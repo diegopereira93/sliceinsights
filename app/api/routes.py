@@ -1,9 +1,12 @@
 """
 FastAPI routes for PickleMatch Advisor API.
 """
+import hashlib
+import json
 from typing import Optional
 from uuid import UUID
 
+from cachetools import TTLCache
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlmodel import select, func
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -22,6 +25,10 @@ from app.services.recommendation_engine import RecommendationEngine
 
 router = APIRouter()
 limiter = Limiter(key_func=get_remote_address)
+
+# TTL caches for frequently accessed data
+_brands_cache = TTLCache(maxsize=1, ttl=300)  # 5 min cache for brands
+_paddles_cache = TTLCache(maxsize=50, ttl=60)  # 1 min cache for paddle queries
 
 
 # ============== Health ==============
@@ -45,13 +52,23 @@ async def health_check(session: AsyncSession = Depends(get_session)):
 
 @router.get("/brands", response_model=dict)
 async def list_brands(session: AsyncSession = Depends(get_session)):
-    """List all brands."""
+    """List all brands (cached for 5 minutes)."""
+    cache_key = "all_brands"
+    
+    # Check cache first
+    if cache_key in _brands_cache:
+        return _brands_cache[cache_key]
+    
     result = await session.exec(select(Brand))
     brands = result.all()
-    return {
+    response = {
         "data": [BrandRead.model_validate(b) for b in brands],
         "total": len(brands)
     }
+    
+    # Store in cache
+    _brands_cache[cache_key] = response
+    return response
 
 
 # ============== Paddles ==============
