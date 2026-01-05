@@ -1,0 +1,103 @@
+services:
+  # PostgreSQL Database
+  postgres_v3:
+    image: postgres:16-alpine
+    container_name: picklematch_db_v3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: picklematch
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data_v3:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - picklematch_v3
+
+  # FastAPI Backend
+  backend_v3:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: picklematch_api_v3
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres_v3:5432/picklematch
+      DATABASE_URL_SYNC: postgresql://postgres:postgres@postgres_v3:5432/picklematch
+      DEBUG: "true"
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./app:/app/app  # Volume mapping for hot-reload
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      postgres_v3:
+        condition: service_healthy
+    networks:
+      - picklematch_v3
+    restart: unless-stopped
+
+  # Next.js Frontend
+  frontend_next:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: picklematch_ui_v3
+    environment:
+      # Internal docker network communication
+      NEXT_PUBLIC_API_URL: http://localhost:8002/api/v1
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules  # Anonymous volume to protect container node_modules
+    command: npm run dev
+    depends_on:
+      - backend_v3
+    networks:
+      - picklematch_v3
+    restart: unless-stopped
+
+  # Seed data runner
+  seed_v3:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: picklematch_seed_v3
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres_v3:5432/picklematch
+      DATABASE_URL_SYNC: postgresql://postgres:postgres@postgres_v3:5432/picklematch
+    volumes:
+      - ./data:/app/data
+      - ./app:/app/app
+    depends_on:
+      postgres_v3:
+        condition: service_healthy
+    command: python -m app.db.seed_data
+    networks:
+      - picklematch_v3
+
+  # Scraper Service (On-demand)
+  scraper:
+    build:
+      context: .
+      dockerfile: Dockerfile.scraper
+    container_name: picklematch_scraper
+    profiles: ["tools"]  # Only start when explicitly requested
+    volumes:
+      - ./scripts:/app/scripts
+      - ./data:/app/data
+    networks:
+      - picklematch_v3
+
+
+volumes:
+  postgres_data_v3:
+
+networks:
+  picklematch_v3:
+    driver: bridge

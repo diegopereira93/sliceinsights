@@ -1,0 +1,57 @@
+# Environment
+.env
+.env.*
+.env.local
+.env.*.local
+!.env.example
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+playwright-report/
+test-results/
+
+# Build
+*.egg-info/
+dist/
+build/
+
+# Docker
+postgres_data/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Security - Never commit these
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets/
+credentials/
+.secrets
+*.credentials
+
+# Logs
+*.log
+logs/
+
+# Data (sensitive)
+data/*.csv
+!data/.gitkeep
+

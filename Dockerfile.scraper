@@ -1,0 +1,9 @@
+FROM mcr.microsoft.com/playwright/python:v1.40.0-jammy
+
+WORKDIR /app
+
+# Install dependencies
+RUN pip install pandas playwright==1.40.0 beautifulsoup4 lxml
+
+# The entrypoint will be overridden by docker-compose or command line
+CMD ["python", "--version"]
