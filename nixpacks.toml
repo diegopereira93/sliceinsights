@@ -1,17 +1,11 @@
 # Nixpacks configuration for Railway
-# This file tells Railway how to build and run the FastAPI backend
+# Using providers for automatic Python detection
 
 [phases.setup]
-nixPkgs = ["python311", "python311Packages.pip", "postgresql"]
+nixPkgs = ["postgresql"]
 
-[phases.install]
-cmds = ["python -m pip install --upgrade pip", "python -m pip install -r requirements.txt"]
-
-[phases.build]
-cmds = ["echo 'Build complete'"]
+# Let Nixpacks auto-detect Python from requirements.txt
+# and use its built-in pip installation
 
 [start]
-cmd = "python -m uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 4"
-
-[variables]
-PYTHON_VERSION = "3.11"
+cmd = "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 4"
