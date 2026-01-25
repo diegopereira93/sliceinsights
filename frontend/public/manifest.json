@@ -1,0 +1,29 @@
+{
+    "name": "SliceInsights - Intelligent Padel Advisor",
+    "short_name": "SliceInsights",
+    "description": "Insights precisos para sua melhor jogada. Encontre a raquete ideal de Padel.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#020817",
+    "theme_color": "#CEFF00",
+    "orientation": "portrait",
+    "categories": [
+        "sports",
+        "shopping",
+        "productivity"
+    ],
+    "icons": [
+        {
+            "src": "/icon.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
