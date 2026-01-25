@@ -6,6 +6,8 @@
 !.env.example
 venv/
 .venv/
+.venv_new/
+.venv_test/
 __pycache__/
 *.pyc
 *.pyo
