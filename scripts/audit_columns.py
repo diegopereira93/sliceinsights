@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 
 # Use the internal docker URL by default, but allow override
 DATABASE_URL = os.getenv("DATABASE_URL_SYNC", "postgresql://postgres:postgres@postgres_v3:5432/picklematch")

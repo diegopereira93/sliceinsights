@@ -1,13 +1,46 @@
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings
 from functools import lru_cache
+from typing import Optional
 
 
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
     
     # Database
-    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/picklematch"
-    database_url_sync: str = "postgresql://postgres:postgres@localhost:5432/picklematch"
+    # Railway provides DATABASE_URL, but SQLAlchemy async needs postgresql+asyncpg://
+    database_url: str = Field(
+        default="postgresql+asyncpg://postgres:postgres@localhost:5432/picklematch",
+        alias="DATABASE_URL"
+    )
+    database_url_sync: Optional[str] = Field(
+        default=None,
+        alias="DATABASE_URL_SYNC"
+    )
+
+    @field_validator("database_url", mode="before")
+    @classmethod
+    def assemble_async_db_url(cls, v: str) -> str:
+        """Ensure the database URL uses the asyncpg driver."""
+        if not v:
+            return v
+        if v.startswith("postgres://"):
+            v = v.replace("postgres://", "postgresql+asyncpg://", 1)
+        elif v.startswith("postgresql://") and "+asyncpg" not in v:
+            v = v.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return v
+
+    @property
+    def sync_database_url(self) -> str:
+        """Get a synchronous version of the database URL."""
+        if self.database_url_sync:
+            return self.database_url_sync
+        
+        # Fallback to transforming database_url
+        v = self.database_url
+        if "+asyncpg" in v:
+            return v.replace("+asyncpg", "")
+        return v
     
     # API
     api_host: str = "0.0.0.0"

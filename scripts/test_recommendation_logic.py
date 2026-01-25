@@ -1,9 +1,7 @@
 
 # import pytest (removed)
-from unittest.mock import MagicMock
 from app.services.recommendation_engine import RecommendationEngine, PlayStyle
 from app.schemas.user_profile import UserProfile
-from app.models.paddle import PaddleMaster
 
 # Mocking PaddleMaster since we don't have DB access here
 class MockPaddle:

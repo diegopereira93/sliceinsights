@@ -17,7 +17,7 @@ async_engine: AsyncEngine = create_async_engine(
 
 # Sync engine for Alembic migrations and seed scripts
 sync_engine = create_engine(
-    settings.database_url_sync,
+    settings.sync_database_url,
     echo=settings.debug,
 )
 

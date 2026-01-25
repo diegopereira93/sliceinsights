@@ -94,19 +94,15 @@ async def test_list_paddles_pagination():
     async def mock_session_gen():
         mock = AsyncMock()
         
-        # Mock for SELECT PaddleMaster
+        # Mock for SELECT PaddleMaster, min_price, offer_count
         paddles_result = MagicMock()
-        paddles_result.all.return_value = mock_paddles
-        
-        # Mock for price aggregation
-        price_result = MagicMock()
-        price_result.first.return_value = Decimal("999.00")
+        paddles_result.all.return_value = [(p, Decimal("999.00"), 2) for p in mock_paddles]
         
         # Mock for count
         count_result = MagicMock()
         count_result.first.return_value = 5
         
-        mock.exec.side_effect = [paddles_result] + [price_result, count_result] * 5 + [count_result]
+        mock.exec.side_effect = [paddles_result, count_result]
         yield mock
     
     app.dependency_overrides[get_session] = mock_session_gen

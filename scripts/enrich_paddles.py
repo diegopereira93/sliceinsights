@@ -1,13 +1,11 @@
 import asyncio
 import os
-from typing import List, Optional
-from uuid import UUID
+from typing import Optional
 import httpx
-from sqlmodel import select, update
+from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.db.database import engine as db_engine
 from app.models.paddle import PaddleMaster
-from app.models.enums import FaceMaterial
 from dotenv import load_dotenv
 
 load_dotenv()

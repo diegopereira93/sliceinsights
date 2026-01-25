@@ -9,7 +9,6 @@ from uuid import uuid4
 
 from app.main import app
 from app.db.database import get_session
-from app.services.recommendation_engine import PlayStyle
 
 
 @pytest.mark.asyncio
@@ -60,7 +59,7 @@ async def test_recommendations_valid_request():
     assert response.status_code == 200
     data = response.json()
     assert "recommendations" in data
-    assert "total_matched" in data
+    assert "total_matching" in data
 
 
 @pytest.mark.asyncio

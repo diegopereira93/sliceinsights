@@ -1,287 +1,197 @@
 """
-Seed script to populate the database with paddle data from CSV.
+Seed script para popular o banco com dados de lojas brasileiras.
 Run with: python -m app.db.seed_data
 """
-import math
-import os
-import re
-from typing import Optional
-from decimal import Decimal
 from pathlib import Path
+from decimal import Decimal
 
 import pandas as pd
-from sqlmodel import Session, select, func
+from sqlmodel import Session, select
 
 from app.db.database import sync_engine, init_db_sync
 from app.models import Brand, PaddleMaster, MarketOffer
-from app.models.enums import FaceMaterial, PaddleShape
 
-# Path to the CSV file
-CSV_PATH = Path("data/raw/paddle_stats_dump.csv")
+# Caminhos dos CSVs brasileiros (absolutos dentro do container)
+BRAZIL_STORE_CSV = Path("/app/data/raw/brazil_pickleball_store.csv")
+MERCADO_LIVRE_CSV = Path("/app/data/raw/mercado_livre.csv")
 
-def extract_brand_name(row_brand: str) -> str:
-    """Clean brand name."""
-    return str(row_brand).strip()
 
-def infer_face_material(name: str) -> Optional[FaceMaterial]:
-    """Try to infer face material from paddle name, else None."""
-    name_lower = name.lower()
-    if "kevlar" in name_lower or "ruby" in name_lower:
-        return FaceMaterial.KEVLAR
-    if "fiberglass" in name_lower or "composite" in name_lower:
-        return FaceMaterial.FIBERGLASS
-    if "hybrid" in name_lower:
-        return FaceMaterial.HYBRID
-    if "carbon" in name_lower or "graphite" in name_lower:
-        return FaceMaterial.CARBON
+def clean_brand_name(brand: str) -> str:
+    """Limpar nome da marca."""
+    return str(brand).strip().title()
+
+
+def seed_from_csv(csv_path: Path, session: Session):
+    """Processar um CSV de loja brasileira."""
+    if not csv_path.exists():
+        print(f"  ⚠️  CSV não encontrado: {csv_path}")
+        return 0, 0
     
-    # User requested NO defaults if missing/unknown
-    return None
-
-def infer_shape(name: str) -> Optional[PaddleShape]:
-    """Try to infer shape from paddle name, else None."""
-    name_lower = name.lower()
-    if "elongated" in name_lower or "blade" in name_lower:
-        return PaddleShape.ELONGATED
-    if "wide" in name_lower or "widebody" in name_lower or "quad" in name_lower:
-        return PaddleShape.WIDEBODY
-    if "standard" in name_lower or "classic" in name_lower:
-        return PaddleShape.STANDARD
-        
-    # User requested NO defaults if missing/unknown
-    return None
-
-def normalize_rating(value) -> Optional[int]:
-    """Normalize a value to an integer rating 0-10. Return None if missing."""
-    if pd.isna(value) or value == 0 or str(value).strip() in ["", "0", "nan"]:
-        return None
+    print(f"\n📖 Processando {csv_path.name}...")
+    df = pd.read_csv(csv_path)
+    print(f"  📊 {len(df)} produtos encontrados")
     
-    try:
-        val_float = float(value)
-        if val_float <= 10.0:
-            return min(10, max(0, round(val_float)))
-        
-        # Heuristic for RPM ~200-250 -> 5-10 range
-        if val_float > 100:
-             score = (val_float - 150) / 10
-             return min(10, max(0, round(score)))
-             
-        return min(10, max(0, round(val_float)))
-    except (ValueError, TypeError):
-        return None
-
-def clean_price(price_val) -> Optional[Decimal]:
-    """Clean price to Decimal, or None."""
-    if pd.isna(price_val):
-        return None
-    try:
-        if isinstance(price_val, str):
-             # Remove currency symbols 
-             clean = re.sub(r'[^\d.]', '', price_val)
-             if not clean: return None
-             return Decimal(clean)
-        return Decimal(str(price_val))
-    except:
-        return None
-
-def clean_thickness(val) -> Optional[float]:
-    """Clean core thickness, or None."""
-    if pd.isna(val) or val == 0:
-        return None
-    try:
-        return float(val)
-    except:
-        return None
-
-def clean_float(val) -> Optional[float]:
-    """Clean generic float value."""
-    if pd.isna(val) or str(val).strip() in ["", "nan"]:
-        return None
-    try:
-        return float(val)
-    except:
-        return None
-
-def clean_int(val) -> Optional[int]:
-    """Clean generic int value."""
-    if pd.isna(val) or str(val).strip() in ["", "nan"]:
-        return None
-    try:
-        return int(float(val))
-    except:
-        return None
-
-def clean_str(val) -> Optional[str]:
-    """Clean string value."""
-    if pd.isna(val) or str(val).strip() in ["", "nan"]:
-        return None
-    return str(val).strip()
-
-def seed_database():
-    """Main function to seed the database from CSV."""
-    if not CSV_PATH.exists():
-        print(f"❌ Error: CSV file not found at {CSV_PATH}")
-        return
-
-    # Ensure tables exist
-    init_db_sync()
+    brands_cache = {}
+    paddles_created = 0
+    offers_created = 0
     
-    # Read CSV
-    print(f"📖 Reading CSV from {CSV_PATH}...")
-    try:
-        df = pd.read_csv(CSV_PATH)
-        print(f"📊 Found {len(df)} rows.")
-    except Exception as e:
-        print(f"❌ Error reading CSV: {e}")
-        return
-
-    with Session(sync_engine) as session:
-        brands_cache = {}
-        paddles_updated = 0
-        paddles_created = 0
-        
-        print(f"Columns: {df.columns.tolist()}")
-        for index, row in df.iterrows():
-            if index == 0: print(f"Sample Row: {row}")
-            # 1. Handle Brand
-            raw_brand = row.get("Col_0")
-            if pd.isna(raw_brand) or str(raw_brand).strip() in ["0", "nan", ""]:
+    for _, row in df.iterrows():
+        try:
+            # Extrair dados
+            brand_name = clean_brand_name(row['brand_name'])
+            model_name = str(row['model_name']).strip()
+            price_brl = float(row['price_brl'])
+            product_url = str(row['product_url'])
+            image_url = str(row.get('image_url', ''))
+            store_name = str(row['store_name'])
+            
+            # Pular se dados inválidos
+            if not brand_name or not model_name or price_brl <= 0:
                 continue
-
-            brand_name = extract_brand_name(raw_brand)
-            if not brand_name:
-                continue
-                
+            
+            # 1. Criar/buscar marca
             if brand_name not in brands_cache:
-                # Check DB first
                 brand = session.exec(select(Brand).where(Brand.name == brand_name)).first()
                 if not brand:
                     brand = Brand(name=brand_name, website="")
                     session.add(brand)
-                    session.flush() # Get ID
+                    session.flush()
                 brands_cache[brand_name] = brand
             
             brand_obj = brands_cache[brand_name]
-
-            # 2. Extract Paddle Data
-            raw_model = row.get("Col_1")
-            if pd.isna(raw_model) or str(raw_model).strip() in ["0", "nan", ""]:
-                continue
-                
-            model_name = str(raw_model)
-            price = clean_price(row.get("Col_2"))
             
-            # Ratings & Specs
-            power_rating = normalize_rating(row.get("Col_6"))
-            spin_rating = normalize_rating(row.get("Col_5"))
-            
-            # Missing in CSV -> None
-            control_rating = None
-            sweet_spot_rating = None
-            
-            core_mm = clean_thickness(row.get("Col_7"))
-            
-            # Infer Stats -> None if inference fails
-            # Try to grab detailed materials from new columns
-            core_material_raw = clean_str(row.get("Col_14")) # Core
-            face_material_raw = clean_str(row.get("Col_13")) # Face
-            
-            face_material = infer_face_material(str(face_material_raw)) if face_material_raw else infer_face_material(model_name)
-            if not face_material:
-                # Try fallback face column
-                face_material_raw_2 = clean_str(row.get("Col_12"))
-                if face_material_raw_2:
-                    face_material = infer_face_material(str(face_material_raw_2))
-            
-            shape = infer_shape(clean_str(row.get("Col_11")) or model_name)
-            
-            # New Stats
-            swing_weight = clean_int(row.get("Col_3"))
-            twist_weight = clean_float(row.get("Col_4"))
-            spin_rpm = clean_int(row.get("Col_5"))
-            power_original = clean_float(row.get("Col_6"))
-            handle_length = clean_str(row.get("Col_8"))
-            grip_circumference = clean_str(row.get("Col_9")) 
-
-            # 3. Create or Update Paddle
-            keywords = [brand_name.lower(), model_name.lower()]
-            if core_mm: keywords.append(f"{int(core_mm)}mm")
-            
-            # Check if paddle exists
-            # print(f"Querying DB for {brand_name} {model_name}...")
+            # 2. Criar/buscar paddle
             paddle = session.exec(select(PaddleMaster).where(
                 PaddleMaster.brand_id == brand_obj.id,
                 PaddleMaster.model_name == model_name
             )).first()
-
-            if paddle:
-                # Update existing
-                paddle.search_keywords = keywords
-                paddle.core_thickness_mm = core_mm
-                paddle.face_material = face_material
-                paddle.core_material = core_material_raw
-                paddle.shape = shape
-                paddle.power_rating = power_rating
-                paddle.swing_weight = swing_weight
-                paddle.twist_weight = twist_weight
-                paddle.spin_rpm = spin_rpm
-                paddle.power_original = power_original
-                paddle.handle_length = handle_length
-                paddle.grip_circumference = grip_circumference
-                paddle.specs_source = "csv_dump_verified"
-                session.add(paddle)
-                paddles_updated += 1
-            else:
-                # Create new
+            
+            # Limpar image_url (converter vazios e 'nan' em None)
+            clean_image = None
+            if image_url and str(image_url).strip() and str(image_url).lower() not in ['nan', 'none', '']:
+                clean_image = image_url
+            
+            if not paddle:
                 paddle = PaddleMaster(
                     brand_id=brand_obj.id,
                     model_name=model_name,
-                    search_keywords=keywords,
-                    core_thickness_mm=core_mm,
-                    face_material=face_material,
-                    core_material=core_material_raw,
-                    shape=shape,
-                    power_rating=power_rating, 
+                    search_keywords=[brand_name.lower(), model_name.lower()],
+                    image_url=clean_image,
                     is_featured=False,
-                    specs_source="csv_dump_verified",
-                    swing_weight=swing_weight,
-                    twist_weight=twist_weight,
-                    spin_rpm=spin_rpm,
-                    power_original=power_original,
-                    handle_length=handle_length,
-                    grip_circumference=grip_circumference,
+                    specs_source="brazil_scraper"
                 )
                 session.add(paddle)
+                session.flush()
                 paddles_created += 1
+            elif not paddle.image_url and clean_image:
+                # Atualizar imagem se não tiver
+                paddle.image_url = clean_image
+                session.add(paddle)
             
-            session.flush()
+            # 3. Criar oferta de mercado
+            offer = session.exec(select(MarketOffer).where(
+                MarketOffer.paddle_id == paddle.id,
+                MarketOffer.store_name == store_name,
+                MarketOffer.url == product_url
+            )).first()
+            
+            if not offer:
+                offer = MarketOffer(
+                    paddle_id=paddle.id,
+                    store_name=store_name,
+                    price_brl=Decimal(str(price_brl)),
+                    url=product_url
+                )
+                session.add(offer)
+                offers_created += 1
+            else:
+                # Atualizar preço se mudou
+                offer.price_brl = Decimal(str(price_brl))
+                session.add(offer)
+        
+        except Exception as e:
+            print(f"  ⚠️  Erro ao processar linha: {e}")
+            continue
+    
+    session.commit()
+    return paddles_created, offers_created
 
-            # 4. Create Market Offer (Upsert logic for simple MSRP offer)
-            if price:
-                price_brl = price * Decimal("5.5")
-                # Check for existing MSRP offer
-                offer = session.exec(select(MarketOffer).where(
-                    MarketOffer.paddle_id == paddle.id,
-                    MarketOffer.store_name == "MSRP (Import)"
-                )).first()
-                
-                if offer:
-                    offer.price_brl = price_brl
-                    session.add(offer)
-                else:
-                    offer = MarketOffer(
-                        paddle_id=paddle.id,
-                        store_name="MSRP (Import)",
-                        price_brl=price_brl,
-                        url=f"https://example.com/search?q={brand_name}+{model_name.replace(' ', '+')}"
-                    )
-                    session.add(offer)
 
-        session.commit()
-        print(f"✅ Processed {len(df)} rows.")
-        print(f"✅ Created {paddles_created} new paddles.")
-        print(f"✅ Updated {paddles_updated} existing paddles.")
-        print("🎉 Database sync completed!")
+def clear_database(session: Session):
+    """Limpar o banco de dados (CUIDADO: remove todos os dados!)."""
+    print("\n🗑️  Limpando banco de dados...")
+    
+    # Deletar na ordem correta (por causa de foreign keys)
+    offers = session.exec(select(MarketOffer)).all()
+    for offer in offers:
+        session.delete(offer)
+    
+    paddles = session.exec(select(PaddleMaster)).all()
+    for paddle in paddles:
+        session.delete(paddle)
+    
+    brands = session.exec(select(Brand)).all()
+    for brand in brands:
+        session.delete(brand)
+    
+    session.commit()
+    print("  ✅ Banco limpo!")
+
+
+def seed_database():
+    """Função principal para popular o banco com dados brasileiros."""
+    print("🇧🇷 SliceInsights - Seed com Dados Brasileiros")
+    print("=" * 50)
+    
+    # Garantir que as tabelas existem
+    init_db_sync()
+    
+    with Session(sync_engine) as session:
+        # LIMPAR BANCO (remover dados internacionais)
+        clear_database(session)
+        
+        # Processar CSVs brasileiros
+        total_paddles = 0
+        total_offers = 0
+        
+        # Brazil Pickleball Store
+        print(f"\n🔍 Verificando {BRAZIL_STORE_CSV}...")
+        print(f"  Exists: {BRAZIL_STORE_CSV.exists()}")
+        if BRAZIL_STORE_CSV.exists():
+            paddles, offers = seed_from_csv(BRAZIL_STORE_CSV, session)
+            total_paddles += paddles
+            total_offers += offers
+            print(f"  ✅ {paddles} raquetes | {offers} ofertas")
+        else:
+            print("  ❌ Arquivo não encontrado!")
+        
+        # Mercado Livre  
+        print(f"\n🔍 Verificando {MERCADO_LIVRE_CSV}...")
+        print(f"  Exists: {MERCADO_LIVRE_CSV.exists()}")
+        if MERCADO_LIVRE_CSV.exists():
+            paddles, offers = seed_from_csv(MERCADO_LIVRE_CSV, session)
+            total_paddles += paddles
+            total_offers += offers
+            print(f"  ✅ {paddles} raquetes | {offers} ofertas")
+        else:
+            print("  ⚠️  Arquivo não encontrado (normal se não tiver Mercado Livre)")
+        
+        # Estatísticas finais
+        print("\n" + "=" * 50)
+        print("🎉 Seed completo!")
+        print(f"  📦 {total_paddles} raquetes únicas criadas")
+        print(f"  🛒 {total_offers} ofertas de lojas brasileiras")
+        
+        # Contar total no banco
+        total_brands = session.exec(select(Brand)).all()
+        total_paddles_db = session.exec(select(PaddleMaster)).all()
+        total_offers_db = session.exec(select(MarketOffer)).all()
+        
+        print("\n📊 Totais no banco:")
+        print(f"  🏷️  {len(total_brands)} marcas")
+        print(f"  🎾 {len(total_paddles_db)} raquetes")
+        print(f"  💰 {len(total_offers_db)} ofertas")
+
 
 if __name__ == "__main__":
     seed_database()

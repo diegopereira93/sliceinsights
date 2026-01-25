@@ -2,7 +2,6 @@ import pytest
 from unittest.mock import MagicMock, AsyncMock
 from app.services.recommendation_engine import RecommendationEngine, PlayStyle
 from app.schemas.user_profile import UserProfile
-from app.models.paddle import PaddleMaster
 from decimal import Decimal
 import uuid
 

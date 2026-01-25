@@ -47,9 +47,15 @@ async def scrape_notion_table():
             # Explicit Horizontal Scroll Check
             # Scroll Right to ensure right-side columns are loaded
             if not use_window_scroll:
-                await page.evaluate(f"document.querySelector('{scroller_selector}').scrollTo(2000, {scroll_position_y})")
+                await page.evaluate(
+                    "([sel, y]) => document.querySelector(sel).scrollTo(2000, y)", 
+                    [scroller_selector, scroll_position_y]
+                )
                 await asyncio.sleep(0.5)
-                await page.evaluate(f"document.querySelector('{scroller_selector}').scrollTo(0, {scroll_position_y})")
+                await page.evaluate(
+                    "([sel, y]) => document.querySelector(sel).scrollTo(0, y)", 
+                    [scroller_selector, scroll_position_y]
+                )
                 await asyncio.sleep(0.5)
             
             # Now read
@@ -85,9 +91,12 @@ async def scrape_notion_table():
             # Scroll Down
             scroll_position_y += scroll_step_y
             if use_window_scroll:
-                 await page.evaluate(f"window.scrollTo(0, {scroll_position_y})")
+                 await page.evaluate("(y) => window.scrollTo(0, y)", scroll_position_y)
             else:
-                 await page.evaluate(f"document.querySelector('{scroller_selector}').scrollTo(0, {scroll_position_y})")
+                 await page.evaluate(
+                     "([sel, y]) => document.querySelector(sel).scrollTo(0, y)", 
+                     [scroller_selector, scroll_position_y]
+                 )
             
             await asyncio.sleep(0.5)
 

@@ -1,8 +1,6 @@
 """
 FastAPI routes for PickleMatch Advisor API.
 """
-import hashlib
-import json
 from typing import Optional
 from uuid import UUID
 
@@ -19,7 +17,6 @@ from app.db.database import get_session
 from app.models import Brand, PaddleMaster, MarketOffer
 from app.models.paddle import PaddleRead
 from app.models.brand import BrandRead
-from app.models.market_offer import MarketOfferRead
 from app.schemas.user_profile import RecommendationRequest, RecommendationResult, UserProfile
 from app.services.recommendation_engine import RecommendationEngine
 
@@ -80,14 +77,17 @@ async def list_paddles(
     brand_id: Optional[int] = None,
     skill_level: Optional[str] = None,
     is_featured: Optional[bool] = None,
+    available_in_brazil: Optional[bool] = Query(
+        default=True,  # Padrão: mostrar apenas produtos disponíveis no Brasil
+        description="Filter by Brazilian market availability"
+    ),
     min_price: Optional[float] = None,
     max_price: Optional[float] = None,
-    limit: int = Query(default=20, le=100),
+    limit: int = Query(default=50, le=100),  # Aumentado para 50 para mostrar catálogo BR completo
     offset: int = 0,
     session: AsyncSession = Depends(get_session)
 ):
     """List paddles with optional filters. Optimized to avoid N+1 queries."""
-    from sqlalchemy import literal_column
     
     # Create subquery for market offer aggregations
     offer_subq = (
@@ -119,6 +119,8 @@ async def list_paddles(
         query = query.where(PaddleMaster.skill_level == skill_level)
     if is_featured is not None:
         query = query.where(PaddleMaster.is_featured == is_featured)
+    if available_in_brazil is not None:
+        query = query.where(PaddleMaster.available_in_brazil == available_in_brazil)
     if min_price is not None:
         query = query.where(offer_subq.c.min_price >= min_price)
     if max_price is not None:
@@ -151,6 +153,8 @@ async def list_paddles(
         count_query = count_query.where(PaddleMaster.skill_level == skill_level)
     if is_featured is not None:
         count_query = count_query.where(PaddleMaster.is_featured == is_featured)
+    if available_in_brazil is not None:
+        count_query = count_query.where(PaddleMaster.available_in_brazil == available_in_brazil)
     
     total_result = await session.exec(count_query)
     total = total_result.first() or 0
@@ -163,12 +167,14 @@ async def list_paddles(
     }
 
 
+from app.services.affiliate_service import get_affiliate_service
+
 @router.get("/paddles/{paddle_id}")
 async def get_paddle(
     paddle_id: UUID,
     session: AsyncSession = Depends(get_session)
 ):
-    """Get paddle details with market offers."""
+    """Get paddle details with market offers (affiliate URLs applied)."""
     result = await session.exec(
         select(PaddleMaster)
         .options(selectinload(PaddleMaster.brand))
@@ -179,9 +185,6 @@ async def get_paddle(
     if not paddle:
         raise HTTPException(status_code=404, detail="Paddle not found")
     
-    # Brand is already loaded via selectinload
-    brand = paddle.brand
-    
     # Get offers
     offers_result = await session.exec(
         select(MarketOffer)
@@ -189,35 +192,30 @@ async def get_paddle(
         .order_by(MarketOffer.price_brl)
     )
     offers = offers_result.all()
+    min_price = float(offers[0].price_brl) if offers else None
+    
+    # Apply affiliate transformations
+    affiliate_service = get_affiliate_service()
+    
+    # Use the consolidated schema logic
+    paddle_read = PaddleRead.from_paddle(paddle, min_price=min_price, offers_count=len(offers))
     
     return {
-        "id": str(paddle.id),
+        "id": str(paddle_read.id),
         "brand": {
-            "id": brand.id,
-            "name": brand.name,
-            "website": brand.website
-        } if brand else None,
-        "model_name": paddle.model_name,
-        "search_keywords": paddle.search_keywords,
-        "specs": {
-            "core_thickness_mm": paddle.core_thickness_mm,
-            "weight_avg_g": paddle.weight_avg_g,
-            "face_material": paddle.face_material.value,
-            "shape": paddle.shape.value,
+            "id": paddle_read.brand_id,
+            "name": paddle_read.brand_name
         },
-        "ratings": {
-            "power": paddle.power_rating,
-            "control": paddle.control_rating,
-            "spin": paddle.spin_rating,
-            "sweet_spot": paddle.sweet_spot_rating,
-        },
-        "ideal_for_tennis_elbow": paddle.ideal_for_tennis_elbow,
-        "skill_level": paddle.skill_level.value,
+        "model_name": paddle_read.model_name,
+        "available_in_brazil": paddle_read.available_in_brazil,
+        "specs": paddle_read.specs.model_dump(),
+        "ratings": paddle_read.ratings.model_dump(),
         "market_offers": [
             {
                 "store_name": o.store_name,
                 "price_brl": float(o.price_brl),
-                "url": o.url,
+                "url": affiliate_service.transform_url(o.url, o.store_name),
+                "affiliate_url": affiliate_service.transform_url(o.url, o.store_name) if affiliate_service.is_affiliate_enabled() else None,
                 "last_updated": o.last_updated.isoformat()
             }
             for o in offers

@@ -24,23 +24,28 @@ class MockPaddle:
         self.spin_rating = spin
         self.sweet_spot_rating = sweet_spot
         self.twist_weight = 6.5
+        self.core_material = "Honeycomb Polymer"
         self.core_thickness_mm = 16.0
+        self.swing_weight = 115
+        self.spin_rpm = 2200
+        self.power_original = 8.5
+        self.handle_length = "5.5"
+        self.grip_circumference = "4.25"
         self.weight_avg_g = 220.0
         self.ideal_for_tennis_elbow = False
         self.is_featured = False
         self.image_url = None
         
-        # Mocked enums
-        self.face_material = MagicMock(value="carbon_fiber")
-        self.shape = MagicMock(value="elongated")
-        self.skill_level = MagicMock(value="intermediate")
+        from app.models.enums import FaceMaterial, PaddleShape, SkillLevel
+        self.face_material = FaceMaterial.CARBON
+        self.shape = PaddleShape.ELONGATED
+        self.skill_level = SkillLevel.INTERMEDIATE
         
         # Brand
-        self.brand = MagicMock(
-            id=1,
-            name=brand_name,
-            website="https://test.com"
-        )
+        self.brand = MagicMock()
+        self.brand.id = 1
+        self.brand.name = brand_name
+        self.brand.website = "https://test.com"
         self.brand_id = 1
 
 

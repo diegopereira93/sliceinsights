@@ -34,86 +34,229 @@
 ## 🚀 Quick Start (Docker)
 
 ```bash
-# Iniciar todos os serviços (Desenvolvimento)
-docker compose up -d --build
+# SliceInsights 🎾🇧🇷
 
-# Acessar:
-# - Frontend: http://localhost:3000
-# - API Backend: http://localhost:8002
-# - Swagger Docs: http://localhost:8002/docs
-# - Prometheus Metrics: http://localhost:8002/metrics
-```
+**Recomendador inteligente de raquetes de pickleball focado no mercado brasileiro**
 
-## 🏭 Production Deploy
+SliceInsights é uma plataforma que ajuda jogadores brasileiros a encontrar a raquete de pickleball ideal através de um quiz personalizado e análises de mercado baseadas em dados reais.
 
-### Opção 1: Railway (Gratuito) ⭐
+## 🌟 Destaques
 
-Deploy full-stack grátis em [railway.app](https://railway.app):
+- 🇧🇷 **Foco Brasil**: Catálogo com 37 raquetes disponíveis no mercado brasileiro
+- 📊 **Analytics Global**: 495 raquetes no banco para análises de mercado completas
+- 🖼️ **Imagens HD**: Produtos com fotos em alta resolução (WebP 1024x1024)
+- 🤖 **Recomendação Inteligente**: Quiz de 10 perguntas + algoritmo de scoring
+- 🤖 **Motor de Recomendação Smart**: Algoritmo que unifica notas técnicas (0-10) com base em Física (Twist Weight, Spin RPM) e alinhamento com estilo de jogo (Power, Control, Balanced).
+- 💰 **Preços Reais**: Integração com Brazil Pickleball Store
+- 📈 **Market Intelligence**: Estatísticas e tendências do mercado global
+
+## 🏗️ Arquitetura
+
+### Stack Tecnológica
+
+- **Backend**: FastAPI + SQLModel + PostgreSQL
+- **Frontend**: Next.js 14 + TypeScript + shadcn/ui
+- **Scrapers**: Playwright (Python)
+- **Deployment**: Docker Compose
+
+### Estratégia Híbrida de Dados
+
+O projeto utiliza uma abordagem em duas camadas:
+
+1. **Catálogo de Produtos** (`available_in_brazil=true`)
+   - 37 raquetes disponíveis no Brasil
+   - Preços em BRL (reais)
+   - Imagens em alta resolução
+   - Links diretos para lojas brasileiras
+
+2. **Analytics e Estatísticas** (dataset completo)
+   - 495 raquetes de todo o mundo
+   - Dados técnicos detalhados
+   - Comparações de mercado global
+
+## 🚀 Quick Start
+
+### Pré-requisitos
+
+- Docker e Docker Compose
+- Python 3.11+ (para scrapers)
+- Node.js 18+ (para desenvolvimento frontend)
+
+### Executar o Projeto
 
 ```bash
-# 1. Conecte seu repositório GitHub no Railway
-# 2. Adicione PostgreSQL database
-# 3. Configure variáveis de ambiente
-# 4. Deploy automático!
+# Clonar o repositório
+git clone https://github.com/seu-usuario/sliceinsights.git
+cd sliceinsights
+
+# Subir todos os serviços
+docker compose up -d
+
+# Popular o banco de dados
+docker compose exec backend_v3 python -m app.db.seed_data_hybrid
+
+# Acessar aplicação
+# Frontend: http://localhost:3000
+# API: http://localhost:8002
+# Docs API: http://localhost:8002/docs
 ```
 
-📚 Guia completo: [docs/railway_deploy.md](docs/railway_deploy.md)
+### Estrutura de Serviços
 
-### Opção 2: Docker (Self-hosted)
+| Serviço | Porta | Descrição |
+|---------|-------|-----------|
+| `frontend_next` | 3000 | Aplicação Next.js |
+| `backend_v3` | 8002 | API FastAPI |
+| `postgres_v3` | 5433 | Banco PostgreSQL |
+
+## 📊 Scrapers de Dados
+
+### Brazil Pickleball Store
+
+Scraper automatizado que extrai produtos da loja oficial:
 
 ```bash
-# Build e deploy de produção
-docker compose -f docker-compose.prod.yml up -d --build
+# Executar scraper
+docker compose --profile tools run --rm scraper python scripts/scrape_brazil_store.py
+
+# Output: data/raw/brazil_pickleball_store.csv
 ```
 
-## 🧪 Testes
+**Dados extraídos**:
+- Nome da marca e modelo
+- Preço em BRL
+- URL do produto
+- Imagem em alta resolução (WebP)
+
+### Atualizar Banco de Dados
+
+Após executar os scrapers:
 
 ```bash
-# Backend tests
-docker compose exec backend_v3 pytest tests/ -v
-
-# Frontend E2E (requer Playwright instalado)
-cd frontend && npx playwright test
+# Repopular banco com novos dados
+docker compose exec backend_v3 python -m app.db.seed_data_hybrid
 ```
 
-## 📂 Project Structure
+O seed híbrido:
+1. Cria produtos brasileiros primeiro (COM imagens)
+2. Adiciona produtos internacionais (para analytics)
+3. Evita duplicatas automaticamente
+
+## 🎯 Funcionalidades
+
+### Quiz de Recomendação
+
+Sistema inteligente de 10 perguntas que considera:
+- Nível de habilidade
+- Estilo de jogo (potência vs controle)
+- Histórico esportivo (tênis, etc.)
+- Orçamento em reais
+- Preferências de peso e formato
+
+### Market Intelligence
+
+- 📉 Distribuição de preços no mercado
+- 📊 Segmentação por características técnicas
+- 💎 "Hidden Gems" - melhores custo-benefício
+- 🏷️ Análise por marca
+
+### Catálogo Brasileiro
+
+- Filtros por marca, preço, características
+- Comparação lado a lado (Battle Mode)
+- Detalhes técnicos completos
+- Links diretos para compra
+
+## 📁 Estrutura do Projeto
 
 ```
-niteroi-raquetes/
-├── app/                      # FastAPI Backend
-│   ├── api/routes.py         # API endpoints com rate limiting
-│   ├── config.py             # Configurações (CORS, logging, etc)
-│   ├── main.py               # App entry com Sentry/Prometheus
-│   └── services/             # Recommendation engine
-├── frontend/                 # Next.js Frontend
-│   ├── app/                  # Routes, error boundaries
-│   ├── components/           # UI components
-│   └── e2e/                  # Playwright E2E tests
-├── tests/                    # Backend tests
-├── .github/workflows/        # CI/CD pipelines
-├── docker-compose.yml        # Dev environment
-├── docker-compose.prod.yml   # Production environment
-└── docs/                     # Documentation
+sliceinsights/
+├── app/                      # Backend FastAPI
+│   ├── api/                  # Endpoints REST
+│   ├── db/                   # Database & ORM
+│   │   ├── seed_data_hybrid.py  # Seed híbrido
+│   │   └── database.py
+│   ├── models/               # SQLModel schemas
+│   └── main.py
+├── frontend/                 # Frontend Next.js
+│   ├── app/                  # App router
+│   ├── components/           # React components
+│   └── lib/                  # Utilities
+├── scripts/                  # Scrapers & tools
+│   ├── scrape_brazil_store.py
+│   └── scrape_mercado_livre.py
+├── data/                     # Dados extraídos
+│   └── raw/
+│       ├── brazil_pickleball_store.csv
+│       └── paddle_stats_dump.csv
+└── docker-compose.yml
 ```
 
-## ⚙️ Environment Variables
+## 🔧 Desenvolvimento
 
-Copie `.env.example` para `.env` e configure:
+### Backend
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `POSTGRES_PASSWORD` | Database password | ✅ |
-| `ALLOWED_ORIGINS` | CORS origins (comma-separated) | ✅ |
-| `SENTRY_DSN` | Sentry error tracking | ❌ |
-| `LOG_LEVEL` | Logging level (INFO, DEBUG, etc) | ❌ |
+```bash
+# Entrar no container
+docker compose exec backend_v3 bash
 
-## 📚 Documentation
+# Rodar testes
+pytest
 
-- [Production Readiness Roadmap](docs/production_readiness_roadmap.md) ✅ **Implemented**
-- [API Specification](docs/api_specification.md)
-- [Database Schema](docs/database_schema.md)
-- [Runbook](docs/runbook.md)
+# Criar migração
+alembic revision --autogenerate -m "description"
+```
 
-## 📄 License
+### Frontend
 
-MIT
+```bash
+# Desenvolvimento local
+cd frontend
+npm install
+npm run dev
+
+# Build de produção
+npm run build
+```
+
+## 📝 API Endpoints
+
+### Principais Rotas
+
+```bash
+# Listar produtos brasileiros (padrão)
+GET /api/v1/paddles
+
+# Todas as raquetes (analytics)
+GET /api/v1/paddles?available_in_brazil=null
+
+# Apenas internacionais
+GET /api/v1/paddles?available_in_brazil=false
+
+# Recomendações do quiz
+POST /api/v1/recommendations
+```
+
+## 🤝 Contribuindo
+
+Contribuições são bem-vindas! Por favor:
+
+1. Fork o projeto
+2. Crie uma feature branch (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+
+## 🙏 Agradecimentos
+
+- Brazil Pickleball Store pela disponibilidade dos produtos
+- Comunidade brasileira de pickleball
+- Dataset internacional de especificações técnicas
+
+---
+
+**Desenvolvido com ❤️ para a comunidade brasileira de pickleball**

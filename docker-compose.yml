@@ -33,6 +33,8 @@ services:
       - "8002:8000"
     volumes:
       - ./app:/app/app  # Volume mapping for hot-reload
+      - ./tests:/app/tests
+      - ./data:/app/data  # Volume for scraped data
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
       postgres_v3:

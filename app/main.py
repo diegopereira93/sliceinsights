@@ -14,6 +14,7 @@ from slowapi.errors import RateLimitExceeded
 from app.config import get_settings
 from app.db.database import init_db
 from app.api.routes import router
+from app.api.endpoints.alerts import router as alerts_router
 
 settings = get_settings()
 
@@ -126,6 +127,7 @@ async def log_requests(request: Request, call_next):
 
 # Include routes
 app.include_router(router, prefix="/api/v1")
+app.include_router(alerts_router, prefix="/api/v1")
 
 
 @app.get("/")
