@@ -55,3 +55,6 @@ logs/
 data/*.csv
 !data/.gitkeep
 
+
+# Agent
+.agent/
