@@ -14,10 +14,11 @@ from app.db.database import sync_engine, init_db_sync
 from app.models import Brand, PaddleMaster, MarketOffer
 from app.models.enums import FaceMaterial, PaddleShape
 
-# Caminhos dos CSVs
-INTERNATIONAL_CSV = Path("/app/data/raw/paddle_stats_dump.csv")
-BRAZIL_STORE_CSV = Path("/app/data/raw/brazil_pickleball_store.csv")
-JOOLA_BRAZIL_CSV = Path("/app/data/raw/joola_brazil.csv")
+# Caminhos dos CSVs (relativos à raiz do projeto)
+ROOT_DIR = Path(__file__).parent.parent.parent
+INTERNATIONAL_CSV = ROOT_DIR / "data/raw/paddle_stats_dump.csv"
+BRAZIL_STORE_CSV = ROOT_DIR / "data/raw/brazil_pickleball_store.csv"
+JOOLA_BRAZIL_CSV = ROOT_DIR / "data/raw/joola_brazil.csv"
 
 # Lista de fontes brasileiras para processar
 BRAZILIAN_SOURCES = [
@@ -273,8 +274,15 @@ def seed_database_hybrid():
     
     init_db_sync()
     
+    import os
+    force_clear = os.getenv("SEED_FORCE_CLEAR", "false").lower() == "true"
+    
     with Session(sync_engine) as session:
-        clear_database(session)
+        if force_clear:
+            clear_database(session)
+        else:
+            print("\n⏭️  Pulando limpeza do banco (SEED_FORCE_CLEAR não é true)")
+        
         
         brands_cache = {}
         paddles_created = {}  # {(brand_key, model_key): paddle_id}
