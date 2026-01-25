@@ -50,7 +50,9 @@ services:
       dockerfile: Dockerfile.frontend
     container_name: picklematch_ui_v3
     environment:
-      # Internal docker network communication
+      # Internal docker network communication for SSR/Rewrites
+      BACKEND_URL: http://backend_v3:8000
+      # External communication for Browser (client-side)
       NEXT_PUBLIC_API_URL: http://localhost:8002/api/v1
     ports:
       - "3000:3000"
