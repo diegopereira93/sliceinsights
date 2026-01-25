@@ -19,6 +19,7 @@ from app.models.paddle import PaddleRead
 from app.models.brand import BrandRead
 from app.schemas.user_profile import RecommendationRequest, RecommendationResult, UserProfile
 from app.services.recommendation_engine import RecommendationEngine
+from app.services.affiliate_service import get_affiliate_service
 
 router = APIRouter()
 limiter = Limiter(key_func=get_remote_address)
@@ -96,7 +97,7 @@ async def list_paddles(
             func.min(MarketOffer.price_brl).label("min_price"),
             func.count(MarketOffer.id).label("offer_count")
         )
-        .where(MarketOffer.is_active == True)
+        .where(MarketOffer.is_active.is_(True)) # noqa: E712
         .group_by(MarketOffer.paddle_id)
         .subquery()
     )
@@ -167,8 +168,6 @@ async def list_paddles(
     }
 
 
-from app.services.affiliate_service import get_affiliate_service
-
 @router.get("/paddles/{paddle_id}")
 async def get_paddle(
     paddle_id: UUID,
@@ -188,7 +187,7 @@ async def get_paddle(
     # Get offers
     offers_result = await session.exec(
         select(MarketOffer)
-        .where(MarketOffer.paddle_id == paddle_id, MarketOffer.is_active == True)
+        .where(MarketOffer.paddle_id == paddle_id, MarketOffer.is_active.is_(True)) # noqa: E712
         .order_by(MarketOffer.price_brl)
     )
     offers = offers_result.all()
@@ -278,7 +277,7 @@ async def search_paddles(
             # Get min price
             price_result = await session.exec(
                 select(func.min(MarketOffer.price_brl))
-                .where(MarketOffer.paddle_id == paddle.id, MarketOffer.is_active == True)
+                .where(MarketOffer.paddle_id == paddle.id, MarketOffer.is_active.is_(True)) # noqa: E712
             )
             min_price = price_result.first()
             

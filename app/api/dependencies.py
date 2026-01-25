@@ -2,8 +2,6 @@
 FastAPI dependencies for the API layer.
 """
 from fastapi import Request
-from slowapi import Limiter
-from slowapi.util import get_remote_address
 
 
 def get_rate_limiter(request: Request):

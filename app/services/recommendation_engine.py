@@ -39,7 +39,7 @@ class RecommendationEngine:
                 func.min(MarketOffer.price_brl).label("min_price"),
                 func.count(MarketOffer.id).label("offers_count")
             )
-            .where(MarketOffer.is_active == True)
+            .where(MarketOffer.is_active.is_(True)) # noqa: E712
             .group_by(MarketOffer.paddle_id)
             .subquery()
         )
