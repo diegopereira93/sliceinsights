@@ -53,6 +53,20 @@ class Settings(BaseSettings):
     
     # CORS
     allowed_origins: list[str] = ["http://localhost:3000", "http://localhost:8002"]
+
+    @field_validator("allowed_origins", mode="before")
+    @classmethod
+    def parse_allowed_origins(cls, v):
+        """Parse allowed origins from JSON string or list."""
+        if isinstance(v, str) and v.startswith("["):
+            import json
+            try:
+                return json.loads(v)
+            except json.JSONDecodeError:
+                return v.split(",")
+        elif isinstance(v, str):
+            return v.split(",")
+        return v
     
     # Logging
     log_level: str = "INFO"

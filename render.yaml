@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: sliceinsights-backend
+    env: docker
+    dockerContext: .
+    dockerfilePath: Dockerfile.backend
+    plan: free
+    branch: main
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        sync: false # User must provide Neon Connection String
+      - key: DATABASE_URL_SYNC
+        sync: false # User must provide Neon Connection String (Sync version)
+      - key: ALLOWED_ORIGINS
+        value: '["https://sliceinsights.vercel.app"]' # Placeholder for frontend URL
+      - key: DEBUG
+        value: "false"
+      - key: LOG_LEVEL
+        value: "INFO"
+      - key: PYTHON_VERSION
+        value: "3.11.0"
