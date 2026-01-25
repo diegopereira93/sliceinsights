@@ -237,6 +237,25 @@ GET /api/v1/paddles?available_in_brazil=false
 POST /api/v1/recommendations
 ```
 
+## 🤖 Desenvolvimento Autônomo
+
+Este projeto utiliza um enxame de agentes de IA especializados para acelerar o desenvolvimento.
+
+**Leia o guia completo: [AUTONOMOUS_DEV.md](./AUTONOMOUS_DEV.md)**
+
+### Workflow Rápido (IssueOps)
+1.  **Abra uma Issue** usando os templates (`Feature Request`, `Bug Report`).
+2.  **Marque um Agente** (ex: `@project-planner`) para iniciar o trabalho.
+3.  **Revise o PR** gerado automaticamente.
+
+### Agentes Principais
+*   `@project-planner`: Planejamento e Arquitetura.
+*   `@frontend-specialist`: UI/UX e React.
+*   `@backend-specialist`: API e Banco de Dados.
+*   `@devops-engineer`: CI/CD e Infra.
+
+---
+
 ## 🤝 Contribuindo
 
 Contribuições são bem-vindas! Por favor:
