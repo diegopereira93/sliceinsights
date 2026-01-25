@@ -51,8 +51,8 @@ class EnrichmentAgent:
             )
             data = response.json()
             return data["choices"][0]["message"]["content"]
-        except Exception as e:
-            print(f"  Error calling LLM: {e}")
+        except Exception:
+            print("  Error calling LLM during search and extract.")
             return {}
 
     async def run(self):
@@ -60,7 +60,7 @@ class EnrichmentAgent:
             # 1. Select paddles with missing data
             # Focusing on face_material as it was highlighted in the roadmap
             query = select(PaddleMaster).where(
-                (PaddleMaster.face_material == None) | (PaddleMaster.core_thickness_mm == None)
+                (PaddleMaster.face_material.is_(None)) | (PaddleMaster.core_thickness_mm.is_(None))
             ).limit(TOP_N)
             
             result = await session.exec(query)
@@ -72,7 +72,7 @@ class EnrichmentAgent:
                 print(f"Enriching {paddle.model_name}...")
                 
                 # Fetch Brand Name
-                brand_query = await session.exec(select(PaddleMaster).where(PaddleMaster.id == paddle.id))
+                # brand_query = await session.exec(select(PaddleMaster).where(PaddleMaster.id == paddle.id))
                 # (Assuming Brand relationship is loaded or accessible)
                 # For simplicity, let's use the brand_id to get brand name if needed, 
                 # but paddle object might have it if joined.

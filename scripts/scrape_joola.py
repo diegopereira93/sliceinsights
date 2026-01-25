@@ -76,7 +76,7 @@ async def scrape_joola_page(page, page_num: int) -> list[dict]:
             
             # Extrair marca e modelo do nome
             # Formato comum: "JOOLA Perseus CFS 16mm"
-            parts = product_name.split()
+            # parts = product_name.split()  # Not used
             brand_name = "Joola"  # Loja oficial Joola
             model_name = product_name.replace("JOOLA", "").strip()
             
@@ -89,8 +89,8 @@ async def scrape_joola_page(page, page_num: int) -> list[dict]:
                 'image_url': image_url
             })
             
-        except Exception as e:
-            print(f"    ⚠️  Erro ao processar produto: {e}")
+        except Exception:
+            print("    ⚠️  Erro ao processar produto")
             continue
     
     return products

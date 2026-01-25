@@ -59,3 +59,22 @@ npx neonctl auth
 # Create Project and get Connection String
 npx neonctl projects create --name sliceinsights
 ```
+
+---
+
+## ⚡ Method C: GitHub Actions Automation (Synchronized)
+
+This is the most robust method, ensuring that Frontend and Backend stay in sync after every push to `main`.
+
+### 1. Configure GitHub Secrets
+1.  In your GitHub repository, go to **Settings** -> **Secrets and variables** -> **Actions**.
+2.  Add the following **Repository secrets**:
+    *   `VERCEL_TOKEN`: Your Vercel API token.
+    *   `VERCEL_ORG_ID`: Your Vercel Team/User ID.
+    *   `VERCEL_PROJECT_ID`: Your Vercel Project ID.
+
+### 2. How it works
+- **CI/CD Pipeline**: Every push to `main` triggers `.github/workflows/ci.yml`.
+- **Verification**: It runs Ruff (Lint), Safety (Security), and Pytest.
+- **Deployment**: If tests pass, it automatically deploys to **Vercel**.
+- **Backend Sync**: **Render** is configured to auto-deploy on every push to `main`, ensuring the API and UI are always updated together.

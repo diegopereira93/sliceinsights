@@ -19,7 +19,7 @@ async def scrape_notion_table():
         print("Waiting for network idle...")
         try:
             await page.wait_for_load_state("networkidle", timeout=60000)
-        except:
+        except Exception:
             pass
 
         print("Waiting for table rows...")
@@ -30,7 +30,7 @@ async def scrape_notion_table():
         try:
             await page.wait_for_selector(scroller_selector, timeout=5000)
             use_window_scroll = False
-        except:
+        except Exception:
             print("Specific scroller not found, using window scroll.")
             use_window_scroll = True
 
@@ -68,7 +68,8 @@ async def scrape_notion_table():
                 parts = text.split('\n')
                 parts = [p.strip() for p in parts if p.strip()]
                 
-                if not parts or len(parts) < 2: continue
+                if not parts or len(parts) < 2:
+                    continue
                 
                 key = f"{parts[0]}_{parts[1]}"
                 

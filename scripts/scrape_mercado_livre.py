@@ -32,7 +32,7 @@ async def scrape_mercado_livre():
         # Aguardar resultados
         try:
             await page.wait_for_selector('.ui-search-layout__item', timeout=10000)
-        except:
+        except Exception:
             print("⚠️  Nenhum resultado encontrado")
             await browser.close()
             return []

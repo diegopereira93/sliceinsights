@@ -95,7 +95,7 @@ def clean_price(price_val) -> Optional[Decimal]:
                 return None
             return Decimal(clean)
         return Decimal(str(price_val))
-    except:
+    except Exception:
         return None
 
 
@@ -105,7 +105,7 @@ def clean_float(val) -> Optional[float]:
         return None
     try:
         return float(val)
-    except:
+    except Exception:
         return None
 
 
@@ -115,7 +115,7 @@ def clean_int(val) -> Optional[int]:
         return None
     try:
         return int(float(val))
-    except:
+    except Exception:
         return None
 
 
@@ -297,7 +297,7 @@ def seed_database_hybrid():
         
         # FASE 2: Criar produtos BR com specs enriquecidas (MÚLTIPLAS FONTES)
         matched_count = 0
-        skipped_count = 0
+        # skipped_count = 0  # Not used in this version
         tier_stats = {1: 0, 2: 0, 3: 0}
         
         for csv_path, source_name in BRAZILIAN_SOURCES:
@@ -525,7 +525,7 @@ def seed_database_hybrid():
         total_brands = len(session.exec(select(Brand)).all())
         total_paddles = len(session.exec(select(PaddleMaster)).all())
         brazilian_paddles = len(session.exec(select(PaddleMaster).where(
-            PaddleMaster.available_in_brazil == True
+            PaddleMaster.available_in_brazil.is_(True)
         )).all())
         total_offers = len(session.exec(select(MarketOffer)).all())
         

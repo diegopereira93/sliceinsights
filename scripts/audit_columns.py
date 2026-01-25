@@ -38,7 +38,7 @@ def audit_columns():
         stats.sort(key=lambda x: x[1])
         
         for col, rate, miss, ex in stats:
-            color = ""
+            # color = ""  # Not used
             if rate == 100:
                 status = "✅"
             elif rate > 80:

@@ -17,9 +17,9 @@ async def check_async():
     # Manually create async session or mock dependency
     from sqlalchemy.ext.asyncio import create_async_engine
     from sqlmodel.ext.asyncio.session import AsyncSession
-    from app.config import get_settings
+    # from app.config import get_settings
     
-    settings = get_settings()
+    # settings = get_settings()
     # Use sync url but replace driver? No, use database_url from settings
     # But running inside container vs host?
     # From host, need localhost:5434. 
