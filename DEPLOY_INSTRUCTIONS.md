@@ -78,3 +78,18 @@ This is the most robust method, ensuring that Frontend and Backend stay in sync 
 - **Verification**: It runs Ruff (Lint), Safety (Security), and Pytest.
 - **Deployment**: If tests pass, it automatically deploys to **Vercel**.
 - **Backend Sync**: **Render** is configured to auto-deploy on every push to `main`, ensuring the API and UI are always updated together.
+
+---
+
+## 🏁 Final Verification (Docker)
+
+Before any major release, it is highly recommended to run the full E2E suite locally using Docker to simulate production:
+
+```bash
+# Start Docker services
+docker compose up -d
+
+# Run Playwright tests
+cd frontend
+npx playwright test
+```

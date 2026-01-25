@@ -38,7 +38,7 @@ Know your team. Calling the right specialist saves tokens and time.
 | Agent | Handle | Role | When to use |
 |-------|--------|------|-------------|
 | **DevOps Engineer** | `@devops-engineer` | Infra | CI/CD, Docker, Deployment, Scripts. |
-| **QA Automation** | `@qa-automation` | Tests | Writing E2E tests, Unit tests strategies. |
+| **Test Engineer** | `@test-engineer` | Tests | Writing E2E tests, Unit tests strategies. |
 | **Security Auditor** | `@security-auditor` | Security | Vulnerability scans, Auth reviews. |
 | **Debugger** | `@debugger` | Fixes | Investigating errors, logs, and weird behaviors. |
 
