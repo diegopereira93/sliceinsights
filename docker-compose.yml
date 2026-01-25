@@ -75,13 +75,14 @@ services:
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres_v3:5432/picklematch
       DATABASE_URL_SYNC: postgresql://postgres:postgres@postgres_v3:5432/picklematch
+      SEED_FORCE_CLEAR: "true"
     volumes:
       - ./data:/app/data
       - ./app:/app/app
     depends_on:
       postgres_v3:
         condition: service_healthy
-    command: python -m app.db.seed_data
+    command: python -m app.db.seed_data_hybrid
     networks:
       - picklematch_v3
 

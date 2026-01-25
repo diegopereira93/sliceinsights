@@ -388,27 +388,35 @@ def seed_database_hybrid():
                         specs_source=f"brazil_scraper+int_match_tier{match_result['match_tier']}",
                         specs_confidence=match_result['match_score'] / 100.0
                     )
-                    
-                    session.add(paddle)
-                    session.flush()
-                    
-                    # Guardar para evitar duplicatas
-                    brand_key = normalize_name(brand_name)
-                    model_key = normalize_name(model_name)
-                    paddles_created[(brand_key, model_key)] = paddle.id
-                    
-                    # Criar oferta brasileira
-                    if price_brl:
-                        offer = MarketOffer(
-                            paddle_id=paddle.id,
-                            store_name=store_name,
-                            price_brl=price_brl,
-                            url=product_url
-                        )
-                        session.add(offer)
                 else:
-                    # SEM MATCH: PULAR (não adicionar ao catálogo)
-                    print(f"  ⏩ Pulando '{brand_name} {model_name}' - sem match no dataset")
+                    # SEM MATCH: Criar apenas com dados básicos do scraper
+                    paddle = PaddleMaster(
+                        brand_id=brand_obj.id,
+                        model_name=model_name,
+                        search_keywords=keywords,
+                        image_url=image_url,
+                        available_in_brazil=True,
+                        specs_source="brazil_scraper",
+                        specs_confidence=1.0
+                    )
+                
+                session.add(paddle)
+                session.flush()
+                
+                # Guardar para evitar duplicatas
+                brand_key = normalize_name(brand_name)
+                model_key = normalize_name(model_name)
+                paddles_created[(brand_key, model_key)] = paddle.id
+                
+                # Criar oferta brasileira
+                if price_brl:
+                    offer = MarketOffer(
+                        paddle_id=paddle.id,
+                        store_name=store_name,
+                        price_brl=price_brl,
+                        url=product_url
+                    )
+                    session.add(offer)
             
             session.commit()
             print(f"  ✅ {len(paddles_created)} produtos brasileiros criados")
