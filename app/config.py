@@ -28,6 +28,12 @@ class Settings(BaseSettings):
             v = v.replace("postgres://", "postgresql+asyncpg://", 1)
         elif v.startswith("postgresql://") and "+asyncpg" not in v:
             v = v.replace("postgresql://", "postgresql+asyncpg://", 1)
+            
+        # Fix for asyncpg: replace sslmode with ssl as asyncpg doesn't support sslmode
+        # but supports ssl=require in the query string (parsed by SQLAlchemy)
+        if "sslmode=" in v:
+            v = v.replace("sslmode=", "ssl=")
+            
         return v
 
     @property
