@@ -30,7 +30,11 @@ These steps are manual because they require authentication with external provide
 5.  **Root Directory**: Click "Edit" and select `frontend`.
 6.  **Environment Variables**:
     *   `NEXT_PUBLIC_API_URL`: Paste the **Render Backend URL** + `/api/v1`.
-7.  Click **Deploy**.
+    *   `BACKEND_URL`: Paste the **Render Backend URL** (without /api/v1).
+7.  **CORS (Render)**:
+    *   In Render Dashboard, add `ALLOWED_ORIGINS` variable.
+    *   Value: `["https://your-app.vercel.app"]` (Replace with your actual Vercel URL).
+8.  Click **Deploy**.
 
 ---
 
