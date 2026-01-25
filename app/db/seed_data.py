@@ -78,6 +78,7 @@ def seed_from_csv(csv_path: Path, session: Session):
                     search_keywords=[brand_name.lower(), model_name.lower()],
                     image_url=clean_image,
                     is_featured=False,
+                    available_in_brazil=True,
                     specs_source="brazil_scraper"
                 )
                 session.add(paddle)
