@@ -18,7 +18,7 @@ These steps are manual because they require authentication with external provide
 4.  Render will auto-detect `render.yaml`.
 5.  **Environment Variables**:
     *   Render will ask for `DATABASE_URL`. Paste the Neon URL.
-    *   **CRITICAL**: Append `?sslmode=require` if missing.
+    *   **Note**: `sslmode=require` is standard for Neon. The backend automatically adapts it for `asyncpg`.
 6.  Click **Apply**. Wait for build (~5 mins).
 7.  **Copy the Backend URL**: e.g., `https://sliceinsights-backend.onrender.com`.
 

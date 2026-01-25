@@ -219,7 +219,25 @@ npm run dev
 npm run build
 ```
 
-## 📝 API Endpoints
+### Qualidade & Testes
+
+```bash
+# Verificar todo o projeto (Lint, Segurança, Testes)
+./scripts/verify.sh
+
+# Rodar apenas Linter (Ruff)
+ruff check .
+
+# Rodar Scan de Segurança
+safety check -r requirements.txt
+```
+233: 
+234: **Padrões exigidos**:
+235: - **Linting**: Código deve passar no `ruff` sem erros.
+236: - **Segurança**: Dependências verificadas pelo `safety`.
+237: - **Testing**: Cobertura básica de endpoints críticos.
+238: 
+239: ## 📝 API Endpoints
 
 ### Principais Rotas
 
