@@ -15,13 +15,13 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 
 interface FilterDrawerProps {
+    brands: string[];
     selectedBrands: string[];
     onToggleBrand: (brand: string) => void;
     onClear: () => void;
 }
 
-export function FilterDrawer({ selectedBrands, onToggleBrand, onClear }: FilterDrawerProps) {
-    const brands = ["Joola", "Selkirk", "CRBN", "Volair", "Six Zero", "Vatic Pro"];
+export function FilterDrawer({ brands, selectedBrands, onToggleBrand, onClear }: FilterDrawerProps) {
 
     return (
         <Drawer>

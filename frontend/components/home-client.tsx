@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 
 interface HomeClientProps {
     initialPaddles: Paddle[];
+    availableBrands: string[];
 }
 
 const containerVariants = {
@@ -31,7 +32,7 @@ const itemVariants = {
     show: { opacity: 1, y: 0 }
 };
 
-export function HomeClient({ initialPaddles }: HomeClientProps) {
+export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps) {
     const [selectedPaddle, setSelectedPaddle] = useState<Paddle | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -133,13 +134,14 @@ export function HomeClient({ initialPaddles }: HomeClientProps) {
                         </div>
 
                         <FilterDrawer
+                            brands={availableBrands}
                             selectedBrands={selectedBrands}
                             onToggleBrand={(brand) => {
                                 setSelectedBrands(prev =>
                                     prev.includes(brand) ? prev.filter(b => b !== brand) : [...prev, brand]
                                 );
                             }}
-                            onClear={() => setSelectedBrands([])}
+                            onClear={handleClearFilters}
                         />
                     </div>
                 </div>

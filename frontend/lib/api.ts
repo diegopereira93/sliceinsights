@@ -1,7 +1,8 @@
 const isBrowser = typeof window !== 'undefined';
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || (isBrowser
-    ? `${window.location.origin}/api/v1`
-    : 'http://backend_v3:8000/api/v1');
+const INTERNAL_API_URL = (process.env.BACKEND_URL || 'http://backend_v3:8000').replace(/\/$/, '') + '/api/v1';
+const PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || (isBrowser ? `${window.location.origin}/api/v1` : INTERNAL_API_URL);
+
+export const API_BASE_URL = isBrowser ? PUBLIC_API_URL : INTERNAL_API_URL;
 
 export interface BackendPaddle {
     id: string;
@@ -65,6 +66,12 @@ export async function getPaddles(filters: Record<string, any> = {}) {
 
     const response = await fetch(`${API_BASE_URL}/paddles?${params.toString()}`);
     if (!response.ok) throw new Error('Failed to fetch paddles');
+    return response.json();
+}
+
+export async function getBrands() {
+    const response = await fetch(`${API_BASE_URL}/brands`);
+    if (!response.ok) throw new Error('Failed to fetch brands');
     return response.json();
 }
 
