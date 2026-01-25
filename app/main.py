@@ -100,6 +100,29 @@ app.add_middleware(GZipMiddleware, minimum_size=500)
 Instrumentator().instrument(app).expose(app)
 logger.info("Prometheus metrics exposed at /metrics")
 
+# ============== Security Headers ==============
+
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    """Add security headers to every response."""
+    response = await call_next(request)
+    # Note: Adjust CSP according to your frontend needs
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "img-src 'self' data: https: http:; "
+        "font-src 'self' data: https://fonts.gstatic.com; "
+        "connect-src 'self' https: http:; "
+        "frame-ancestors 'none';"
+    )
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    return response
+
 # ============== Request Logging Middleware ==============
 
 @app.middleware("http")

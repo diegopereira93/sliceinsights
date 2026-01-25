@@ -15,17 +15,15 @@ from app.db.database import get_session
 async def test_recommendations_valid_request():
     """Test recommendations endpoint with valid request."""
     paddle_id = uuid4()
+    from tests.conftest import MockPaddle
     mock_row = (
-        MagicMock(
+        MockPaddle(
             id=paddle_id,
-            model_name="Test Paddle",
-            power_rating=7.0,
-            control_rating=7.0,
-            spin_rating=7.0,
-            sweet_spot_rating=7.0,
-            twist_weight=6.5,
-            ideal_for_tennis_elbow=False,
-            skill_level=MagicMock(value="intermediate")
+            name="Test Paddle",
+            power=7.0,
+            control=7.0,
+            spin=7.0,
+            sweet_spot=7.0
         ),
         "Test Brand",
         Decimal("999.00"),
@@ -66,17 +64,15 @@ async def test_recommendations_valid_request():
 async def test_recommendations_power_style():
     """Test recommendations with power play style."""
     paddle_id = uuid4()
+    from tests.conftest import MockPaddle
     mock_row = (
-        MagicMock(
+        MockPaddle(
             id=paddle_id,
-            model_name="Power Paddle",
-            power_rating=9.0,
-            control_rating=6.0,
-            spin_rating=7.0,
-            sweet_spot_rating=7.0,
-            twist_weight=5.5,
-            ideal_for_tennis_elbow=False,
-            skill_level=MagicMock(value="advanced")
+            name="Power Paddle",
+            power=9.0,
+            control=6.0,
+            spin=7.0,
+            sweet_spot=7.0
         ),
         "Power Brand",
         Decimal("1500.00"),
@@ -116,22 +112,21 @@ async def test_recommendations_power_style():
 async def test_recommendations_tennis_elbow():
     """Test recommendations filter for tennis elbow."""
     paddle_id = uuid4()
+    from tests.conftest import MockPaddle
     mock_row = (
-        MagicMock(
+        MockPaddle(
             id=paddle_id,
-            model_name="Elbow Friendly",
-            power_rating=6.0,
-            control_rating=8.0,
-            spin_rating=7.0,
-            sweet_spot_rating=9.0,
-            twist_weight=7.5,
-            ideal_for_tennis_elbow=True,
-            skill_level=MagicMock(value="beginner")
+            name="Elbow Friendly",
+            power=6.0,
+            control=8.0,
+            spin=7.0,
+            sweet_spot=9.0
         ),
         "Comfort Brand",
         Decimal("800.00"),
         3
     )
+    mock_row[0].core_thickness_mm = 16.0
     
     async def mock_session_gen():
         mock = AsyncMock()

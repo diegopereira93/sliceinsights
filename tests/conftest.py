@@ -34,6 +34,7 @@ class MockPaddle:
         self.weight_avg_g = 220.0
         self.ideal_for_tennis_elbow = False
         self.is_featured = False
+        self.available_in_brazil = True
         self.image_url = None
         
         from app.models.enums import FaceMaterial, PaddleShape, SkillLevel
