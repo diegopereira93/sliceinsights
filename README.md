@@ -107,7 +107,7 @@ docker compose exec backend_v3 python -m app.db.seed_data_hybrid
 |---------|-------|-----------|
 | `frontend_next` | 3000 | Aplicação Next.js |
 | `backend_v3` | 8002 | API FastAPI |
-| `postgres_v3` | 5433 | Banco PostgreSQL |
+| `postgres_v3` | 5434 | Banco PostgreSQL |
 
 ## 📊 Scrapers de Dados
 
