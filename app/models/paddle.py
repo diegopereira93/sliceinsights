@@ -12,9 +12,27 @@ if TYPE_CHECKING:
     from .market_offer import MarketOffer
 
 
+from pydantic import field_validator
+
 class PaddleMasterBase(SQLModel):
     """Base paddle model with shared attributes."""
     model_name: str = Field(index=True)
+    
+    # ... (Model fields are unchanged, inserting methods below) ...
+
+    @field_validator("power_rating")
+    @classmethod
+    def validate_rating_range(cls, v: Optional[int]) -> Optional[int]:
+        if v is not None and (v < 0 or v > 10):
+            raise ValueError("Rating must be between 0 and 10")
+        return v
+
+    @field_validator("twist_weight")
+    @classmethod
+    def validate_twist_weight(cls, v: Optional[float]) -> Optional[float]:
+        if v is not None and v < 0:
+            raise ValueError("Twist weight cannot be negative")
+        return v
     
     # Physical Specs
     core_thickness_mm: Optional[float] = None

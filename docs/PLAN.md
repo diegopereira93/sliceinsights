@@ -55,3 +55,39 @@
 
 ### Manual Verification
 - Execute `python3 scripts/update_paddle_specs.py` (dry-run mode if possible or against dev db) to ensure logic remains correct.
+
+---
+
+## Phase 2: Data Integrity & Logic Validation (Orchestration)
+
+**Objective**: Ensure the "Nature of Data" (Physics -> Ratings) is mathematically correct and robust.
+
+### 1. Domain Logic Validation (Agent: `test-engineer`)
+#### [NEW] [tests/test_domain_logic.py](file:///home/diego/Documentos/projetos/data-products/sliceinsights/tests/test_domain_logic.py)
+- **Goal**: Verify `calculate_paddle_ratings` against edge cases.
+- **Scenarios**:
+    - Twist Weight < 100 (Small scale conversion).
+    - Twist Weight > 150 (Large scale conversion).
+    - Missing Spin RPM (Defaults).
+    - Boundary checks (0-10 limits).
+
+### 2. Script Refactoring (Agent: `backend-specialist`)
+#### [MODIFY] [scripts/update_paddle_specs.py](file:///home/diego/Documentos/projetos/data-products/sliceinsights/scripts/update_paddle_specs.py)
+- **Goal**: Migrate from Raw f-string SQL to SQLModel ORM.
+- **Why**: Security (prevent injection) + Data Consistency (use model validation).
+
+### 3. Database Constraints (Agent: `database-architect`)
+#### [MODIFY] [app/models/paddle.py](file:///home/diego/Documentos/projetos/data-products/sliceinsights/app/models/paddle.py)
+- **Goal**: Add validators/constraints to `PaddleMaster`.
+- **Changes**:
+    - `validator("power_rating")`: ensure 0-10.
+    - `validator("twist_weight")`: warn on suspicious values.
+
+### 4. Production Data Verification (Agent: `qa-automation-engineer` & `devops-engineer`)
+#### [NEW] [frontend/e2e/data-integrity.spec.ts](file:///home/diego/Documentos/projetos/data-products/sliceinsights/frontend/e2e/data-integrity.spec.ts)
+- **Goal**: Validate that data ingested in Backend actually appears in Frontend Catalog.
+- **Action**: Create an E2E test that:
+    1. Visits the Catalog page.
+    2. Searches for a specific "Golden Record" (e.g., "Ben Johns Perseus").
+    3. Verifies that the displayed specs (Power, Control) match the database values.
+- **CI/CD**: Add this test to the `verify-deployment` pipeline stage.
