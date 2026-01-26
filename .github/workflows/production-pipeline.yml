@@ -77,13 +77,16 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Trigger Render Deploy Hook
-        if: "${{ secrets.RENDER_DEPLOY_HOOK }}"
-        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
-      - name: Check Render Config
-        if: "!${{ secrets.RENDER_DEPLOY_HOOK }}"
+        env:
+          DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
         run: |
-          echo "⚠️ RENDER_DEPLOY_HOOK secret is missing."
-          echo "Backend will rely on Render's auto-deploy (Git integration)."
+          if [ -n "$DEPLOY_HOOK" ]; then
+            echo "Triggering Render Deploy..."
+            curl -X POST "$DEPLOY_HOOK"
+          else
+            echo "⚠️ RENDER_DEPLOY_HOOK secret is missing. Skipping manual trigger."
+            echo "Backend will rely on Render's auto-deploy (Git integration)."
+          fi
 
   # ------------------------------------------------------------------
   # 🕵️‍♀️ VERIFICATION IN PRODUCTION
