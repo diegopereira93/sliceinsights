@@ -84,3 +84,31 @@ jobs:
         run: |
           echo "⚠️ RENDER_DEPLOY_HOOK secret is missing."
           echo "Backend will rely on Render's auto-deploy (Git integration)."
+
+  # ------------------------------------------------------------------
+  # 🕵️‍♀️ VERIFICATION IN PRODUCTION
+  # ------------------------------------------------------------------
+  verify-deployment:
+    name: 🕵️‍♀️ Verify Live Deployment
+    needs: [deploy-frontend]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install Playwright
+        run: |
+          cd frontend
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Run Smoke Test
+        run: |
+          cd frontend
+          npx playwright test e2e/verification.spec.ts
+        env:
+          # Validating the stable URL we recovered
+          BASE_URL: "https://frontend-five-iota-18.vercel.app"
