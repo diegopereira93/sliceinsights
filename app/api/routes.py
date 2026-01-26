@@ -64,20 +64,42 @@ async def diagnostics(
     
     # Check data files
     root_dir = Path(__file__).parent.parent.parent
+    data_dir = root_dir / "data"
+    data_raw_dir = root_dir / "data" / "raw"
+    
     data_files = {
         "paddle_stats_dump.csv": (root_dir / "data/raw/paddle_stats_dump.csv").exists(),
         "brazil_pickleball_store.csv": (root_dir / "data/raw/brazil_pickleball_store.csv").exists(),
         "joola_brazil.csv": (root_dir / "data/raw/joola_brazil.csv").exists(),
     }
     
+    # List what actually exists
+    try:
+        data_dir_contents = list(data_dir.iterdir()) if data_dir.exists() else []
+        data_raw_contents = list(data_raw_dir.iterdir()) if data_raw_dir.exists() else []
+    except Exception as e:
+        data_dir_contents = [f"Error: {str(e)}"]
+        data_raw_contents = []
+    
     # Check environment variables (masked)
     db_url = os.getenv("DATABASE_URL", "NOT SET")
     db_url_sync = os.getenv("DATABASE_URL_SYNC", "NOT SET")
     seed_force = os.getenv("SEED_FORCE_CLEAR", "NOT SET")
     
+    # List root contents
+    try:
+        root_contents = [str(p.name) for p in root_dir.iterdir()]
+    except:
+        root_contents = ["Error listing root"]
+    
     return {
         "data_files": data_files,
         "all_files_exist": all(data_files.values()),
+        "data_dir_exists": data_dir.exists(),
+        "data_raw_dir_exists": data_raw_dir.exists(),
+        "data_dir_contents": [str(p.name) for p in data_dir_contents] if isinstance(data_dir_contents, list) else data_dir_contents,
+        "data_raw_contents": [str(p.name) for p in data_raw_contents] if isinstance(data_raw_contents, list) else data_raw_contents,
+        "root_contents": root_contents,
         "env": {
             "DATABASE_URL": f"{db_url[:30]}..." if len(db_url) > 30 else db_url,
             "DATABASE_URL_SYNC": f"{db_url_sync[:30]}..." if len(db_url_sync) > 30 else db_url_sync,
