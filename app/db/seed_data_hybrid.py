@@ -14,11 +14,11 @@ from app.db.database import sync_engine, init_db_sync
 from app.models import Brand, PaddleMaster, MarketOffer
 from app.models.enums import FaceMaterial, PaddleShape
 
-# Caminhos dos CSVs (relativos à raiz do projeto)
-ROOT_DIR = Path(__file__).parent.parent.parent
-INTERNATIONAL_CSV = ROOT_DIR / "data/raw/paddle_stats_dump.csv"
-BRAZIL_STORE_CSV = ROOT_DIR / "data/raw/brazil_pickleball_store.csv"
-JOOLA_BRAZIL_CSV = ROOT_DIR / "data/raw/joola_brazil.csv"
+# Caminhos dos CSVs - dentro de app/ para garantir inclusão no container
+APP_DIR = Path(__file__).parent.parent  # /app/app
+INTERNATIONAL_CSV = APP_DIR / "data/paddle_stats_dump.csv"
+BRAZIL_STORE_CSV = APP_DIR / "data/brazil_pickleball_store.csv"
+JOOLA_BRAZIL_CSV = APP_DIR / "data/joola_brazil.csv"
 
 # Lista de fontes brasileiras para processar
 BRAZILIAN_SOURCES = [
