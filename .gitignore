@@ -64,6 +64,4 @@ data/*.csv
 
 # Node.js (CLI tools installed locally)
 node_modules/
-package.json
-package-lock.json
-yarn.lock
+
