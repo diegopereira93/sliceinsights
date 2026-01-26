@@ -1,9 +1,18 @@
 {
-    "name": "sliceinsights-frontend",
-    "buildCommand": "npm run build",
-    "devCommand": "npm run dev",
-    "installCommand": "npm install",
-    "outputDirectory": ".next",
-    "framework": "nextjs",
-    "rootDirectory": "frontend"
+    "version": 2,
+    "builds": [
+        {
+            "src": "frontend/package.json",
+            "use": "@vercel/next"
+        }
+    ],
+    "rewrites": [
+        {
+            "source": "/api/v1/:path*",
+            "destination": "https://sliceinsights-backend.onrender.com/api/v1/:path*"
+        }
+    ],
+    "env": {
+        "NEXT_PUBLIC_API_URL": "https://sliceinsights-backend.onrender.com/api/v1"
+    }
 }
