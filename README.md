@@ -229,18 +229,27 @@ npm run build
 ./scripts/verify.sh
 
 # Rodar apenas Linter (Ruff)
-ruff check .
+./.venv/bin/ruff check .
 
 # Rodar Scan de Segurança
-safety check -r requirements.txt
+./.venv/bin/safety check -r requirements.txt
 ```
-233: 
-234: **Padrões exigidos**:
-235: - **Linting**: Código deve passar no `ruff` sem erros.
-236: - **Segurança**: Dependências verificadas pelo `safety`.
-237: - **Testing**: Cobertura básica de endpoints críticos.
-238: 
-239: ## 📝 API Endpoints
+
+### 🌳 Fluxo de Trabalho Git (Obrigatório)
+
+Para garantir a estabilidade em produção, todos os ajustes (humanos ou agentes) seguem este padrão:
+
+1.  **Branch a partir da `main`**: `git checkout -b feat/nome-da-feature`.
+2.  **Desenvolvimento**: Implemente as mudanças e verifique localmente com `./scripts/verify.sh`.
+3.  **Pull Request**: Abra um PR contra a `main`. **Nunca faça push direto na `main`.**
+4.  **Merge**: O merge só deve ocorrer após aprovação e sucesso na pipeline de CI.
+
+**Padrões exigidos**:
+- **Linting**: Código deve passar no `ruff` sem erros.
+- **Segurança**: Dependências verificadas pelo `safety`.
+- **Testing**: Cobertura básica de endpoints críticos.
+
+## 📝 API Endpoints
 
 ### Principais Rotas
 
@@ -282,10 +291,10 @@ Este projeto utiliza um enxame de agentes de IA especializados para acelerar o d
 Contribuições são bem-vindas! Por favor:
 
 1. Fork o projeto
-2. Crie uma feature branch (`git checkout -b feature/nova-feature`)
-3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
-4. Push para a branch (`git push origin feature/nova-feature`)
-5. Abra um Pull Request
+2. Crie uma branch de feature (`git checkout -b feat/nova-feature`)
+3. Commit suas mudanças (`git commit -m 'feat: adiciona nova feature'`)
+4. Push para a branch (`git push origin feat/nova-feature`)
+5. Abra um Pull Request contra a `main`.
 
 ## 📄 Licença
 

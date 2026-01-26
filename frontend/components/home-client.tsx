@@ -96,7 +96,7 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
                         <Sparkles className="w-4 h-4 mr-2 fill-current" /> AI Advisor
                     </Badge>
                     <h1 className="mb-6 text-3xl font-black md:text-5xl lg:max-w-3xl">
-                        Descubra qual raquete é a <span className="text-primary italic">combinação perfeita</span> para o seu jogo.
+                        Descubra com a <span className="text-primary italic">SliceInsights</span> a raquete perfeita para o seu jogo.
                     </h1>
 
                     <div className="w-full mt-4">

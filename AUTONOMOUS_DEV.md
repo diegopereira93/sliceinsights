@@ -9,9 +9,10 @@ Welcome to the **Autonomous Development Protocol** for `sliceinsights`. This pro
 The most efficient way to work is **Asynchronous IssueOps**. Don't wait for the chat.
 
 1.  **Define**: Create an Issue using the `Feature Request` or `Task` template.
-2.  **Trigger**: Tag the relevant agent in the issue or PR (mentions like `@project-planner`).
-3.  **Review**: The agents will pick up the context, create a plan, code it, and open a PR.
-4.  **Merge**: You review the final PR (guided by the checklist) and merge.
+2.  **Branch**: ALWAYS create a new branch from `main` (e.g., `feat/`, `fix/`, `chore/`). **Never work directly on `main`.**
+3.  **Trigger**: Tag the relevant agent in the issue or PR (mentions like `@project-planner`).
+4.  **Review**: The agents will pick up the context, create a plan, code it, and open a PR against `main`.
+5.  **Merge**: You review the final PR (guided by the checklist) and merge.
 
 ---
 
@@ -63,7 +64,8 @@ Agents listen for specific intent patterns. Use these keywords in your prompts o
 ## 🔄 The Autonomous Cycle
 
 1.  **Initialization**: User runs `/[command]` or states clear intent.
-2.  **Orchestration**: If complex, `orchestrator` breaks it down.
+2.  **Branching (MANDATORY)**: Create a feature branch `git checkout -b type/description`.
+3.  **Orchestration**: If complex, `orchestrator` breaks it down.
 3.  **Execution**: Agents work in parallel where possible.
     *   *Frontend* builds UI.
     *   *Backend* builds API.
@@ -72,6 +74,21 @@ Agents listen for specific intent patterns. Use these keywords in your prompts o
     *   **MANDATORY**: Agents MUST run `scripts/verify.sh` locally to ensure linting, security, and tests pass.
     *   *CI/CD*: GitHub Actions (`ci.yml`) acts as the final gatekeeper on PRs.
 5.  **Completion**: `walkthrough.md` is updated with proof of verification.
+
+---
+
+---
+
+## 🌳 Git Workflow Guidelines
+
+To maintain production stability, all contributors (human and agent) must follow these rules:
+
+*   **Main is Protected**: Direct pushes to `main` are restricted to deployment finalization.
+*   **Branch Naming**: 
+    *   `feat/feature-name` for new work.
+    *   `fix/bug-name` for bug fixes.
+    *   `docs/doc-updates` for documentation.
+*   **PR Requirement**: All code must enter `main` via a Pull Request with at least one passing CI run.
 
 ---
 

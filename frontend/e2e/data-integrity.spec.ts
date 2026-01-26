@@ -3,11 +3,12 @@ import { test, expect } from '@playwright/test';
 
 test('Data Integrity: Catalog displays enriched paddle specs', async ({ page }) => {
     // 1. Visit Catalog
-    await page.goto('/catalog');
+    // 1. Visit Home (Catalog is embedded)
+    await page.goto('/');
 
     // 2. Search for a known heavy-hitter (Joola Ben Johns Perseus)
     // Assuming the DB has at least some seed data or ingested data
-    const searchBox = page.getByPlaceholder('Buscar raquetes...');
+    const searchBox = page.getByPlaceholder('Buscar raquete...');
 
     // Verify search input exists (smoke check)
     await expect(searchBox).toBeVisible();

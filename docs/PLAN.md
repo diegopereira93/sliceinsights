@@ -90,4 +90,61 @@
     1. Visits the Catalog page.
     2. Searches for a specific "Golden Record" (e.g., "Ben Johns Perseus").
     3. Verifies that the displayed specs (Power, Control) match the database values.
-- **CI/CD**: Add this test to the `verify-deployment` pipeline stage.
+---
+
+## Phase 3: Public Presence & Polish (Orchestration)
+
+**Objective**: Maximize visibility and ensure a premium user experience for the Open Beta launch.
+
+### 1. SEO & OpenGraph Optimization (Agent: `seo-specialist`)
+#### [MODIFY] [frontend/app/layout.tsx](file:///home/diego/Documentos/projetos/data-products/sliceinsights/frontend/app/layout.tsx)
+- **Goal**: Implement high-fidelity meta tags and social share images.
+- **Changes**:
+    - Add `metadata` object with descriptive title and summary.
+    - Configure `openGraph` and `twitter` cards.
+    - Ensure `robots.txt` allows indexing.
+
+### 2. Performance & VBR (Agent: `performance-optimizer`)
+#### [MODIFY] [frontend/next.config.mjs](file:///home/diego/Documentos/projetos/data-products/sliceinsights/frontend/next.config.mjs)
+- **Goal**: Achieve Lighthouse Score > 80.
+- **Action**: 
+    - Enable image optimization and compression if not already present.
+    - Identify and remove blocking scripts or heavy dependencies.
+    - Verify with `npx lighthouse`.
+
+### 3. E2E Stabilization (Agent: `test-engineer`)
+#### [MODIFY] [frontend/e2e/verification.spec.ts](file:///home/diego/Documentos/projetos/data-products/sliceinsights/frontend/e2e/verification.spec.ts)
+- **Goal**: Fix the 7th failing test case.
+- **Action**: 
+    - Analyze Playwright traces to identify the cause of failure.
+    - Fix selectors or hydration issues.
+    - Ensure 100% pass rate in the CI/CD pipeline.
+
+---
+
+## Phase 4: Scaling & Deployment Protocol (Orchestration)
+
+**Objective**: Transition to a more robust branching strategy and trigger the production deployment.
+
+### 1. New Branching Protocol (Agent: `project-planner`)
+- **Policy**: All new features or adjustments MUST start with a branch off `main`.
+- **Action**: 
+    - Create a branch `feat/unified-protocol-and-deploy`.
+    - Update [AUTONOMOUS_DEV.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/AUTONOMOUS_DEV.md) under "The Autonomous Cycle".
+    - Update [README.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/README.md) development section.
+
+### 2. Final Documentation Sweep (Agent: `documentation-writer`)
+- **Goal**: Ensure all guidelines are clear for external agent contributors.
+- **Action**: Add a "Git Workflow" section to the docs explicitly stating: `main` is protected; branch first.
+
+### 3. Production Deployment (Agent: `devops-engineer`)
+- **Goal**: Push certified changes to production and trigger Vercel/Render pipelines.
+- **Action**: 
+    - Checkout `main`, merge the feature branch after local verification.
+    - Push to origin `main`.
+    - Monitor GitHub Actions: [production-pipeline.yml](file:///home/diego/.github/workflows/production-pipeline.yml).
+
+## Orchestration Summary
+| Phase | Agents | Goal |
+|-------|--------|------|
+| **Phase 4** | `project-planner`, `documentation-writer`, `devops-engineer` | Deployment & Protocol Upgrade |

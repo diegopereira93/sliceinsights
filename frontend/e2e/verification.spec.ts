@@ -7,12 +7,12 @@ test.describe('Production Verification (Smoke Test)', () => {
 
     test('Should load Homepage with correct branding', async ({ page }) => {
         // Allow fuzzy matching for flexibility
-        await expect(page).toHaveTitle(/slice|pickleball/i);
+        await expect(page).toHaveTitle(/SliceInsights/i);
 
         const heading = page.locator('h1');
         await expect(heading).toBeVisible();
         // Should contain brand name
-        await expect(heading).toContainText(/Slice/i);
+        await expect(heading).toContainText(/SliceInsights/i);
     });
 
     test('Should display interactive elements (Quiz or Catalog)', async ({ page }) => {

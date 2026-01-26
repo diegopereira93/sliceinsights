@@ -1,5 +1,3 @@
-
-import pytest
 from app.models.paddle import calculate_paddle_ratings, PaddleMaster
 
 def test_calculate_ratings_large_twist_scale():
