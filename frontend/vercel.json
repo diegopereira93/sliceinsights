@@ -1,0 +1,11 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/v1/:path*",
+            "destination": "https://sliceinsights.onrender.com/api/v1/:path*"
+        }
+    ],
+    "env": {
+        "NEXT_PUBLIC_API_URL": "https://sliceinsights.onrender.com/api/v1"
+    }
+}
