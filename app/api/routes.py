@@ -46,6 +46,42 @@ async def health_check(session: AsyncSession = Depends(get_session)):
         raise HTTPException(status_code=503, detail="Database unavailable")
 
 
+# ============== Admin (Seed Trigger) ==============
+
+@router.post("/admin/seed")
+async def trigger_seed(
+    secret: str = Query(..., description="Admin secret key"),
+):
+    """
+    Trigger database seed manually.
+    Protected by secret key to prevent abuse.
+    """
+    import os
+    admin_secret = os.getenv("ADMIN_SEED_SECRET", "sliceinsights2026")
+    
+    if secret != admin_secret:
+        raise HTTPException(status_code=403, detail="Invalid secret")
+    
+    try:
+        # Run seed in a separate thread to avoid blocking
+        import threading
+        from app.db.seed_data_hybrid import seed_database_hybrid
+        
+        def run_seed():
+            os.environ["SEED_FORCE_CLEAR"] = "true"
+            seed_database_hybrid()
+        
+        thread = threading.Thread(target=run_seed)
+        thread.start()
+        
+        return {
+            "status": "seed_started",
+            "message": "Database seed triggered in background. Check /api/v1/paddles in 30-60 seconds."
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Seed failed: {str(e)}")
+
+
 # ============== Brands ==============
 
 @router.get("/brands", response_model=dict)
