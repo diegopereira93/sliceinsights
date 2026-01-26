@@ -38,14 +38,19 @@ class Settings(BaseSettings):
 
     @property
     def sync_database_url(self) -> str:
-        """Get a synchronous version of the database URL."""
+        """Get a synchronous version of the database URL for psycopg2."""
         if self.database_url_sync:
             return self.database_url_sync
         
         # Fallback to transforming database_url
         v = self.database_url
         if "+asyncpg" in v:
-            return v.replace("+asyncpg", "")
+            v = v.replace("+asyncpg", "")
+        
+        # psycopg2 requires sslmode=, not ssl= (which is for asyncpg)
+        if "ssl=" in v and "sslmode=" not in v:
+            v = v.replace("ssl=", "sslmode=")
+            
         return v
     
     # API
