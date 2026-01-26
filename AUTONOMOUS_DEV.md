@@ -70,9 +70,10 @@ Agents listen for specific intent patterns. Use these keywords in your prompts o
     *   *Frontend* builds UI.
     *   *Backend* builds API.
     *   *Testers* write verification.
-4.  **Verification**:
-    *   **MANDATORY**: Agents MUST run `scripts/verify.sh` locally to ensure linting, security, and tests pass.
-    *   *CI/CD*: GitHub Actions (`ci.yml`) acts as the final gatekeeper on PRs.
+4.  **Verification & Documentation (MANDATORY)**:
+    *   **Tests**: Agents MUST run `scripts/verify.sh` locally to ensure linting, security, and tests pass.
+    *   **Docs**: Agents MUST identify and update any affected documentation (README, API docs, Guides) to reflect code changes.
+    *   *CI/CD*: GitHub Actions acts as the final gatekeeper on PRs.
 5.  **Completion**: `walkthrough.md` is updated with proof of verification.
 
 ---

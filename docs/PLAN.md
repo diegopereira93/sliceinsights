@@ -144,7 +144,20 @@
     - Push to origin `main`.
     - Monitor GitHub Actions: [production-pipeline.yml](file:///home/diego/.github/workflows/production-pipeline.yml).
 
+---
+
+## Phase 5: Documentation Maintenance Guideline (Orchestration)
+
+**Objective**: Ensure project documentation remains synchronized with code changes by mandating agent-led updates.
+
+### 1. Guideline Enforcement (Agent: `documentation-writer`)
+- **Policy**: Agents MUST identify and update any affected documentation (README, API docs, Guides) before finalizing a task or making a push.
+- **Action**: 
+    - Update [AUTONOMOUS_DEV.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/AUTONOMOUS_DEV.md) "The Autonomous Cycle" and "Verification".
+    - Update [README.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/README.md) "Fluxo de Trabalho Git".
+    - Update [.agent/workflows/orchestrate.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/.agent/workflows/orchestrate.md) to include doc-sync as a mandatory step.
+
 ## Orchestration Summary
 | Phase | Agents | Goal |
 |-------|--------|------|
-| **Phase 4** | `project-planner`, `documentation-writer`, `devops-engineer` | Deployment & Protocol Upgrade |
+| **Phase 5** | `documentation-writer` | Mandatory Documentation Sync |

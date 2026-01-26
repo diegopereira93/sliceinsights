@@ -241,8 +241,9 @@ Para garantir a estabilidade em produção, todos os ajustes (humanos ou agentes
 
 1.  **Branch a partir da `main`**: `git checkout -b feat/nome-da-feature`.
 2.  **Desenvolvimento**: Implemente as mudanças e verifique localmente com `./scripts/verify.sh`.
-3.  **Pull Request**: Abra um PR contra a `main`. **Nunca faça push direto na `main`.**
-4.  **Merge**: O merge só deve ocorrer após aprovação e sucesso na pipeline de CI.
+3.  **Documentação**: Atualize todos os documentos afetados (README, API docs) antes do push.
+4.  **Pull Request**: Abra um PR contra a `main`. **Nunca faça push direto na `main`.**
+5.  **Merge**: O merge só deve ocorrer após aprovação e sucesso na pipeline de CI.
 
 **Padrões exigidos**:
 - **Linting**: Código deve passar no `ruff` sem erros.
