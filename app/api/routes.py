@@ -48,12 +48,51 @@ async def health_check(session: AsyncSession = Depends(get_session)):
 
 # ============== Admin (Seed Trigger) ==============
 
+@router.get("/admin/diag")
+async def diagnostics(
+    secret: str = Query(..., description="Admin secret key"),
+):
+    """
+    Diagnostic endpoint to check database and file configuration.
+    """
+    import os
+    from pathlib import Path
+    
+    admin_secret = os.getenv("ADMIN_SEED_SECRET", "sliceinsights2026")
+    if secret != admin_secret:
+        raise HTTPException(status_code=403, detail="Invalid secret")
+    
+    # Check data files
+    root_dir = Path(__file__).parent.parent.parent
+    data_files = {
+        "paddle_stats_dump.csv": (root_dir / "data/raw/paddle_stats_dump.csv").exists(),
+        "brazil_pickleball_store.csv": (root_dir / "data/raw/brazil_pickleball_store.csv").exists(),
+        "joola_brazil.csv": (root_dir / "data/raw/joola_brazil.csv").exists(),
+    }
+    
+    # Check environment variables (masked)
+    db_url = os.getenv("DATABASE_URL", "NOT SET")
+    db_url_sync = os.getenv("DATABASE_URL_SYNC", "NOT SET")
+    seed_force = os.getenv("SEED_FORCE_CLEAR", "NOT SET")
+    
+    return {
+        "data_files": data_files,
+        "all_files_exist": all(data_files.values()),
+        "env": {
+            "DATABASE_URL": f"{db_url[:30]}..." if len(db_url) > 30 else db_url,
+            "DATABASE_URL_SYNC": f"{db_url_sync[:30]}..." if len(db_url_sync) > 30 else db_url_sync,
+            "SEED_FORCE_CLEAR": seed_force,
+        },
+        "root_dir": str(root_dir),
+    }
+
+
 @router.post("/admin/seed")
 async def trigger_seed(
     secret: str = Query(..., description="Admin secret key"),
 ):
     """
-    Trigger database seed manually.
+    Trigger database seed manually (SYNCHRONOUS).
     Protected by secret key to prevent abuse.
     """
     import os
@@ -63,23 +102,29 @@ async def trigger_seed(
         raise HTTPException(status_code=403, detail="Invalid secret")
     
     try:
-        # Run seed in a separate thread to avoid blocking
-        import threading
+        os.environ["SEED_FORCE_CLEAR"] = "true"
+        
+        # Import and run synchronously for better error handling
         from app.db.seed_data_hybrid import seed_database_hybrid
+        seed_database_hybrid()
         
-        def run_seed():
-            os.environ["SEED_FORCE_CLEAR"] = "true"
-            seed_database_hybrid()
+        # Count results
+        from sqlmodel import select
+        from app.db.database import sync_engine
+        from sqlmodel import Session
         
-        thread = threading.Thread(target=run_seed)
-        thread.start()
+        with Session(sync_engine) as session:
+            brands_count = len(session.exec(select(Brand)).all())
+            paddles_count = len(session.exec(select(PaddleMaster)).all())
         
         return {
-            "status": "seed_started",
-            "message": "Database seed triggered in background. Check /api/v1/paddles in 30-60 seconds."
+            "status": "seed_completed",
+            "brands_created": brands_count,
+            "paddles_created": paddles_count,
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Seed failed: {str(e)}")
+        import traceback
+        raise HTTPException(status_code=500, detail=f"Seed failed: {str(e)}\n\nTraceback:\n{traceback.format_exc()}")
 
 
 # ============== Brands ==============
