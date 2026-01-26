@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "neonctl": "^2.20.1",
+    "vercel": "^50.5.0"
+  }
+}
