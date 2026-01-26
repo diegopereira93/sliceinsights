@@ -1,5 +1,8 @@
 # SliceInsights - Insights precisos para sua melhor jogada
 
+![CI Quality Gate](https://github.com/diegogp/sliceinsights/actions/workflows/production-pipeline.yml/badge.svg)
+
+
 🏓 Uma plataforma premium de recomendação de raquetes de Pickleball, focada em alta performance, UX sofisticada e conversão.
 
 ## ✨ Features
@@ -297,4 +300,3 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 ---
 
 **Desenvolvido com ❤️ para a comunidade brasileira de pickleball**
-chore(prod): trigger redeploy after vercel settings update
