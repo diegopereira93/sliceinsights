@@ -5,9 +5,7 @@
 .env.*.local
 !.env.example
 venv/
-.venv/
-.venv_new/
-.venv_test/
+.venv*/
 __pycache__/
 *.pyc
 *.pyo
