@@ -89,15 +89,57 @@ export async function getPaddles(filters: Record<string, any> = {}) {
         }
     });
 
-    const response = await fetch(`${getApiBaseUrl()}/paddles?${params.toString()}`);
-    if (!response.ok) throw new Error('Failed to fetch paddles');
-    return response.json();
+    const url = `${getApiBaseUrl()}/paddles?${params.toString()}`;
+    console.log('[SSR] Fetching paddles from:', url);
+
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout for cold starts
+
+        const response = await fetch(url, {
+            signal: controller.signal,
+            cache: 'no-store', // Ensure fresh data
+        });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+            console.error('[SSR] Paddles fetch failed with status:', response.status);
+            throw new Error('Failed to fetch paddles');
+        }
+        const data = await response.json();
+        console.log('[SSR] Paddles fetched successfully, count:', data.data?.length || 0);
+        return data;
+    } catch (error) {
+        console.error('[SSR] Paddles fetch error:', error);
+        throw error;
+    }
 }
 
 export async function getBrands() {
-    const response = await fetch(`${getApiBaseUrl()}/brands`);
-    if (!response.ok) throw new Error('Failed to fetch brands');
-    return response.json();
+    const url = `${getApiBaseUrl()}/brands`;
+    console.log('[SSR] Fetching brands from:', url);
+
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
+
+        const response = await fetch(url, {
+            signal: controller.signal,
+            cache: 'no-store',
+        });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+            console.error('[SSR] Brands fetch failed with status:', response.status);
+            throw new Error('Failed to fetch brands');
+        }
+        const data = await response.json();
+        console.log('[SSR] Brands fetched successfully, count:', data.data?.length || 0);
+        return data;
+    } catch (error) {
+        console.error('[SSR] Brands fetch error:', error);
+        throw error;
+    }
 }
 
 export async function getRecommendations(request: RecommendationRequest) {
