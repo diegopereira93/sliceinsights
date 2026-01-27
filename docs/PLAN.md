@@ -176,3 +176,30 @@
 |-------|--------|------|
 | **Phase 5** | `documentation-writer` | Mandatory Documentation Sync |
 | **Phase 6** | `project-planner`, `devops-engineer`, `test-engineer` | GitHub Actions & CI Verification |
+| **Phase 7** | `devops-engineer`, `backend-specialist`, `orchestrator` | Production Deployment & Health Sync |
+
+---
+
+## Phase 7: Production Deployment & Health Sync (Orchestration)
+
+**Objective**: Force the deployment of the verified `main` branch to Render and verify full stack health.
+
+### 1. Deployment Troubleshooting (`devops-engineer`)
+- **Observation**: Commit `b201257` is live on GitHub/Vercel but Render is stuck on `bf06449`.
+- **Root Cause**: `RENDER_DEPLOY_HOOK` secret is missing in GitHub repository settings.
+- **Action**: 
+    - Verify if Render auto-deploy can be re-triggered or if a manual webhook is necessary.
+    - If auto-deploy is disabled, I will prepare the exact instructions for the user to add the secret.
+
+### 2. Backend Health & Connectivity (`backend-specialist`)
+- **Goal**: Ensure the backend isn't just "up" but actually serving data.
+- **Problem**: Frontend current returns "Nenhuma raquete encontrada", suggesting DB or API issues.
+- **Action**:
+    - Check `/health` and `/api/v1/paddles` endpoints via browser or terminal.
+    - Verify logs for any "migrations pending" or "connection refused" errors.
+
+### 3. Orchestration Audit (`orchestrator`)
+- **Goal**: Final sign-off on the 3+ agent requirement and verification scripts.
+- **Action**:
+    - Synthesize results from all 3 agents into a final report.
+    - Run `security_scan.py` one last time on the `main` branch state.
