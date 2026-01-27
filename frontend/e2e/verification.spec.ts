@@ -18,13 +18,9 @@ test.describe('Production Verification (Smoke Test)', () => {
     });
 
     test('Should display interactive elements (Quiz or Catalog)', async ({ page }) => {
-        // Check for the catalog section heading or quiz button
-        // These should exist regardless of whether paddles are loaded
-        const quizButton = page.getByRole('button', { name: /descobrir|start|quiz/i }).first();
-        const catalogHeading = page.locator('text=/CATÁLOGO|RAQUETES|Nenhuma raquete/i').first();
-        const bottomNav = page.locator('nav').first();
-
-        // At least one of these should be visible
-        await expect(quizButton.or(catalogHeading).or(bottomNav)).toBeVisible({ timeout: 15000 });
+        // Check for the bottom navigation which always exists on the homepage
+        // This is a reliable indicator that the page has loaded correctly
+        const bottomNav = page.getByRole('navigation');
+        await expect(bottomNav).toBeVisible({ timeout: 15000 });
     });
 });
