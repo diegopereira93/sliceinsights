@@ -1,12 +1,35 @@
 const isBrowser = typeof window !== 'undefined';
 
+// Production Render backend URL - hardcoded fallback for SSR on Vercel
+// (vercel.json env vars are not available at runtime for SSR)
+const RENDER_BACKEND_URL = 'https://sliceinsights.onrender.com/api/v1';
+
 // For SSR on Vercel, NEXT_PUBLIC_API_URL is available at runtime in the server environment
 // BACKEND_URL is an internal URL for Docker-based development
 const INTERNAL_API_URL = (process.env.BACKEND_URL || 'http://backend_v3:8000').replace(/\/$/, '') + '/api/v1';
-const PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || (isBrowser ? `${window.location.origin}/api/v1` : INTERNAL_API_URL);
 
-// Always prefer the public URL for both client and server when available
-export const API_BASE_URL = PUBLIC_API_URL;
+// Use PUBLIC URL if available, otherwise use hardcoded Render URL for production or Docker URL for dev
+const getApiBaseUrl = (): string => {
+    // Check if we have an explicit public URL configured
+    if (process.env.NEXT_PUBLIC_API_URL) {
+        return process.env.NEXT_PUBLIC_API_URL;
+    }
+
+    // Browser: use relative path (rewrites will handle it)
+    if (isBrowser) {
+        return `${window.location.origin}/api/v1`;
+    }
+
+    // Server-side: check if BACKEND_URL is set (Docker), otherwise use Render URL
+    if (process.env.BACKEND_URL) {
+        return INTERNAL_API_URL;
+    }
+
+    // Production fallback: use hardcoded Render URL
+    return RENDER_BACKEND_URL;
+};
+
+export const API_BASE_URL = getApiBaseUrl();
 
 export interface BackendPaddle {
     id: string;
