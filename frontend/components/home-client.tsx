@@ -1,5 +1,6 @@
 'use client';
 
+// Ralph-Loop v1.0.1 - Self-Verification Enabled
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PaddleCard, Paddle } from '@/components/paddle/paddle-card';

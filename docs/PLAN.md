@@ -203,3 +203,20 @@
 - **Action**:
     - Synthesize results from all 3 agents into a final report.
     - Run `security_scan.py` one last time on the `main` branch state.
+---
+
+## Phase 8: Ralph-Loop implementation for Database Consistency (Orchestration)
+
+**Objective**: Ensure the database is NEVER empty in the UI by implementing the Ralph-Loop (RARV) cycle autonomously.
+
+### 1. Data Hydration Sweep (`database-architect`)
+- **Goal**: Verify production DB hydration.
+- **Action**: Check `PaddleMaster` table and sync with `paddles.json` if count < 10.
+
+### 2. Frontend Cache Purge & Propagation (`devops-engineer`)
+- **Goal**: Ensure Vercel is not serving stale build.
+- **Action**: Use Vercel CLI or manual deployment trigger to force a clean build.
+
+### 3. Verification & Self-Healing (`test-engineer` & `orchestrator`)
+- **Goal**: Continuous health monitoring.
+- **Action**: Implement a periodic ping/check in GitHub Actions to keep Render awake.
