@@ -62,8 +62,13 @@ class Settings(BaseSettings):
     app_name: str = "SliceInsights"
     app_version: str = "1.0.0"
     
-    # CORS
-    allowed_origins: list[str] = ["http://localhost:3000", "http://localhost:8002"]
+    # CORS - include Vercel production and preview URLs
+    allowed_origins: list[str] = [
+        "http://localhost:3000",
+        "http://localhost:8002",
+        "https://frontend-five-iota-18.vercel.app",
+        "https://sliceinsights.com.br",
+    ]
 
     @field_validator("allowed_origins", mode="before")
     @classmethod
