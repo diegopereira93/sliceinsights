@@ -69,7 +69,7 @@ def check_frontend_ssr():
         return False
 
 def main():
-    print("--- 🎾 Ralph-Loop Autonomous Health Check ---")
+    print("--- 🎾 Ralph-Loop Autonomous Health Check v1.1 (Redeploy Trigger) ---")
     
     # 1. Check Backend
     if not check_backend():
