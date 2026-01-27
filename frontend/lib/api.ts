@@ -243,3 +243,4 @@ export async function subscribeToAlert(paddleId: string, email: string, targetPr
     if (!res.ok) throw new Error('Failed to create alert');
     return res.json();
 }
+// Build timestamp: 20260127201245
