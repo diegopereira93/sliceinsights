@@ -1,0 +1,14 @@
+# SliceInsights Robots.txt
+# https://frontend-five-iota-18.vercel.app
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://frontend-five-iota-18.vercel.app/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Disallow admin/api routes if any
+Disallow: /api/

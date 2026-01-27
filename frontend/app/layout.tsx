@@ -7,19 +7,35 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SliceInsights - Encontre Sua Raquete Ideal",
-  description: "Insights precisos para sua melhor jogada. Encontre a raquete ideal usando nossa análise de dados avançada para Padel.",
+  title: {
+    default: "SliceInsights - Encontre Sua Raquete Ideal de Pickleball",
+    template: "%s | SliceInsights"
+  },
+  description: "Encontre a raquete de pickleball perfeita para seu estilo de jogo. Quiz inteligente, catálogo brasileiro com 37+ raquetes, preços atualizados e recomendações personalizadas.",
+  keywords: ["pickleball", "raquete pickleball", "paddle pickleball", "pickleball brasil", "recomendação raquete", "quiz pickleball", "comprar raquete pickleball"],
+  authors: [{ name: "SliceInsights" }],
+  creator: "SliceInsights",
+  metadataBase: new URL("https://frontend-five-iota-18.vercel.app"),
   manifest: "/manifest.json",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
   openGraph: {
-    title: "SliceInsights - Intelligent Padel Insights",
-    description: "Encontre a raquete ideal para seu estilo de jogo com SliceInsights.",
-    url: "https://sliceinsights.com.br",
+    title: "SliceInsights - Encontre Sua Raquete Ideal de Pickleball",
+    description: "Quiz inteligente para encontrar a raquete perfeita. Catálogo brasileiro com preços atualizados.",
+    url: "https://frontend-five-iota-18.vercel.app",
     siteName: "SliceInsights",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
+        alt: "SliceInsights - Recomendador de Raquetes de Pickleball",
       },
     ],
     locale: "pt_BR",
@@ -27,9 +43,12 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "SliceInsights",
-    description: "Insights precisos para sua melhor jogada.",
+    title: "SliceInsights - Encontre Sua Raquete Ideal",
+    description: "Quiz inteligente para recomendar a raquete de pickleball perfeita para você.",
     images: ["/og-image.jpg"],
+  },
+  alternates: {
+    canonical: "https://frontend-five-iota-18.vercel.app",
   },
 };
 

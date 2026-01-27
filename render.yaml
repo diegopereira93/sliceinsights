@@ -13,7 +13,7 @@ services:
       - key: DATABASE_URL_SYNC
         sync: false # User must provide Neon Connection String (Sync version)
       - key: ALLOWED_ORIGINS
-        value: '["https://sliceinsights.vercel.app"]' # Placeholder for frontend URL
+        value: '["https://frontend-five-iota-18.vercel.app", "https://sliceinsights.vercel.app"]' # Frontend URLs
       - key: DEBUG
         value: "false"
       - key: LOG_LEVEL
