@@ -1,8 +1,12 @@
 const isBrowser = typeof window !== 'undefined';
+
+// For SSR on Vercel, NEXT_PUBLIC_API_URL is available at runtime in the server environment
+// BACKEND_URL is an internal URL for Docker-based development
 const INTERNAL_API_URL = (process.env.BACKEND_URL || 'http://backend_v3:8000').replace(/\/$/, '') + '/api/v1';
 const PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || (isBrowser ? `${window.location.origin}/api/v1` : INTERNAL_API_URL);
 
-export const API_BASE_URL = isBrowser ? PUBLIC_API_URL : INTERNAL_API_URL;
+// Always prefer the public URL for both client and server when available
+export const API_BASE_URL = PUBLIC_API_URL;
 
 export interface BackendPaddle {
     id: string;
