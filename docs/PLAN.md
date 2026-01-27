@@ -146,18 +146,33 @@
 
 ---
 
-## Phase 5: Documentation Maintenance Guideline (Orchestration)
+---
 
-**Objective**: Ensure project documentation remains synchronized with code changes by mandating agent-led updates.
+## Phase 6: GitHub Actions & CI Verification (Orchestration)
 
-### 1. Guideline Enforcement (Agent: `documentation-writer`)
-- **Policy**: Agents MUST identify and update any affected documentation (README, API docs, Guides) before finalizing a task or making a push.
+**Objective**: Ensure all CI/CD workflows are healthy after dependency fixes and structure changes.
+
+### 1. Backend CI Local Simulation (Agent: `devops-engineer`)
+- **Goal**: Verify that the "Backend Test" workflow steps run successfully locally.
 - **Action**: 
-    - Update [AUTONOMOUS_DEV.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/AUTONOMOUS_DEV.md) "The Autonomous Cycle" and "Verification".
-    - Update [README.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/README.md) "Fluxo de Trabalho Git".
-    - Update [.agent/workflows/orchestrate.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/.agent/workflows/orchestrate.md) to include doc-sync as a mandatory step.
+    - Run dependency installation within Docker.
+    - Run full test suite with SQLite (`python -m pytest tests/`).
+    - Verify `safety` and `ruff` checks.
+
+### 2. Frontend CI Local Simulation (Agent: `test-engineer`)
+- **Goal**: Verify that the "Frontend Build Check" runs successfully locally.
+- **Action**:
+    - Run `npm run build` in the `frontend` directory.
+    - Run smoke tests if applicable.
+
+### 3. Pipeline Monitoring (Agent: `devops-engineer`)
+- **Goal**: Monitor the real GitHub Actions run after push.
+- **Action**:
+    - Once changes are pushed, track the "Production Pipeline" progress.
+    - Document any failure and remediate.
 
 ## Orchestration Summary
 | Phase | Agents | Goal |
 |-------|--------|------|
 | **Phase 5** | `documentation-writer` | Mandatory Documentation Sync |
+| **Phase 6** | `project-planner`, `devops-engineer`, `test-engineer` | GitHub Actions & CI Verification |

@@ -7,11 +7,11 @@ import csv
 import os
 import sys
 
+from thefuzz import fuzz  # noqa: E402
+from dotenv import load_dotenv  # noqa: E402
+
 # Add project root to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from thefuzz import fuzz
-from dotenv import load_dotenv
 
 load_dotenv()
 
