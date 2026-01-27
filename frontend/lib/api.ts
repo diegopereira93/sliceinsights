@@ -1,15 +1,12 @@
-const isBrowser = typeof window !== 'undefined';
-
 // Production Render backend URL - hardcoded fallback for SSR on Vercel
 // (vercel.json env vars are not available at runtime for SSR)
 const RENDER_BACKEND_URL = 'https://sliceinsights.onrender.com/api/v1';
 
-// For SSR on Vercel, NEXT_PUBLIC_API_URL is available at runtime in the server environment
-// BACKEND_URL is an internal URL for Docker-based development
-const INTERNAL_API_URL = (process.env.BACKEND_URL || 'http://backend_v3:8000').replace(/\/$/, '') + '/api/v1';
+// Get API base URL at runtime - called for each request, not at module load time
+// This is critical for proper SSR behavior on Vercel where env vars behave differently
+export const getApiBaseUrl = (): string => {
+    const isBrowser = typeof window !== 'undefined';
 
-// Use PUBLIC URL if available, otherwise use hardcoded Render URL for production or Docker URL for dev
-const getApiBaseUrl = (): string => {
     // Check if we have an explicit public URL configured
     if (process.env.NEXT_PUBLIC_API_URL) {
         return process.env.NEXT_PUBLIC_API_URL;
@@ -22,14 +19,15 @@ const getApiBaseUrl = (): string => {
 
     // Server-side: check if BACKEND_URL is set (Docker), otherwise use Render URL
     if (process.env.BACKEND_URL) {
-        return INTERNAL_API_URL;
+        return (process.env.BACKEND_URL).replace(/\/$/, '') + '/api/v1';
     }
 
     // Production fallback: use hardcoded Render URL
     return RENDER_BACKEND_URL;
 };
 
-export const API_BASE_URL = getApiBaseUrl();
+// Alias for backwards compatibility
+export const API_BASE_URL = RENDER_BACKEND_URL;
 
 export interface BackendPaddle {
     id: string;
@@ -91,19 +89,19 @@ export async function getPaddles(filters: Record<string, any> = {}) {
         }
     });
 
-    const response = await fetch(`${API_BASE_URL}/paddles?${params.toString()}`);
+    const response = await fetch(`${getApiBaseUrl()}/paddles?${params.toString()}`);
     if (!response.ok) throw new Error('Failed to fetch paddles');
     return response.json();
 }
 
 export async function getBrands() {
-    const response = await fetch(`${API_BASE_URL}/brands`);
+    const response = await fetch(`${getApiBaseUrl()}/brands`);
     if (!response.ok) throw new Error('Failed to fetch brands');
     return response.json();
 }
 
 export async function getRecommendations(request: RecommendationRequest) {
-    const response = await fetch(`${API_BASE_URL}/recommendations`, {
+    const response = await fetch(`${getApiBaseUrl()}/recommendations`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(request),
@@ -113,13 +111,13 @@ export async function getRecommendations(request: RecommendationRequest) {
 }
 
 export async function searchPaddles(query: string) {
-    const response = await fetch(`${API_BASE_URL}/search?q=${encodeURIComponent(query)}`);
+    const response = await fetch(`${getApiBaseUrl()}/search?q=${encodeURIComponent(query)}`);
     if (!response.ok) throw new Error('Failed to search paddles');
     return response.json();
 }
 
 export async function getPaddleById(id: string) {
-    const response = await fetch(`${API_BASE_URL}/paddles/${id}`);
+    const response = await fetch(`${getApiBaseUrl()}/paddles/${id}`);
     if (!response.ok) throw new Error('Failed to fetch paddle details');
     return response.json();
 }
@@ -190,7 +188,7 @@ export interface AlertResponse {
 }
 
 export async function subscribeToAlert(paddleId: string, email: string, targetPrice_brl: number): Promise<AlertResponse> {
-    const res = await fetch(`${API_BASE_URL}/alerts`, {
+    const res = await fetch(`${getApiBaseUrl()}/alerts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
