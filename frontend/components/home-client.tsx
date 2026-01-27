@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PaddleCard, Paddle } from '@/components/paddle/paddle-card';
 import { FilterDrawer } from '@/components/paddle/filter-drawer';
@@ -8,9 +8,10 @@ import { RacketFinderQuiz } from '@/components/paddle/racket-finder-quiz';
 import { PaddleDetailDrawer } from '@/components/paddle/paddle-detail-drawer';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Sparkles, Search, X, Swords } from 'lucide-react';
+import { Sparkles, Search, X, Swords, Loader2 } from 'lucide-react';
 import { PaddleComparator } from './paddle/paddle-comparator';
 import { Button } from '@/components/ui/button';
+import { getPaddles, getBrands, mapBackendToFrontendPaddle } from '@/lib/api';
 
 interface HomeClientProps {
     initialPaddles: Paddle[];
@@ -33,6 +34,38 @@ const itemVariants = {
 };
 
 export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps) {
+    // Client-side state for data (fallback when SSR is empty)
+    const [paddles, setPaddles] = useState<Paddle[]>(initialPaddles);
+    const [brands, setBrands] = useState<string[]>(availableBrands);
+    const [isLoadingData, setIsLoadingData] = useState(false);
+
+    // Client-side fallback: fetch data if SSR returned empty
+    useEffect(() => {
+        async function fetchClientData() {
+            if (initialPaddles.length === 0 && !isLoadingData) {
+                setIsLoadingData(true);
+                try {
+                    const [paddlesRes, brandsRes] = await Promise.all([
+                        getPaddles({ limit: 50, available_in_brazil: true }),
+                        getBrands()
+                    ]);
+
+                    if (paddlesRes?.data) {
+                        setPaddles(paddlesRes.data.map(mapBackendToFrontendPaddle));
+                    }
+                    if (brandsRes?.data) {
+                        setBrands(brandsRes.data.map((b: any) => b.name).sort());
+                    }
+                } catch (error) {
+                    console.error('Failed to fetch client-side data:', error);
+                } finally {
+                    setIsLoadingData(false);
+                }
+            }
+        }
+        fetchClientData();
+    }, [initialPaddles.length, isLoadingData]);
+
     const [selectedPaddle, setSelectedPaddle] = useState<Paddle | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -46,7 +79,7 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
 
     // Derived state for filtering
     const filteredPaddles = useMemo(() => {
-        return initialPaddles.filter(paddle => {
+        return paddles.filter(paddle => {
             // 1. Search Query
             const matchesSearch = searchQuery === '' ||
                 paddle.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -60,7 +93,7 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
 
             return matchesSearch && matchesBrand && matchesPrice;
         });
-    }, [initialPaddles, searchQuery, selectedBrands, priceRange]);
+    }, [paddles, searchQuery, selectedBrands, priceRange]);
 
     const handleRecommend = (paddle: Paddle) => {
         setSelectedPaddle(paddle);
@@ -134,7 +167,7 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
                         </div>
 
                         <FilterDrawer
-                            brands={availableBrands}
+                            brands={brands}
                             selectedBrands={selectedBrands}
                             onToggleBrand={(brand) => {
                                 setSelectedBrands(prev =>
