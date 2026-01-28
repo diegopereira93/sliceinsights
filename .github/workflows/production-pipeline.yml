@@ -60,13 +60,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: team_ZFJC51ofDNBpjeDzsdlrte9W
-          vercel-project-id: prj_sHAVjsnRimdGrHaqUwFdnPHaIz4Q
-          working-directory: ./
-          vercel-args: 'frontend --prod'
+        working-directory: ./
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: team_ZFJC51ofDNBpjeDzsdlrte9W
+          VERCEL_PROJECT_ID: prj_sHAVjsnRimdGrHaqUwFdnPHaIz4Q
+        run: |
+          npm install --global vercel@latest
+          vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
 
   deploy-backend:
     name: 🚀 Deploy Backend (Render)
