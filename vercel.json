@@ -1,5 +1,17 @@
 {
     "version": 2,
+    "builds": [
+        {
+            "src": "frontend/package.json",
+            "use": "@vercel/next"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/$1"
+        }
+    ],
     "env": {
         "NEXT_PUBLIC_API_URL": "https://sliceinsights.onrender.com/api/v1",
         "BACKEND_URL": "https://sliceinsights.onrender.com"
