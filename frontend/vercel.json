@@ -1,0 +1,6 @@
+{
+    "env": {
+        "NEXT_PUBLIC_API_URL": "https://sliceinsights.onrender.com/api/v1",
+        "BACKEND_URL": "https://sliceinsights.onrender.com"
+    }
+}
