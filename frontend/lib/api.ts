@@ -17,10 +17,8 @@ export const getApiBaseUrl = (): string => {
         return `${window.location.origin}/api/v1`;
     }
 
-    // Server-side: check if BACKEND_URL is set (Docker), otherwise use Render URL
-    if (process.env.BACKEND_URL) {
-        return (process.env.BACKEND_URL).replace(/\/$/, '') + '/api/v1';
-    }
+    // Server-side: Always use the hardcoded Render URL to avoid Env Var issues in Vercel Runtime
+    return RENDER_BACKEND_URL;
 
     // Production fallback: use hardcoded Render URL
     return RENDER_BACKEND_URL;
