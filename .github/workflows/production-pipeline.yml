@@ -64,7 +64,7 @@ jobs:
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: team_ZFJC51ofDNBpjeDzsdlrte9W
-          VERCEL_PROJECT_ID: prj_sHAVjsnRimdGrHaqUwFdnPHaIz4Q
+          VERCEL_PROJECT_ID: prj_4oY1e21t1fmlAwjJjBn1ThAj71O6
         run: |
           npm install --global vercel@latest
           vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
@@ -111,4 +111,4 @@ jobs:
           npx playwright test e2e/verification.spec.ts
         env:
           # Validating the stable URL we recovered
-          BASE_URL: "https://frontend-five-iota-18.vercel.app"
+          BASE_URL: "https://sliceinsights.vercel.app"

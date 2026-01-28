@@ -22,7 +22,9 @@
 - **Sentry Integration**: Error tracking (configurável via `SENTRY_DSN`)
 - **Health Check**: Validação de conexão com DB em `/api/v1/health`
 - **Error Boundaries**: Tratamento gracioso de erros no frontend
-- **CI/CD Pipeline**: GitHub Actions para testes e build
+- [x] **CI/CD Pipeline**: GitHub Actions para testes e build
+- [x] **Lógica de Recomendação**: Validação física unificada (Physics-Based Scoring)
+- [x] **Verificação Contínua**: Ralph-Loop (Self-Healing) ativo em produção
 
 ## 🛠️ Tech Stack
 

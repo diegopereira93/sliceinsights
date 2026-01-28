@@ -170,8 +170,8 @@ async def list_paddles(
     skill_level: Optional[str] = None,
     is_featured: Optional[bool] = None,
     available_in_brazil: Optional[bool] = Query(
-        default=True,  # Padrão: mostrar apenas produtos disponíveis no Brasil
-        description="Filter by Brazilian market availability"
+        default=None,
+        description="Filter by Brazilian market availability (True for BR only, False for International only, None for all)"
     ),
     min_price: Optional[float] = None,
     max_price: Optional[float] = None,

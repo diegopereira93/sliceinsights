@@ -16,7 +16,7 @@ export default async function StatisticsPage() {
     try {
         // Fetch a larger dataset for meaningful statistics
         // available_in_brazil=null/false to see the whole market for analysis
-        const response = await getPaddles({ limit: 100, available_in_brazil: false });
+        const response = await getPaddles({ limit: 150 });
         if (response && response.data) {
             paddles = response.data.map(mapBackendToFrontendPaddle);
         }
