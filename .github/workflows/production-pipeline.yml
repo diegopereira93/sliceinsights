@@ -65,8 +65,8 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: team_ZFJC51ofDNBpjeDzsdlrte9W
           vercel-project-id: prj_sHAVjsnRimdGrHaqUwFdnPHaIz4Q
-          working-directory: ./frontend
-          vercel-args: '--prod'
+          working-directory: ./
+          vercel-args: 'frontend --prod'
 
   deploy-backend:
     name: 🚀 Deploy Backend (Render)
