@@ -67,7 +67,7 @@ jobs:
           VERCEL_PROJECT_ID: prj_sHAVjsnRimdGrHaqUwFdnPHaIz4Q
         run: |
           npm install --global vercel@latest
-          vercel deploy frontend --prod --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
 
   deploy-backend:
     name: 🚀 Deploy Backend (Render)
