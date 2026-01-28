@@ -64,7 +64,7 @@ jobs:
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: team_ZFJC51ofDNBpjeDzsdlrte9W
-          VERCEL_PROJECT_ID: prj_4oY1e21t1fmlAwjJjBn1ThAj71O6
+          VERCEL_PROJECT_ID: prj_sHAVjsnRimdGrHaqUwFdnPHaIz4Q
         run: |
           npm install --global vercel@latest
           vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
