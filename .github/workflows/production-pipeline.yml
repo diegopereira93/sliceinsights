@@ -89,7 +89,6 @@ jobs:
 
   # ------------------------------------------------------------------
   # 🕵️‍♀️ VERIFICATION IN PRODUCTION
-  # ------------------------------------------------------------------
   verify-deployment:
     name: 🕵️‍♀️ Verify Live Deployment
     needs: [deploy-frontend]
@@ -100,15 +99,32 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Install Playwright
+      - name: Install Dependencies
         run: |
           cd frontend
           npm ci
+      - name: Install Playwright
+        run: |
+          cd frontend
           npx playwright install --with-deps chromium
-      - name: Run Smoke Test
+      - name: 🏥 Health Check Gate
+        run: |
+          echo "Checking Backend Health..."
+          MAX_RETRIES=12 # 2 minutes
+          COUNT=0
+          until curl -s https://sliceinsights.onrender.com/api/v1/health | grep "healthy"; do
+            if [ $COUNT -eq $MAX_RETRIES ]; then
+              echo "❌ Backend health check failed after 2 minutes."
+              exit 1
+            fi
+            echo "Waiting for backend (Render Cold Start)... ($COUNT/$MAX_RETRIES)"
+            sleep 10
+            COUNT=$((COUNT+1))
+          done
+          echo "✅ Backend is UP and Healthy!"
+      - name: 🧪 Run Smoke Tests
         run: |
           cd frontend
           npx playwright test e2e/verification.spec.ts
         env:
-          # Validating the stable URL we recovered
-          BASE_URL: "https://sliceinsights.vercel.app"
+          BASE_URL: "https://frontend-five-iota-18.vercel.app"

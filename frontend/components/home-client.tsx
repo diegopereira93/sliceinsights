@@ -13,6 +13,7 @@ import { Sparkles, Search, X, Swords, Loader2 } from 'lucide-react';
 import { PaddleComparator } from './paddle/paddle-comparator';
 import { Button } from '@/components/ui/button';
 import { getPaddles, getBrands, mapBackendToFrontendPaddle } from '@/lib/api';
+import { EmptyState } from '@/components/ui/empty-state';
 
 interface HomeClientProps {
     initialPaddles: Paddle[];
@@ -39,6 +40,7 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
     const [paddles, setPaddles] = useState<Paddle[]>(initialPaddles);
     const [brands, setBrands] = useState<string[]>(availableBrands);
     const [isLoadingData, setIsLoadingData] = useState(false);
+    const [fetchError, setFetchError] = useState<boolean>(false);
 
     // Client-side fallback: fetch data if SSR returned empty
     useEffect(() => {
@@ -46,6 +48,7 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
             if (initialPaddles.length === 0 && !isLoadingData) {
                 setIsLoadingData(true);
                 try {
+                    setFetchError(false);
                     const [paddlesRes, brandsRes] = await Promise.all([
                         getPaddles({ limit: 50, available_in_brazil: true }),
                         getBrands()
@@ -59,6 +62,7 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
                     }
                 } catch (error) {
                     console.error('Failed to fetch client-side data:', error);
+                    setFetchError(true);
                 } finally {
                     setIsLoadingData(false);
                 }
@@ -180,18 +184,24 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
                     </div>
                 </div>
 
-                {filteredPaddles.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-20 text-center opacity-70">
-                        <Search className="w-12 h-12 mb-4 text-muted-foreground" />
-                        <h3 className="text-xl font-bold">Nenhuma raquete encontrada</h3>
-                        <p className="text-sm text-muted-foreground">Tente ajustar seus filtros ou busca.</p>
-                        <button
-                            onClick={handleClearFilters}
-                            className="mt-4 text-primary font-bold hover:underline"
-                        >
-                            Limpar filtros
-                        </button>
+                {isLoadingData ? (
+                    <div className="flex flex-col items-center justify-center py-24 text-center">
+                        <Loader2 className="w-12 h-12 mb-4 text-primary animate-spin" />
+                        <h3 className="text-xl font-bold uppercase italic tracking-tighter">Sincronizando Laboratório...</h3>
+                        <p className="text-xs text-muted-foreground mt-2">Isso pode levar alguns segundos (Cold Start do Render).</p>
                     </div>
+                ) : fetchError ? (
+                    <EmptyState
+                        title="Falha na Conexão"
+                        description="Não conseguimos conectar com o servidor. Verifique sua internet ou tente novamente."
+                        icon="wifi-off"
+                        onRetry={() => window.location.reload()}
+                        actionLabel="Recarregar"
+                    />
+                ) : filteredPaddles.length === 0 ? (
+                    <EmptyState
+                        onRetry={handleClearFilters}
+                    />
                 ) : (
                     <motion.div
                         variants={containerVariants}

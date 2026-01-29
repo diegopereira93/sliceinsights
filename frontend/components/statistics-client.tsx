@@ -7,7 +7,7 @@ import {
     ZAxis, ReferenceLine, Label, Cell, Legend
 } from 'recharts';
 import { motion } from 'framer-motion';
-import { TrendingUp, Zap, Target, DollarSign, Activity, Shield, Scale, BarChart3, Wind, Trophy, Gem, Star, Award } from 'lucide-react';
+import { TrendingUp, Zap, Target, DollarSign, Activity, Shield, Scale, BarChart3, Wind, Trophy, Gem, Star, Award, Loader2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import {
     Drawer,
@@ -310,7 +310,29 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
         }
     }, [stats]);
 
-    if (!stats) return <div className="p-8 text-center animate-pulse">Carregando dados do laboratório...</div>;
+    if (!stats || initialPaddles.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 text-center animate-in fade-in duration-700">
+                <div className="relative mb-8">
+                    <Loader2 className="w-16 h-16 text-primary animate-spin" />
+                    <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full" />
+                </div>
+                <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-2">Processando Laboratório</h2>
+                <p className="text-muted-foreground max-w-xs mx-auto">
+                    Estamos analisando {initialPaddles.length === 0 ? 'os dados do mercado' : 'a base de dados'}. Isso pode levar alguns segundos durante o Cold Start.
+                </p>
+                {initialPaddles.length === 0 && (
+                    <Button
+                        variant="ghost"
+                        onClick={() => window.location.reload()}
+                        className="mt-8 text-xs font-bold uppercase tracking-widest text-primary hover:bg-primary/5 rounded-full"
+                    >
+                        Forçar Atualização
+                    </Button>
+                )}
+            </div>
+        );
+    }
 
     // --- Match Score Calculation ---
     const matchScore = useMemo(() => {

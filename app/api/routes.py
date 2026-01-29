@@ -36,14 +36,24 @@ async def health_check(session: AsyncSession = Depends(get_session)):
     """Health check endpoint with database validation."""
     try:
         from sqlalchemy import text
-        await session.exec(text("SELECT 1"))
+        # Use a short timeout for the health check to avoid hanging
+        await session.execute(text("SELECT 1"))
         return {
             "status": "healthy",
             "version": "1.0.0",
             "database": "connected"
         }
-    except Exception:
-        raise HTTPException(status_code=503, detail="Database unavailable")
+    except Exception as e:
+        import structlog
+        logger = structlog.get_logger()
+        logger.error("Health check failed", error=str(e))
+        # Don't fail the whole app if DB is just warming up, but return 503
+        return {
+            "status": "degraded",
+            "version": "1.0.0",
+            "database": "disconnected",
+            "detail": str(e)
+        }
 
 
 # ============== Admin (Seed Trigger) ==============

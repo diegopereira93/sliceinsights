@@ -22,6 +22,10 @@
 - **Sentry Integration**: Error tracking (configurável via `SENTRY_DSN`)
 - **Health Check**: Validação de conexão com DB em `/api/v1/health`
 - **Error Boundaries**: Tratamento gracioso de erros no frontend
+### Estrutura de Monorepo (Frontend/Backend)
+- O frontend reside na pasta `/frontend`.
+- O deploy na Vercel é configurado via DashBoard (Root Directory: `frontend`) e o arquivo `frontend/vercel.json` gerencia variáveis de ambiente.
+- O pipeline de CI/CD no GitHub Actions dispara o deploy a partir da raiz para garantir a detecção correta.
 - [x] **CI/CD Pipeline**: GitHub Actions para testes e build
 - [x] **Lógica de Recomendação**: Validação física unificada (Physics-Based Scoring)
 - [x] **Verificação Contínua**: Ralph-Loop (Self-Healing) ativo em produção

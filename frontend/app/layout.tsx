@@ -60,6 +60,8 @@ export const viewport: Viewport = {
   themeColor: "#ffffff",
 };
 
+import ErrorBoundary from "@/components/ui/error-boundary";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -69,7 +71,9 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={`${inter.className} antialiased`}>
         <MobileLayout>
-          {children}
+          <ErrorBoundary>
+            {children}
+          </ErrorBoundary>
           <Toaster />
         </MobileLayout>
       </body>
