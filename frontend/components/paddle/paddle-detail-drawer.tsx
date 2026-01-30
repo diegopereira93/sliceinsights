@@ -289,7 +289,7 @@ export function PaddleDetailDrawer({ paddle: initialPaddle, isOpen, onClose }: P
                     </div>
                 </div>
 
-                <DrawerFooter className="border-t border-border/50 bg-background/50 backdrop-blur-md pt-6 pb-10">
+                <DrawerFooter className="border-t border-border/50 bg-background/50 backdrop-blur-md pt-6 pb-24 md:pb-10 px-4 sm:px-6">
                     <div className="flex items-center justify-between gap-4 max-w-4xl mx-auto w-full">
                         <div className="flex flex-col">
                             <span className="text-xs text-muted-foreground font-medium uppercase tracking-tighter">Preço Especial</span>
