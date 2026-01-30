@@ -187,8 +187,8 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
                 {isLoadingData ? (
                     <div className="flex flex-col items-center justify-center py-24 text-center">
                         <Loader2 className="w-12 h-12 mb-4 text-primary animate-spin" />
-                        <h3 className="text-xl font-bold uppercase italic tracking-tighter">Sincronizando Laboratório...</h3>
-                        <p className="text-xs text-muted-foreground mt-2">Isso pode levar alguns segundos (Cold Start do Render).</p>
+                        <h3 className="text-xl font-bold uppercase italic tracking-tighter">Carregando Catálogo...</h3>
+                        <p className="text-xs text-muted-foreground mt-2">Estamos buscando as melhores raquetes para você.</p>
                     </div>
                 ) : fetchError ? (
                     <EmptyState
