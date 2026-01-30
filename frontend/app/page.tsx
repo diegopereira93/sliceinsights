@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic'; // Ensure fresh data on each request
 
 export default async function Home() {
+  console.log('[Home] Rendering page...');
   // Fetch data on the server
   let paddles = [];
   let brands: string[] = [];
