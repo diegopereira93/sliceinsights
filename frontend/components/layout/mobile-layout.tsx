@@ -8,7 +8,7 @@ interface MobileLayoutProps {
 export function MobileLayout({ children }: MobileLayoutProps) {
     return (
         <div className="flex flex-col min-h-screen bg-background font-sans antialiased">
-            <main className="flex-1 pb-24 px-4 pt-4"> {/* pb-24 to ensure content is not hidden by nav */}
+            <main className="flex-1 pb-32 px-4 pt-4 ios-safe-padding"> {/* Increased padding for BottomNav + Safe Area */}
                 {children}
             </main>
             <BottomNav />

@@ -50,6 +50,11 @@
 
 :root {
   --radius: 0.75rem;
+  /* Safe Area Insets for Mobile */
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+  --safe-left: env(safe-area-inset-left);
+  --safe-right: env(safe-area-inset-right);
   --background: oklch(0.99 0 0);
   --foreground: oklch(0.1 0 0);
   --card: oklch(1 0 0);
@@ -161,5 +166,10 @@
 
   body {
     @apply bg-background text-foreground;
+    min-height: 100dvh;
+    padding-bottom: constant(safe-area-inset-bottom);
+    /* iOS 11.0 */
+    padding-bottom: env(safe-area-inset-bottom);
+    /* iOS 11.2+ */
   }
 }
