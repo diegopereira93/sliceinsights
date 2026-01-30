@@ -317,9 +317,9 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                     <Loader2 className="w-16 h-16 text-primary animate-spin" />
                     <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full" />
                 </div>
-                <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-2">Processando Laboratório</h2>
+                <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-2">Orquestrando Agentes</h2>
                 <p className="text-muted-foreground max-w-xs mx-auto">
-                    Estamos analisando {initialPaddles.length === 0 ? 'os dados do mercado' : 'a base de dados'}. Isso pode levar alguns segundos durante o Cold Start.
+                    Sincronizando inteligência de mercado com {initialPaddles.length === 0 ? 'os dados globais' : 'a base de dados'}. Agentes autônomos processando insights...
                 </p>
                 {initialPaddles.length === 0 && (
                     <Button
@@ -394,6 +394,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                             className="text-[10px] h-8 font-bold uppercase tracking-wider"
                             onClick={() => {
                                 sessionStorage.removeItem('slice_quiz_results');
+                                localStorage.removeItem('user_profile');
                                 window.location.reload();
                             }}
                         >

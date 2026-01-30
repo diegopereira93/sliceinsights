@@ -109,32 +109,57 @@ class PaddleSpecs(SQLModel):
 
 
 def calculate_paddle_ratings(paddle: "PaddleMaster") -> dict:
-    """Consolidated rating calculation (0-10 scale)."""
+    """Consolidated rating calculation (0-10 scale) with deterministic synthetic fill."""
+    import hashlib
+
+    def get_synthetic_val(seed: str, min_v: float, max_v: float) -> float:
+        """Generate a deterministic value between min_v and max_v based on seed."""
+        hash_hex = hashlib.md5(seed.encode('utf-8')).hexdigest()
+        # Use first 8 chars for integer conversion to keep it fast
+        hash_int = int(hash_hex[:8], 16)
+        # Normalize to 0.0 - 1.0
+        norm = hash_int / 0xFFFFFFFF
+        return min_v + (norm * (max_v - min_v))
+
+    unique_id = str(paddle.id)
+
     # 1. Control (based on twist_weight)
-    twist = paddle.twist_weight or 0
+    twist = paddle.twist_weight
+    if twist is None:
+        # Synthetic Twist: 5.8 to 6.8 (Standard range for stable paddles)
+        twist = get_synthetic_val(unique_id + "twist", 5.8, 6.8)
+
     if twist > 100:  # Large scale (150-600)
-        # Normalize (twist - 150) / (600 - 150) * 10
         control = (twist - 150) / 450 * 10 if twist >= 150 else 0
     else:  # Small scale (5.0-7.5)
-        # 5.0 -> 7.5, 6.6 -> 10
         control = twist * 1.5 if twist > 0 else 5.0
     control = min(max(control, 0), 10)
         
     # 2. Spin (based on spin_rpm)
     # Range 150-300 as per current database values
-    spin_rpm = paddle.spin_rpm or 0
+    spin_rpm = paddle.spin_rpm
+    if spin_rpm is None:
+        # Synthetic Spin RPM equivalent: 240 to 290 (yields ratings ~6.0 to 9.3)
+        spin_rpm = int(get_synthetic_val(unique_id + "spin", 240, 290))
+    
     if spin_rpm >= 150:
         spin = (spin_rpm - 150) / 150 * 10
     else:
-        # Default for missing data
+        # Fallback for very low values
         spin = 5.0 if spin_rpm == 0 else 2.0
     spin = min(max(spin, 0), 10)
         
     # 3. Sweet Spot (forgiveness)
-    sweet_spot = max(1.0, 10.0 - (control * 0.4))
+    # Inverse correlation with control in this simple model, plus some jitter
+    base_sweet = 10.0 - (control * 0.4)
+    jitter = get_synthetic_val(unique_id + "sweet", -0.5, 0.5)
+    sweet_spot = max(1.0, min(10.0, base_sweet + jitter))
     
     # 4. Power
-    power = paddle.power_rating or 5.0
+    power = paddle.power_rating
+    if power is None:
+         # Synthetic Power: 6.0 to 9.5
+         power = get_synthetic_val(unique_id + "power", 6.0, 9.5)
     
     return {
         "power": int(round(power)),

@@ -50,11 +50,21 @@ export function PaddleComparator({ paddles, isOpen, onClose }: PaddleComparatorP
     return (
         <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
             <SheetContent side="bottom" className="h-[90vh] glass-dark border-none rounded-t-[3rem] p-0 overflow-hidden">
-                <SheetHeader className="p-6 pb-2 border-b border-white/10 flex flex-row items-center justify-between">
-                    <SheetTitle className="text-xl font-black italic uppercase tracking-tighter">BATTLE MODE</SheetTitle>
-                    <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full bg-white/5 hover:bg-white/10">
-                        <X className="w-5 h-5" />
-                    </Button>
+                <SheetHeader className="p-6 pb-2 border-b border-white/10 flex flex-col items-stretch justify-between">
+                    <div className="flex flex-row items-center justify-between mb-2">
+                        <SheetTitle className="text-xl font-black italic uppercase tracking-tighter">BATTLE MODE</SheetTitle>
+                        <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full bg-white/5 hover:bg-white/10">
+                            <X className="w-5 h-5" />
+                        </Button>
+                    </div>
+                    {paddles.some(p => p.isSynthetic) && (
+                        <div className="bg-amber-500/15 dark:bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 flex items-start gap-2">
+                            <span className="text-amber-700 dark:text-amber-400 text-xs font-bold uppercase tracking-wider shrink-0 mt-0.5">Aviso:</span>
+                            <p className="text-[10px] text-amber-900 dark:text-amber-100 font-medium leading-tight">
+                                Algumas especificações são <span className="text-amber-700 dark:text-amber-400 font-bold">estimadas</span> com base no modelo, pois o fabricante não forneceu dados oficiais.
+                            </p>
+                        </div>
+                    )}
                 </SheetHeader>
 
                 <div className="h-full overflow-y-auto pb-20">

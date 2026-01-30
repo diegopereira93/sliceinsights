@@ -36,6 +36,10 @@ export interface Paddle {
     gripCircumference?: string;
     coreMaterial?: string;
     faceMaterial?: string; // Specific face material from spec
+
+    // Data Transparency
+    isSynthetic?: boolean;
+    dataQuality?: 'Verified' | 'Estimated';
 }
 
 interface PaddleCardProps {
@@ -67,7 +71,7 @@ export function PaddleCard({ paddle, onClick, onCompare, isComparing }: PaddleCa
                             {paddle.brand}
                         </Badge>
                         {paddle.availableInBrazil === false && (
-                            <Badge className="bg-amber-500 text-white border-none font-bold uppercase tracking-tighter text-[9px]">
+                            <Badge className="bg-amber-500 text-amber-950 border-none font-bold uppercase tracking-tighter text-[9px]">
                                 Importado
                             </Badge>
                         )}
@@ -130,18 +134,25 @@ export function PaddleCard({ paddle, onClick, onCompare, isComparing }: PaddleCa
                         </span>
                     </div>
                     {onCompare && (
-                        <Button
-                            variant={isComparing ? "secondary" : "outline"}
-                            size="sm"
-                            className={`rounded-xl font-bold h-8 px-3 transition-all relative z-10 ${isComparing ? 'bg-primary text-primary-foreground border-none scale-105 shadow-glow-sm' : 'border-white/10 hover:bg-white/5'}`}
-                            onClick={(e: React.MouseEvent) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                onCompare(paddle);
-                            }}
-                        >
-                            {isComparing ? 'Comparando' : 'Comparar'}
-                        </Button>
+                        <div className="flex gap-2">
+                            {paddle.isSynthetic && (
+                                <Badge variant="outline" className="border-amber-600/50 text-amber-700 dark:border-amber-500/50 dark:text-amber-400 text-[9px] h-8 px-2 font-bold uppercase tracking-wider bg-amber-500/10 dark:bg-amber-500/5" title="Especificações estimadas baseadas no modelo">
+                                    Estimado
+                                </Badge>
+                            )}
+                            <Button
+                                variant={isComparing ? "secondary" : "outline"}
+                                size="sm"
+                                className={`rounded-xl font-bold h-8 px-3 transition-all relative z-10 ${isComparing ? 'bg-primary text-primary-foreground border-none scale-105 shadow-glow-sm' : 'border-white/10 hover:bg-white/5'}`}
+                                onClick={(e: React.MouseEvent) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    onCompare(paddle);
+                                }}
+                            >
+                                {isComparing ? 'Comparando' : 'Comparar'}
+                            </Button>
+                        </div>
                     )}
                 </CardFooter>
             </Card>

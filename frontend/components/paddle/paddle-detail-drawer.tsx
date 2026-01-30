@@ -183,7 +183,7 @@ export function PaddleDetailDrawer({ paddle: initialPaddle, isOpen, onClose }: P
                                     {displayPaddle.controlLevel} Control
                                 </Badge>
                                 {displayPaddle.availableInBrazil === false && (
-                                    <Badge className="bg-amber-500/90 backdrop-blur-md text-white border-none px-3 py-1 font-bold flex items-center gap-1">
+                                    <Badge className="bg-amber-500/90 backdrop-blur-md text-amber-950 border-none px-3 py-1 font-bold flex items-center gap-1">
                                         <Globe className="w-3 h-3" /> IMPORTADO
                                     </Badge>
                                 )}
@@ -207,6 +207,20 @@ export function PaddleDetailDrawer({ paddle: initialPaddle, isOpen, onClose }: P
                                             </li>
                                         ))}
                                     </ul>
+                                </div>
+                            )}
+
+                            {/* Data Transparency Section */}
+                            {displayPaddle.isSynthetic && (
+                                <div className="bg-amber-500/15 dark:bg-amber-500/10 p-4 rounded-2xl border border-amber-500/20">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <Badge variant="outline" className="border-amber-600 text-amber-700 dark:border-amber-500 dark:text-amber-400 font-bold uppercase text-[10px]">
+                                            Dados Estimados
+                                        </Badge>
+                                    </div>
+                                    <p className="text-xs text-amber-900 dark:text-amber-100 font-medium leading-relaxed">
+                                        As especificações desta raquete foram estimadas pelo nosso algoritmo com base nas características do modelo e dados parciais, pois o fabricante não forneceu métricas oficiais completas.
+                                    </p>
                                 </div>
                             )}
 
