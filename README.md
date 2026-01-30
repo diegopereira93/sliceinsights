@@ -20,8 +20,9 @@
 - **Prometheus Metrics**: Métricas de performance em `/metrics`
 - **Structured Logging**: Logs JSON com structlog
 - **Sentry Integration**: Error tracking (configurável via `SENTRY_DSN`)
-- **Health Check**: Validação de conexão com DB em `/api/v1/health`
+- **Health Check**: Validação de conexão com DB em `/api/v1/health` (Returns 503 on failure)
 - **Error Boundaries**: Tratamento gracioso de erros no frontend
+- **E2E Testing**: Suite completa com Playwright verificando integridade de dados em produção
 ### Estrutura de Monorepo (Frontend/Backend)
 - O frontend reside na pasta `/frontend`.
 - O deploy na Vercel é configurado via DashBoard (Root Directory: `frontend`) e o arquivo `frontend/vercel.json` gerencia variáveis de ambiente.

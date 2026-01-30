@@ -1,44 +1,38 @@
-# Project Recommendation Implementation: Phase 1 (Orchestrated)
+# Plan: Documentation Refactoring and Updates
 
-## 📋 Problem Statement
-The project is currently healthy but unstable in production. The backend suffers from intermittent 502/DNS failures on Render, and the frontend lacks graceful degradation when the API is unreachable, leading to "Empty Catalog" or "Loading Forever" states.
+Update the project documentation to match the current production state, technology stack versions, and workflow improvements.
 
-## 🏗️ Proposed Solution
+## Proposed Changes
 
-### Domains Touched
-- **DevOps**: Infrastructure stability and CI/CD automation.
-- **Frontend**: UX resilience and error state implementation.
-- **Testing**: E2E suite verification and regression testing.
+### [Docs] Deployment & Infrastructure
+#### [MODIFY] [DEPLOYMENT.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/docs/DEPLOYMENT.md)
+- Update Backend URL to `https://sliceinsights.onrender.com`.
+- Update Backend Status to ✅ Online.
+- Synchronize environment variable names with current production config.
 
-### Step-by-Step Changes
+### [Docs] Architecture & Roadmap
+#### [MODIFY] [ARCHITECTURE.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/docs/ARCHITECTURE.md)
+- Correct Next.js version to 14.x (App Router).
+- Update tech stack to mention Render/Vercel instead of Railway.
+- Update "Próximos Passos Técnicos" to reflect completed CI/CD and Playwright tests.
 
-#### 1. Phase 1: Planning (Agent: `project-planner`)
-- Analyze `render.yaml` and `vercel.json` for URL mismatches.
-- Design `EmptyState` and `ErrorToast` components for the frontend.
-- Plan CI/CD update to re-enable Playwright tests.
+#### [MODIFY] [NEXT_STEPS.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/docs/roadmaps/NEXT_STEPS.md)
+- Move "Deployment Stack" and "CI/CD Setup" to the "Concluído" section.
+- Add "E2E Testing with Playwright" to the "Concluído" section.
 
-#### 2. Phase 2: Implementation (Parallel Agents)
-- **DevOps** (`devops-engineer`):
-    - Update `vercel.json` and `lib/api.ts` to use a more stable backend connection (ensure health checks are correct).
-    - Modify `.github/workflows/production-pipeline.yml` to re-enable E2E tests and add a health-check gate BEFORE deployment.
-- **Frontend** (`frontend-specialist`):
-    - Implement `ErrorBoundary` in `app/layout.tsx`.
-    - Add `EmptyState` to `HomeClient` and `StatisticsClient` to handle fetch failures.
-    - Improve `isLoadingData` logic to show helpful error messages after a timeout.
-- **Backend** (`backend-specialist`):
-    - Optimize `/health` endpoint to be more responsive for cold starts.
+### [Docs] Technical & General
+#### [MODIFY] [api_specification.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/docs/technical/api_specification.md)
+- Update `/api/v1/health` response examples to match current implementation (e.g., handling 503 correctly).
+- Update Base URLs to reflect `sliceinsights.vercel.app` and `sliceinsights.onrender.com`.
 
-#### 3. Phase 3: Verification (Agent: `test-engineer`)
-- Run `npx playwright test` against the staging/prod preview.
-- Verify `scripts/verify.sh` passes.
-- Generate final `ORCHESTRATION_REPORT.md`.
+#### [MODIFY] [README.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/README.md)
+- Update "Production-Ready Features" to confirm all items are fully implemented.
+- Ensure all quick start instructions match the current repository structure.
 
-## 🏁 Deliverables
-- [ ] Stable Production Backend Connection.
-- [ ] Graceful Frontend Error/Empty States.
-- [ ] Automated E2E Testing recovered in CI/CD.
+## Verification Plan
 
----
+### Automated Checks
+- Run `lint_runner.py` to ensure markdown files follow standards (no broken links within the updated files).
 
-> [!IMPORTANT]
-> This plan follows the strict `orchestrate.md` protocol with a minimum of 3 different agent roles coordinated.
+### Manual Verification
+- Review each updated file to ensure information accuracy and consistency across the entire documentation set.

@@ -4,7 +4,8 @@
 
 ```
 Development: http://localhost:8002/api/v1
-Production:  https://api.picklematch.com/v1
+Production:  https://sliceinsights.onrender.com/api/v1
+Frontend:    https://sliceinsights.vercel.app
 ```
 
 ---
@@ -41,7 +42,7 @@ GET /health
 }
 ```
 
-> **Note:** O health check valida a conexão com o banco de dados.
+> **Note:** O health check valida a conexão com o banco de dados. Caso o banco esteja inacessível, retorna **503 Service Unavailable**.
 
 ---
 

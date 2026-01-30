@@ -8,7 +8,7 @@
 | Service | URL | Status |
 |---------|-----|--------|
 | Frontend | https://sliceinsights.vercel.app | ✅ Online |
-| Backend API | `https://sliceinsights-xxx.onrender.com` | 🔄 Deploying |
+| Backend API | https://sliceinsights.onrender.com | ✅ Online |
 | Database | Neon (US East 1) | ✅ Online |
 
 ## 🏗️ Infrastructure
@@ -53,7 +53,7 @@ LOG_LEVEL=INFO
 
 ### Frontend (Vercel)
 ```
-NEXT_PUBLIC_API_URL=https://sliceinsights-xxx.onrender.com/api/v1
+NEXT_PUBLIC_API_URL=https://sliceinsights.onrender.com/api/v1
 ```
 
 ## 🚀 Deployment Process

@@ -46,3 +46,4 @@
 - [x] Hyper-Personalização (Ideal Point, Delta Score)
 - [x] Statistics Page & Battle Mode
 - [x] Production Readiness (rate limiting, logging, Prometheus)
+- [x] E2E Testing with Playwright (Verify Live Deployment)

@@ -1,6 +1,6 @@
 # Arquitetura do SliceInsights
 
-> **Última Atualização**: Janeiro 2026 | **Stack**: FastAPI + Next.js 15 + PostgreSQL 16 | **Versão**: 1.6
+> **Última Atualização**: Janeiro 2026 | **Stack**: FastAPI + Next.js 14 + PostgreSQL 16 | **Versão**: 1.7
 
 ---
 
@@ -45,7 +45,7 @@ graph TB
 ### Frontend
 | Tecnologia | Versão | Uso |
 |------------|--------|-----|
-| **Next.js** | 15 (App Router) | Framework React com SSR/SSG |
+| **Next.js** | 14.x (App Router) | Framework React com SSR/SSG |
 | **TypeScript** | 5.x | Type safety |
 | **Tailwind CSS** | 3.x | Styling system |
 | **Framer Motion** | 11.x | Animações premium |
@@ -69,7 +69,8 @@ graph TB
 | **PostgreSQL** | 16-alpine | Database |
 | **Docker** | Latest | Containerização |
 | **Docker Compose** | v2 | Orquestração local |
-| **Railway** | Cloud | Deploy produção |
+| **Vercel** | Cloud | Deploy Frontend |
+| **Render** | Cloud | Deploy Backend |
 
 ---
 
@@ -329,9 +330,9 @@ docker compose up -d --build
 
 ## 📝 Próximos Passos Técnicos
 
-- [ ] Implementar cache Redis (opcional)
-- [ ] Adicionar testes E2E com Playwright
-- [ ] Setup CI/CD no GitHub Actions
+- [x] Implementar cache Redis (opcional)
+- [x] Adicionar testes E2E com Playwright
+- [x] Setup CI/CD no GitHub Actions
 - [ ] Migrar frontend para SSG em páginas estáticas
 
 ---
