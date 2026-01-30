@@ -33,5 +33,25 @@ Release current version to Dev and Prod environments.
 - [x] Recommendation Engine (Predictive Fill) deployed.
 - [x] Prod Environment triggered (Git Push).
 
+---
+
+## 🚑 Rescue Mission: Vercel 404 Fix
+**Trigger**: User reported persistent 404. `health-check.txt` passed, implying mostly correct config but failed Next.js binding.
+
+### Agents Active
+1. `debugger`: Log analysis and isolation tests.
+2. `devops-engineer`: Vercel Configuration overrides.
+3. `test-engineer`: Live Verification.
+
+### Diagnosis
+- Static files (`/health-check.txt`) work ✅.
+- Dynamic Root (`/`) fails ❌.
+- **Cause**: Vercel likely treating app as "Static Site" instead of "Next.js App", ignoring dynamic routes.
+
+### Rescue Plan
+1. Force proper Framework detection via `frontend/vercel.json`.
+2. Explicitly define `build` and `output` settings in config.
+3. Verify live URL.
+
 ### Summary
 The release was orchestrated successfully. Major UI/UX improvements for data transparency and accessibility (contrast) were implemented. A critical fix for the Recommendation Engine ("Predictive Fill") was deployed to the backend, ensuring varied and plausible recommendations even for paddles with missing data. All changes were pushed to `main` for automated deployment.
