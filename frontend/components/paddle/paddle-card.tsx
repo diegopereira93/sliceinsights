@@ -132,19 +132,19 @@ export function PaddleCard({ paddle, onClick, onCompare, isComparing }: PaddleCa
                         </div>
                     )}
                 </CardContent>
-                <CardFooter className="p-4 pt-0 mt-auto flex items-center justify-between">
-                    <div className="flex flex-col">
+                <CardFooter className="p-4 pt-0 mt-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div className="flex flex-col self-start sm:self-auto">
                         <span className="font-black text-xl text-primary-text">
                             {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(paddle.price)}
                         </span>
                     </div>
                     {onCompare && (
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 w-full sm:w-auto">
 
                             <Button
                                 variant={isComparing ? "secondary" : "outline"}
                                 size="sm"
-                                className={`rounded-xl font-bold h-8 px-3 transition-all relative z-10 ${isComparing ? 'bg-primary text-primary-foreground border-none scale-105 shadow-glow-sm' : 'border-white/10 hover:bg-white/5'}`}
+                                className={`w-full sm:w-auto rounded-xl font-bold h-9 sm:h-8 px-3 transition-all relative z-10 ${isComparing ? 'bg-primary text-primary-foreground border-none scale-105 shadow-glow-sm' : 'border-white/10 hover:bg-white/5'}`}
                                 onClick={(e: React.MouseEvent) => {
                                     e.stopPropagation();
                                     e.preventDefault();
