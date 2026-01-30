@@ -75,6 +75,11 @@ export function PaddleCard({ paddle, onClick, onCompare, isComparing }: PaddleCa
                                 Importado
                             </Badge>
                         )}
+                        {paddle.isSynthetic && (
+                            <Badge variant="outline" className="backdrop-blur-md bg-amber-500/20 text-amber-100 border-amber-500/50 font-bold uppercase tracking-tighter text-[9px]" title="Especificações estimadas">
+                                Estimado
+                            </Badge>
+                        )}
                         {paddle.powerLevel === 'High' && (
                             <Badge className="bg-primary text-primary-foreground border-none font-bold">
                                 <Zap className="w-3 h-3 mr-1 fill-current" /> POWER
@@ -135,11 +140,7 @@ export function PaddleCard({ paddle, onClick, onCompare, isComparing }: PaddleCa
                     </div>
                     {onCompare && (
                         <div className="flex gap-2">
-                            {paddle.isSynthetic && (
-                                <Badge variant="outline" className="border-amber-600/50 text-amber-700 dark:border-amber-500/50 dark:text-amber-400 text-[9px] h-8 px-2 font-bold uppercase tracking-wider bg-amber-500/10 dark:bg-amber-500/5" title="Especificações estimadas baseadas no modelo">
-                                    Estimado
-                                </Badge>
-                            )}
+
                             <Button
                                 variant={isComparing ? "secondary" : "outline"}
                                 size="sm"
