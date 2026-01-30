@@ -39,7 +39,7 @@ async def test_health_check_db_unavailable():
     """Test health check returns 503 when DB is unavailable."""
     async def mock_session_gen():
         mock = AsyncMock()
-        mock.exec.side_effect = Exception("DB connection failed")
+        mock.execute.side_effect = Exception("DB connection failed")
         yield mock
     
     app.dependency_overrides[get_session] = mock_session_gen
@@ -51,7 +51,7 @@ async def test_health_check_db_unavailable():
     app.dependency_overrides.clear()
     
     assert response.status_code == 503
-    assert "unavailable" in response.json()["detail"].lower()
+    assert "connection failed" in response.json()["detail"].lower()
 
 
 @pytest.mark.asyncio

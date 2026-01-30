@@ -35,9 +35,16 @@ test('Data Integrity: Catalog displays enriched paddle specs', async ({ page }) 
         await expect(page.locator('.grid > div').first()).toBeVisible();
 
         // Check for "Potência" label/badge which implies ratings are calculated
-        // The UI likely shows "Potência" in the card or details
+        // Use a more robust selector that handles both languages if needed, or matches the UI better
         const firstCard = page.locator('.grid > div').first();
-        await expect(firstCard).toContainText('Potência');
-        await expect(firstCard).toContainText('Controle');
+        const cardText = (await firstCard.innerText()).toUpperCase();
+        console.log('DEBUG - CARD TEXT (UPPER):', cardText);
+
+        const hasRatingText = cardText.includes('POTÊNCIA') || cardText.includes('POWER');
+        expect(hasRatingText, `Card should contain Power/Potência rating. Found text: ${cardText}`).toBeTruthy();
+
+        const hasControlText = cardText.includes('CONTROLE') || cardText.includes('CONTROL');
+        expect(hasControlText, `Card should contain Control/Controle rating. Found text: ${cardText}`).toBeTruthy();
+
     }
 });

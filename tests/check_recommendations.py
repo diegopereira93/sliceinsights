@@ -7,8 +7,6 @@ from uuid import uuid4
 sys.path.append(os.getcwd())
 
 from app.models.paddle import PaddleMaster, calculate_paddle_ratings
-from app.models.enums import PlayStyle
-from app.schemas.user_profile import UserProfile
 
 async def verify_variety():
     print("--- Verifying Recommendation Variety ---")

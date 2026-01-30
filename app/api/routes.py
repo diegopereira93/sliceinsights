@@ -6,6 +6,7 @@ from uuid import UUID
 
 from cachetools import TTLCache
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi.responses import JSONResponse
 from sqlmodel import select, func
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -48,12 +49,15 @@ async def health_check(session: AsyncSession = Depends(get_session)):
         logger = structlog.get_logger()
         logger.error("Health check failed", error=str(e))
         # Don't fail the whole app if DB is just warming up, but return 503
-        return {
-            "status": "degraded",
-            "version": "1.0.0",
-            "database": "disconnected",
-            "detail": str(e)
-        }
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "degraded",
+                "version": "1.0.0",
+                "database": "disconnected",
+                "detail": str(e)
+            }
+        )
 
 
 # ============== Admin (Seed Trigger) ==============
