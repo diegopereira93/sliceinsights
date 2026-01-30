@@ -2,7 +2,6 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    distDir: '.next',
     // Enable standalone output for Docker multi-stage builds
     // output: 'standalone',
 
