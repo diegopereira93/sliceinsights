@@ -20,8 +20,51 @@ Release current version to Dev and Prod environments.
 2. **Implementation**:
     - **Frontend**: Implemented "Estimado" badges, warning alerts, and fixed light/dark mode contrast using responsive Tailwind classes.
     - **Backend**: Implemented "Predictive Fill" (Deterministic Synthetic Ratings) in `PaddleMaster` model to solve repetitive recommendations.
-3. **Verification**:
-    - Ran `tests/check_recommendations.py` inside backend container: Verified deterministic variety.
+3. **Verification Steps**
+1. Open on Mobile Device (iPhone/Android).
+2. Check if "Install App" (PWA) prompt appears (or "Add to Home Screen").
+3. Verify `BottomNav` does not cover the last item in lists.
+
+---
+
+## 🐞 Fix Catalog Card UI
+**Trigger**: User reported "Comparar" button missing and "Estimado" badge cut off on mobile.
+**Root Cause**: `CardFooter` overflow. Price + Badge + Button > Card Width on mobile.
+
+### Actions Taken
+1. **Badges**: Moved `isSynthetic` ("Estimado") badge from Footer to Image Overlay (Header).
+2. **Layout**: Cleared footer space to ensure Price and Compare Button fit side-by-side on all screens.
+3. **Deployment**: Pushed to `main`.
+
+### Verification Steps
+1. Open Mobile View.
+2. Confirm "Comparar" button is fully visible.
+3. Confirm "Estimado" badge is visible over the image (top-left).
+
+---
+
+## 🐞 Fix Modal/Drawer Overflow
+**Trigger**: User reported "Avise-me" button cut off in the Paddle Detail Drawer on mobile.
+**Root Cause**: `DrawerFooter` padding (`pb-10`) was insufficient for mobile browsers with bottom chrome/home bars.
+**Action**: Increased footer padding to `pb-24` (mobile) and restored `pb-10` (desktop).
+
+### Verification
+1. Open any Paddle Detail.
+2. Verify "Avise-me" and "Comprar" buttons are entirely visible and clickable.
+
+---
+
+## 🐞 Fix Catalog Card Footer (Attempt 2)
+**Trigger**: User reported "Comparar" button still cut off on minimal widths (e.g., iPhone SE).
+**Root Cause**: `flex-row` with `justify-between` fails when content (Price + Button) exceeds width.
+**Action**: Refactored Footer to **Responsive Layout**:
+- **Mobile**: `flex-col` (Stacked). Price on top, "Comparar" button full-width below.
+- **Desktop**: `flex-row` (Side-by-side).
+
+### Verification
+1. Open Mobile View.
+2. Verify Price is above the button.
+3. Verify "Comparar" button takes full width and is fully visible.
     - Verified Frontend Build: Success.
 4. **Prod Release**:
     - Pushed to `main` (Triggers CI/CD for Frontend and Backend).
@@ -32,31 +75,6 @@ Release current version to Dev and Prod environments.
 - [x] UI Transparency & Accessibility Features (Contrast) deployed.
 - [x] Recommendation Engine (Predictive Fill) deployed.
 - [x] Prod Environment triggered (Git Push).
-
----
-
-## 🚑 Rescue Mission: Vercel 404 Fix
-**Trigger**: User reported persistent 404. `health-check.txt` passed, implying mostly correct config but failed Next.js binding.
-
-### Agents Active
-1. `debugger`: Log analysis and isolation tests.
-2. `devops-engineer`: Vercel Configuration overrides.
-3. `test-engineer`: Live Verification.
-
-### Diagnosis
-- Static files (`/health-check.txt`) work ✅.
-- Dynamic Root (`/`) fails ❌.
-- **Cause**: Vercel likely treating app as "Static Site" instead of "Next.js App", ignoring dynamic routes.
-
-### Rescue Plan
-1. Force proper Framework detection via `frontend/vercel.json` (✅ Done).
-2. Explicitly define `build` and `output` settings in config (✅ Done).
-3. Verify live URL (✅ Success - 404 Resolved).
-
-### Verification
-- **Status**: **RESOLVED**.
-- **Observation**: User reports slow loading. Accessing backend (`onrender.com`) confirms "Cold Start" delay (Free Tier spin-up).
-- **Outcome**: Site is functional. Latency is expected behavior for current infrastructure tier.
 
 ### Summary
 The release was orchestrated successfully. Major UI/UX improvements for data transparency and accessibility (contrast) were implemented. A critical fix for the Recommendation Engine ("Predictive Fill") was deployed to the backend, ensuring varied and plausible recommendations even for paddles with missing data. All changes were pushed to `main` for automated deployment.
