@@ -150,15 +150,30 @@ async def trigger_seed(
 # ============== Brands ==============
 
 @router.get("/brands", response_model=dict)
-async def list_brands(session: AsyncSession = Depends(get_session)):
+async def list_brands(
+    available_in_brazil: Optional[bool] = Query(None),
+    session: AsyncSession = Depends(get_session)
+):
     """List all brands (cached for 5 minutes)."""
-    cache_key = "all_brands"
+    # Cache key includes filter now
+    cache_key = f"all_brands_{available_in_brazil}"
     
     # Check cache first
     if cache_key in _brands_cache:
         return _brands_cache[cache_key]
     
-    result = await session.exec(select(Brand))
+    query = select(Brand)
+    
+    if available_in_brazil is not None:
+        # Join with PaddleMaster and filter, ensure distinct brands
+        query = (
+            query
+            .join(PaddleMaster, Brand.id == PaddleMaster.brand_id)
+            .where(PaddleMaster.available_in_brazil == available_in_brazil)
+            .distinct()
+        )
+    
+    result = await session.exec(query)
     brands = result.all()
     response = {
         "data": [BrandRead.model_validate(b) for b in brands],

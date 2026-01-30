@@ -119,8 +119,13 @@ export async function getPaddles(filters: Record<string, any> = {}) {
     }
 }
 
-export async function getBrands() {
-    const url = `${getApiBaseUrl()}/brands`;
+export async function getBrands(filters: { available_in_brazil?: boolean } = {}) {
+    const params = new URLSearchParams();
+    if (filters.available_in_brazil !== undefined) {
+        params.append('available_in_brazil', filters.available_in_brazil.toString());
+    }
+
+    const url = `${getApiBaseUrl()}/brands?${params.toString()}`;
     console.log('[SSR] Fetching brands from:', url);
 
     try {

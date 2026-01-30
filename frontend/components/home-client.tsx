@@ -51,7 +51,7 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
                     setFetchError(false);
                     const [paddlesRes, brandsRes] = await Promise.all([
                         getPaddles({ limit: 50, available_in_brazil: true }),
-                        getBrands()
+                        getBrands({ available_in_brazil: true })
                     ]);
 
                     if (paddlesRes?.data) {
