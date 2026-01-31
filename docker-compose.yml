@@ -23,7 +23,7 @@ services:
   backend_v3:
     build:
       context: .
-      dockerfile: Dockerfile.backend
+      dockerfile: Dockerfile
     container_name: picklematch_api_v3
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres_v3:5432/picklematch
@@ -70,7 +70,7 @@ services:
   seed_v3:
     build:
       context: .
-      dockerfile: Dockerfile.backend
+      dockerfile: Dockerfile
     container_name: picklematch_seed_v3
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres_v3:5432/picklematch

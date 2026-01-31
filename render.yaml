@@ -3,7 +3,7 @@ services:
     name: sliceinsights-backend
     env: docker
     dockerContext: .
-    dockerfilePath: Dockerfile.backend
+    dockerfilePath: Dockerfile
     plan: free
     branch: main
     autoDeploy: true
