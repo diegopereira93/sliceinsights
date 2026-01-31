@@ -127,4 +127,4 @@ jobs:
           cd frontend
           npx playwright test e2e/verification.spec.ts
         env:
-          BASE_URL: "https://frontend-five-iota-18.vercel.app"
+          BASE_URL: "https://sliceinsights.vercel.app"

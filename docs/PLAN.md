@@ -1,38 +1,29 @@
-# Plan: Documentation Refactoring and Updates
+# Plan: Resolve E2E Test Failures (404 Not Found)
 
-Update the project documentation to match the current production state, technology stack versions, and workflow improvements.
+The E2E tests are currently failing because the `BASE_URL` in the GitHub Actions workflow points to a 404 page (`https://frontend-five-iota-18.vercel.app`). The correct production URL is `https://sliceinsights.vercel.app`.
 
 ## Proposed Changes
 
-### [Docs] Deployment & Infrastructure
-#### [MODIFY] [DEPLOYMENT.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/docs/DEPLOYMENT.md)
-- Update Backend URL to `https://sliceinsights.onrender.com`.
-- Update Backend Status to ✅ Online.
-- Synchronize environment variable names with current production config.
+### CI/CD Pipeline
 
-### [Docs] Architecture & Roadmap
-#### [MODIFY] [ARCHITECTURE.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/docs/ARCHITECTURE.md)
-- Correct Next.js version to 14.x (App Router).
-- Update tech stack to mention Render/Vercel instead of Railway.
-- Update "Próximos Passos Técnicos" to reflect completed CI/CD and Playwright tests.
+#### [MODIFY] [production-pipeline.yml](file:///home/diego/Documentos/projetos/data-products/sliceinsights/.github/workflows/production-pipeline.yml)
+- Update `BASE_URL` in the `verify-deployment` job from `https://frontend-five-iota-18.vercel.app` to `https://sliceinsights.vercel.app`.
+- Ensure the deployment step correctly targets the production environment.
 
-#### [MODIFY] [NEXT_STEPS.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/docs/roadmaps/NEXT_STEPS.md)
-- Move "Deployment Stack" and "CI/CD Setup" to the "Concluído" section.
-- Add "E2E Testing with Playwright" to the "Concluído" section.
+### Frontend Configuration
 
-### [Docs] Technical & General
-#### [MODIFY] [api_specification.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/docs/technical/api_specification.md)
-- Update `/api/v1/health` response examples to match current implementation (e.g., handling 503 correctly).
-- Update Base URLs to reflect `sliceinsights.vercel.app` and `sliceinsights.onrender.com`.
-
-#### [MODIFY] [README.md](file:///home/diego/Documentos/projetos/data-products/sliceinsights/README.md)
-- Update "Production-Ready Features" to confirm all items are fully implemented.
-- Ensure all quick start instructions match the current repository structure.
+#### [MODIFY] [vercel.json](file:///home/diego/Documentos/projetos/data-products/sliceinsights/frontend/vercel.json)
+- Double-check environment variables to ensure they point to the correct backend. (Currently pointing to `https://sliceinsights.onrender.com`).
 
 ## Verification Plan
 
-### Automated Checks
-- Run `lint_runner.py` to ensure markdown files follow standards (no broken links within the updated files).
+### Automated Tests
+- Run Playwright E2E tests locally against the production URL to verify they pass.
+  ```bash
+  cd frontend
+  BASE_URL=https://sliceinsights.vercel.app npx playwright test e2e/verification.spec.ts
+  ```
+- Trigger the GitHub Action (if possible) or wait for the next push to main to verify the pipeline passes.
 
 ### Manual Verification
-- Review each updated file to ensure information accuracy and consistency across the entire documentation set.
+- Access `https://sliceinsights.vercel.app` in the browser and verify the title and main content are correct.
