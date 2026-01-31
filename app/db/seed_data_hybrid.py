@@ -127,20 +127,14 @@ def clean_str(val) -> Optional[str]:
 
 
 def clear_database(session: Session):
-    """Limpar o banco de dados."""
+    """Limpar o banco de dados de forma eficiente."""
+    from sqlalchemy import text
     print("\n🗑️  Limpando banco de dados...")
     
-    offers = session.exec(select(MarketOffer)).all()
-    for offer in offers:
-        session.delete(offer)
-    
-    paddles = session.exec(select(PaddleMaster)).all()
-    for paddle in paddles:
-        session.delete(paddle)
-    
-    brands = session.exec(select(Brand)).all()
-    for brand in brands:
-        session.delete(brand)
+    # Deletar em ordem para respeitar FKs
+    session.execute(text("DELETE FROM market_offers"))
+    session.execute(text("DELETE FROM paddle_master"))
+    session.execute(text("DELETE FROM brands"))
     
     session.commit()
     print("  ✅ Banco limpo!")
