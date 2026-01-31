@@ -43,7 +43,7 @@ jobs:
         with:
           node-version: '20'
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
       - name: Build Check
         # Verifies if the project builds successfully (catches TS errors, etc)
         run: npm run build
@@ -102,7 +102,7 @@ jobs:
       - name: Install Dependencies
         run: |
           cd frontend
-          npm ci
+          npm install
       - name: Install Playwright
         run: |
           cd frontend
