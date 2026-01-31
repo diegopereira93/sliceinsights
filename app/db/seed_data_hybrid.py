@@ -311,11 +311,12 @@ def seed_database_hybrid():
                 store_name = str(row['store_name'])
                 image_url = clean_str(row.get('image_url'))
                 
-                if not brand_name or not model_name:
+                if not brand_name or not model_name or len(brand_name) < 2 or brand_name == "0":
                     continue
                 
                 # Criar/buscar marca (case-insensitive)
                 brand_key = normalize_name(brand_name)
+                model_key = normalize_name(model_name)
                 if brand_key not in brands_cache:
                     brand = session.exec(select(Brand).where(func.lower(Brand.name) == brand_key)).first()
                     if not brand:
