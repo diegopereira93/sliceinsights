@@ -320,17 +320,45 @@ def seed_database_hybrid():
                 if not brand_name or not model_name:
                     continue
                 
-                # Criar/buscar marca
-                if brand_name not in brands_cache:
-                    brand = session.exec(select(Brand).where(Brand.name == brand_name)).first()
+                # Criar/buscar marca (case-insensitive)
+                brand_key = normalize_name(brand_name)
+                if brand_key not in brands_cache:
+                    brand = session.exec(select(Brand).where(func.lower(Brand.name) == brand_key)).first()
                     if not brand:
                         brand = Brand(name=brand_name, website="")
                         session.add(brand)
                         session.flush()
-                    brands_cache[brand_name] = brand
+                    brands_cache[brand_key] = brand
                 
-                brand_obj = brands_cache[brand_name]
+                brand_obj = brands_cache[brand_key]
                 
+                if (brand_key, model_key) in paddles_created:
+                    paddle_id = paddles_created[(brand_key, model_key)]
+                else:
+                    # Check database for existing paddle (idempotency across runs)
+                    existing_paddle = session.exec(select(PaddleMaster).where(
+                        PaddleMaster.brand_id == brand_obj.id,
+                        PaddleMaster.model_name == model_name
+                    )).first()
+                    
+                    if existing_paddle:
+                        paddle_id = existing_paddle.id
+                        paddles_created[(brand_key, model_key)] = paddle_id
+                    else:
+                        paddle_id = None
+
+                if paddle_id:
+                    # Paddle already exists, just add the new market offer
+                    if price_brl:
+                        offer = MarketOffer(
+                            paddle_id=paddle_id,
+                            store_name=store_name,
+                            price_brl=price_brl,
+                            url=product_url
+                        )
+                        session.add(offer)
+                    continue
+
                 # MATCHING: Buscar specs do dataset internacional
                 match_result = find_matching_specs(brand_name, model_name, df_int)
                 
@@ -404,8 +432,6 @@ def seed_database_hybrid():
                 session.flush()
                 
                 # Guardar para evitar duplicatas
-                brand_key = normalize_name(brand_name)
-                model_key = normalize_name(model_name)
                 paddles_created[(brand_key, model_key)] = paddle.id
                 
                 # Criar oferta brasileira

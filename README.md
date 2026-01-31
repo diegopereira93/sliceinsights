@@ -41,48 +41,16 @@
 - **Observability**: Prometheus + Sentry + Structlog
 - **Architecture**: Clean Architecture / Service Layer Pattern
 
-## 🚀 Quick Start (Docker)
+## 📖 Documentation
 
-```bash
-# SliceInsights 🎾🇧🇷
+For detailed technical documentation, architecture guides, and deployment instructions, please refer to the [docs/](./docs/) directory:
 
-**Recomendador inteligente de raquetes de pickleball focado no mercado brasileiro**
+- [Architecture Guide](./docs/ARCHITECTURE.md)
+- [API Specification](./docs/technical/api_specification.md)
+- [Deployment Guide](./docs/DEPLOYMENT.md)
+- [Project Analysis Report](./docs/PROJECT_ANALYSIS_REPORT.md)
 
-SliceInsights é uma plataforma que ajuda jogadores brasileiros a encontrar a raquete de pickleball ideal através de um quiz personalizado e análises de mercado baseadas em dados reais.
-
-## 🌟 Destaques
-
-- 🇧🇷 **Foco Brasil**: Catálogo com 37 raquetes disponíveis no mercado brasileiro
-- 📊 **Analytics Global**: 495 raquetes no banco para análises de mercado completas
-- 🖼️ **Imagens HD**: Produtos com fotos em alta resolução (WebP 1024x1024)
-- 🤖 **Recomendação Inteligente**: Quiz de 10 perguntas + algoritmo de scoring
-- 🤖 **Motor de Recomendação Smart**: Algoritmo que unifica notas técnicas (0-10) com base em Física (Twist Weight, Spin RPM) e alinhamento com estilo de jogo (Power, Control, Balanced).
-- 💰 **Preços Reais**: Integração com Brazil Pickleball Store
-- 📈 **Market Intelligence**: Estatísticas e tendências do mercado global
-
-## 🏗️ Arquitetura
-
-### Stack Tecnológica
-
-- **Backend**: FastAPI + SQLModel + PostgreSQL
-- **Frontend**: Next.js 14 + TypeScript + shadcn/ui
-- **Scrapers**: Playwright (Python)
-- **Deployment**: Docker Compose
-
-### Estratégia Híbrida de Dados
-
-O projeto utiliza uma abordagem em duas camadas:
-
-1. **Catálogo de Produtos** (`available_in_brazil=true`)
-   - 37 raquetes disponíveis no Brasil
-   - Preços em BRL (reais)
-   - Imagens em alta resolução
-   - Links diretos para lojas brasileiras
-
-2. **Analytics e Estatísticas** (dataset completo)
-   - 495 raquetes de todo o mundo
-   - Dados técnicos detalhados
-   - Comparações de mercado global
+---
 
 ## 🚀 Quick Start
 
@@ -279,7 +247,7 @@ POST /api/v1/recommendations
 
 Este projeto utiliza um enxame de agentes de IA especializados para acelerar o desenvolvimento.
 
-**Leia o guia completo: [AUTONOMOUS_DEV.md](./AUTONOMOUS_DEV.md)**
+**Read more about the system architecture in [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)**
 
 ### Workflow Rápido (IssueOps)
 1.  **Abra uma Issue** usando os templates (`Feature Request`, `Bug Report`).

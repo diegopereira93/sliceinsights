@@ -134,9 +134,21 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
         }
     }, []);
 
-    useEffect(() => {
-        console.log("Statistics: initialPaddles count", initialPaddles.length);
+    const paddles = useMemo(() => {
+        // Deduplicate paddles to be robust against backend data issues
+        const uniqueMap = new Map<string, Paddle>();
+        initialPaddles.forEach(p => {
+            const key = `${p.brand}-${p.name}`.toLowerCase();
+            if (!uniqueMap.has(key)) {
+                uniqueMap.set(key, p);
+            }
+        });
+        return Array.from(uniqueMap.values());
     }, [initialPaddles]);
+
+    useEffect(() => {
+        console.log("Statistics: paddles count (deduplicated)", paddles.length);
+    }, [paddles]);
 
     const idealPoint = useMemo<IdealPoint | null>(() => {
         if (!userProfile) return null;
@@ -175,33 +187,33 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
 
     // --- Derived Data Calculations ---
     const stats = useMemo(() => {
-        if (!initialPaddles.length) return null;
+        if (!paddles.length) return null;
 
-        const totalPaddles = initialPaddles.length;
-        const avgPrice = initialPaddles.reduce((acc, p) => acc + p.price, 0) / totalPaddles;
+        const totalPaddles = paddles.length;
+        const avgPrice = paddles.reduce((acc, p) => acc + p.price, 0) / totalPaddles;
 
         // Price range for filters
-        const prices = initialPaddles.map(p => p.price).filter(p => p > 0);
+        const prices = paddles.map(p => p.price).filter(p => p > 0);
         const minPrice = Math.min(...prices);
         const maxPrice = Math.max(...prices);
 
         // Get unique brands
-        const brands = [...new Set(initialPaddles.map(p => p.brand))].sort();
+        const brands = [...new Set(paddles.map(p => p.brand))].sort();
 
         // --- Dynamic Insights ---
         // 1. Best Value (highest rating / price ratio)
-        const paddlesWithRating = initialPaddles.filter(p => p.rating > 0 && p.price > 0);
+        const paddlesWithRating = paddles.filter(p => p.rating > 0 && p.price > 0);
         const bestValue = paddlesWithRating.length ?
             [...paddlesWithRating].sort((a, b) => (b.rating / b.price) - (a.rating / a.price))[0] : null;
 
         // 2. Hidden Gem (high spin or power, below avg price)
-        const hiddenGem = initialPaddles
+        const hiddenGem = paddles
             .filter(p => p.price < avgPrice && p.price > 0 && (p.spin > 7 || p.power > 7))
             .sort((a, b) => (b.spin + b.power) - (a.spin + a.power))[0] || null;
 
         // 3. Market Pattern - most common core thickness
         const coreCount: Record<string, number> = {};
-        initialPaddles.forEach(p => {
+        paddles.forEach(p => {
             if (p.coreThicknessmm) {
                 const key = `${p.coreThicknessmm}mm`;
                 coreCount[key] = (coreCount[key] || 0) + 1;
@@ -211,14 +223,14 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
         const corePercentage = mostCommonCore ? ((mostCommonCore[1] / totalPaddles) * 100).toFixed(0) : null;
 
         // 4. Top Power paddle
-        const topPowerPaddle = [...initialPaddles].sort((a, b) => (b.powerOriginal || 0) - (a.powerOriginal || 0))[0];
+        const topPowerPaddle = [...paddles].sort((a, b) => (b.powerOriginal || 0) - (a.powerOriginal || 0))[0];
 
         // Chart data maps
-        const pricePerformanceData = initialPaddles
+        const pricePerformanceData = paddles
             .filter(p => p.rating > 0)
             .map(p => ({ ...p, priceJitter: p.price + (Math.random() * 20 - 10) }));
 
-        const powerControlData = initialPaddles.map(p => {
+        const powerControlData = paddles.map(p => {
             let control = p.control;
             let power = p.power;
             if ((!control || control === 0) && p.swingWeight) control = Math.max(0, Math.min(10, 10 - ((p.swingWeight - 100) / 3)));
@@ -226,11 +238,11 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
             return { ...p, control, power };
         }).filter(p => p.power > 0 && p.control > 0).map(p => ({ ...p, x: p.power, y: p.control, z: 1 }));
 
-        const physicsData = initialPaddles
+        const physicsData = paddles
             .filter(p => p.twistWeight && p.swingWeight)
             .map(p => ({ ...p, x: p.twistWeight, y: p.swingWeight, z: p.price }));
 
-        const spinSweetSpotData = initialPaddles.map(p => {
+        const spinSweetSpotData = paddles.map(p => {
             let sweetSpot = p.sweetSpot;
             if ((!sweetSpot || sweetSpot === 0) && p.twistWeight) sweetSpot = Math.max(0, Math.min(10, (p.twistWeight - 5.0) * 4));
             return { ...p, sweetSpot };
@@ -238,7 +250,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
 
         // Leaderboards
         const getTop = (key: keyof Paddle, sortFn: (a: Paddle, b: Paddle) => number): LeaderboardItem[] => {
-            return [...initialPaddles]
+            return [...paddles]
                 .sort(sortFn)
                 .slice(0, 10)
                 .map((p, i) => ({
@@ -261,8 +273,8 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
             .map(i => ({ ...i, value: (i.value as number)?.toFixed(2) || 'N/A' }));
 
         // Distributions
-        const swingWeights = initialPaddles.map(p => p.swingWeight).filter(v => v !== undefined) as number[];
-        const twistWeights = initialPaddles.map(p => p.twistWeight).filter(v => v !== undefined) as number[];
+        const swingWeights = paddles.map(p => p.swingWeight).filter(v => v !== undefined) as number[];
+        const twistWeights = paddles.map(p => p.twistWeight).filter(v => v !== undefined) as number[];
 
         return {
             totalPaddles,
@@ -284,7 +296,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
             leaderboards: { topPower, topSpin, topSwingWeight, topTwistWeight },
             distributions: { prices, swingWeights, twistWeights }
         };
-    }, [initialPaddles]);
+    }, [paddles]);
 
     // Apply scatter filters
     const filteredPaddles = useMemo(() => {
@@ -298,7 +310,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
             if (scatterFilters.minPower > 0 && (p.power || 0) < scatterFilters.minPower) return false;
             return true;
         });
-    }, [initialPaddles, scatterFilters]);
+    }, [paddles, scatterFilters]);
 
     // Initialize filter price range
     useEffect(() => {
@@ -310,7 +322,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
         }
     }, [stats]);
 
-    if (!stats || initialPaddles.length === 0) {
+    if (!stats || paddles.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 text-center animate-in fade-in duration-700">
                 <div className="relative mb-8">
@@ -319,9 +331,9 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                 </div>
                 <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-2">Orquestrando Agentes</h2>
                 <p className="text-muted-foreground max-w-xs mx-auto">
-                    Sincronizando inteligência de mercado com {initialPaddles.length === 0 ? 'os dados globais' : 'a base de dados'}. Agentes autônomos processando insights...
+                    Sincronizando inteligência de mercado com {paddles.length === 0 ? 'os dados globais' : 'a base de dados'}. Agentes autônomos processando insights...
                 </p>
-                {initialPaddles.length === 0 && (
+                {paddles.length === 0 && (
                     <Button
                         variant="ghost"
                         onClick={() => window.location.reload()}
@@ -518,13 +530,13 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                         </motion.div>
 
                         {/* Hidden Gems */}
-                        <HiddenGems paddles={initialPaddles} onPaddleClick={setSelectedPaddle} idealPoint={idealPoint} />
+                        <HiddenGems paddles={paddles} onPaddleClick={setSelectedPaddle} idealPoint={idealPoint} />
 
                         {/* Market Segments */}
-                        <MarketSegments paddles={initialPaddles} />
+                        <MarketSegments paddles={paddles} />
 
                         {/* Technical Deep Dive */}
-                        <TechnicalSpecsCharts paddles={initialPaddles} />
+                        <TechnicalSpecsCharts paddles={paddles} />
 
                         {/* Market Distribution */}
                         <section className="space-y-6">
@@ -554,7 +566,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                             filters={scatterFilters}
                             onFiltersChange={setScatterFilters}
                             activeCount={filteredPaddles.length}
-                            totalCount={initialPaddles.length}
+                            totalCount={paddles.length}
                         />
 
                         {/* Chart 1: Price vs Performance */}
