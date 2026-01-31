@@ -22,5 +22,5 @@ services:
       - key: PYTHON_VERSION
         value: "3.11.0"
       - key: SEED_FORCE_CLEAR
-        value: "true" # Triggering one last clean seed to resolve duplication
+        value: "false" # Force clear disabled after clean seed
 
