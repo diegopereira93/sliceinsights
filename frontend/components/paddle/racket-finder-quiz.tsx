@@ -480,11 +480,11 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
         <div className="w-full max-w-md mx-auto">
             {/* Progress bar */}
             <div className="mb-6">
-                <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs font-medium text-zinc-400">
-                        Pergunta {currentStep + 1} de {steps.length}
+                <div className="flex justify-between items-center mb-3">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                        Etapa {currentStep + 1} / {steps.length}
                     </span>
-                    <span className="text-xs font-bold text-primary-text">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-primary">
                         {Math.round(progress)}%
                     </span>
                 </div>

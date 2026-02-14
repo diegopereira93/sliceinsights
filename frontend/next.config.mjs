@@ -2,8 +2,8 @@ import withPWA from 'next-pwa';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    // Enable standalone output for Docker multi-stage builds
-    output: 'standalone',
+    // Enable standalone output for Docker production builds only
+    ...(process.env.NODE_ENV === 'production' && { output: 'standalone' }),
 
     async rewrites() {
         const backendUrl = process.env.BACKEND_URL || 'http://backend_v3:8000';

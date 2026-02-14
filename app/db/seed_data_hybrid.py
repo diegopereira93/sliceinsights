@@ -11,7 +11,7 @@ import pandas as pd
 from sqlmodel import Session, select
 
 from app.db.database import sync_engine, init_db_sync
-from app.models import Brand, PaddleMaster, MarketOffer
+from app.models import Brand, PaddleMaster, MarketOffer, calculate_paddle_ratings
 from app.models.enums import FaceMaterial, PaddleShape
 
 # Caminhos dos CSVs - dentro de app/ para garantir inclusão no container
@@ -318,7 +318,12 @@ def seed_database_hybrid():
                 brand_key = normalize_name(brand_name)
                 model_key = normalize_name(model_name)
                 if brand_key not in brands_cache:
-                    brand = session.exec(select(Brand).where(func.lower(Brand.name) == brand_key)).first()
+                    # Look for brand in DB using normalized name if possible, 
+                    # but since we can't easily normalize in PG exactly like in Python, 
+                    # we'll fetch all brands and normalize them in Python for a clean match.
+                    all_brands = session.exec(select(Brand)).all()
+                    brand = next((b for b in all_brands if normalize_name(b.name) == brand_key), None)
+                    
                     if not brand:
                         brand = Brand(name=brand_name, website="")
                         session.add(brand)
@@ -390,6 +395,10 @@ def seed_database_hybrid():
                     if core_mm:
                         keywords.append(f"{int(core_mm)}mm")
                     
+                    # Calculate ratings for matched paddles to ensure ratings_dict is defined
+                    temp_paddle = PaddleMaster(brand_id=brand_obj.id, model_name=model_name)
+                    ratings_dict = calculate_paddle_ratings(temp_paddle)
+
                     paddle = PaddleMaster(
                         brand_id=brand_obj.id,
                         model_name=model_name,
@@ -402,6 +411,9 @@ def seed_database_hybrid():
                         core_material=core_material_raw,
                         shape=shape,
                         power_rating=power_rating,
+                        control_rating=ratings_dict["control"],
+                        spin_rating=ratings_dict["spin"],
+                        sweet_spot_rating=ratings_dict["sweet_spot"],
                         swing_weight=swing_weight,
                         twist_weight=twist_weight,
                         spin_rpm=spin_rpm,
@@ -413,12 +425,20 @@ def seed_database_hybrid():
                     )
                 else:
                     # SEM MATCH: Criar apenas com dados básicos do scraper
+                    # Calcular ratings sintéticos básicos
+                    temp_paddle = PaddleMaster(brand_id=brand_obj.id, model_name=model_name)
+                    ratings_dict = calculate_paddle_ratings(temp_paddle)
+                    
                     paddle = PaddleMaster(
                         brand_id=brand_obj.id,
                         model_name=model_name,
                         search_keywords=keywords,
                         image_url=image_url,
                         available_in_brazil=True,
+                        power_rating=ratings_dict["power"],
+                        control_rating=ratings_dict["control"],
+                        spin_rating=ratings_dict["spin"],
+                        sweet_spot_rating=ratings_dict["sweet_spot"],
                         specs_source="brazil_scraper",
                         specs_confidence=1.0
                     )
@@ -477,15 +497,17 @@ def seed_database_hybrid():
                 continue  # Pular, já criamos como BR
             
             # Criar/buscar marca
-            if brand_name not in brands_cache:
-                brand = session.exec(select(Brand).where(Brand.name == brand_name)).first()
+            if brand_key not in brands_cache:
+                all_brands = session.exec(select(Brand)).all()
+                brand = next((b for b in all_brands if normalize_name(b.name) == brand_key), None)
+                
                 if not brand:
                     brand = Brand(name=brand_name, website="")
                     session.add(brand)
                     session.flush()
-                brands_cache[brand_name] = brand
+                brands_cache[brand_key] = brand
             
-            brand_obj = brands_cache[brand_name]
+            brand_obj = brands_cache[brand_key]
             
             # Extrair specs do dataset internacional
             price = clean_price(row.get("Col_2"))
@@ -512,6 +534,10 @@ def seed_database_hybrid():
             if core_mm:
                 keywords.append(f"{int(core_mm)}mm")
             
+            # Calculate ratings for international paddles
+            temp_paddle = PaddleMaster(brand_id=brand_obj.id, model_name=model_name)
+            ratings_dict = calculate_paddle_ratings(temp_paddle)
+
             # Criar paddle internacional (SEM imagem, para analytics)
             paddle = PaddleMaster(
                 brand_id=brand_obj.id,
@@ -521,14 +547,11 @@ def seed_database_hybrid():
                 face_material=face_material,
                 core_material=core_material_raw,
                 shape=shape,
-                power_rating=power_rating,
-                swing_weight=swing_weight,
-                twist_weight=twist_weight,
-                spin_rpm=spin_rpm,
-                power_original=power_original,
-                handle_length=handle_length,
-                grip_circumference=grip_circumference,
                 available_in_brazil=False,  # ← NÃO disponível no BR
+                power_rating=power_rating or ratings_dict["power"],
+                control_rating=ratings_dict["control"],
+                spin_rating=ratings_dict["spin"],
+                sweet_spot_rating=ratings_dict["sweet_spot"],
                 specs_source="international_dataset"
             )
             session.add(paddle)

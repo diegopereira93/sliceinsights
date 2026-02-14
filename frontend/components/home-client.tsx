@@ -69,7 +69,7 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
             }
         }
         fetchClientData();
-    }, [initialPaddles.length, isLoadingData]);
+    }, [initialPaddles.length]); // Fix: removed isLoadingData to prevent infinite loop
 
     const [selectedPaddle, setSelectedPaddle] = useState<Paddle | null>(null);
     const [searchQuery, setSearchQuery] = useState('');

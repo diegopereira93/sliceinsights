@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   keywords: ["pickleball", "raquete pickleball", "paddle pickleball", "pickleball brasil", "recomendação raquete", "quiz pickleball", "comprar raquete pickleball"],
   authors: [{ name: "SliceInsights" }],
   creator: "SliceInsights",
-  metadataBase: new URL("https://frontend-five-iota-18.vercel.app"),
+  metadataBase: new URL("https://sliceinsights.vercel.app"),
   manifest: "/manifest.json",
   robots: {
     index: true,
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "SliceInsights - Encontre Sua Raquete Ideal de Pickleball",
     description: "Quiz inteligente para encontrar a raquete perfeita. Catálogo brasileiro com preços atualizados.",
-    url: "https://frontend-five-iota-18.vercel.app",
+    url: "https://sliceinsights.vercel.app",
     siteName: "SliceInsights",
     images: [
       {
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     images: ["/og-image.jpg"],
   },
   alternates: {
-    canonical: "https://frontend-five-iota-18.vercel.app",
+    canonical: "https://sliceinsights.vercel.app",
   },
 };
 

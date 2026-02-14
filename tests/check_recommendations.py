@@ -1,3 +1,5 @@
+from app.models.paddle import PaddleMaster, calculate_paddle_ratings
+
 import asyncio
 import sys
 import os
@@ -5,8 +7,6 @@ from uuid import uuid4
 
 # Add app to path
 sys.path.append(os.getcwd())
-
-from app.models.paddle import PaddleMaster, calculate_paddle_ratings
 
 async def verify_variety():
     print("--- Verifying Recommendation Variety ---")

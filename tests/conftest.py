@@ -36,6 +36,8 @@ class MockPaddle:
         self.is_featured = False
         self.available_in_brazil = True
         self.image_url = None
+        self.specs_source = "lab_dataset"
+        self.specs_confidence = 0.95
         
         from app.models.enums import FaceMaterial, PaddleShape, SkillLevel
         self.face_material = FaceMaterial.CARBON

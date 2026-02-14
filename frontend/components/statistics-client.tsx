@@ -93,6 +93,12 @@ const itemVariants = {
 export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
     const [selectedPaddle, setSelectedPaddle] = useState<Paddle | null>(null);
     const [activeTab, setActiveTab] = useState('overview');
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     const [scatterFilters, setScatterFilters] = useState<ScatterFilters>({
         brand: null,
         priceRange: [0, 3000],
@@ -368,7 +374,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
     }, [selectedPaddle, idealPoint]);
 
     return (
-        <div className="min-h-screen bg-background text-foreground">
+        <div className="min-h-screen bg-black text-foreground dark">
 
             {/* Header */}
             <div className="px-6 py-10 bg-gradient-to-br from-muted/30 to-background border-b border-border/50 rounded-b-[2.5rem] mb-8">
@@ -585,59 +591,61 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                 </div>
                             </div>
                             <div className="h-[350px] w-full bg-card/40 backdrop-blur-sm rounded-[2rem] border border-border/50 p-4 shadow-inner relative">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
-                                        <CartesianGrid strokeDasharray="3 3" opacity={0.1} vertical={false} />
-                                        <XAxis
-                                            type="number"
-                                            dataKey="priceJitter"
-                                            name="Preço"
-                                            unit="R$"
-                                            tick={{ fontSize: 10, fill: '#888' }}
-                                            tickFormatter={(val) => `R$${val / 1000}k`}
-                                            domain={['dataMin - 100', 'dataMax + 100']}
-                                        />
-                                        <YAxis
-                                            type="number"
-                                            dataKey="rating"
-                                            name="Rating"
-                                            domain={[0, 10]}
-                                            hide
-                                        />
-                                        <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: '3 3' }} />
-                                        <ReferenceLine y={9.0} stroke="#10b981" strokeDasharray="3 3" label={{ value: "Elite Tier (9.0+)", position: "insideTopLeft", fill: "#10b981", fontSize: 10, fontWeight: 700 }} />
-                                        <ReferenceLine x={stats.avgPrice} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: "Preço Médio", position: "insideTopRight", fill: "#f59e0b", fontSize: 10, fontWeight: 700, angle: -90, dx: 10 }} />
-                                        <Scatter
-                                            name="Paddles"
-                                            data={stats.pricePerformanceData.filter(p => filteredPaddles.some(f => f.id === p.id))}
-                                            onClick={(data) => setSelectedPaddle(data.payload)}
-                                            className="cursor-pointer"
-                                        >
-                                            {stats.pricePerformanceData.filter(p => filteredPaddles.some(f => f.id === p.id)).map((entry, index) => (
-                                                <Cell
-                                                    key={`cell-${index}`}
-                                                    fill={entry.rating >= 9.0 ? '#10b981' : (entry.price < stats.avgPrice && entry.rating >= 8.0 ? '#f59e0b' : '#6366f1')}
-                                                    fillOpacity={0.7}
-                                                    stroke="none"
-                                                />
-                                            ))}
-                                        </Scatter>
-                                        {idealPoint && (
-                                            <Scatter
-                                                name="Seu Perfil"
-                                                data={[{ priceJitter: idealPoint.price, rating: idealPoint.rating, name: 'Seu Perfil Ideal' }]}
-                                                shape={(props: any) => {
-                                                    const { cx, cy } = props;
-                                                    return (
-                                                        <g transform={`translate(${cx - 12},${cy - 12})`}>
-                                                            <Star className="w-6 h-6 text-primary fill-primary shadow-glow animate-pulse" />
-                                                        </g>
-                                                    );
-                                                }}
+                                {isMounted && (
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
+                                            <CartesianGrid strokeDasharray="3 3" opacity={0.1} vertical={false} />
+                                            <XAxis
+                                                type="number"
+                                                dataKey="priceJitter"
+                                                name="Preço"
+                                                unit="R$"
+                                                tick={{ fontSize: 10, fill: '#888' }}
+                                                tickFormatter={(val) => `R$${val / 1000}k`}
+                                                domain={['dataMin - 100', 'dataMax + 100']}
                                             />
-                                        )}
-                                    </ScatterChart>
-                                </ResponsiveContainer>
+                                            <YAxis
+                                                type="number"
+                                                dataKey="rating"
+                                                name="Rating"
+                                                domain={[0, 10]}
+                                                hide
+                                            />
+                                            <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: '3 3' }} />
+                                            <ReferenceLine y={9.0} stroke="#10b981" strokeDasharray="3 3" label={{ value: "Elite Tier (9.0+)", position: "insideTopLeft", fill: "#10b981", fontSize: 10, fontWeight: 700 }} />
+                                            <ReferenceLine x={stats.avgPrice} stroke="#f59e0b" strokeDasharray="3 3" label={{ value: "Preço Médio", position: "insideTopRight", fill: "#f59e0b", fontSize: 10, fontWeight: 700, angle: -90, dx: 10 }} />
+                                            <Scatter
+                                                name="Paddles"
+                                                data={stats.pricePerformanceData.filter(p => filteredPaddles.some(f => f.id === p.id))}
+                                                onClick={(data) => setSelectedPaddle(data.payload)}
+                                                className="cursor-pointer"
+                                            >
+                                                {stats.pricePerformanceData.filter(p => filteredPaddles.some(f => f.id === p.id)).map((entry, index) => (
+                                                    <Cell
+                                                        key={`cell-${index}`}
+                                                        fill={entry.rating >= 9.0 ? '#10b981' : (entry.price < stats.avgPrice && entry.rating >= 8.0 ? '#f59e0b' : '#6366f1')}
+                                                        fillOpacity={0.7}
+                                                        stroke="none"
+                                                    />
+                                                ))}
+                                            </Scatter>
+                                            {idealPoint && (
+                                                <Scatter
+                                                    name="Seu Perfil"
+                                                    data={[{ priceJitter: idealPoint.price, rating: idealPoint.rating, name: 'Seu Perfil Ideal' }]}
+                                                    shape={(props: any) => {
+                                                        const { cx, cy } = props;
+                                                        return (
+                                                            <g transform={`translate(${cx - 12},${cy - 12})`}>
+                                                                <Star className="w-6 h-6 text-primary fill-primary shadow-glow animate-pulse" />
+                                                            </g>
+                                                        );
+                                                    }}
+                                                />
+                                            )}
+                                        </ScatterChart>
+                                    </ResponsiveContainer>
+                                )}
                             </div>
                         </section>
 
@@ -655,56 +663,58 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                 </div>
                             </div>
                             <div className="h-[350px] w-full bg-card/40 backdrop-blur-sm rounded-[2rem] border border-border/50 p-4 shadow-inner">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <ScatterChart margin={{ top: 20, right: 30, bottom: 20, left: 10 }}>
-                                        <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
-                                        <XAxis
-                                            type="number"
-                                            dataKey="x"
-                                            name="Power"
-                                            domain={[0, 10]}
-                                            tick={{ fontSize: 10, fill: '#888' }}
-                                            label={{ value: 'Power', position: 'insideBottom', offset: -5, fontSize: 10, fill: '#666', fontWeight: 700 }}
-                                        />
-                                        <YAxis
-                                            type="number"
-                                            dataKey="y"
-                                            name="Control"
-                                            domain={[0, 10]}
-                                            tick={{ fontSize: 10, fill: '#888' }}
-                                            label={{ value: 'Control', angle: -90, position: 'insideLeft', offset: 10, fontSize: 10, fill: '#666', fontWeight: 700 }}
-                                        />
-                                        <Tooltip content={<CustomTooltip />} />
-                                        <Scatter
-                                            data={stats.powerControlData.filter(p => filteredPaddles.some(f => f.id === p.id))}
-                                            fill="#3b82f6"
-                                            onClick={(data) => setSelectedPaddle(data.payload)}
-                                            className="cursor-pointer"
-                                        >
-                                            {stats.powerControlData.filter(p => filteredPaddles.some(f => f.id === p.id)).map((entry, index) => (
-                                                <Cell
-                                                    key={`cell-pc-${index}`}
-                                                    fill={entry.x > 8 ? '#ef4444' : (entry.y > 8 ? '#3b82f6' : '#8b5cf6')}
-                                                    fillOpacity={0.6}
-                                                />
-                                            ))}
-                                        </Scatter>
-                                        {idealPoint && (
-                                            <Scatter
-                                                name="Seu Perfil"
-                                                data={[{ x: idealPoint.power, y: idealPoint.control }]}
-                                                shape={(props: any) => {
-                                                    const { cx, cy } = props;
-                                                    return (
-                                                        <g transform={`translate(${cx - 12},${cy - 12})`}>
-                                                            <Star className="w-6 h-6 text-primary fill-primary shadow-glow animate-pulse" />
-                                                        </g>
-                                                    );
-                                                }}
+                                {isMounted && (
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <ScatterChart margin={{ top: 20, right: 30, bottom: 20, left: 10 }}>
+                                            <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
+                                            <XAxis
+                                                type="number"
+                                                dataKey="x"
+                                                name="Power"
+                                                domain={[0, 10]}
+                                                tick={{ fontSize: 10, fill: '#888' }}
+                                                label={{ value: 'Power', position: 'insideBottom', offset: -5, fontSize: 10, fill: '#666', fontWeight: 700 }}
                                             />
-                                        )}
-                                    </ScatterChart>
-                                </ResponsiveContainer>
+                                            <YAxis
+                                                type="number"
+                                                dataKey="y"
+                                                name="Control"
+                                                domain={[0, 10]}
+                                                tick={{ fontSize: 10, fill: '#888' }}
+                                                label={{ value: 'Control', angle: -90, position: 'insideLeft', offset: 10, fontSize: 10, fill: '#666', fontWeight: 700 }}
+                                            />
+                                            <Tooltip content={<CustomTooltip />} />
+                                            <Scatter
+                                                data={stats.powerControlData.filter(p => filteredPaddles.some(f => f.id === p.id))}
+                                                fill="#3b82f6"
+                                                onClick={(data) => setSelectedPaddle(data.payload)}
+                                                className="cursor-pointer"
+                                            >
+                                                {stats.powerControlData.filter(p => filteredPaddles.some(f => f.id === p.id)).map((entry, index) => (
+                                                    <Cell
+                                                        key={`cell-pc-${index}`}
+                                                        fill={entry.x > 8 ? '#ef4444' : (entry.y > 8 ? '#3b82f6' : '#8b5cf6')}
+                                                        fillOpacity={0.6}
+                                                    />
+                                                ))}
+                                            </Scatter>
+                                            {idealPoint && (
+                                                <Scatter
+                                                    name="Seu Perfil"
+                                                    data={[{ x: idealPoint.power, y: idealPoint.control }]}
+                                                    shape={(props: any) => {
+                                                        const { cx, cy } = props;
+                                                        return (
+                                                            <g transform={`translate(${cx - 12},${cy - 12})`}>
+                                                                <Star className="w-6 h-6 text-primary fill-primary shadow-glow animate-pulse" />
+                                                            </g>
+                                                        );
+                                                    }}
+                                                />
+                                            )}
+                                        </ScatterChart>
+                                    </ResponsiveContainer>
+                                )}
                             </div>
                         </section>
 
@@ -725,37 +735,39 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                         </div>
                                     </div>
                                     <div className="h-[300px] w-full bg-card/40 backdrop-blur-sm rounded-[2rem] border border-border/50 p-4 shadow-inner">
-                                        <ResponsiveContainer width="100%" height="100%">
-                                            <ScatterChart margin={{ top: 20, right: 30, bottom: 20, left: 10 }}>
-                                                <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
-                                                <XAxis
-                                                    type="number"
-                                                    dataKey="x"
-                                                    name="Twist Weight"
-                                                    domain={['auto', 'auto']}
-                                                    tick={{ fontSize: 10, fill: '#888' }}
-                                                    label={{ value: 'Twist W.', position: 'insideBottom', offset: -5, fontSize: 10, fill: '#666' }}
-                                                />
-                                                <YAxis
-                                                    type="number"
-                                                    dataKey="y"
-                                                    name="Swing Weight"
-                                                    domain={['auto', 'auto']}
-                                                    tick={{ fontSize: 10, fill: '#888' }}
-                                                    label={{ value: 'Swing W.', angle: -90, position: 'insideLeft', offset: 10, fontSize: 10, fill: '#666' }}
-                                                />
-                                                <Tooltip content={<CustomTooltip />} />
-                                                <Scatter
-                                                    data={stats.physicsData.filter(p => filteredPaddles.some(f => f.id === p.id))}
-                                                    onClick={(data) => setSelectedPaddle(data.payload)}
-                                                    className="cursor-pointer"
-                                                >
-                                                    {stats.physicsData.filter(p => filteredPaddles.some(f => f.id === p.id)).map((entry, index) => (
-                                                        <Cell key={`cell-phy-${index}`} fill={`hsl(270, 70%, ${50 + (index % 20)}%)`} fillOpacity={0.8} />
-                                                    ))}
-                                                </Scatter>
-                                            </ScatterChart>
-                                        </ResponsiveContainer>
+                                        {isMounted && (
+                                            <ResponsiveContainer width="100%" height="100%">
+                                                <ScatterChart margin={{ top: 20, right: 30, bottom: 20, left: 10 }}>
+                                                    <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
+                                                    <XAxis
+                                                        type="number"
+                                                        dataKey="x"
+                                                        name="Twist Weight"
+                                                        domain={['auto', 'auto']}
+                                                        tick={{ fontSize: 10, fill: '#888' }}
+                                                        label={{ value: 'Twist W.', position: 'insideBottom', offset: -5, fontSize: 10, fill: '#666' }}
+                                                    />
+                                                    <YAxis
+                                                        type="number"
+                                                        dataKey="y"
+                                                        name="Swing Weight"
+                                                        domain={['auto', 'auto']}
+                                                        tick={{ fontSize: 10, fill: '#888' }}
+                                                        label={{ value: 'Swing W.', angle: -90, position: 'insideLeft', offset: 10, fontSize: 10, fill: '#666' }}
+                                                    />
+                                                    <Tooltip content={<CustomTooltip />} />
+                                                    <Scatter
+                                                        data={stats.physicsData.filter(p => filteredPaddles.some(f => f.id === p.id))}
+                                                        onClick={(data) => setSelectedPaddle(data.payload)}
+                                                        className="cursor-pointer"
+                                                    >
+                                                        {stats.physicsData.filter(p => filteredPaddles.some(f => f.id === p.id)).map((entry, index) => (
+                                                            <Cell key={`cell-phy-${index}`} fill={`hsl(270, 70%, ${50 + (index % 20)}%)`} fillOpacity={0.8} />
+                                                        ))}
+                                                    </Scatter>
+                                                </ScatterChart>
+                                            </ResponsiveContainer>
+                                        )}
                                     </div>
                                 </section>
                             )}
@@ -775,52 +787,54 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                     </div>
                                 </div>
                                 <div className="h-[300px] w-full bg-card/40 backdrop-blur-sm rounded-[2rem] border border-border/50 p-4 shadow-inner">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <ScatterChart margin={{ top: 20, right: 30, bottom: 20, left: 10 }}>
-                                            <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
-                                            <XAxis
-                                                type="number"
-                                                dataKey="x"
-                                                name="Spin"
-                                                domain={[0, 10]}
-                                                tick={{ fontSize: 10, fill: '#888' }}
-                                                label={{ value: 'Spin', position: 'insideBottom', offset: -5, fontSize: 10, fill: '#666' }}
-                                            />
-                                            <YAxis
-                                                type="number"
-                                                dataKey="y"
-                                                name="Sweet Spot"
-                                                domain={[0, 10]}
-                                                tick={{ fontSize: 10, fill: '#888' }}
-                                                label={{ value: 'Sweet Spot', angle: -90, position: 'insideLeft', offset: 10, fontSize: 10, fill: '#666' }}
-                                            />
-                                            <Tooltip content={<CustomTooltip />} />
-                                            <Scatter
-                                                data={stats.spinSweetSpotData.filter(p => filteredPaddles.some(f => f.id === p.id))}
-                                                fill="#ec4899"
-                                                onClick={(data) => setSelectedPaddle(data.payload)}
-                                                className="cursor-pointer"
-                                            >
-                                                {stats.spinSweetSpotData.filter(p => filteredPaddles.some(f => f.id === p.id)).map((entry, index) => (
-                                                    <Cell key={`cell-ss-${index}`} fillOpacity={0.6} fill="#ec4899" />
-                                                ))}
-                                            </Scatter>
-                                            {idealPoint && (
-                                                <Scatter
-                                                    name="Seu Perfil"
-                                                    data={[{ x: idealPoint.spin, y: idealPoint.sweetSpot }]}
-                                                    shape={(props: any) => {
-                                                        const { cx, cy } = props;
-                                                        return (
-                                                            <g transform={`translate(${cx - 12},${cy - 12})`}>
-                                                                <Star className="w-6 h-6 text-primary fill-primary shadow-glow animate-pulse" />
-                                                            </g>
-                                                        );
-                                                    }}
+                                    {isMounted && (
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <ScatterChart margin={{ top: 20, right: 30, bottom: 20, left: 10 }}>
+                                                <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
+                                                <XAxis
+                                                    type="number"
+                                                    dataKey="x"
+                                                    name="Spin"
+                                                    domain={[0, 10]}
+                                                    tick={{ fontSize: 10, fill: '#888' }}
+                                                    label={{ value: 'Spin', position: 'insideBottom', offset: -5, fontSize: 10, fill: '#666' }}
                                                 />
-                                            )}
-                                        </ScatterChart>
-                                    </ResponsiveContainer>
+                                                <YAxis
+                                                    type="number"
+                                                    dataKey="y"
+                                                    name="Sweet Spot"
+                                                    domain={[0, 10]}
+                                                    tick={{ fontSize: 10, fill: '#888' }}
+                                                    label={{ value: 'Sweet Spot', angle: -90, position: 'insideLeft', offset: 10, fontSize: 10, fill: '#666' }}
+                                                />
+                                                <Tooltip content={<CustomTooltip />} />
+                                                <Scatter
+                                                    data={stats.spinSweetSpotData.filter(p => filteredPaddles.some(f => f.id === p.id))}
+                                                    fill="#ec4899"
+                                                    onClick={(data) => setSelectedPaddle(data.payload)}
+                                                    className="cursor-pointer"
+                                                >
+                                                    {stats.spinSweetSpotData.filter(p => filteredPaddles.some(f => f.id === p.id)).map((entry, index) => (
+                                                        <Cell key={`cell-ss-${index}`} fillOpacity={0.6} fill="#ec4899" />
+                                                    ))}
+                                                </Scatter>
+                                                {idealPoint && (
+                                                    <Scatter
+                                                        name="Seu Perfil"
+                                                        data={[{ x: idealPoint.spin, y: idealPoint.sweetSpot }]}
+                                                        shape={(props: any) => {
+                                                            const { cx, cy } = props;
+                                                            return (
+                                                                <g transform={`translate(${cx - 12},${cy - 12})`}>
+                                                                    <Star className="w-6 h-6 text-primary fill-primary shadow-glow animate-pulse" />
+                                                                </g>
+                                                            );
+                                                        }}
+                                                    />
+                                                )}
+                                            </ScatterChart>
+                                        </ResponsiveContainer>
+                                    )}
                                 </div>
                             </section>
                         </div>

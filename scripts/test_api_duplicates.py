@@ -1,6 +1,5 @@
 
 import requests
-import json
 from collections import Counter
 
 def test_api_paddles():

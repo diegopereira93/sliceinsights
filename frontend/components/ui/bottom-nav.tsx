@@ -13,7 +13,7 @@ export function BottomNav() {
             <div className="flex items-center justify-around h-16">
                 <NavItem href="/" icon={Home} label="Home" active={pathname === '/'} />
                 <NavItem href="/statistics" icon={BarChart2} label="Análise" active={pathname === '/statistics'} />
-                <NavItem href="/favorites" icon={Heart} label="Favoritos" active={pathname === '/favorites'} />
+                {/* <NavItem href="/favorites" icon={Heart} label="Favoritos" active={pathname === '/favorites'} /> */}
             </div>
         </nav>
     );

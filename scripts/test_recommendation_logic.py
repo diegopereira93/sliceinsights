@@ -1,14 +1,13 @@
+from app.services.recommendation_engine import RecommendationEngine
+from app.models.enums import PlayStyle
+from app.schemas.user_profile import UserProfile
+from app.models.paddle import calculate_paddle_ratings
 
 import os
 import sys
 
 # Add current directory to path to find 'app'
 sys.path.append(os.getcwd())
-
-from app.services.recommendation_engine import RecommendationEngine
-from app.models.enums import PlayStyle
-from app.schemas.user_profile import UserProfile
-from app.models.paddle import calculate_paddle_ratings
 
 # Mocking PaddleMaster since we don't have DB access here
 class MockPaddle:

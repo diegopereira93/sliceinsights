@@ -55,11 +55,19 @@ logs/
 data/*.csv
 !data/.gitkeep
 
-
 # Agent
 .agent/
 .vercel
+.loki/
 
 # Node.js (CLI tools installed locally)
 node_modules/
 
+# PWA (auto-generated)
+frontend/public/sw.js
+frontend/public/sw.js.map
+frontend/public/workbox-*.js
+frontend/public/workbox-*.js.map
+
+# Ruff
+.ruff_cache/

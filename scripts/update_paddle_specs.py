@@ -138,6 +138,10 @@ def main():
             match, score = find_best_match(brand.name, paddle.model_name, csv_specs)
             
             if match and score >= MIN_MATCH_SCORE:
+                # Update metadata for transparency
+                paddle.specs_source = "lab_dataset"
+                paddle.specs_confidence = float(score) / 100.0
+                
                 # Update attributes pythonically (ORM handles safety)
                 changes_made = False
                 
@@ -145,6 +149,7 @@ def main():
                     paddle.swing_weight = match['swing_weight']
                     changes_made = True
                 
+                # ... (rest of the checks) ...
                 if match['twist_weight'] is not None and paddle.twist_weight != match['twist_weight']:
                     paddle.twist_weight = match['twist_weight']
                     changes_made = True
@@ -165,10 +170,12 @@ def main():
                     paddle.core_material = match['core_material']
                     changes_made = True
 
+                session.add(paddle)
+                updated += 1
                 if changes_made:
-                    session.add(paddle)
-                    updated += 1
-                    print(f"   ✓ {brand.name} {paddle.model_name} -> {match['brand']} {match['model']} (score: {score})")
+                    print(f"   ✓ {brand.name} {paddle.model_name} -> {match['brand']} {match['model']} (score: {score}) [Specs + Meta]")
+                else:
+                    print(f"   · {brand.name} {paddle.model_name} -> {match['brand']} {match['model']} (score: {score}) [Meta Only]")
             else:
                 not_found.append((brand.name, paddle.model_name, score))
                 # print(f"   ✗ {brand.name} {paddle.model_name} (best score: {score})")

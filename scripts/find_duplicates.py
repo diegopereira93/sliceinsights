@@ -1,5 +1,4 @@
 
-import asyncio
 from sqlmodel import select, func, Session
 from app.db.database import sync_engine
 from app.models import PaddleMaster, Brand

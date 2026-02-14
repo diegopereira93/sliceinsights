@@ -50,8 +50,11 @@ class PaddleMasterBase(SQLModel):
     handle_length: Optional[str] = None # e.g. "5.5"
     grip_circumference: Optional[str] = None # e.g. "4.125"
 
-    # Performance Ratings (0-10) - Kept for normalized comparison
+    # Performance Ratings (0-10) - Materialized for SQL comparison
     power_rating: Optional[int] = None
+    control_rating: Optional[int] = None
+    spin_rating: Optional[int] = None
+    sweet_spot_rating: Optional[int] = None
     
     # Market Availability
     available_in_brazil: bool = Field(default=False, index=True)  # Produto disponível no Brasil
@@ -165,7 +168,8 @@ def calculate_paddle_ratings(paddle: "PaddleMaster") -> dict:
         "power": int(round(power)),
         "control": int(round(control)),
         "spin": int(round(spin)),
-        "sweet_spot": int(round(sweet_spot))
+        "sweet_spot": int(round(sweet_spot)),
+        "is_synthetic": any(v is None for v in [paddle.twist_weight, paddle.spin_rpm, paddle.power_rating])
     }
 
 
@@ -177,6 +181,9 @@ class PaddleRead(SQLModel):
     model_name: str
     specs: PaddleSpecs
     ratings: PaddleRatings
+    specs_source: str
+    specs_confidence: float
+    is_synthetic: bool = False
     image_url: Optional[str] = None
     is_featured: bool = False
     available_in_brazil: bool = False
@@ -205,6 +212,9 @@ class PaddleRead(SQLModel):
                 grip_circumference=paddle.grip_circumference,
             ),
             ratings=PaddleRatings(**ratings_dict),
+            specs_source=paddle.specs_source,
+            specs_confidence=paddle.specs_confidence,
+            is_synthetic=ratings_dict.get("is_synthetic", False),
             image_url=paddle.image_url,
             is_featured=paddle.is_featured,
             available_in_brazil=paddle.available_in_brazil,

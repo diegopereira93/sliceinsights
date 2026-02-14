@@ -7,7 +7,6 @@ Serviço para detectar quedas de preço e enviar notificações.
 import os
 import httpx
 from datetime import datetime
-from typing import Optional
 from dataclasses import dataclass
 
 

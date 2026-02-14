@@ -7,7 +7,6 @@ Integra com o scraper existente do Brazil Pickleball Store.
 
 import os
 import dlt
-from dlt.sources.helpers import requests
 import pandas as pd
 from datetime import datetime
 from pathlib import Path
@@ -72,8 +71,8 @@ def run_pipeline():
     # Executar
     load_info = pipeline.run(price_snapshots_source())
     
-    print(f"✅ Pipeline concluído!")
-    print(f"   - Tabela: price_data.price_snapshots")
+    print("✅ Pipeline concluído!")
+    print("   - Tabela: price_data.price_snapshots")
     print(f"   - Load info: {load_info}")
     
     return load_info

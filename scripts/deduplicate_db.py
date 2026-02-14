@@ -1,6 +1,5 @@
 
 import logging
-from uuid import UUID
 from sqlmodel import Session, select, func
 from app.db.database import sync_engine
 from app.models import Brand, PaddleMaster, MarketOffer

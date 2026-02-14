@@ -90,18 +90,21 @@ const idealPoint = useMemo<IdealPoint | null>(() => {
 
 ### Renderização no Scatter Chart
 
-O Ideal Point é exibido como um ponto destacado (laranja, maior) nos gráficos:
+O Ideal Point é exibido como uma estrela animada (`Star`) usando um segundo componente `Scatter` nos gráficos:
 
 ```tsx
 {idealPoint && (
-    <ReferenceDot
-        x={idealPoint.power}
-        y={idealPoint.control}
-        r={8}
-        fill="#FF9800"
-        stroke="#FFF"
-        strokeWidth={2}
-        label={{ value: "Seu Ideal", position: "top" }}
+    <Scatter
+        name="Seu Perfil"
+        data={[{ x: idealPoint.power, y: idealPoint.control }]}
+        shape={(props: any) => {
+            const { cx, cy } = props;
+            return (
+                <g transform={`translate(${cx - 12},${cy - 12})`}>
+                    <Star className="w-6 h-6 text-primary fill-primary shadow-glow animate-pulse" />
+                </g>
+            );
+        }}
     />
 )}
 ```
@@ -161,6 +164,7 @@ Quando o usuário possui um perfil salvo, a página de Estatísticas exibe um ba
         <p>Modo Personalizado Ativo</p>
         <Button onClick={() => {
             sessionStorage.removeItem('slice_quiz_results');
+            localStorage.removeItem('user_profile');
             window.location.reload();
         }}>
             Resetar

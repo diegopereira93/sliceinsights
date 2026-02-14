@@ -1,6 +1,6 @@
 from .enums import FaceMaterial, PaddleShape, SkillLevel, PlayStyle
 from .brand import Brand
-from .paddle import PaddleMaster
+from .paddle import PaddleMaster, calculate_paddle_ratings
 from .market_offer import MarketOffer
 
 __all__ = [
@@ -11,4 +11,5 @@ __all__ = [
     "Brand",
     "PaddleMaster",
     "MarketOffer",
+    "calculate_paddle_ratings",
 ]

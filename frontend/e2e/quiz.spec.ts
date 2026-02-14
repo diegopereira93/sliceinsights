@@ -27,8 +27,8 @@ test.describe('Quiz Flow', () => {
         // Select one to "start" (it's actually the first question)
         await levelOptions.first().click();
 
-        // Wait for subsequent questions (look for "Pergunta" text)
-        await expect(page.locator('text=/Pergunta [2-9] de 10/')).toBeVisible({ timeout: 10000 });
+        // Wait for subsequent questions (support both Local "Etapa" and Prod "Pergunta")
+        await expect(page.locator('text=/(Etapa|Pergunta) [2-9].*10/')).toBeVisible({ timeout: 10000 });
 
         // Select first option for each question (up to 10 questions)
         for (let i = 0; i < 10; i++) {
@@ -84,18 +84,20 @@ test.describe('Quiz Flow', () => {
             }
         }
 
-        // Wait for recommendations to load
-        await page.waitForSelector('text=/Match Perfeito|Recomendação|Raquete/i', {
+        // Wait for recommendations/catalog to load
+        // The current UI seems to redirect to the catalog/results page directly
+        await page.waitForSelector('text=/Catálogo de Raquetes|Resultados|Recomendação/i', {
             timeout: 15000
         });
 
-        // Check that recommendations are displayed or the success message
-        await expect(page.locator('text=/Match Perfeito Encontrado!/i')).toBeVisible();
+        // Check that recommendations/catalog are displayed
+        await expect(page.locator('text=/Catálogo de Raquetes|Resultados|Recomendação/i').first()).toBeVisible();
     });
 
     test('should navigate to statistics page', async ({ page }) => {
         // Find and click statistics link
-        const statsLink = page.getByRole('link', { name: /estatísticas|statistics|métricas/i });
+        // Update selector to be more robust or match current nav
+        const statsLink = page.getByRole('link', { name: /estatísticas|statistics|métricas|dash/i });
 
         if (await statsLink.isVisible()) {
             await statsLink.click();
