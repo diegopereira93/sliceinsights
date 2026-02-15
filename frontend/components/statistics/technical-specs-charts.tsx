@@ -211,7 +211,7 @@ export function TechnicalSpecsCharts({ paddles }: TechnicalSpecsChartsProps) {
                         </ResponsiveContainer>
                     </div>
                     <p className="text-xs text-muted-foreground mt-4 text-center">
-                        Cabos <strong>5.5"</strong> (Híbridos) são os favoritos para backhand de duas mãos.
+                        Cabos <strong>5.5&quot;</strong> (Híbridos) são os favoritos para backhand de duas mãos.
                     </p>
                 </div>
 
