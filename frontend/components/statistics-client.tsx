@@ -316,7 +316,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
             if (scatterFilters.minPower > 0 && (p.power || 0) < scatterFilters.minPower) return false;
             return true;
         });
-    }, [paddles, scatterFilters]);
+    }, [initialPaddles, scatterFilters]);
 
     // Initialize filter price range
     useEffect(() => {
@@ -326,7 +326,28 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                 priceRange: [stats.minPrice, stats.maxPrice]
             }));
         }
-    }, [stats]);
+    }, [stats, scatterFilters.priceRange]);
+
+    // --- Match Score Calculation ---
+    const matchScore = useMemo(() => {
+        if (!selectedPaddle || !idealPoint) return null;
+
+        const p = selectedPaddle;
+        const i = idealPoint;
+
+        // Euclidean distance for Power, Control, Spin
+        const distance = Math.sqrt(
+            Math.pow((p.power || 5) - i.power, 2) +
+            Math.pow((p.control || 5) - i.control, 2) +
+            Math.pow((p.spin || 5) - i.spin, 2)
+        );
+
+        // Max possible distance is sqrt(10^2 + 10^2 + 10^2) = 17.32
+        const maxDist = 17.32;
+        const score = Math.max(0, Math.min(100, 100 - (distance / maxDist * 100)));
+
+        return Math.round(score);
+    }, [selectedPaddle, idealPoint]);
 
     if (!stats || paddles.length === 0) {
         return (
@@ -352,26 +373,6 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
         );
     }
 
-    // --- Match Score Calculation ---
-    const matchScore = useMemo(() => {
-        if (!selectedPaddle || !idealPoint) return null;
-
-        const p = selectedPaddle;
-        const i = idealPoint;
-
-        // Euclidean distance for Power, Control, Spin
-        const distance = Math.sqrt(
-            Math.pow((p.power || 5) - i.power, 2) +
-            Math.pow((p.control || 5) - i.control, 2) +
-            Math.pow((p.spin || 5) - i.spin, 2)
-        );
-
-        // Max possible distance is sqrt(10^2 + 10^2 + 10^2) = 17.32
-        const maxDist = 17.32;
-        const score = Math.max(0, Math.min(100, 100 - (distance / maxDist * 100)));
-
-        return Math.round(score);
-    }, [selectedPaddle, idealPoint]);
 
     return (
         <div className="min-h-screen bg-black text-foreground dark">
