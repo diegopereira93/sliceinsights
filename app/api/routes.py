@@ -21,6 +21,7 @@ from app.models.brand import BrandRead
 from app.schemas.user_profile import RecommendationRequest, RecommendationResult, UserProfile
 from app.services.recommendation_engine import RecommendationEngine
 from app.services.affiliate_service import get_affiliate_service
+from app.api.endpoints.history import router as history_router
 
 router = APIRouter()
 limiter = Limiter(key_func=get_remote_address)
@@ -417,3 +418,6 @@ async def search_paddles(
         "results": scored[:limit],
         "total": len(scored)
     }
+
+# Include child routers
+router.include_router(history_router, prefix="/paddles", tags=["paddles"])

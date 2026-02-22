@@ -173,6 +173,12 @@ export async function getPaddleById(id: string) {
     return response.json();
 }
 
+export async function getPaddlePriceHistory(id: string, days: number = 30) {
+    const response = await fetch(`${getApiBaseUrl()}/paddles/${id}/history?days=${days}`);
+    if (!response.ok) throw new Error('Failed to fetch paddle history');
+    return response.json();
+}
+
 import { Paddle } from '@/components/paddle/paddle-card';
 
 export function mapBackendToFrontendPaddle(bp: BackendPaddle): Paddle {

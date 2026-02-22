@@ -18,6 +18,7 @@ import { EmptyState } from '@/components/ui/empty-state';
 interface HomeClientProps {
     initialPaddles: Paddle[];
     availableBrands: string[];
+    totalPaddlesCount: number;
 }
 
 const containerVariants = {
@@ -35,48 +36,99 @@ const itemVariants = {
     show: { opacity: 1, y: 0 }
 };
 
-export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps) {
+export function HomeClient({ initialPaddles, availableBrands, totalPaddlesCount }: HomeClientProps) {
     // Client-side state for data (fallback when SSR is empty)
     const [paddles, setPaddles] = useState<Paddle[]>(initialPaddles);
     const [brands, setBrands] = useState<string[]>(availableBrands);
     const [isLoadingData, setIsLoadingData] = useState(false);
     const [fetchError, setFetchError] = useState<boolean>(false);
 
+    // Pagination state
+    const [visibleCount, setVisibleCount] = useState(50);
+
     // Client-side fallback: fetch data if SSR returned empty
     useEffect(() => {
+        let isMounted = true;
         async function fetchClientData() {
             if (initialPaddles.length === 0 && !isLoadingData) {
                 setIsLoadingData(true);
                 try {
                     setFetchError(false);
                     const [paddlesRes, brandsRes] = await Promise.all([
-                        getPaddles({ limit: 50, available_in_brazil: true }),
-                        getBrands({ available_in_brazil: true })
+                        getPaddles({ limit: 100 }), // First batch
+                        getBrands()
                     ]);
 
-                    if (paddlesRes?.data) {
+                    if (paddlesRes?.data && isMounted) {
                         setPaddles(paddlesRes.data.map(mapBackendToFrontendPaddle));
                     }
-                    if (brandsRes?.data) {
+                    if (brandsRes?.data && isMounted) {
                         setBrands(brandsRes.data.map((b: any) => b.name).sort());
                     }
                 } catch (error) {
                     console.error('Failed to fetch client-side data:', error);
-                    setFetchError(true);
+                    if (isMounted) setFetchError(true);
                 } finally {
-                    setIsLoadingData(false);
+                    if (isMounted) setIsLoadingData(false);
                 }
             }
         }
         fetchClientData();
-    }, [initialPaddles.length]); // Fix: removed isLoadingData to prevent infinite loop
+        return () => { isMounted = false; };
+    }, [initialPaddles.length]);
+
+    // Background Lazy Loading for the rest of the catalog
+    useEffect(() => {
+        let isMounted = true;
+        async function fetchRemainingData() {
+            // Only start if we have the initial batch and there's more to get
+            const startOffset = Math.max(initialPaddles.length, 100);
+            if (initialPaddles.length === 0 || startOffset >= totalPaddlesCount || isLoadingData) return;
+
+            try {
+                let currentOffset = startOffset;
+
+                while (currentOffset < totalPaddlesCount && isMounted) {
+                    const paddlesRes = await getPaddles({ limit: 100, offset: currentOffset });
+
+                    if (paddlesRes?.data && paddlesRes.data.length > 0) {
+                        const newPaddles = paddlesRes.data.map(mapBackendToFrontendPaddle);
+                        if (isMounted) {
+                            setPaddles(prev => {
+                                const existingIds = new Set(prev.map((p: Paddle) => p.id));
+                                const uniqueNew = newPaddles.filter((p: Paddle) => !existingIds.has(p.id));
+                                return [...prev, ...uniqueNew];
+                            });
+                        }
+                        currentOffset += paddlesRes.data.length;
+                    } else {
+                        break;
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to fetch background data:', error);
+            }
+        }
+
+        // Slight delay to prioritize Time to Interactive
+        const timer = setTimeout(() => {
+            fetchRemainingData();
+        }, 1500);
+
+        return () => {
+            isMounted = false;
+            clearTimeout(timer);
+        };
+    }, [initialPaddles.length, totalPaddlesCount, isLoadingData]);
 
     const [selectedPaddle, setSelectedPaddle] = useState<Paddle | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
 
     // Filter States
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-    const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]); // 0 to Max
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, 4000]); // 0 to Max
+    const [weightFilter, setWeightFilter] = useState<"all" | "light" | "standard" | "heavy">("all");
+    const [thicknessFilter, setThicknessFilter] = useState<"all" | "14mm" | "16mm">("all");
 
     // Comparison State
     const [comparingPaddles, setComparingPaddles] = useState<Paddle[]>([]);
@@ -93,12 +145,28 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
             // 2. Brand Filter
             const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(paddle.brand);
 
-            // 3. Price Filter (Simple implementation for now)
+            // 3. Price Filter
             const matchesPrice = paddle.price >= priceRange[0] && paddle.price <= priceRange[1];
 
-            return matchesSearch && matchesBrand && matchesPrice;
+            // 4. Weight Filter
+            let matchesWeight = true;
+            if (weightFilter !== "all" && paddle.weight) {
+                const w = paddle.weight.toLowerCase();
+                if (weightFilter === "light") matchesWeight = w.includes("light");
+                else if (weightFilter === "heavy") matchesWeight = w.includes("heavy");
+                else if (weightFilter === "standard") matchesWeight = w.includes("standard") || w.includes("mid");
+            }
+
+            // 5. Thickness Filter
+            let matchesThickness = true;
+            if (thicknessFilter !== "all" && paddle.coreThicknessmm) {
+                if (thicknessFilter === "14mm") matchesThickness = paddle.coreThicknessmm === 14;
+                if (thicknessFilter === "16mm") matchesThickness = paddle.coreThicknessmm === 16;
+            }
+
+            return matchesSearch && matchesBrand && matchesPrice && matchesWeight && matchesThickness;
         });
-    }, [paddles, searchQuery, selectedBrands, priceRange]);
+    }, [paddles, searchQuery, selectedBrands, priceRange, weightFilter, thicknessFilter]);
 
     const handleRecommend = (paddle: Paddle) => {
         setSelectedPaddle(paddle);
@@ -107,7 +175,9 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
     const handleClearFilters = () => {
         setSearchQuery('');
         setSelectedBrands([]);
-        setPriceRange([0, 10000]);
+        setPriceRange([0, 4000]);
+        setWeightFilter("all");
+        setThicknessFilter("all");
     };
 
     const handleCompare = useCallback((paddle: Paddle) => {
@@ -179,6 +249,12 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
                                     prev.includes(brand) ? prev.filter(b => b !== brand) : [...prev, brand]
                                 );
                             }}
+                            priceRange={priceRange}
+                            onPriceRangeChange={setPriceRange}
+                            weightFilter={weightFilter}
+                            onWeightChange={setWeightFilter}
+                            thicknessFilter={thicknessFilter}
+                            onThicknessChange={setThicknessFilter}
                             onClear={handleClearFilters}
                         />
                     </div>
@@ -210,7 +286,7 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
                         key={searchQuery + selectedBrands.join(',')}
                         className="grid grid-cols-2 lg:grid-cols-4 gap-6"
                     >
-                        {filteredPaddles.map((paddle) => (
+                        {filteredPaddles.slice(0, visibleCount).map((paddle) => (
                             <motion.div key={paddle.id} variants={itemVariants}>
                                 <PaddleCard
                                     paddle={paddle}
@@ -221,6 +297,25 @@ export function HomeClient({ initialPaddles, availableBrands }: HomeClientProps)
                             </motion.div>
                         ))}
                     </motion.div>
+                )}
+
+                {/* Pagination Button */}
+                {!isLoadingData && !fetchError && filteredPaddles.length > visibleCount && (
+                    <div className="mt-12 flex flex-col items-center justify-center gap-4">
+                        <Button
+                            variant="outline"
+                            onClick={() => setVisibleCount(prev => prev + 50)}
+                            className="rounded-full px-8 h-12 font-bold border-white/10 hover:bg-white/5"
+                        >
+                            Carregar Mais ({filteredPaddles.length - visibleCount} restantes)
+                        </Button>
+                        {paddles.length < totalPaddlesCount && (
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground animate-pulse">
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                                <span>Sincronizando banco de dados...</span>
+                            </div>
+                        )}
+                    </div>
                 )}
             </section>
 

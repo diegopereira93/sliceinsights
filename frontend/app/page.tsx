@@ -13,15 +13,17 @@ export default async function Home() {
   // Fetch data on the server
   let paddles = [];
   let brands: string[] = [];
+  let totalPaddles = 0;
 
   try {
     const [paddlesRes, brandsRes] = await Promise.all([
-      getPaddles({ limit: 50, available_in_brazil: true }),
+      getPaddles({ limit: 100 }), // API max limit is 100 per request
       getBrands()
     ]);
 
     if (paddlesRes && paddlesRes.data) {
       paddles = paddlesRes.data.map(mapBackendToFrontendPaddle);
+      totalPaddles = paddlesRes.total || paddles.length;
     }
 
     if (brandsRes && brandsRes.data) {
@@ -37,6 +39,7 @@ export default async function Home() {
     <HomeClient
       initialPaddles={paddles}
       availableBrands={brands}
+      totalPaddlesCount={totalPaddles}
     />
   );
 }

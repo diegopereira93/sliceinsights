@@ -26,6 +26,13 @@ BRAZILIAN_SOURCES = [
     (JOOLA_BRAZIL_CSV, "Joola Brazil")
 ]
 
+# Data Quality Gate: Marcas inválidas detectadas nos scrapers
+EXCLUDED_BRANDS = {
+    "0", "raw carbon", "black diamond 14mm", "black diamond 16mm", 
+    "double black diamond 14 mm", "ruby", "prism v-2", "n/a", "unknown",
+    "nan", "none"
+}
+
 
 def normalize_name(text):
     """Normalizar nome para comparação."""
@@ -314,13 +321,14 @@ def seed_database_hybrid():
                 if not brand_name or not model_name or len(brand_name) < 2 or brand_name == "0":
                     continue
                 
-                # Criar/buscar marca (case-insensitive)
+                
+                # Data Quality Gate
                 brand_key = normalize_name(brand_name)
+                if brand_key in EXCLUDED_BRANDS or len(brand_key) < 2:
+                    continue
+                
                 model_key = normalize_name(model_name)
                 if brand_key not in brands_cache:
-                    # Look for brand in DB using normalized name if possible, 
-                    # but since we can't easily normalize in PG exactly like in Python, 
-                    # we'll fetch all brands and normalize them in Python for a clean match.
                     all_brands = session.exec(select(Brand)).all()
                     brand = next((b for b in all_brands if normalize_name(b.name) == brand_key), None)
                     
@@ -488,8 +496,11 @@ def seed_database_hybrid():
             brand_name = extract_brand_name(raw_brand)
             model_name = str(raw_model).strip()
             
-            # Verificar se já existe (brasileiro)
+            # Data Quality Gate
             brand_key = normalize_name(brand_name)
+            if brand_key in EXCLUDED_BRANDS or len(brand_key) < 2:
+                continue
+                
             model_key = normalize_name(model_name)
             
             if (brand_key, model_key) in paddles_created:
