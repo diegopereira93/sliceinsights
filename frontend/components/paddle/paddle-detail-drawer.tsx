@@ -12,15 +12,17 @@ import {
 } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Star, Zap, Weight, ShoppingCart, X, Crosshair, Tornado, Target, Layers, Ruler, Activity, ExternalLink, Globe } from 'lucide-react';
+import { Star, Zap, Weight, ShoppingCart, X, Crosshair, Tornado, Target, Layers, Ruler, Activity, ExternalLink, Globe, TrendingDown } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { SpecItem } from '@/components/ui/spec-item';
 import { PerformanceBar } from '@/components/ui/performance-bar';
 import { WeightSensationScale } from '@/components/ui/weight-sensation-scale';
 import { PriceSparkline } from '@/components/ui/price-sparkline';
-import { getPaddleById } from '@/lib/api';
+import { CircularProgress } from '@/components/ui/circular-progress';
+import { getPaddleById, getPaddlePriceHistory } from '@/lib/api';
 import { ImportCalculator } from '@/components/import-calculator';
 import { PriceAlertDialog } from '@/components/paddle/price-alert-dialog';
+import { PriceHistoryChart } from './price-history-chart';
 
 interface PaddleDetailDrawerProps {
     paddle: Paddle | null;
@@ -40,91 +42,34 @@ interface PaddleDetails extends Paddle {
     market_offers?: MarketOffer[];
 }
 
-interface CircularProgressProps {
-    value: number; // 0-100
-    label: string;
-    icon: React.ElementType;
-    colorClass: string;
-    strokeColor: string;
-}
-
-function CircularProgress({ value, label, icon: Icon, colorClass, strokeColor }: CircularProgressProps) {
-    const radius = 32;
-    const circumference = 2 * Math.PI * radius;
-    const offset = circumference - (value / 100) * circumference;
-
-    return (
-        <div className="flex flex-col items-center gap-2 group">
-            <div className="relative w-20 h-20 flex items-center justify-center">
-                <svg className="w-full h-full transform -rotate-90">
-                    <circle
-                        cx="40"
-                        cy="40"
-                        r={radius}
-                        className="stroke-white/5"
-                        strokeWidth="6"
-                        fill="transparent"
-                    />
-                    <circle
-                        cx="40"
-                        cy="40"
-                        r={radius}
-                        stroke={strokeColor}
-                        strokeWidth="6"
-                        fill="transparent"
-                        strokeDasharray={circumference}
-                        strokeDashoffset={offset}
-                        strokeLinecap="round"
-                        className="transition-all duration-1000 ease-out opacity-20 blur-md"
-                    />
-                    <circle
-                        cx="40"
-                        cy="40"
-                        r={radius}
-                        stroke={strokeColor}
-                        strokeWidth="6"
-                        fill="transparent"
-                        strokeDasharray={circumference}
-                        strokeDashoffset={offset}
-                        strokeLinecap="round"
-                        className="transition-all duration-1000 ease-out"
-                    />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center flex-col">
-                    <span className={`text-sm font-black ${colorClass}`}>
-                        {Math.round(value)}%
-                    </span>
-                </div>
-            </div>
-
-            <div className="flex items-center gap-1.5">
-                <Icon className={`w-3.5 h-3.5 ${colorClass}`} />
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{label}</span>
-            </div>
-        </div>
-    );
-}
-
 export function PaddleDetailDrawer({ paddle: initialPaddle, isOpen, onClose }: PaddleDetailDrawerProps) {
     const [details, setDetails] = useState<PaddleDetails | null>(null);
     const [loading, setLoading] = useState(false);
+    const [priceHistory, setPriceHistory] = useState<any>(null);
 
     useEffect(() => {
         if (isOpen && initialPaddle) {
             setDetails(initialPaddle as PaddleDetails);
             setLoading(true);
-            getPaddleById(initialPaddle.id)
-                .then(data => {
+
+            // Parallel fetches
+            Promise.all([
+                getPaddleById(initialPaddle.id),
+                getPaddlePriceHistory(initialPaddle.id)
+            ])
+                .then(([data, historyData]) => {
                     setDetails(prev => ({
                         ...prev!,
                         market_offers: data.market_offers,
-                        availableInBrazil: data.available_in_brazil, // Normalize to camelCase
+                        availableInBrazil: data.available_in_brazil,
                     }));
+                    setPriceHistory(historyData.history);
                 })
-                .catch(err => console.error("Error fetching paddle details:", err))
+                .catch(err => console.error("Error fetching paddle details/history:", err))
                 .finally(() => setLoading(false));
         } else {
             setDetails(null);
+            setPriceHistory(null);
         }
     }, [isOpen, initialPaddle]);
 
@@ -227,6 +172,21 @@ export function PaddleDetailDrawer({ paddle: initialPaddle, isOpen, onClose }: P
                             {displayPaddle.swingWeight && (
                                 <WeightSensationScale swingWeight={displayPaddle.swingWeight} />
                             )}
+
+                            {/* Price History Chart Section */}
+                            <div className="bg-zinc-900/40 p-5 rounded-2xl border border-white/5">
+                                <div className="flex items-center justify-between mb-2">
+                                    <h4 className="text-xs font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                                        <TrendingDown className="w-4 h-4 text-primary-text" /> Histórico de Preços
+                                    </h4>
+                                    <Badge variant="secondary" className="text-[9px] h-5 bg-white/5 border-none text-zinc-400">Últimos 30 dias</Badge>
+                                </div>
+                                {loading && !priceHistory ? (
+                                    <div className="h-48 animate-pulse bg-white/5 rounded-xl" />
+                                ) : (
+                                    <PriceHistoryChart history={priceHistory || {}} />
+                                )}
+                            </div>
 
                             <div>
                                 <h4 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-4">Especificações Técnicas</h4>
