@@ -1,6 +1,6 @@
 import logging
 from typing import List, Dict, Any, Optional
-from openai import AsyncOpenAI
+from groq import AsyncGroq
 import structlog
 
 from app.config import get_settings
@@ -9,22 +9,19 @@ logger = structlog.get_logger(__name__)
 settings = get_settings()
 
 class LLMService:
-    """Service for interacting with Grok (xAI) via the OpenAI SDK wrapper."""
+    """Service for interacting with Groq API (Llama 3.3)."""
     
     def __init__(self):
-        self.api_key = settings.grok_api_key
-        # Grok uses the xAI API base url
-        self.base_url = "https://api.x.ai/v1"
-        self.model_name = "grok-2-latest" # O mais recomendado
+        self.api_key = settings.groq_api_key
+        self.model_name = "llama-3.3-70b-versatile" # O mesmo modelo do lakehouse
         
         self.client = None
         if self.api_key:
-            self.client = AsyncOpenAI(
+            self.client = AsyncGroq(
                 api_key=self.api_key,
-                base_url=self.base_url
             )
         else:
-            logger.warning("No GROK_API_KEY found. LLM features will be disabled or mocked.")
+            logger.warning("No GROQ_API_KEY found. LLM features will be disabled or mocked.")
 
     async def generate_dossier(self, user_profile: Dict[str, Any], top_paddles: List[Dict[str, Any]]) -> str:
         """

@@ -35,6 +35,17 @@ class AffiliateService:
         parsed = urlparse(url)
         hostname = parsed.hostname or ""
         
+        # Add universal tracking UTM parameters
+        query_params = parse_qs(parsed.query)
+        query_params["utm_source"] = ["sliceinsights"]
+        query_params["utm_medium"] = ["affiliate"]
+        query_params["utm_campaign"] = ["paddle_recommendation"]
+        
+        new_query = urlencode(query_params, doseq=True)
+        parsed = parsed._replace(query=new_query)
+        
+        hostname = parsed.hostname or ""
+        
         # Amazon (includes amazon.com.br, amazon.com, etc.)
         if "amazon" in hostname and self.amazon_tag:
             return self._transform_amazon(url, parsed)

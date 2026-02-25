@@ -91,7 +91,7 @@ class Settings(BaseSettings):
     sentry_dsn: str = ""
     
     # LLM & AI
-    grok_api_key: str = ""
+    groq_api_key: str = ""
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

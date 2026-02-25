@@ -18,6 +18,7 @@ from app.db.database import get_session
 from app.models import Brand, PaddleMaster, MarketOffer
 from app.models.paddle import PaddleRead
 from app.models.brand import BrandRead
+from app.models.lead import Lead, LeadCreate, LeadRead
 from app.schemas.user_profile import RecommendationRequest, RecommendationResult, UserProfile
 from app.services.recommendation_engine import RecommendationEngine
 from app.services.affiliate_service import get_affiliate_service
@@ -467,6 +468,30 @@ async def coach_chat(
     )
     
     return ChatResponse(reply=reply)
+
+# ============== Leads ==============
+
+@router.post("/leads", response_model=LeadRead, status_code=201)
+@limiter.limit("10/minute")
+async def create_lead(
+    request: Request,
+    lead_in: LeadCreate,
+    session: AsyncSession = Depends(get_session)
+):
+    """Capture a new lead email from the Quiz Gate."""
+    # Check if exists
+    result = await session.exec(select(Lead).where(Lead.email == lead_in.email))
+    existing = result.first()
+    
+    if existing:
+        return existing
+        
+    db_lead = Lead.model_validate(lead_in)
+    session.add(db_lead)
+    await session.commit()
+    await session.refresh(db_lead)
+    
+    return db_lead
 
 # Include child routers
 router.include_router(history_router, prefix="/paddles", tags=["paddles"])

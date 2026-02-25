@@ -143,6 +143,16 @@ export async function getPaddles(filters: Record<string, any> = {}) {
     }
 }
 
+export async function captureLead(email: string, name?: string) {
+    const response = await fetch(`${getApiBaseUrl()}/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name, converted_from: 'quiz_result' }),
+    });
+    if (!response.ok) throw new Error('Failed to capture lead');
+    return response.json();
+}
+
 export async function getBrands(filters: { available_in_brazil?: boolean } = {}) {
     const params = new URLSearchParams();
     if (filters.available_in_brazil !== undefined) {

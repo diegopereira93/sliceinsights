@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { Paddle } from './paddle-card';
-import { getRecommendations, RecommendationRequest } from '@/lib/api';
+import { getRecommendations, RecommendationRequest, captureLead } from '@/lib/api';
 import { CoachChatInterface } from './coach-chat-interface';
 
 interface QuizStep {
@@ -374,6 +374,10 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
     const [showResults, setShowResults] = useState(false);
     const [recommendedPaddle, setRecommendedPaddle] = useState<Paddle | null>(null);
     const [grokDossier, setGrokDossier] = useState<string>('');
+    const [isLeadGate, setIsLeadGate] = useState(false);
+    const [leadName, setLeadName] = useState('');
+    const [leadEmail, setLeadEmail] = useState('');
+    const [isSubmittingLead, setIsSubmittingLead] = useState(false);
 
     const [loadingLabel, setLoadingLabel] = useState('Analisando seu perfil...');
 
@@ -393,7 +397,22 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
         if (currentStep < steps.length - 1) {
             setCurrentStep(currentStep + 1);
         } else {
-            findRecommendation(newAnswers);
+            setIsLeadGate(true); // Trigger the Lead Gate instead of direct recommendation
+        }
+    };
+
+    const handleLeadSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!leadEmail) return;
+        setIsSubmittingLead(true);
+        try {
+            await captureLead(leadEmail, leadName);
+        } catch (error) {
+            console.error('Failed to capture lead:', error);
+        } finally {
+            setIsSubmittingLead(false);
+            setIsLeadGate(false);
+            findRecommendation(answers); // Resume flow
         }
     };
 
@@ -506,13 +525,48 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
 
             <AnimatePresence mode="wait">
                 <motion.div
-                    key={isRecommending ? 'loading' : currentStep}
+                    key={isLeadGate ? 'lead' : isRecommending ? 'loading' : currentStep}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.3 }}
                 >
-                    {isRecommending ? (
+                    {isLeadGate ? (
+                        <div className="py-8 flex flex-col items-center justify-center text-center gap-4">
+                            <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-4">
+                                <Trophy className="w-8 h-8 text-primary shadow-glow" />
+                            </div>
+                            <h2 className="text-2xl font-bold">Perfil Analisado!</h2>
+                            <p className="text-zinc-400 mb-6">
+                                Descobri a raquete perfeita para o seu estilo de jogo. Para qual e-mail devo enviar o seu Dossiê Completo?
+                            </p>
+                            <form onSubmit={handleLeadSubmit} className="w-full flex flex-col gap-3">
+                                <input
+                                    type="text"
+                                    placeholder="Seu nome"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary"
+                                    value={leadName}
+                                    onChange={(e) => setLeadName(e.target.value)}
+                                    required
+                                />
+                                <input
+                                    type="email"
+                                    placeholder="Seu melhor e-mail"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary"
+                                    value={leadEmail}
+                                    onChange={(e) => setLeadEmail(e.target.value)}
+                                    required
+                                />
+                                <Button
+                                    type="submit"
+                                    disabled={isSubmittingLead || !leadEmail}
+                                    className="w-full h-12 font-bold mt-2 rounded-xl"
+                                >
+                                    {isSubmittingLead ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Ver Minha Recomendação'}
+                                </Button>
+                            </form>
+                        </div>
+                    ) : isRecommending ? (
                         <div className="py-12 flex flex-col items-center justify-center gap-4">
                             <Loader2 className="w-10 h-10 animate-spin text-primary-text" />
                             <p className="font-bold text-lg min-h-[1.5em] transition-all duration-300">{loadingLabel}</p>
@@ -644,7 +698,7 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
                 </motion.div>
             </AnimatePresence>
 
-            {currentStep > 0 && !isRecommending && !showResults && (
+            {currentStep > 0 && !isRecommending && !showResults && !isLeadGate && (
                 <Button
                     variant="ghost"
                     size="sm"

@@ -4,6 +4,7 @@ from .paddle import PaddleMaster, calculate_paddle_ratings
 from .market_offer import MarketOffer
 from .price_snapshot import PriceSnapshot
 from .ai_knowledge import AIKnowledgeBase
+from .lead import Lead
 
 __all__ = [
     "FaceMaterial",
@@ -15,5 +16,6 @@ __all__ = [
     "MarketOffer",
     "PriceSnapshot",
     "AIKnowledgeBase",
+    "Lead",
     "calculate_paddle_ratings",
 ]
