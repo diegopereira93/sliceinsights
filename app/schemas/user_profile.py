@@ -57,6 +57,7 @@ class RecommendationResult(BaseModel):
     filters_applied: dict[str, bool]
     total_matching: int
     returned: int
+    grok_dossier: Optional[str] = None
 
 
 class RecommendationRequest(BaseModel):

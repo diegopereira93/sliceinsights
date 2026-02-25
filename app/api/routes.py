@@ -22,6 +22,8 @@ from app.schemas.user_profile import RecommendationRequest, RecommendationResult
 from app.services.recommendation_engine import RecommendationEngine
 from app.services.affiliate_service import get_affiliate_service
 from app.api.endpoints.history import router as history_router
+from app.services.llm_service import llm_service
+from app.schemas.chat import ChatRequest, ChatResponse
 
 router = APIRouter()
 limiter = Limiter(key_func=get_remote_address)
@@ -361,7 +363,34 @@ async def get_recommendations(
     )
     
     engine = RecommendationEngine(session)
-    return await engine.get_recommendations(profile, limit=body.limit)
+    result = await engine.get_recommendations(profile, limit=body.limit)
+    
+    # Generate the personalized AI dossier from the Grok LLM
+    try:
+        if result.recommendations:
+            # Transform PaddleRecommendations to dict for LLM context
+            paddles_context = [
+                {
+                    "Rank": rec.rank,
+                    "Brand": rec.brand_name,
+                    "Model": rec.model_name,
+                    "Reasons": rec.match_reasons,
+                    "Tags": rec.tags
+                } 
+                for rec in result.recommendations
+            ]
+            
+            dossier = await llm_service.generate_dossier(
+                user_profile=profile.model_dump(),
+                top_paddles=paddles_context
+            )
+            result.grok_dossier = dossier
+    except Exception as e:
+        import structlog
+        structlog.get_logger(__name__).error("Dossier generation failed", error=str(e))
+        result.grok_dossier = "Seu perfil foi analisado com sucesso por nossas métricas avançadas."
+        
+    return result
 
 
 # ============== Search ==============
@@ -418,6 +447,26 @@ async def search_paddles(
         "results": scored[:limit],
         "total": len(scored)
     }
+
+# ============== LLM Coach Chat ==============
+
+@router.post("/chat", response_model=ChatResponse)
+@limiter.limit("20/minute")
+async def coach_chat(
+    request: Request,
+    body: ChatRequest,
+    session: AsyncSession = Depends(get_session)
+):
+    """Chat with the AI Coach restricted to the contextual recommendations."""
+    # Convert chat history to list of dicts for LLM Service
+    messages = [{"role": m.role, "content": m.content} for m in body.messages]
+    
+    reply = await llm_service.chat_with_context(
+        chat_history=messages,
+        context=body.context
+    )
+    
+    return ChatResponse(reply=reply)
 
 # Include child routers
 router.include_router(history_router, prefix="/paddles", tags=["paddles"])
