@@ -19,7 +19,7 @@ from app.models import Brand, PaddleMaster, MarketOffer
 from app.models.paddle import PaddleRead
 from app.models.brand import BrandRead
 from app.models.lead import Lead, LeadCreate, LeadRead
-from app.schemas.user_profile import RecommendationRequest, RecommendationResult, UserProfile, ConversationalRecommendationRequest
+from app.schemas.user_profile import RecommendationRequest, RecommendationResult, UserProfile
 from app.services.recommendation_engine import RecommendationEngine
 from app.services.affiliate_service import get_affiliate_service
 from app.api.endpoints.history import router as history_router
@@ -366,88 +366,62 @@ async def get_recommendations(
     engine = RecommendationEngine(session)
     result = await engine.get_recommendations(profile, limit=body.limit)
     
-    # Generate the personalized AI dossier from the Grok LLM
+    # Generate the personalized AI dossier from the Groq LLM
     try:
         if result.recommendations:
-            # Transform PaddleRecommendations to dict for LLM context
-            paddles_context = [
-                {
+            # Fetch full paddle objects for specs context
+            paddle_ids = [rec.paddle_id for rec in result.recommendations]
+            paddles_result = await session.exec(
+                select(PaddleMaster).where(PaddleMaster.id.in_(paddle_ids))
+            )
+            paddles_by_id = {p.id: p for p in paddles_result.all()}
+            
+            # Build RICH context with all structured data (SCI)
+            paddles_context = []
+            for rec in result.recommendations:
+                paddle = paddles_by_id.get(rec.paddle_id)
+                entry = {
                     "Rank": rec.rank,
                     "Brand": rec.brand_name,
                     "Model": rec.model_name,
+                    "Ratings": rec.ratings,
+                    "Value_Score": rec.value_score,
+                    "Price_BRL": rec.min_price_brl,
                     "Reasons": rec.match_reasons,
-                    "Tags": rec.tags
-                } 
-                for rec in result.recommendations
-            ]
+                    "Tags": rec.tags,
+                }
+                if paddle:
+                    entry["Specs"] = {
+                        "core_thickness_mm": paddle.core_thickness_mm,
+                        "core_material": paddle.core_material,
+                        "face_material": str(paddle.face_material) if paddle.face_material else None,
+                        "shape": str(paddle.shape) if paddle.shape else None,
+                        "spin_rpm": paddle.spin_rpm,
+                        "swing_weight": paddle.swing_weight,
+                        "twist_weight": paddle.twist_weight,
+                        "handle_length": paddle.handle_length,
+                    }
+                paddles_context.append(entry)
+            
+            # Decode UserProfile into human-readable Portuguese for the LLM
+            profile_context = {
+                "Nível": profile.skill_level.value,
+                "Estilo_de_Jogo": profile.play_style.value,
+                "Orçamento": f"até R$ {profile.budget_max_brl:.0f}" if profile.budget_max_brl else "Sem limite",
+                "Epicondilite": "Sim" if profile.has_tennis_elbow else "Não",
+                "Preferência_Spin": profile.spin_preference or "Sem preferência",
+                "Preferência_Peso": profile.weight_preference or "Sem preferência",
+                "Slider_Power_vs_Control": f"{profile.power_preference_percent}% Power / {100 - profile.power_preference_percent}% Control" if profile.power_preference_percent is not None else "Não informado",
+            }
             
             dossier = await llm_service.generate_dossier(
-                user_profile=profile.model_dump(),
+                user_profile=profile_context,
                 top_paddles=paddles_context
             )
             result.grok_dossier = dossier
     except Exception as e:
         import structlog
         structlog.get_logger(__name__).error("Dossier generation failed", error=str(e))
-        result.grok_dossier = "Seu perfil foi analisado com sucesso por nossas métricas avançadas."
-        
-    return result
-
-
-@router.post("/recommendations/conversational", response_model=RecommendationResult)
-@limiter.limit("30/minute")
-async def get_conversational_recommendations(
-    request: Request,
-    body: ConversationalRecommendationRequest,
-    session: AsyncSession = Depends(get_session)
-):
-    """Get personalized paddle recommendations interpreting natural language via LLM Text-to-Filter."""
-    
-    # 1. Parse natural language into Filters (UserProfile dict)
-    filters_dict = await llm_service.parse_query_to_filters(body.user_query)
-    
-    # 2. Map standard defaults if missing
-    from app.models.enums import SkillLevel, PlayStyle
-    
-    skill_str = filters_dict.get("skill_level", "Beginner")
-    skill_level = getattr(SkillLevel, skill_str.upper(), SkillLevel.BEGINNER) if hasattr(SkillLevel, skill_str.upper()) else SkillLevel.BEGINNER
-    
-    style_str = filters_dict.get("play_style", "Balanced")
-    play_style = getattr(PlayStyle, style_str.upper(), PlayStyle.BALANCED) if hasattr(PlayStyle, style_str.upper()) else PlayStyle.BALANCED
-    
-    profile = UserProfile(
-        skill_level=skill_level,
-        budget_max_brl=filters_dict.get("budget_max_brl"),
-        play_style=play_style,
-        has_tennis_elbow=filters_dict.get("has_tennis_elbow", False),
-        weight_preference=filters_dict.get("weight_preference")
-    )
-    
-    engine = RecommendationEngine(session)
-    result = await engine.get_recommendations(profile, limit=body.limit)
-    
-    # 3. Generate Dossier
-    try:
-        if result.recommendations:
-            paddles_context = [
-                {
-                    "Rank": rec.rank,
-                    "Brand": rec.brand_name,
-                    "Model": rec.model_name,
-                    "Reasons": rec.match_reasons,
-                    "Tags": rec.tags
-                } 
-                for rec in result.recommendations
-            ]
-            
-            dossier = await llm_service.generate_dossier(
-                user_profile=profile.model_dump(),
-                top_paddles=paddles_context
-            )
-            result.grok_dossier = dossier
-    except Exception as e:
-        import structlog
-        structlog.get_logger(__name__).error("Dossier generation failed in conversational route", error=str(e))
         result.grok_dossier = "Seu perfil foi analisado com sucesso por nossas métricas avançadas."
         
     return result

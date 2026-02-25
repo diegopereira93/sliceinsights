@@ -73,11 +73,6 @@ export interface RecommendationRequest {
     limit: number;
 }
 
-export interface ConversationalRecommendationRequest {
-    user_query: string;
-    limit: number;
-}
-
 export interface Recommendation {
     rank: number;
     paddle_id: string;
@@ -197,16 +192,6 @@ export async function getRecommendations(request: RecommendationRequest) {
         body: JSON.stringify(request),
     });
     if (!response.ok) throw new Error('Failed to fetch recommendations');
-    return response.json();
-}
-
-export async function getConversationalRecommendations(request: ConversationalRecommendationRequest) {
-    const response = await fetch(`${getApiBaseUrl()}/recommendations/conversational`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(request),
-    });
-    if (!response.ok) throw new Error('Failed to fetch conversational recommendations');
     return response.json();
 }
 
