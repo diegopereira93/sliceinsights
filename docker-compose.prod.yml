@@ -6,7 +6,7 @@
 services:
   # PostgreSQL Database
   postgres:
-    image: postgres:16-alpine
+    image: pgvector/pgvector:pg16
     container_name: picklematch_db_prod
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
