@@ -54,6 +54,8 @@ class RecommendationEngine:
             )
             .join(Brand, PaddleMaster.brand_id == Brand.id)
             .outerjoin(offers_subquery, PaddleMaster.id == offers_subquery.c.paddle_id)
+            # DATA QUALITY GATE: Only recommend paddles with verified data
+            .where(PaddleMaster.specs_confidence >= 0.5)
         )
         
         # 3. Apply Hard Filters
