@@ -143,8 +143,8 @@ class RecommendationEngine:
         
         def score_fn(item):
             ratings = item["ratings"]
-            norm_power = ratings["power"]
-            norm_control = ratings["control"]
+            norm_power = ratings["power"] if ratings["power"] is not None else 5.0
+            norm_control = ratings["control"] if ratings["control"] is not None else 5.0
             
             # CASE A: Fine-grained Slider Preference (0-100%)
             if profile.power_preference_percent is not None:
@@ -178,8 +178,12 @@ class RecommendationEngine:
         price = float(data["min_price"])
         ratings = data["ratings"]
         
-        # Performance aggregate
-        performance = (ratings["power"] + ratings["control"] + ratings["spin"]) / 3
+        # Only compute value_score from non-None ratings
+        real_ratings = [v for v in [ratings["power"], ratings["control"], ratings["spin"]] if v is not None]
+        if not real_ratings:
+            return None
+        
+        performance = sum(real_ratings) / len(real_ratings)
         
         # Formula: (Performance / Price) * 1000
         value_score = (performance / price) * 1000
@@ -194,11 +198,11 @@ class RecommendationEngine:
         """Generate match reasons using unified ratings."""
         reasons = []
         
-        if profile.play_style == PlayStyle.POWER and ratings["power"] >= 8:
+        if profile.play_style == PlayStyle.POWER and ratings["power"] is not None and ratings["power"] >= 8:
             reasons.append(f"Excepcional potência ({ratings['power']}/10)")
-        elif profile.play_style == PlayStyle.CONTROL and ratings["control"] >= 8:
+        elif profile.play_style == PlayStyle.CONTROL and ratings["control"] is not None and ratings["control"] >= 8:
             reasons.append(f"Máxima estabilidade e controle ({ratings['control']}/10)")
-        elif profile.play_style == PlayStyle.BALANCED:
+        elif profile.play_style == PlayStyle.BALANCED and ratings["power"] is not None and ratings["control"] is not None:
             avg = (ratings["power"] + ratings["control"]) / 2
             if avg >= 7.5:
                 reasons.append(f"Equilíbrio ideal entre ataque e defesa (Média {avg:.1f})")
@@ -221,12 +225,12 @@ class RecommendationEngine:
         if rank == 1:
             tags.append("Top Pick")
         
-        if ratings["power"] >= 9:
+        if ratings["power"] is not None and ratings["power"] >= 9:
             tags.append("Power Pro")
-        elif ratings["control"] >= 9:
+        elif ratings["control"] is not None and ratings["control"] >= 9:
             tags.append("Elite Control")
             
-        if ratings["spin"] >= 8.5:
+        if ratings["spin"] is not None and ratings["spin"] >= 8.5:
             tags.append("Spin Machine")
             
         return tags

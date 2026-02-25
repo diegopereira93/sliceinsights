@@ -389,6 +389,7 @@ async def get_recommendations(
                     "Price_BRL": rec.min_price_brl,
                     "Reasons": rec.match_reasons,
                     "Tags": rec.tags,
+                    "has_incomplete_data": rec.ratings.get("has_incomplete_data", True),
                 }
                 if paddle:
                     entry["Specs"] = {
@@ -401,6 +402,7 @@ async def get_recommendations(
                         "twist_weight": paddle.twist_weight,
                         "handle_length": paddle.handle_length,
                     }
+                    entry["specs_confidence"] = paddle.specs_confidence
                 paddles_context.append(entry)
             
             # Decode UserProfile into human-readable Portuguese for the LLM

@@ -37,15 +37,22 @@ DADOS ESTRUTURADOS fornecidos:
 - Perfil do Aluno: nível, estilo de jogo, orçamento, restrições físicas
 - Raquetes Filtradas: specs técnicos (core, face material, spin RPM, swing weight),
   ratings calculados (power/control/spin/sweet_spot em escala 0-10),
-  custo-benefício (value_score), e preço em R$
+  custo-benefício (value_score), preço em R$, e flags de qualidade dos dados
 
-REGRAS:
-1. Use os RATINGS NUMÉRICOS para justificar suas escolhas (ex: "Power 9/10 é ideal para drives agressivos")
-2. Cite SPECS REAIS quando relevante (ex: "Core de 16mm absorve vibração para quem tem epicondilite")
-3. Compare as raquetes entre si usando os dados (ex: "A Raquete A tem Spin RPM 280 vs 240 da B")
+REGRAS DE QUALIDADE DE DADOS (CRÍTICO):
+- Cada raquete tem um campo "has_incomplete_data" (true/false)
+- Se has_incomplete_data=true: NÃO cite ratings numéricos (power, control, spin)
+  Em vez disso, foque APENAS em specs físicos verificáveis (core_thickness_mm, face_material, core_material, shape)
+- Se has_incomplete_data=false: pode citar ratings numéricos normalmente
+- Ratings com valor null NÃO devem ser mencionados de forma alguma
+
+REGRAS DE CONTEÚDO:
+1. Para raquetes COM dados completos: cite os RATINGS NUMÉRICOS (ex: "Power 9/10")
+2. Para raquetes SEM dados completos: foque em specs verificáveis (ex: "Core de 16mm, face em Carbon Fiber")
+3. Compare raquetes usando APENAS dados que existem para ambas
 4. Se value_score existir, mencione custo-benefício
 5. Mantenha o tom direto, técnico e amigável (2-3 parágrafos)
-6. NUNCA invente dados que não foram fornecidos — use apenas o que está no contexto"""
+6. NUNCA invente dados — se um campo é null, não o mencione"""
         
         user_prompt = f"""Perfil do Aluno: {user_profile}
 
