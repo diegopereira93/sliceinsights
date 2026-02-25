@@ -45,3 +45,4 @@ pip-audit==2.10.0
 # AI & Embeddings
 pgvector==0.2.1
 openai==1.14.0
+dlt==0.4.5
