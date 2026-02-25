@@ -85,6 +85,30 @@ export interface Recommendation {
     value_score?: number;
 }
 
+export interface RecommendationResult {
+    user_profile: any;
+    recommendations: Recommendation[];
+    filters_applied: Record<string, boolean>;
+    total_matching: number;
+    returned: number;
+    grok_dossier?: string;
+}
+
+export interface ChatMessage {
+    role: 'user' | 'assistant' | 'system';
+    content: string;
+}
+
+export async function chatWithCoach(messages: ChatMessage[], context: string) {
+    const response = await fetch(`${getApiBaseUrl()}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages, context }),
+    });
+    if (!response.ok) throw new Error('Failed to chat with coach');
+    return response.json();
+}
+
 export async function getPaddles(filters: Record<string, any> = {}) {
     const params = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {

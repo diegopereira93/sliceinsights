@@ -24,6 +24,7 @@ import {
 import { Slider } from '@/components/ui/slider';
 import { Paddle } from './paddle-card';
 import { getRecommendations, RecommendationRequest } from '@/lib/api';
+import { CoachChatInterface } from './coach-chat-interface';
 
 interface QuizStep {
     key: string;
@@ -372,6 +373,7 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
     const [isRecommending, setIsRecommending] = useState(false);
     const [showResults, setShowResults] = useState(false);
     const [recommendedPaddle, setRecommendedPaddle] = useState<Paddle | null>(null);
+    const [grokDossier, setGrokDossier] = useState<string>('');
 
     const [loadingLabel, setLoadingLabel] = useState('Analisando seu perfil...');
 
@@ -418,6 +420,10 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
 
             if (result.recommendations && result.recommendations.length > 0) {
                 const rec = result.recommendations[0];
+
+                if (result.grok_dossier) {
+                    setGrokDossier(result.grok_dossier);
+                }
 
                 // --- Persist for Hyper-Personalization ---
                 if (typeof window !== 'undefined') {
@@ -538,6 +544,15 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
                                         </div>
                                     </div>
                                 </motion.div>
+                            )}
+
+                            {grokDossier && recommendedPaddle && (
+                                <div className="w-full text-left mb-4">
+                                    <CoachChatInterface
+                                        grokDossier={grokDossier}
+                                        contextString={`O usuário recebeu a raquete ${recommendedPaddle.brand} ${recommendedPaddle.name} por R$${recommendedPaddle.price}. Responda dúvidas sobre essa raquete.`}
+                                    />
+                                </div>
                             )}
 
                             <div className="flex flex-col gap-2 w-full">
