@@ -23,6 +23,64 @@ class LLMService:
         else:
             logger.warning("No GROQ_API_KEY found. LLM features will be disabled or mocked.")
 
+    async def parse_query_to_filters(self, user_query: str) -> Dict[str, Any]:
+        """
+        Translates natural language into a strictly typed JSON dictionary matching the UserProfile schema.
+        This provides a safe "Text-to-SQL-Filters" barrier.
+        """
+        if not self.client:
+            # Fallback mock for testing without API Key
+            return {
+                "skill_level": "Beginner",
+                "play_style": "Balanced",
+                "has_tennis_elbow": False,
+                "budget_max_brl": 1500
+            }
+            
+        system_prompt = """
+Você é um analisador avançado de "Text-to-Filter" para uma loja de Pickleball.
+Sua única função é extrair parâmetros da mensagem do usuário e retornar EXATAMENTE um objeto JSON.
+
+ESQUEMA DO JSON ESPERADO (não adicione outras chaves):
+{
+  "skill_level": "Beginner" | "Intermediate" | "Advanced",
+  "play_style": "Power" | "Control" | "Balanced",
+  "has_tennis_elbow": true | false,
+  "budget_max_brl": número | null,
+  "weight_preference": "heavy" | "standard" | "light" | "no_preference" | null
+}
+
+REGRAS:
+- Se o usuário não disser o preço, defina budget_max_brl como null.
+- Se falar de lesão no pulso/cotovelo/braço, defina has_tennis_elbow como true.
+- Se falar que está começando, é Beginner.
+- Se quiser atacar/bater forte: Power. Se quiser defender/pingar: Control.
+- Retorne APENAS o JSON válido.
+"""
+        try:
+            response = await self.client.chat.completions.create(
+                model=self.model_name,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_query}
+                ],
+                temperature=0.0,
+                response_format={"type": "json_object"},
+                max_tokens=200
+            )
+            import json
+            content = response.choices[0].message.content
+            return json.loads(content)
+        except Exception as e:
+            logger.error("Error parsing user query to filters via LLM", error=str(e))
+            # Safe Fallback
+            return {
+                "skill_level": "Beginner",
+                "play_style": "Balanced",
+                "has_tennis_elbow": False,
+                "budget_max_brl": None
+            }
+
     async def generate_dossier(self, user_profile: Dict[str, Any], top_paddles: List[Dict[str, Any]]) -> str:
         """
         Generates a personalized dossier explaining why the recommended paddles fit the user.

@@ -71,3 +71,9 @@ class RecommendationRequest(BaseModel):
     power_preference_percent: Optional[int] = Field(default=None, ge=0, le=100)
     limit: int = Field(default=3, ge=1, le=10)
 
+
+class ConversationalRecommendationRequest(BaseModel):
+    """API request for purely conversational recommendations."""
+    user_query: str = Field(..., description="The user's request in natural language.")
+    limit: int = Field(default=3, ge=1, le=10)
+

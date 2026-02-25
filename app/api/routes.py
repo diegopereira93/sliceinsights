@@ -19,7 +19,7 @@ from app.models import Brand, PaddleMaster, MarketOffer
 from app.models.paddle import PaddleRead
 from app.models.brand import BrandRead
 from app.models.lead import Lead, LeadCreate, LeadRead
-from app.schemas.user_profile import RecommendationRequest, RecommendationResult, UserProfile
+from app.schemas.user_profile import RecommendationRequest, RecommendationResult, UserProfile, ConversationalRecommendationRequest
 from app.services.recommendation_engine import RecommendationEngine
 from app.services.affiliate_service import get_affiliate_service
 from app.api.endpoints.history import router as history_router
@@ -389,6 +389,65 @@ async def get_recommendations(
     except Exception as e:
         import structlog
         structlog.get_logger(__name__).error("Dossier generation failed", error=str(e))
+        result.grok_dossier = "Seu perfil foi analisado com sucesso por nossas métricas avançadas."
+        
+    return result
+
+
+@router.post("/recommendations/conversational", response_model=RecommendationResult)
+@limiter.limit("30/minute")
+async def get_conversational_recommendations(
+    request: Request,
+    body: ConversationalRecommendationRequest,
+    session: AsyncSession = Depends(get_session)
+):
+    """Get personalized paddle recommendations interpreting natural language via LLM Text-to-Filter."""
+    
+    # 1. Parse natural language into Filters (UserProfile dict)
+    filters_dict = await llm_service.parse_query_to_filters(body.user_query)
+    
+    # 2. Map standard defaults if missing
+    from app.models.enums import SkillLevel, PlayStyle
+    
+    skill_str = filters_dict.get("skill_level", "Beginner")
+    skill_level = getattr(SkillLevel, skill_str.upper(), SkillLevel.BEGINNER) if hasattr(SkillLevel, skill_str.upper()) else SkillLevel.BEGINNER
+    
+    style_str = filters_dict.get("play_style", "Balanced")
+    play_style = getattr(PlayStyle, style_str.upper(), PlayStyle.BALANCED) if hasattr(PlayStyle, style_str.upper()) else PlayStyle.BALANCED
+    
+    profile = UserProfile(
+        skill_level=skill_level,
+        budget_max_brl=filters_dict.get("budget_max_brl"),
+        play_style=play_style,
+        has_tennis_elbow=filters_dict.get("has_tennis_elbow", False),
+        weight_preference=filters_dict.get("weight_preference")
+    )
+    
+    engine = RecommendationEngine(session)
+    result = await engine.get_recommendations(profile, limit=body.limit)
+    
+    # 3. Generate Dossier
+    try:
+        if result.recommendations:
+            paddles_context = [
+                {
+                    "Rank": rec.rank,
+                    "Brand": rec.brand_name,
+                    "Model": rec.model_name,
+                    "Reasons": rec.match_reasons,
+                    "Tags": rec.tags
+                } 
+                for rec in result.recommendations
+            ]
+            
+            dossier = await llm_service.generate_dossier(
+                user_profile=profile.model_dump(),
+                top_paddles=paddles_context
+            )
+            result.grok_dossier = dossier
+    except Exception as e:
+        import structlog
+        structlog.get_logger(__name__).error("Dossier generation failed in conversational route", error=str(e))
         result.grok_dossier = "Seu perfil foi analisado com sucesso por nossas métricas avançadas."
         
     return result
