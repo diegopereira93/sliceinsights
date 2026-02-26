@@ -603,10 +603,10 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
                                 </div>
                             )}
 
-                            {grokDossier && recommendedPaddle && (
+                            {recommendedPaddle && (
                                 <div className="w-full text-left mb-4">
                                     <CoachChatInterface
-                                        grokDossier={grokDossier}
+                                        grokDossier={grokDossier || `Olá! Analisei as suas respostas e a ${recommendedPaddle.brand} ${recommendedPaddle.name} é a raquete ideal para o seu perfil. O que gostaria de saber sobre ela?`}
                                         contextString={`O usuário recebeu a raquete ${recommendedPaddle.brand} ${recommendedPaddle.name} por R$${recommendedPaddle.price}. Responda dúvidas sobre essa raquete.`}
                                     />
                                 </div>

@@ -58,7 +58,7 @@ export function CoachChatInterface({ grokDossier, contextString }: CoachChatInte
             console.error('Chat error:', error);
             setMessages(prev => [...prev, {
                 role: 'assistant',
-                content: 'Desculpe, tive um problema de conexão. Poderia repetir a pergunta?'
+                content: 'Desculpe, meu sistema de inteligência avançada está offline para atualizações neste momento. Podes conferir as especificações da raquete na nossa tabela!'
             }]);
         } finally {
             setIsLoading(false);
@@ -96,8 +96,8 @@ export function CoachChatInterface({ grokDossier, contextString }: CoachChatInte
                             {msg.role === 'user' ? <User className="w-4 h-4 text-zinc-400" /> : <Bot className="w-4 h-4 text-primary" />}
                         </div>
                         <div className={`p-3 rounded-2xl text-sm leading-relaxed max-w-[85%] ${msg.role === 'user'
-                                ? 'bg-primary text-primary-foreground rounded-tr-sm'
-                                : 'bg-white/5 text-zinc-300 rounded-tl-sm border border-white/5'
+                            ? 'bg-primary text-primary-foreground rounded-tr-sm'
+                            : 'bg-white/5 text-zinc-300 rounded-tl-sm border border-white/5'
                             }`}>
                             {/* Make bold text actually bold and add paragraphs */}
                             {msg.content.split('\n').map((paragraph, i) => (
