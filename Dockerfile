@@ -19,12 +19,9 @@ COPY scripts/ ./scripts/
 COPY alembic/ ./alembic/
 COPY alembic.ini .
 
-# Make scripts executable
-RUN chmod +x scripts/*.sh
-
 # Default port for Railway/Render
 ENV PORT=8000
 EXPOSE 8000
 
-# Run the application startup script (includes migrations and seeding)
-CMD ["./scripts/start_prod.sh"]
+# Run the application startup
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT}"]
