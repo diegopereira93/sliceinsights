@@ -1,11 +1,14 @@
 """
-P1: Enrich existing paddles with real specs from paddle_stats_dump.csv.
+Enrich existing paddles with real specs from paddle_stats_dump.csv.
 Updates ONLY NULL fields — never overwrites manually entered data.
 
-Run with: docker compose exec backend_v3 python scripts/enrich_from_csv.py
+Run with:
+  docker compose exec backend_v3 python scripts/enrich_from_csv.py
+  docker compose exec backend_v3 python scripts/enrich_from_csv.py --dry-run
 """
 import sys
 import re
+import argparse
 from pathlib import Path
 from difflib import SequenceMatcher
 
@@ -21,7 +24,7 @@ from app.models.enums import FaceMaterial, PaddleShape
 
 CSV_PATH = Path(__file__).parent.parent / "app" / "data" / "paddle_stats_dump.csv"
 
-# CSV Column mapping (no headers in the CSV)
+# CSV Column mapping (verified against actual data, 21 columns total)
 COL_BRAND = 0
 COL_MODEL = 1
 COL_PRICE_USD = 2
@@ -32,27 +35,61 @@ COL_POWER = 6
 COL_CORE_MM = 7
 COL_HANDLE_LENGTH = 8
 COL_GRIP_CIRC = 9
-COL_SHAPE = 10
-COL_FACE_MATERIAL_1 = 11
-COL_FACE_MATERIAL_2 = 12
-COL_FACE_MATERIAL_3 = 13
-COL_CORE_MATERIAL = 14
+# col10 = another spin RPM measurement (ignore)
+COL_SHAPE = 11          # 'Wide body', 'Elongated', etc.
+COL_FACE_MATERIAL_A = 12  # Primary face material text
+COL_FACE_MATERIAL_B = 13  # Secondary face material text
+COL_CORE_MATERIAL = 13
+
+
+# ─── Text Cleaning ────────────────────────────────────────────────────────────
+
+# Portuguese / generic noise present in Brazilian store product titles
+NOISE_TOKENS = {
+    # Portuguese
+    'raquete', 'de', 'pickleball', 'kit', 'paddle', 'raquetes',
+    # English noise in thickness annotations
+    'mm', '14mm', '16mm', '13mm', '12mm', '19mm', '15mm',
+    # Generic
+    'pro', 'series',
+}
+
+# Brand alias map: DB brand name → CSV brand name (lowercase)
+BRAND_ALIASES: dict[str, str] = {
+    '3rdshot': '3rdshot',
+    '3rd shot': '3rdshot',
+    'slk': 'slk',
+    'selkirk slk': 'slk',
+    'proxr': 'proxr',
+    'pro-xr': 'proxr',
+    'start': 'start',
+}
 
 
 def normalize(text: str) -> str:
+    """Lowercase, strip accents, remove non-alphanumeric except spaces."""
     if not text or pd.isna(text):
         return ""
-    text = str(text).lower().strip()
-    text = re.sub(r'[^a-z0-9\s]', '', text)
-    text = re.sub(r'\s+', ' ', text)
+    import unicodedata
+    text = str(text)
+    text = unicodedata.normalize('NFKD', text)
+    text = text.encode('ascii', 'ignore').decode('ascii')
+    text = text.lower().strip()
+    text = re.sub(r'[^a-z0-9\s]', ' ', text)
+    text = re.sub(r'\s+', ' ', text).strip()
     return text
 
 
-NOISE_TOKENS = {'mm', '14mm', '16mm', '13mm', '12mm', '19mm', 'raquete', 'pickleball', 'paddle', 'de'}
-
 def clean_model(text: str) -> str:
+    """Remove noise tokens from a model name."""
     words = normalize(text).split()
     return ' '.join(w for w in words if w not in NOISE_TOKENS)
+
+
+def resolve_brand(db_brand: str) -> str:
+    """Normalize and resolve brand aliases."""
+    nb = normalize(db_brand)
+    return BRAND_ALIASES.get(nb, nb)
 
 
 def clean_float(val) -> float | None:
@@ -79,6 +116,14 @@ def clean_str(val) -> str | None:
     return str(val).strip()
 
 
+def normalize_rating(raw: float) -> int:
+    """Normalize a raw power score (typically 6-9) to a 0-10 int scale."""
+    if raw is None:
+        return None
+    clamped = max(0.0, min(10.0, float(raw)))
+    return int(round(clamped))
+
+
 def infer_face_material(name: str) -> FaceMaterial | None:
     n = name.lower()
     if 'kevlar' in n:
@@ -103,88 +148,90 @@ def infer_shape(name: str) -> PaddleShape | None:
     return None
 
 
-def match_score(db_brand: str, db_model: str, csv_brand: str, csv_model: str) -> float:
-    """Calculate match score between a DB paddle and a CSV paddle."""
-    b1, b2 = normalize(db_brand), normalize(csv_brand)
-    if b1 != b2:
-        return 0.0
-
-    m1 = clean_model(db_model)
-    m2 = clean_model(csv_model)
-
-    if m1 == m2:
-        return 1.0
-
-    return SequenceMatcher(None, m1, m2).ratio()
+def fuzzy_score(m1: str, m2: str) -> float:
+    """SequenceMatcher ratio, with a bonus for sub-string containment."""
+    ratio = SequenceMatcher(None, m1, m2).ratio()
+    # Boost if one is a significant substring of the other
+    shorter, longer = (m1, m2) if len(m1) <= len(m2) else (m2, m1)
+    if shorter and shorter in longer and len(shorter) >= 4:
+        ratio = max(ratio, 0.80)
+    return ratio
 
 
-def enrich():
-    print("🧠 P1: Enrichment Pipeline — paddle_stats_dump.csv → PostgreSQL")
+# ─── Main ────────────────────────────────────────────────────────────────────
+
+def enrich(dry_run: bool = False):
+    mode = "DRY-RUN" if dry_run else "LIVE"
+    print(f"🧠 Enrich Pipeline — paddle_stats_dump.csv → PostgreSQL [{mode}]")
     print("=" * 60)
 
     if not CSV_PATH.exists():
         print(f"❌ CSV not found: {CSV_PATH}")
         return
 
-    df = pd.read_csv(CSV_PATH, header=None)
-    print(f"📦 CSV loaded: {len(df)} paddles with real specs")
+    df = pd.read_csv(CSV_PATH, header=None, on_bad_lines='skip')
+    print(f"📦 CSV: {len(df)} rows loaded")
 
     init_db_sync()
 
     with Session(sync_engine) as session:
-        # Load all paddles + brands
         paddles = session.exec(
             select(PaddleMaster).join(Brand, PaddleMaster.brand_id == Brand.id)
         ).all()
-
-        # Pre-load brands by id
         brands = {b.id: b for b in session.exec(select(Brand)).all()}
 
-        print(f"🎾 DB paddles: {len(paddles)}")
+        print(f"🎾 DB: {len(paddles)} paddles\n")
 
         # Build CSV lookup: {(brand_norm, model_norm): row}
-        csv_lookup = {}
+        csv_lookup: dict[tuple[str, str], any] = {}
         for _, row in df.iterrows():
             b = normalize(str(row[COL_BRAND]))
             m = clean_model(str(row[COL_MODEL]))
-            csv_lookup[(b, m)] = row
+            if b and m:
+                csv_lookup[(b, m)] = row
 
         enriched = 0
-        already_complete = 0
         no_match = 0
-        updated_fields_total = {}
+        updated_fields_total: dict[str, int] = {}
+        match_log = []
 
         for paddle in paddles:
             brand = brands.get(paddle.brand_id)
             if not brand:
                 continue
 
-            brand_norm = normalize(brand.name)
+            brand_norm = resolve_brand(brand.name)
             model_norm = clean_model(paddle.model_name)
 
-            # Try exact match first
+            # 1. Exact match
             csv_row = csv_lookup.get((brand_norm, model_norm))
+            match_type = "exact"
 
-            # Try fuzzy match if exact fails
+            # 2. Fuzzy match within same brand
             if csv_row is None:
                 best_score = 0.0
                 best_row = None
                 for (cb, cm), row in csv_lookup.items():
                     if cb != brand_norm:
                         continue
-                    s = SequenceMatcher(None, model_norm, cm).ratio()
-                    if s > best_score and s >= 0.65:
+                    s = fuzzy_score(model_norm, cm)
+                    if s > best_score and s >= 0.60:
                         best_score = s
                         best_row = row
                 if best_row is not None:
                     csv_row = best_row
+                    match_type = f"fuzzy({best_score:.2f})"
 
             if csv_row is None:
                 no_match += 1
+                match_log.append(f"  ❌ NO MATCH  [{brand.name}] {paddle.model_name!r}")
                 continue
 
-            # Check what's missing and fill
-            updates = {}
+            csv_model_display = f"{csv_row[COL_BRAND]} {csv_row[COL_MODEL]}"
+            match_log.append(f"  ✅ {match_type:15s} [{brand.name}] {paddle.model_name!r}  →  {csv_model_display!r}")
+
+            # Build updates for NULL fields only
+            updates: dict = {}
 
             sw = clean_int(csv_row[COL_SWING_WEIGHT])
             tw = clean_float(csv_row[COL_TWIST_WEIGHT])
@@ -193,9 +240,10 @@ def enrich():
             cm = clean_float(csv_row[COL_CORE_MM])
             hl = clean_str(csv_row[COL_HANDLE_LENGTH])
             gc = clean_str(csv_row[COL_GRIP_CIRC])
-            core_mat = clean_str(csv_row[COL_CORE_MATERIAL])
+            core_mat = clean_material(csv_row[COL_CORE_MATERIAL])
             shape_str = clean_str(csv_row[COL_SHAPE])
-            face_str = clean_str(csv_row[COL_FACE_MATERIAL_2])
+            # Use first non-null face material text
+            face_str = clean_str(csv_row[COL_FACE_MATERIAL_A]) or clean_str(csv_row[COL_FACE_MATERIAL_B])
 
             if paddle.swing_weight is None and sw:
                 updates['swing_weight'] = sw
@@ -204,7 +252,6 @@ def enrich():
             if paddle.spin_rpm is None and sr:
                 updates['spin_rpm'] = sr
             if paddle.power_rating is None and pw:
-                from app.db.seed_data_hybrid import normalize_rating
                 updates['power_rating'] = normalize_rating(pw)
             if paddle.power_original is None and pw:
                 updates['power_original'] = pw
@@ -226,43 +273,43 @@ def enrich():
                     updates['face_material'] = f
 
             if not updates:
-                already_complete += 1
                 continue
 
-            # Apply updates
+            enriched += 1
             for field, value in updates.items():
-                setattr(paddle, field, value)
                 updated_fields_total[field] = updated_fields_total.get(field, 0) + 1
 
-            # Update source tracking
-            if 'int_match' not in (paddle.specs_source or ''):
-                paddle.specs_source = f"{paddle.specs_source or 'unknown'}+csv_enriched"
+            if not dry_run:
+                for field, value in updates.items():
+                    setattr(paddle, field, value)
 
-            # Recalculate confidence based on data completeness
-            real_fields = sum(1 for v in [paddle.swing_weight, paddle.twist_weight, paddle.spin_rpm, paddle.power_rating] if v is not None)
-            paddle.specs_confidence = real_fields / 4.0
+                paddle.specs_source = f"csv_enriched+{match_type}"
+                real_fields = sum(1 for v in [
+                    paddle.swing_weight, paddle.twist_weight,
+                    paddle.spin_rpm, paddle.power_rating
+                ] if v is not None)
+                paddle.specs_confidence = real_fields / 4.0
 
-            enriched += 1
+        if not dry_run:
+            session.commit()
 
-        session.commit()
+    # ─── Report ───────────────────────────────────────────────────────────────
+    print("\n".join(match_log))
+    print(f"\n{'=' * 60}")
+    print(f"✅ ENRICHMENT {'PREVIEW' if dry_run else 'COMPLETE'}")
+    print(f"   🟢 Enriched:     {enriched}")
+    print(f"   🔴 No match:     {no_match}")
+    print(f"\n📊 Fields to update:")
+    for field, count in sorted(updated_fields_total.items(), key=lambda x: -x[1]):
+        print(f"   {field}: {count}")
 
-        print(f"\n{'=' * 60}")
-        print(f"✅ ENRICHMENT COMPLETE")
-        print(f"   🟢 Enriched:        {enriched}")
-        print(f"   ⚪ Already complete: {already_complete}")
-        print(f"   🔴 No CSV match:    {no_match}")
-        print(f"\n📊 Fields updated:")
-        for field, count in sorted(updated_fields_total.items(), key=lambda x: -x[1]):
-            print(f"   {field}: {count}")
-
-        # Final stats
-        total = len(paddles)
-        real = session.exec(select(PaddleMaster).where(
-            PaddleMaster.spin_rpm.is_not(None),
-            PaddleMaster.twist_weight.is_not(None),
-        )).all()
-        print(f"\n🎯 DATA QUALITY: {len(real)}/{total} paddles with real performance data ({len(real)/total*100:.0f}%)")
+    total = len(paddles)
+    coverage = enriched / total * 100 if total else 0
+    print(f"\n🎯 Expected coverage: {enriched}/{total} paddles ({coverage:.0f}%)")
 
 
 if __name__ == "__main__":
-    enrich()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dry-run", action="store_true", help="Preview without writing to DB")
+    args = parser.parse_args()
+    enrich(dry_run=args.dry_run)
