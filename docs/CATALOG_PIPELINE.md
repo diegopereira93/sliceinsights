@@ -125,6 +125,48 @@ Arquivo JSON com 44 entradas, cada uma contendo:
 
 ---
 
+## Estatísticas de Preenchimento (Snapshot atual)
+
+> Última atualização: 2026-02-26. Total: **72 paddles** no catálogo.
+
+### Taxa de Preenchimento por Campo
+
+| Campo | Preenchidos | % | Fonte Principal |
+|---|:---:|:---:|---|
+| `model_name` | 72 | 100% | Scrape de loja BR (Fase 1) |
+| `image_url` | 72 | 100% | Scrape de loja BR (Fase 1) |
+| `price_brl` | 72 | 100% | Scrape de loja BR (Fase 1) |
+| `core_thickness_mm` | 62 | **86%** | CSV US (20) + Scrape BR (42) |
+| `face_material` | 47 | **65%** | CSV US (5) + Scrape BR (42) |
+| `core_material` | 45 | **63%** | CSV US (20) + Scrape BR (25) |
+| `shape` | 33 | **46%** | CSV US (13) + Scrape BR (20) |
+| `swing_weight` | 20 | 28% | CSV US exclusivo |
+| `twist_weight` | 22 | 31% | CSV US exclusivo |
+| `spin_rpm` | 19 | 26% | CSV US exclusivo |
+| `power_rating` | 20 | 28% | CSV US exclusivo |
+| `handle_length` | 20 | 28% | CSV US exclusivo |
+| `grip_circumference` | 20 | 28% | CSV US exclusivo |
+
+### Cobertura por Fonte de Dados
+
+| Fonte (`specs_source`) | Paddles | Campos Cobertos |
+|---|:---:|---|
+| `br_scrape_joola.com.br` | 21 | core_mm, face, core_mat, shape |
+| `br_scrape_brazilpickleballstore.com.br` | 21 | core_mm, face, core_mat, shape |
+| `csv_enriched` (CSV US + scrape BR) | 22 | Todos os campos performance + estruturais |
+| `br_scraper` (apenas seed, sem enriquecimento) | 8 | Somente dados comerciais (preço, imagem) |
+
+### Distribuição de Confiança
+
+| Tier | Paddles | % | Significado |
+|---|:---:|:---:|---|
+| 🟢 Alta (≥ 0.75) | 20 | 28% | Specs completos via CSV americano |
+| 🟡 Parcial (0.30 – 0.74) | 42 | 58% | Dados estruturais via scrape BR |
+| 🟠 Baixa (> 0) | 2 | 3% | Specs mínimos |
+| 🔴 Zero | 8 | 11% | Non-paddles (6) + sem match (2) |
+
+---
+
 ## Filtros de Qualidade
 
 ### Non-Paddle Detection
