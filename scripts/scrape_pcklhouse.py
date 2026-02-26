@@ -1,19 +1,26 @@
 """
-Scraper: Brazil Pickleball Store (Nuvemshop/TiendaNube)
-Domain: brazilpickleballstore.com.br
-Output: data/raw/brazil_pickleball_store.csv
+Scraper: PCKL House (Nuvemshop/TiendaNube)
+Domain: pcklhouse.com.br
+Output: data/raw/pcklhouse_products.csv
 """
 from scraper_utils import fetch_nuvemshop_products, save_to_csv
 
-DOMAIN = "www.brazilpickleballstore.com.br"
-STORE = "Brazil Pickleball Store"
-CATEGORY = "raquete"
-OUTPUT = "data/raw/brazil_pickleball_store.csv"
+DOMAIN = "www.pcklhouse.com.br"
+STORE = "PCKL House"
+CATEGORY = "raquetes"
+OUTPUT = "data/raw/pcklhouse_products.csv"
 
 
 def main():
     print(f"🏓 Scraping {STORE}...")
+    # Try common Nuvemshop category paths
     products = fetch_nuvemshop_products(DOMAIN, CATEGORY)
+    if not products:
+        for alt in ["raquete", "pickleball", "produtos"]:
+            products = fetch_nuvemshop_products(DOMAIN, alt)
+            if products:
+                break
+
     print(f"  📦 {len(products)} paddle products found")
 
     rows = []
