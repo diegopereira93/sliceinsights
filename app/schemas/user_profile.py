@@ -43,7 +43,7 @@ class PaddleRecommendation(BaseModel):
     paddle_id: UUID
     brand_name: str
     model_name: str
-    ratings: dict[str, int]
+    ratings: dict[str, Optional[int]]
     min_price_brl: Optional[float]
     match_reasons: list[str]
     tags: list[str]

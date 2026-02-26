@@ -20,6 +20,7 @@ class MockPaddle:
         self.brand_id = 1
         self.brand = MagicMock()
         self.brand.name = "Test Brand"
+        self.available_in_brazil = True
 
 def test_normalization():
     engine = RecommendationEngine(session=None)

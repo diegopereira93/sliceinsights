@@ -29,6 +29,7 @@ services:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres_v3:5432/picklematch
       DATABASE_URL_SYNC: postgresql://postgres:postgres@postgres_v3:5432/picklematch
       DEBUG: "true"
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
     ports:
       - "8002:8000"
     volumes:
@@ -66,32 +67,6 @@ services:
       - picklematch_v3
     restart: unless-stopped
 
-  # Streamlit Chat
-  chat_v3:
-    build:
-      context: .
-      dockerfile: Dockerfile.chat
-    container_name: picklematch_chat_v3
-    environment:
-      CHAT_DB_HOST: postgres_v3
-      CHAT_DB_PORT: 5432
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-      GROQ_API_KEY: ${GROQ_API_KEY}
-    ports:
-      - "8502:8501"
-    volumes:
-      - ./.env:/app/.env
-      - ./streamlit/chat:/app/streamlit/chat
-    working_dir: /app/streamlit/chat
-    depends_on:
-      postgres_v3:
-        condition: service_healthy
-    networks:
-      - picklematch_v3
-    restart: unless-stopped
-
   # Seed data runner
   seed_v3:
     build:
@@ -105,23 +80,11 @@ services:
     volumes:
       - ./data:/app/data
       - ./app:/app/app
+      - ./scripts:/app/scripts
     depends_on:
       postgres_v3:
         condition: service_healthy
-    command: python -m app.db.seed_data_hybrid
-    networks:
-      - picklematch_v3
-
-  # Scraper Service (On-demand)
-  scraper:
-    build:
-      context: .
-      dockerfile: Dockerfile.scraper
-    container_name: picklematch_scraper
-    profiles: ["tools"]
-    volumes:
-      - ./scripts:/app/scripts
-      - ./data:/app/data
+    command: python -m app.db.seed_brazil_catalog
     networks:
       - picklematch_v3
 

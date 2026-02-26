@@ -1,6 +1,6 @@
 # Arquitetura do SliceInsights
 
-> **Última Atualização**: Janeiro 2026 | **Stack**: FastAPI + Next.js 14 + PostgreSQL 16 | **Versão**: 1.7
+> **Última Atualização**: Fevereiro 2026 | **Stack**: FastAPI + Next.js 14 + PostgreSQL 16 | **Versão**: 1.7
 
 ---
 
@@ -10,7 +10,7 @@ SliceInsights é uma plataforma de recomendação de raquetes de Pickleball com 
 
 ```mermaid
 graph TB
-    subgraph "Frontend - Next.js 15"
+    subgraph "Frontend - Next.js 14"
         UI[UI Components]
         Quiz[Racket Finder Quiz]
         Stats[Statistics Dashboard]
@@ -45,7 +45,7 @@ graph TB
 ### Frontend
 | Tecnologia | Versão | Uso |
 |------------|--------|-----|
-| **Next.js** | 14.x (App Router) | Framework React com SSR/SSG |
+| **Next.js** | 14.2.35 (App Router) | Framework React com SSR/SSG |
 | **TypeScript** | 5.x | Type safety |
 | **Tailwind CSS** | 3.x | Styling system |
 | **Framer Motion** | 11.x | Animações premium |

@@ -30,10 +30,11 @@
 - [x] **CI/CD Pipeline**: GitHub Actions para testes e build
 - [x] **Lógica de Recomendação**: Validação física unificada (Physics-Based Scoring)
 - [x] **Verificação Contínua**: Ralph-Loop (Self-Healing) ativo em produção
+- [x] **Project Documentation**: Revisão completa v1.7 concluída
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Next.js 14 (App Router) + Tailwind CSS + Framer Motion
+- **Frontend**: Next.js 14.2.35 (App Router) + Tailwind CSS + Framer Motion
 - **UI Components**: Shadcn/ui + Lucide Icons + Radix UI
 - **Backend**: FastAPI + SQLModel + AsyncPG
 - **Database**: PostgreSQL 16
@@ -48,7 +49,7 @@ For detailed technical documentation, architecture guides, and deployment instru
 - [Architecture Guide](./docs/ARCHITECTURE.md)
 - [API Specification](./docs/technical/api_specification.md)
 - [Deployment Guide](./docs/DEPLOYMENT.md)
-- [Project Analysis Report](./docs/PROJECT_ANALYSIS_REPORT.md)
+- [Project Analysis Report (Archive Jan 2026)](./docs/archive/PROJECT_ANALYSIS_REPORT_JAN_2026.md)
 
 ---
 

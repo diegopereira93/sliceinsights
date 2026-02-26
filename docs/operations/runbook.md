@@ -1,16 +1,15 @@
-# Runbook: Operação e Manutenção - Niterói Raquetes
+# Runbook: Operação e Manutenção - SliceInsights
 
-Instruções fundamentais para rodar, manter e depurar o projeto PickleMatch Advisor.
+Instruções fundamentais para rodar, manter e depurar o projeto SliceInsights.
 
 ## 🐳 1. Operação com Docker
 
 O projeto utiliza o Docker Compose para orquestrar 4 serviços principais.
 
 ### Serviços:
-- `picklematch_db_v3`: PostgreSQL 16 (Porta 5434).
-- `picklematch_api_v3`: FastAPI Backend (Porta 8002).
-- `picklematch_ui_v3`: Next.js Frontend (Porta 3000).
-- `picklematch_seed_v3`: Script efêmero que popula o banco e encerra.
+- `postgres_v3`: PostgreSQL 16 (Porta 5434).
+- `backend_v3`: FastAPI Backend (Porta 8002).
+- `frontend_next`: Next.js Frontend (Porta 3000).
 
 ### Comandos de Gestão:
 ```bash
@@ -36,13 +35,13 @@ docker compose up -d
 Se precisar rodar comandos dentro dos containers:
 ```bash
 # Acessar terminal do backend
-docker exec -it picklematch_api_v3 bash
+docker exec -it backend_v3 bash
 
 # Ver status do banco de dados
-docker exec -it picklematch_db_v3 pg_isready -U postgres
+docker exec -it postgres_v3 pg_isready -U postgres
 
 # Rodar testes
-docker exec -it picklematch_api_v3 pytest tests/ -v
+docker exec -it backend_v3 pytest tests/ -v
 ```
 
 ---
@@ -79,7 +78,7 @@ Copie `.env.example` para `.env` e configure:
 ### Popular Base de Dados (Seed):
 O serviço `seed_v3` roda automaticamente no `docker compose up`. Se precisar rodar manualmente:
 ```bash
-docker exec -it picklematch_api_v3 python -m app.db.seed_data
+docker exec -it backend_v3 python -m app.db.seed_data_hybrid
 ```
 
 ### Limpar e Reiniciar Banco:
@@ -132,10 +131,10 @@ Ao editar um arquivo `.tsx` ou `.py` na sua IDE (VS Code, etc), salve o arquivo 
 ### Backend Tests:
 ```bash
 # Rodar todos os testes
-docker exec -it picklematch_api_v3 pytest tests/ -v
+docker exec -it backend_v3 pytest tests/ -v
 
 # Rodar com coverage
-docker exec -it picklematch_api_v3 pytest tests/ -v --cov=app
+docker exec -it backend_v3 pytest tests/ -v --cov=app
 ```
 
 ### Frontend E2E Tests:
@@ -172,7 +171,7 @@ npx playwright show-report
 
 ### Health Check Failing (503):
 - Verifique se o banco de dados está running: `docker ps`.
-- Teste a conexão: `docker exec -it picklematch_db_v3 pg_isready -U postgres`.
+- Teste a conexão: `docker exec -it postgres_v3 pg_isready -U postgres`.
 
 ---
 

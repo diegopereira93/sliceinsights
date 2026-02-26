@@ -1,6 +1,6 @@
 # SliceInsights - Documentação do Projeto
 
-**Status**: Production-Ready | **Raquetes**: 460 | **Versão**: 1.6
+**Status**: Production-Ready | **Raquetes**: 460 | **Versão**: 1.7
 
 > Plataforma premium de recomendação de raquetes de Pickleball com motor de IA e **Hyper-Personalização**, focada no mercado brasileiro.
 
@@ -17,7 +17,7 @@
 
 ### Para Deploy
 - **Railway**: Siga [`operations/railway_deploy.md`](operations/railway_deploy.md)
-- **Production Checklist**: [`roadmaps/production_readiness_roadmap.md`](roadmaps/production_readiness_roadmap.md) ✅
+- **Production Checklist**: [`../production-ready-check.md`](../production-ready-check.md) ✅
 
 ---
 
@@ -42,8 +42,7 @@
 | Documento | Status | Descrição |
 |-----------|--------|-----------|
 | [`roadmaps/NEXT_STEPS.md`](roadmaps/NEXT_STEPS.md) | 🔥 **URGENTE** | O que fazer AGORA (P0/P1) |
-| [`roadmaps/monetization.md`](roadmaps/monetization.md) | 🟡 20% | Foco em geração de receita |
-| [`roadmaps/future_ideas.md`](roadmaps/future_ideas.md) | 💡 Backlog | Ideias não priorizadas |
+| [`MONETIZATION.md`](MONETIZATION.md) | 🟡 20% | Foco em geração de receita |
 
 ---
 
@@ -58,7 +57,7 @@
 - 🔒 **Produção**: Rate limiting, CORS, logging, métricas Prometheus
 - ⚔️ **Features**: Comparador "Batalha", Info tooltips técnicos
 - ✅ **Testes**: 15 testes automatizados passando
-- 🎯 **Hyper-Personalização (v1.6)**:
+- 🎯 **Hyper-Personalização (v1.7)**:
   - Quiz de 10 perguntas com slider Power/Control
   - **Ideal Point**: Seu perfil ideal visualizado nos gráficos de dispersão
   - **Delta Score (%)**: Distância entre suas preferências e cada raquete
@@ -89,7 +88,7 @@
 
 ## 🏗️ Tech Stack
 
-- **Frontend**: Next.js 15 + Tailwind CSS + Framer Motion
+- **Frontend**: Next.js 14.2.35 + Tailwind CSS + Framer Motion
 - **Backend**: FastAPI + SQLModel + AsyncPG
 - **Database**: PostgreSQL 16
 - **Deploy**: Docker + Railway
@@ -138,4 +137,4 @@ MIT
 
 ---
 
-**Última Atualização**: Janeiro 2026 | **Versão**: 1.6 (Hyper-Personalization)
+**Última Atualização**: Fevereiro 2026 | **Versão**: 1.7 (Hyper-Personalization)

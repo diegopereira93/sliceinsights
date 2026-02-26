@@ -1,4 +1,4 @@
-# API Specification - PickleMatch Advisor
+# API Specification - SliceInsights v1.7
 
 ## Base URL
 
@@ -183,6 +183,21 @@ GET /paddles/{paddle_id}
 
 ### Recommendations (Core Endpoint)
 
+```http
+POST /recommendations
+```
+
+**Request Body:**
+```json
+{
+  "skill_level": "intermediate",
+  "budget_max_brl": 1200.0,
+  "play_style": "control",
+  "has_tennis_elbow": false,
+  "limit": 3
+}
+```
+
 **Response:**
 ```json
 {
@@ -212,12 +227,61 @@ GET /paddles/{paddle_id}
       "tags": ["Top Pick", "Melhor Controle"]
     }
   ],
+  "grok_dossier": "Análise detalhada do seu perfil...",
   "filters_applied": {
     "budget_filter": true,
     "tennis_elbow_filter": false
-  },
-  "total_matching": 8,
-  "returned": 1
+  }
+}
+```
+
+---
+
+### AI Coach Chat
+
+```http
+POST /chat
+```
+
+**Request Body:**
+```json
+{
+  "messages": [
+    {"role": "user", "content": "Qual raquete é melhor para controle?"}
+  ],
+  "context": "Contexto das recomendações atuais..."
+}
+```
+
+**Response:**
+```json
+{
+  "reply": "Para controle, eu recomendo a Joola Perseus 16mm devido ao seu núcleo mais grosso..."
+}
+```
+
+---
+
+### Leads (Quiz Gate)
+
+```http
+POST /leads
+```
+
+**Request Body:**
+```json
+{
+  "email": "usuario@exemplo.com",
+  "name": "Nome Opcional"
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "id": 123,
+  "email": "usuario@exemplo.com",
+  "created_at": "2026-01-25T10:30:00Z"
 }
 ```
 

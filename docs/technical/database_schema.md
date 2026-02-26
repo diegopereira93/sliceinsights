@@ -1,4 +1,4 @@
-# Database Schema - PickleMatch Advisor
+# Database Schema - SliceInsights v1.7
 
 ## Overview
 
@@ -25,15 +25,22 @@ erDiagram
         string model_name
         array search_keywords
         float core_thickness_mm
-        int weight_avg_g
+        string core_material
         enum face_material
         enum shape
+        int swing_weight
+        float twist_weight
+        int spin_rpm
+        float power_original
+        string handle_length
+        string grip_circumference
         int power_rating
         int control_rating
         int spin_rating
         int sweet_spot_rating
-        boolean ideal_for_tennis_elbow
-        enum skill_level
+        boolean available_in_brazil
+        string specs_source
+        float specs_confidence
         string image_url
         boolean is_featured
         datetime created_at
@@ -46,8 +53,17 @@ erDiagram
         string store_name
         decimal price_brl
         string url
+        string affiliate_url
         datetime last_updated
         boolean is_active
+    }
+
+    Lead {
+        int id PK
+        string email
+        string name
+        string converted_from
+        datetime created_at
     }
 ```
 

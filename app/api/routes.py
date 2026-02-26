@@ -377,32 +377,43 @@ async def get_recommendations(
             paddles_by_id = {p.id: p for p in paddles_result.all()}
             
             # Build RICH context with all structured data (SCI)
+            # Build RICH context with all structured data (SCI)
+            # Remove internal flags and raw Enum names to prevent LLM hallucination/robotic speaking
             paddles_context = []
             for rec in result.recommendations:
                 paddle = paddles_by_id.get(rec.paddle_id)
                 entry = {
-                    "Rank": rec.rank,
-                    "Brand": rec.brand_name,
-                    "Model": rec.model_name,
-                    "Ratings": rec.ratings,
-                    "Value_Score": rec.value_score,
-                    "Price_BRL": rec.min_price_brl,
-                    "Reasons": rec.match_reasons,
-                    "Tags": rec.tags,
-                    "has_incomplete_data": rec.ratings.get("has_incomplete_data", True),
+                    "Marca": rec.brand_name,
+                    "Modelo": rec.model_name,
+                    "Custo-Benefício": "Excepcional" if rec.value_score and rec.value_score > 10 else ("Bom" if rec.value_score and rec.value_score > 7 else "Regular"),
+                    "Preço": f"R$ {rec.min_price_brl:.2f}" if rec.min_price_brl else "Sob consulta",
+                    "Motivos para Escolher": rec.match_reasons,
                 }
                 if paddle:
-                    entry["Specs"] = {
-                        "core_thickness_mm": paddle.core_thickness_mm,
-                        "core_material": paddle.core_material,
-                        "face_material": str(paddle.face_material) if paddle.face_material else None,
-                        "shape": str(paddle.shape) if paddle.shape else None,
-                        "spin_rpm": paddle.spin_rpm,
-                        "swing_weight": paddle.swing_weight,
-                        "twist_weight": paddle.twist_weight,
-                        "handle_length": paddle.handle_length,
+                    # Clean Enum formatting
+                    face_mat = paddle.face_material.value if hasattr(paddle.face_material, "value") else str(paddle.face_material) if paddle.face_material else "Não informado"
+                    shape_val = paddle.shape.value if hasattr(paddle.shape, "value") else str(paddle.shape) if paddle.shape else "Não informada"
+                    
+                    entry["Especificações Físicas"] = {
+                        "Espessura do núcleo (mm)": paddle.core_thickness_mm or "Não informado",
+                        "Material do núcleo": paddle.core_material or "Não informado",
+                        "Material da face": face_mat.title() if face_mat != "Não informado" else face_mat,
+                        "Formato": shape_val.title() if shape_val != "Não informada" else shape_val,
                     }
+                    
+                    # Add numeric ratings ONLY if specs_confidence is HIGH
+                    # We pass the internal float to LLM but disguise the key so the LLM acts naturally
                     entry["specs_confidence"] = paddle.specs_confidence
+                    if paddle.specs_confidence >= 0.75:
+                        entry["Notas de Performance"] = {
+                            "Potência (Power)": rec.ratings.get("power", "N/A"),
+                            "Controle (Control)": rec.ratings.get("control", "N/A"),
+                            "Spin (Efeito)": rec.ratings.get("spin", "N/A"),
+                            "Sweet Spot (Área de acerto)": rec.ratings.get("sweet_spot", "N/A"),
+                            "Peso de Swing (Swing Weight)": paddle.swing_weight or "N/A",
+                            "Peso de Torção (Twist Weight)": paddle.twist_weight or "N/A"
+                        }
+                        
                 paddles_context.append(entry)
             
             # Decode UserProfile into human-readable Portuguese for the LLM
