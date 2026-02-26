@@ -458,12 +458,11 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
                 // Try to find the paddle in our current list or just use what backend gave us
                 const localPaddle = paddles.find(p => p.id === rec.paddle_id);
                 if (localPaddle) {
-                    onRecommend({
+                    setRecommendedPaddle({
                         ...localPaddle,
                         matchReasons: rec.match_reasons,
                         tags: rec.tags
                     });
-                    setRecommendedPaddle(localPaddle);
                 } else {
                     // Fallback to minimal paddle object if not found in current pre-loaded list
                     const fallbackPaddle: Paddle = {
@@ -484,7 +483,6 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
                         matchReasons: rec.match_reasons,
                         tags: rec.tags
                     };
-                    onRecommend(fallbackPaddle);
                     setRecommendedPaddle(fallbackPaddle);
                 }
             }
@@ -579,7 +577,7 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
                             <h2 className="text-2xl font-bold">Match Perfeito Encontrado!</h2>
                             <p className="text-zinc-400 max-w-[280px] mb-2">Preparamos uma recomendação personalizada baseada no seu perfil.</p>
 
-                            {recommendedPaddle && (
+                            {recommendedPaddle ? (
                                 <motion.div
                                     initial={{ scale: 0.9, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
@@ -598,6 +596,11 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
                                         </div>
                                     </div>
                                 </motion.div>
+                            ) : (
+                                <div className="w-full bg-white/5 border border-dashed border-white/10 rounded-2xl p-8 mb-4">
+                                    <Heart className="w-8 h-8 text-zinc-500 mx-auto mb-2 opacity-20" />
+                                    <p className="text-sm text-zinc-400">Não encontramos uma raquete exata para seu orçamento ou nível no momento.</p>
+                                </div>
                             )}
 
                             {grokDossier && recommendedPaddle && (
