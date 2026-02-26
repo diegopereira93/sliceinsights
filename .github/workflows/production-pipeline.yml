@@ -12,6 +12,20 @@ jobs:
   test-backend:
     name: 🐍 Backend Test
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: picklematch
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
@@ -24,10 +38,9 @@ jobs:
           pip install -r requirements.txt
           pip install pytest httpx pytest-asyncio aiosqlite
       - name: Run Tests
-        run: python -m pytest tests/
+        run: PYTHONPATH=. python -m pytest tests/
         env:
-          # Use in-memory SQLite for speed and isolation
-          DATABASE_URL: "sqlite+aiosqlite:///:memory:"
+          DATABASE_URL: "postgresql+asyncpg://postgres:postgres@localhost:5432/picklematch"
           API_SECRET_KEY: "test-secret"
 
   test-frontend:
@@ -125,6 +138,6 @@ jobs:
       - name: 🧪 Run Smoke Tests
         run: |
           cd frontend
-          npx playwright test e2e/verification.spec.ts
+          npx playwright test e2e/sliceinsights.spec.ts
         env:
           BASE_URL: "https://sliceinsights.vercel.app"
