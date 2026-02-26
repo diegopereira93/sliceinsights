@@ -142,3 +142,4 @@ jobs:
           npx playwright test e2e/sliceinsights.spec.ts
         env:
           BASE_URL: "https://sliceinsights.vercel.app"
+          API_URL: "https://sliceinsights.onrender.com/api/v1"
