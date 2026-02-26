@@ -1,19 +1,19 @@
 """
-Scraper: Brazil Pickleball Store (Nuvemshop/TiendaNube)
-Domain: brazilpickleballstore.com.br
-Output: data/raw/brazil_pickleball_store.csv
+Scraper: ProSpin (WooCommerce)
+Domain: prospin.com.br
+Output: data/raw/prospin_products.csv
 """
-from scraper_utils import fetch_nuvemshop_products, save_to_csv
+from scraper_utils import fetch_woocommerce_products, save_to_csv
 
-DOMAIN = "www.brazilpickleballstore.com.br"
-STORE = "Brazil Pickleball Store"
-CATEGORY = "raquete"
-OUTPUT = "data/raw/brazil_pickleball_store.csv"
+DOMAIN = "www.prospin.com.br"
+STORE = "ProSpin"
+CATEGORY = "categoria-produto/pickleball"
+OUTPUT = "data/raw/prospin_products.csv"
 
 
 def main():
     print(f"🏓 Scraping {STORE}...")
-    products = fetch_nuvemshop_products(DOMAIN, CATEGORY)
+    products = fetch_woocommerce_products(DOMAIN, CATEGORY)
     print(f"  📦 {len(products)} paddle products found")
 
     rows = []
