@@ -1,0 +1,482 @@
+[
+  {
+    "name": "beginner | power | R$ 600 | Elbow: True",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "power",
+      "budget_max_brl": 600,
+      "has_tennis_elbow": true
+    },
+    "top_1": "3Rdshot Start 16mm",
+    "duration": 0.46,
+    "success": true
+  },
+  {
+    "name": "beginner | power | R$ 1200 | Elbow: True",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "power",
+      "budget_max_brl": 1200,
+      "has_tennis_elbow": true
+    },
+    "top_1": "3Rdshot Venus 16mm",
+    "duration": 0.47,
+    "success": true
+  },
+  {
+    "name": "beginner | power | R$ 600 | Elbow: False",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "power",
+      "budget_max_brl": 600,
+      "has_tennis_elbow": false
+    },
+    "top_1": "3Rdshot Touch Control 16MM",
+    "duration": 0.48,
+    "success": true
+  },
+  {
+    "name": "beginner | power | R$ 1200 | Elbow: False",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "power",
+      "budget_max_brl": 1200,
+      "has_tennis_elbow": false
+    },
+    "top_1": "Engage Pursuit Pro1 Widebody 12.7mm",
+    "duration": 0.12,
+    "success": true
+  },
+  {
+    "name": "beginner | power | R$ 2500 | Elbow: True",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "power",
+      "budget_max_brl": 2500,
+      "has_tennis_elbow": true
+    },
+    "top_1": "3Rdshot Touch Control 16MM Edição Especial",
+    "duration": 0.11,
+    "success": true
+  },
+  {
+    "name": "beginner | power | R$ 2500 | Elbow: False",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "power",
+      "budget_max_brl": 2500,
+      "has_tennis_elbow": false
+    },
+    "top_1": "3Rdshot 4x   Start 16mm",
+    "duration": 0.12,
+    "success": true
+  },
+  {
+    "name": "beginner | control | R$ 600 | Elbow: True",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "control",
+      "budget_max_brl": 600,
+      "has_tennis_elbow": true
+    },
+    "top_1": "3Rdshot Start 16mm",
+    "duration": 0.08,
+    "success": true
+  },
+  {
+    "name": "beginner | control | R$ 600 | Elbow: False",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "control",
+      "budget_max_brl": 600,
+      "has_tennis_elbow": false
+    },
+    "top_1": "3Rdshot Touch Control 16MM Edição Especial",
+    "duration": 0.11,
+    "success": true
+  },
+  {
+    "name": "beginner | control | R$ 1200 | Elbow: True",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "control",
+      "budget_max_brl": 1200,
+      "has_tennis_elbow": true
+    },
+    "top_1": "3Rdshot Oberon 16mm",
+    "duration": 0.1,
+    "success": true
+  },
+  {
+    "name": "beginner | control | R$ 1200 | Elbow: False",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "control",
+      "budget_max_brl": 1200,
+      "has_tennis_elbow": false
+    },
+    "top_1": "3Rdshot Touch Control 16MM Edição Especial",
+    "duration": 0.09,
+    "success": true
+  },
+  {
+    "name": "beginner | control | R$ 2500 | Elbow: False",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "control",
+      "budget_max_brl": 2500,
+      "has_tennis_elbow": false
+    },
+    "top_1": "Proxr Signature Series 13mm",
+    "duration": 0.1,
+    "success": true
+  },
+  {
+    "name": "beginner | control | R$ 2500 | Elbow: True",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "control",
+      "budget_max_brl": 2500,
+      "has_tennis_elbow": true
+    },
+    "top_1": "Slk ERA Enlongated 16mm Sunset - Edition Limited",
+    "duration": 0.1,
+    "success": true
+  },
+  {
+    "name": "beginner | balanced | R$ 600 | Elbow: True",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "balanced",
+      "budget_max_brl": 600,
+      "has_tennis_elbow": true
+    },
+    "top_1": "3Rdshot Touch Control 16MM",
+    "duration": 0.09,
+    "success": true
+  },
+  {
+    "name": "beginner | balanced | R$ 600 | Elbow: False",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "balanced",
+      "budget_max_brl": 600,
+      "has_tennis_elbow": false
+    },
+    "top_1": "3Rdshot Start 16mm",
+    "duration": 0.07,
+    "success": true
+  },
+  {
+    "name": "beginner | balanced | R$ 1200 | Elbow: True",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "balanced",
+      "budget_max_brl": 1200,
+      "has_tennis_elbow": true
+    },
+    "top_1": "3Rdshot 4x   Start 16mm",
+    "duration": 0.09,
+    "success": true
+  },
+  {
+    "name": "beginner | balanced | R$ 1200 | Elbow: False",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "balanced",
+      "budget_max_brl": 1200,
+      "has_tennis_elbow": false
+    },
+    "top_1": "3Rdshot Oberon 16mm",
+    "duration": 0.08,
+    "success": true
+  },
+  {
+    "name": "beginner | balanced | R$ 2500 | Elbow: True",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "balanced",
+      "budget_max_brl": 2500,
+      "has_tennis_elbow": true
+    },
+    "top_1": "3Rdshot Touch Control 16MM Edição Especial",
+    "duration": 0.07,
+    "success": true
+  },
+  {
+    "name": "beginner | balanced | R$ 2500 | Elbow: False",
+    "payload": {
+      "skill_level": "beginner",
+      "play_style": "balanced",
+      "budget_max_brl": 2500,
+      "has_tennis_elbow": false
+    },
+    "top_1": "Engage Pursuit Pro1 Hybrid 12.7mm",
+    "duration": 0.07,
+    "success": true
+  },
+  {
+    "name": "intermediate | power | R$ 600 | Elbow: True",
+    "payload": {
+      "skill_level": "intermediate",
+      "play_style": "power",
+      "budget_max_brl": 600,
+      "has_tennis_elbow": true
+    },
+    "top_1": "3Rdshot Touch Control 16MM",
+    "duration": 0.07,
+    "success": true
+  },
+  {
+    "name": "intermediate | power | R$ 600 | Elbow: False",
+    "payload": {
+      "skill_level": "intermediate",
+      "play_style": "power",
+      "budget_max_brl": 600,
+      "has_tennis_elbow": false
+    },
+    "top_1": "3Rdshot Touch Control 16MM",
+    "duration": 0.07,
+    "success": true
+  },
+  {
+    "name": "intermediate | power | R$ 1200 | Elbow: True",
+    "payload": {
+      "skill_level": "intermediate",
+      "play_style": "power",
+      "budget_max_brl": 1200,
+      "has_tennis_elbow": true
+    },
+    "top_1": "3Rdshot Venus 16mm",
+    "duration": 0.07,
+    "success": true
+  },
+  {
+    "name": "intermediate | power | R$ 1200 | Elbow: False",
+    "payload": {
+      "skill_level": "intermediate",
+      "play_style": "power",
+      "budget_max_brl": 1200,
+      "has_tennis_elbow": false
+    },
+    "top_1": "Proxr Signature Series 16mm",
+    "duration": 0.07,
+    "success": true
+  },
+  {
+    "name": "intermediate | power | R$ 2500 | Elbow: True",
+    "payload": {
+      "skill_level": "intermediate",
+      "play_style": "power",
+      "budget_max_brl": 2500,
+      "has_tennis_elbow": true
+    },
+    "top_1": "Proxr Sweet Spot Max Series 16mm",
+    "duration": 0.07,
+    "success": true
+  },
+  {
+    "name": "intermediate | power | R$ 2500 | Elbow: False",
+    "payload": {
+      "skill_level": "intermediate",
+      "play_style": "power",
+      "budget_max_brl": 2500,
+      "has_tennis_elbow": false
+    },
+    "top_1": "Engage Pursuit Pro1 Innovation 15.2mm",
+    "duration": 0.07,
+    "success": true
+  },
+  {
+    "name": "intermediate | control | R$ 600 | Elbow: True",
+    "payload": {
+      "skill_level": "intermediate",
+      "play_style": "control",
+      "budget_max_brl": 600,
+      "has_tennis_elbow": true
+    },
+    "top_1": "3Rdshot Touch Control 16MM Edição Especial",
+    "duration": 0.06,
+    "success": true
+  },
+  {
+    "name": "intermediate | control | R$ 600 | Elbow: False",
+    "payload": {
+      "skill_level": "intermediate",
+      "play_style": "control",
+      "budget_max_brl": 600,
+      "has_tennis_elbow": false
+    },
+    "top_1": "3Rdshot Touch Control 16MM Edição Especial",
+    "duration": 0.07,
+    "success": true
+  },
+  {
+    "name": "intermediate | control | R$ 1200 | Elbow: True",
+    "payload": {
+      "skill_level": "intermediate",
+      "play_style": "control",
+      "budget_max_brl": 1200,
+      "has_tennis_elbow": true
+    },
+    "top_1": "Proxr Signature Series 16mm",
+    "duration": 0.07,
+    "success": true
+  },
+  {
+    "name": "intermediate | control | R$ 1200 | Elbow: False",
+    "payload": {
+      "skill_level": "intermediate",
+      "play_style": "control",
+      "budget_max_brl": 1200,
+      "has_tennis_elbow": false
+    },
+    "top_1": "Proxr Signature Series 13mm",
+    "duration": 0.08,
+    "success": true
+  },
+  {
+    "name": "intermediate | balanced | R$ 600 | Elbow: True",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "intermediate | balanced | R$ 600 | Elbow: False",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "intermediate | control | R$ 2500 | Elbow: True",
+    "payload": {
+      "skill_level": "intermediate",
+      "play_style": "control",
+      "budget_max_brl": 2500,
+      "has_tennis_elbow": true
+    },
+    "top_1": "Slk ERA Enlongated 16mm",
+    "duration": 0.09,
+    "success": true
+  },
+  {
+    "name": "intermediate | balanced | R$ 1200 | Elbow: True",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "intermediate | control | R$ 2500 | Elbow: False",
+    "payload": {
+      "skill_level": "intermediate",
+      "play_style": "control",
+      "budget_max_brl": 2500,
+      "has_tennis_elbow": false
+    },
+    "top_1": "3Rdshot Oberon 16mm",
+    "duration": 0.07,
+    "success": true
+  },
+  {
+    "name": "intermediate | balanced | R$ 1200 | Elbow: False",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "intermediate | balanced | R$ 2500 | Elbow: True",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "intermediate | balanced | R$ 2500 | Elbow: False",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | power | R$ 600 | Elbow: True",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | power | R$ 1200 | Elbow: True",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | power | R$ 600 | Elbow: False",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | power | R$ 1200 | Elbow: False",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | power | R$ 2500 | Elbow: False",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | control | R$ 600 | Elbow: True",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | power | R$ 2500 | Elbow: True",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | control | R$ 1200 | Elbow: True",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | control | R$ 600 | Elbow: False",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | control | R$ 1200 | Elbow: False",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | balanced | R$ 600 | Elbow: True",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | control | R$ 2500 | Elbow: True",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | control | R$ 2500 | Elbow: False",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | balanced | R$ 1200 | Elbow: False",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | balanced | R$ 600 | Elbow: False",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | balanced | R$ 1200 | Elbow: True",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | balanced | R$ 2500 | Elbow: False",
+    "success": false,
+    "error": "HTTP 429"
+  },
+  {
+    "name": "advanced | balanced | R$ 2500 | Elbow: True",
+    "success": false,
+    "error": "HTTP 429"
+  }
+]

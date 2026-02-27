@@ -1,6 +1,6 @@
 # Arquitetura do SliceInsights
 
-> **Última Atualização**: Fevereiro 2026 | **Stack**: FastAPI + Next.js 14 + PostgreSQL 16 | **Versão**: 1.7
+> **Última Atualização**: Fevereiro 2026 | **Stack**: FastAPI + Next.js 14 + PostgreSQL 16 | **Versão**: 1.8
 
 ---
 
@@ -19,7 +19,8 @@ graph TB
     
     subgraph "Backend - FastAPI"
         API[REST API]
-        Engine[Recommendation Engine]
+        Engine[Hybrid Engine]
+        LLM[AI Ranking Layer - Llama 3.3]
         Cache[TTL Cache]
     end
     
@@ -33,6 +34,8 @@ graph TB
     Stats --> API
     Comparator --> API
     API --> Engine
+    Engine --> LLM
+    LLM --> Engine
     Engine --> Cache
     Engine --> DB
     Seed --> DB
@@ -132,14 +135,13 @@ O motor de recomendação (`RecommendationEngine`) é o coração do SliceInsigh
 2. **Persistência (Client-Side)**: Respostas são salvas em `sessionStorage` e `localStorage` para Hyper-Personalização.
 3. **Filtros Hard** (SQL Level):
    - Orçamento e Preferência de Peso.
-   - Tennis Elbow (Exclui raquetes com núcleo < 16mm).
-3. **Smart Scoring**:
-   - **Unified Ratings**: Todas as raquetes são processadas pela função `calculate_paddle_ratings`, garantindo que notas de 0-10 sejam consistentes entre a busca e a exibição.
-   - **Pesos Dinâmicos**: O algoritmo aplica pesos baseados no `PlayStyle` (Power vs Control).
-   - **Value Score**: Cálculo de custo-benefício (Performance / Preço).
-4. **Ranking & Insights**:
-   - Geração de `match_reasons` dinâmicos.
-   - Aplicação de tags baseadas em outliers de performance (ex: "Spin Machine").
+   - **Trava de Segurança (Tennis Elbow)**: Filtro rígido de 16mm no SQL antes do processamento de IA.
+4. **AI Ranking Pass (Hybrid)**:
+   - **Seleção Dinâmica**: O `RecommendationEngine` seleciona os top candidatos via SQL.
+   - **Refinamento por IA (Llama 3.3)**: O `LLMService` analisa os candidatos qualitativamente, aplicando o "Diversity Jitter" para evitar monopólios de marca e gerando um dossiê técnico personalizado.
+5. **Ranking & Insights**:
+   - Geração de `grok_dossier` com tom de coach profissional.
+   - Aplicação de tags baseadas em outliers de performance.
 
 > 📖 Veja a [Documentação Detalhada do Algoritmo](technical/recommendation_system.md) para fórmulas matemáticas e lógica de normalização.
 

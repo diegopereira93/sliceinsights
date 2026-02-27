@@ -10,22 +10,21 @@ from app.models.enums import PlayStyle
 from app.schemas.user_profile import UserProfile, RecommendationResult, PaddleRecommendation
 import json
 import hashlib
+from app.services.llm_service import llm_service
+
 class RecommendationEngine:
     def __init__(self, session: AsyncSession):
         self.session = session
-        # Simple in-memory cache for this session or shared if needed
-        # For now, let's use a class-level or instance-level dictionary-based cache
-        # with a basic TTL/Size limit logic if this were a production Redis system.
-        # Here we'll use a simple dict for demonstration as per roadmap.
         self._cache = {}
 
     async def get_recommendations(
         self,
         profile: UserProfile,
-        limit: int = 3
+        limit: int = 3,
+        use_ai_ranking: bool = True
     ) -> RecommendationResult:
         """
-        Generate paddle recommendations based on user profile with caching.
+        Generate paddle recommendations based on user profile with optional AI ranking.
         """
         # 0. Cache Check
         cache_key = self._get_cache_key(profile, limit)
@@ -44,7 +43,8 @@ class RecommendationEngine:
             .subquery()
         )
 
-        # 2. Base query
+        # 2. Base query - Get a larger pool for the AI to choose from
+        candidate_pool_limit = 20 if use_ai_ranking else limit
         query = (
             select(
                 PaddleMaster,
@@ -54,47 +54,77 @@ class RecommendationEngine:
             )
             .join(Brand, PaddleMaster.brand_id == Brand.id)
             .outerjoin(offers_subquery, PaddleMaster.id == offers_subquery.c.paddle_id)
-            # DATA QUALITY GATE: Lowered to 0.0 to support newly scraped BR catalog
             .where(PaddleMaster.specs_confidence >= 0.0)
         )
         
         # 3. Apply Hard Filters
         if profile.has_tennis_elbow:
-            query = query.where(PaddleMaster.core_thickness_mm >= 16.0)
+            # STRICT HARD FILTER: If user has elbow issues, ONLY 16mm+ or those with "Touch/Soft/16mm" markers
+            # We must be strict here because the simulation detected 13mm leaks.
+            query = query.where(
+                (PaddleMaster.core_thickness_mm >= 16.0) | 
+                (PaddleMaster.model_name.ilike("%16mm%")) |
+                (PaddleMaster.model_name.ilike("%touch%"))
+            )
+        
+        # 4. Diversity Jitter (SCI) - Avoid "3Rdshot Monastery"
+        # Since we only send a small pool to the LLM, randomize it so different brands get a chance.
+        query = query.order_by(func.random())
         
         if profile.budget_max_brl:
             query = query.where(offers_subquery.c.min_price <= Decimal(str(profile.budget_max_brl)))
-        
-        # Weight preference filters disabled - swing_weight data not available yet
-        # TODO: Re-enable when swing_weight data is populated
-        # if profile.weight_preference == 'heavy':
-        #     query = query.where(PaddleMaster.swing_weight >= 120)
-        # elif profile.weight_preference == 'light':
-        #     query = query.where(PaddleMaster.swing_weight <= 110)
-        # elif profile.weight_preference == 'standard':
-        #     query = query.where(PaddleMaster.swing_weight.between(110, 120))
         
         # 4. Execute
         result = await self.session.exec(query)
         rows = result.all()
         
-        # 5. Ranking
+        # 5. Ranking Process
         paddles_data = []
         for paddle, brand_name, min_price, offers_count in rows:
-            # Unified rating calculation
             ratings = self._get_paddle_ratings(paddle)
-            
             paddles_data.append({
+                "id": str(paddle.id),
                 "paddle": paddle,
                 "brand_name": brand_name,
-                "min_price": min_price,
+                "min_price": float(min_price) if min_price else None,
                 "offers_count": offers_count or 0,
-                "ratings": ratings
+                "ratings": ratings,
+                "model_name": paddle.model_name
             })
             
-        ranked_paddles = self._rank_by_style(paddles_data, profile)
+        grok_dossier = None
         
-        # 6. Build recommendations
+        if use_ai_ranking and paddles_data:
+            # Shift core intelligence to LLM
+            # Prepare a simplified list for the LLM to process
+            ai_candidates = [
+                {
+                    "id": p["id"],
+                    "brand": p["brand_name"],
+                    "model": p["model_name"],
+                    "price": p["min_price"],
+                    "ratings": p["ratings"],
+                    "confidence": p["paddle"].specs_confidence
+                } for p in paddles_data[:candidate_pool_limit]
+            ]
+            
+            ai_result = await llm_service.generate_ai_recommendations(profile.model_dump(), ai_candidates)
+            
+            # Map LLM results back to objects
+            ranked_ids = ai_result.get("ranked_ids", [])
+            grok_dossier = ai_result.get("dossier")
+            
+            # Create a lookup map
+            paddles_map = {p["id"]: p for p in paddles_data}
+            ranked_paddles = [paddles_map[pid] for pid in ranked_ids if pid in paddles_map]
+            
+            # Fallback if AI fails or returns weird IDs
+            if not ranked_paddles:
+                ranked_paddles = self._rank_by_style(paddles_data, profile)[:limit]
+        else:
+            ranked_paddles = self._rank_by_style(paddles_data, profile)[:limit]
+        
+        # 6. Build final recommendations
         recommendations = []
         for rank, data in enumerate(ranked_paddles[:limit], 1):
             paddle = data["paddle"]
@@ -106,30 +136,16 @@ class RecommendationEngine:
                 brand_name=data["brand_name"],
                 model_name=paddle.model_name,
                 ratings=ratings,
-                min_price_brl=float(data["min_price"]) if data["min_price"] else None,
+                min_price_brl=data["min_price"],
                 match_reasons=self._get_match_reasons(paddle, ratings, profile),
                 tags=self._get_tags(paddle, ratings, profile, rank),
                 value_score=self._calculate_value_score(data, profile)
             ))
 
-        # 7. Fallback: If no recommendations but we had rows, take the top 1 by style as best effort
-        if not recommendations and rows:
-             best_effort = ranked_paddles[0]
-             recommendations.append(PaddleRecommendation(
-                rank=1,
-                paddle_id=best_effort["paddle"].id,
-                brand_name=best_effort["brand_name"],
-                model_name=best_effort["paddle"].model_name,
-                ratings=best_effort["ratings"],
-                min_price_brl=float(best_effort["min_price"]) if best_effort["min_price"] else None,
-                match_reasons=["Recomendação baseada em popularidade (Specs ainda em validação)"],
-                tags=["Best Effort"],
-                value_score=None
-             ))
-        
         result_obj = RecommendationResult(
             user_profile=profile,
             recommendations=recommendations,
+            grok_dossier=grok_dossier,
             filters_applied={
                 "budget_filter": profile.budget_max_brl is not None,
                 "tennis_elbow_filter": profile.has_tennis_elbow,
@@ -160,23 +176,44 @@ class RecommendationEngine:
         
         def score_fn(item):
             ratings = item["ratings"]
-            norm_power = ratings["power"] if ratings["power"] is not None else 5.0
-            norm_control = ratings["control"] if ratings["control"] is not None else 5.0
+            paddle = item["paddle"]
             
-            # CASE A: Fine-grained Slider Preference (0-100%)
+            # Base Ratings (scaled 0-10)
+            p_val = ratings["power"]
+            c_val = ratings["control"]
+            
+            # TITLE-BASED INFERENCE (SCI) - If data is missing, use keywords
+            lower_name = paddle.model_name.lower()
+            if p_val is None:
+                p_val = 5.0
+                if any(x in lower_name for x in ["power", "pro", "3s", "14mm", "attack", "speed"]):
+                    p_val += 1.5
+            
+            if c_val is None:
+                c_val = 5.0
+                if any(x in lower_name for x in ["control", "16mm", "touch", "soft", "precision"]):
+                    c_val += 1.5
+            
+            # 1. Main Style Score (Primary Sort)
             if profile.power_preference_percent is not None:
                 power_weight = profile.power_preference_percent / 100.0
                 control_weight = 1.0 - power_weight
-                return (norm_power * power_weight) + (norm_control * control_weight)
+                main_score = (p_val * power_weight) + (c_val * control_weight)
+            else:
+                style = profile.play_style
+                if style == PlayStyle.POWER:
+                    main_score = p_val * 0.8 + c_val * 0.2
+                elif style == PlayStyle.CONTROL:
+                    main_score = c_val * 0.8 + p_val * 0.2
+                else:  # BALANCED
+                    main_score = (p_val + c_val) / 2
 
-            # CASE B: Legacy Enum Style
-            style = profile.play_style
-            if style == PlayStyle.POWER:
-                return norm_power * 0.8 + norm_control * 0.2
-            elif style == PlayStyle.CONTROL:
-                return norm_control * 0.8 + norm_power * 0.2
-            else:  # BALANCED
-                return (norm_power + norm_control) / 2
+            # 2. Tie-Breaker Logic
+            confidence = paddle.specs_confidence or 0.0
+            price = float(item["min_price"]) if item["min_price"] else 9999.0
+            jitter = (hash(paddle.model_name) % 100) / 1000.0
+
+            return (main_score, confidence, -price, jitter)
 
         return sorted(paddles_data, key=score_fn, reverse=True)
 

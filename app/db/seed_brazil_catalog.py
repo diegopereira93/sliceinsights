@@ -87,6 +87,16 @@ def seed():
                     brands_cache[brand_key] = brand
                 brand = brands_cache[brand_key]
 
+                # Skip non-paddles
+                lower_model = model_name.lower()
+                if any(x in lower_model for x in ["mala", "mochila", "bolsa", "capa", "rede", "kit", "bola", "ball", "tshirt", "camiseta", "raqueteira", "tênis", "tenis", "short", "meia"]):
+                    continue
+                if "raquete" not in lower_model and "paddle" not in lower_model:
+                     # Some valid paddles might not have "raquete" in the CSV name, 
+                     # but bags/accessories usually specify what they are.
+                     # Let's keep brands we know are paddles if not clearly a bag.
+                     pass
+
                 # Get/create Paddle
                 cache_key = (brand_key, model_key)
                 if cache_key not in paddles_cache:
@@ -98,6 +108,7 @@ def seed():
                     ).first()
                     if not existing:
                         image_url = str(row.get("image_url", "")) or None
+                        
                         existing = PaddleMaster(
                             brand_id=brand.id,
                             model_name=model_name,
@@ -105,7 +116,7 @@ def seed():
                             available_in_brazil=True,
                             search_keywords=[brand_name.lower(), model_name.lower()],
                             specs_source="br_scraper",
-                            specs_confidence=0.0,
+                            specs_confidence=0.0
                         )
                         session.add(existing)
                         session.flush()

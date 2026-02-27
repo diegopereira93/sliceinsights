@@ -1,17 +1,18 @@
-# SliceInsights - Insights precisos para sua melhor jogada
+# SliceInsights v1.8 - Insights precisos para sua melhor jogada
 
 ![CI Quality Gate](https://github.com/diegogp/sliceinsights/actions/workflows/production-pipeline.yml/badge.svg)
 
 
-🏓 Uma plataforma premium de recomendação de raquetes de Pickleball, focada em alta performance, UX sofisticada e conversão.
+🏓 Uma plataforma premium de recomendação de raquetes de Pickleball, focada em alta performance, UX sofisticada e conversão. **Agora com Rankeamento Híbrido por IA**.
 
 ## ✨ Features
 
-- **Racket Finder Quiz v3**: Consultor dinâmico com **Labor Illusion** (mensagens de processamento em tempo real) para feedback imersivo.
-- **Cromatismo Técnico**: Atributos técnicos (Power, Control, Spin, Sweet Spot) codificados por cores para escaneamento visual rápido.
-- **Design System Premium**: Interface moderna com cores vibrantes (Lime Green #CEFF00), Glassmorphism e Dark Mode nativo.
-- **SE Refactor (High Performance)**: Backend otimizado com SQL Joins (resolvendo N+1 queries) e filtros de banco de dados para escalabilidade.
-- **Mobile-First PWA**: Experiência de app nativo focada em dispositivos móveis.
+- **AI Racket Finder v1.8**: Consultor de Elite (Llama 3.3) que cruza specs técnicas com o perfil do aluno para recomendações "Coach-Level".
+- **Labor Illusion Advanced**: Mensagens de processamento em tempo real para feedback técnico imersivo.
+- **Cromatismo Técnico & Médio**: Atributos técnicos e filtros de saúde (Tennis Elbow) validados por hardware.
+- **Design System Elite**: Interface moderna com Lime Green (#CEFF00), Glassmorphism e Dark Mode nativo.
+- **SE Refactor (High Performance)**: Backend otimizado com SQL Joins e Smart Filtering.
+- **Mobile-First PWA**: Experiência de app nativo focada em performance móvel.
 
 ## 🛡️ Production-Ready Features
 

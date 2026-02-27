@@ -364,79 +364,8 @@ async def get_recommendations(
     )
     
     engine = RecommendationEngine(session)
-    result = await engine.get_recommendations(profile, limit=body.limit)
+    result = await engine.get_recommendations(profile, limit=body.limit, use_ai_ranking=True)
     
-    # Generate the personalized AI dossier from the Groq LLM
-    try:
-        if result.recommendations:
-            # Fetch full paddle objects for specs context
-            paddle_ids = [rec.paddle_id for rec in result.recommendations]
-            paddles_result = await session.exec(
-                select(PaddleMaster).where(PaddleMaster.id.in_(paddle_ids))
-            )
-            paddles_by_id = {p.id: p for p in paddles_result.all()}
-            
-            # Build RICH context with all structured data (SCI)
-            # Build RICH context with all structured data (SCI)
-            # Remove internal flags and raw Enum names to prevent LLM hallucination/robotic speaking
-            paddles_context = []
-            for rec in result.recommendations:
-                paddle = paddles_by_id.get(rec.paddle_id)
-                entry = {
-                    "Marca": rec.brand_name,
-                    "Modelo": rec.model_name,
-                    "Custo-Benefício": "Excepcional" if rec.value_score and rec.value_score > 10 else ("Bom" if rec.value_score and rec.value_score > 7 else "Regular"),
-                    "Preço": f"R$ {rec.min_price_brl:.2f}" if rec.min_price_brl else "Sob consulta",
-                    "Motivos para Escolher": rec.match_reasons,
-                }
-                if paddle:
-                    # Clean Enum formatting
-                    face_mat = paddle.face_material.value if hasattr(paddle.face_material, "value") else str(paddle.face_material) if paddle.face_material else "Não informado"
-                    shape_val = paddle.shape.value if hasattr(paddle.shape, "value") else str(paddle.shape) if paddle.shape else "Não informada"
-                    
-                    entry["Especificações Físicas"] = {
-                        "Espessura do núcleo (mm)": paddle.core_thickness_mm or "Não informado",
-                        "Material do núcleo": paddle.core_material or "Não informado",
-                        "Material da face": face_mat.title() if face_mat != "Não informado" else face_mat,
-                        "Formato": shape_val.title() if shape_val != "Não informada" else shape_val,
-                    }
-                    
-                    # Add numeric ratings ONLY if specs_confidence is HIGH
-                    # We pass the internal float to LLM but disguise the key so the LLM acts naturally
-                    entry["specs_confidence"] = paddle.specs_confidence
-                    if paddle.specs_confidence >= 0.75:
-                        entry["Notas de Performance"] = {
-                            "Potência (Power)": rec.ratings.get("power", "N/A"),
-                            "Controle (Control)": rec.ratings.get("control", "N/A"),
-                            "Spin (Efeito)": rec.ratings.get("spin", "N/A"),
-                            "Sweet Spot (Área de acerto)": rec.ratings.get("sweet_spot", "N/A"),
-                            "Peso de Swing (Swing Weight)": paddle.swing_weight or "N/A",
-                            "Peso de Torção (Twist Weight)": paddle.twist_weight or "N/A"
-                        }
-                        
-                paddles_context.append(entry)
-            
-            # Decode UserProfile into human-readable Portuguese for the LLM
-            profile_context = {
-                "Nível": profile.skill_level.value,
-                "Estilo_de_Jogo": profile.play_style.value,
-                "Orçamento": f"até R$ {profile.budget_max_brl:.0f}" if profile.budget_max_brl else "Sem limite",
-                "Epicondilite": "Sim" if profile.has_tennis_elbow else "Não",
-                "Preferência_Spin": profile.spin_preference or "Sem preferência",
-                "Preferência_Peso": profile.weight_preference or "Sem preferência",
-                "Slider_Power_vs_Control": f"{profile.power_preference_percent}% Power / {100 - profile.power_preference_percent}% Control" if profile.power_preference_percent is not None else "Não informado",
-            }
-            
-            dossier = await llm_service.generate_dossier(
-                user_profile=profile_context,
-                top_paddles=paddles_context
-            )
-            result.grok_dossier = dossier
-    except Exception as e:
-        import structlog
-        structlog.get_logger(__name__).error("Dossier generation failed", error=str(e))
-        result.grok_dossier = "Seu perfil foi analisado com sucesso por nossas métricas avançadas."
-        
     return result
 
 

@@ -44,35 +44,36 @@ The recommendation engine uses a multi-stage approach to find the best paddles f
    - `standard`: `swing_weight` between 110 and 120
    - `heavy`: `swing_weight >= 120`
 
-### Smart Scoring (Python Level)
-After filtering, paddles are scored based on the user's `play_style`:
+### Smart AI Ranking (v1.8 - Hybrid)
+Após a filtragem SQL, as raquetes são processadas pelo **Serviço de IA (Llama 3.3)**:
 
-| Style | Scoring Formula |
-|-------|-----------------|
-| **POWER** | `(Power * 0.8) + (Control * 0.2)` |
-| **CONTROL** | `(Control * 0.8) + (Power * 0.2)` |
-| **BALANCED** | `(Power + Control) / 2` |
-
-**Slider Preference**: If the user provides a specific `power_preference_percent` (0-100%), the weights are adjusted linearly.
+1. **Seleção de Candidatos**: O motor seleciona os 20 melhores candidatos via SQL (based on budget and availability).
+2. **Refinamento Qualitativo**: A IA analisa termos como "Pro", "Performance" e "Control" no nome do modelo e marca para garantir que o nível de habilidade (Beginner/Advanced) seja rigorosamente respeitado.
+3. **Diversity Jitter**: Aplicação de um jitter de ranqueamento para garantir que marcas diversas (Engage, Proxr, Selkirk) apareçam nos resultados, evitando o monopólio de uma única marca.
+4. **Dossiê do Coach**: Geração de uma análise técnica personalizada (`grok_dossier`) que explica a escolha baseada nos specs reais e no perfil do usuário.
 
 ---
 
-## 3. Value Score Calculation
+## 3. Trava Médica (Tennis Elbow)
 
-The `value_score` helps users identify "best deals" by comparing technical performance to market price.
-
-- **Performance Aggregate**: `(Power + Control + Spin) / 3`
-- **Formula**: `(Performance Aggregate / Price) * 1000`
-- **Interpretation**: A higher score (e.g., > 8.0) indicates a paddle that offers high performance relative to its price in BRL.
+O sistema implementa uma camada de segurança dupla:
+- **Camada 1 (SQL)**: Bloqueio rígido de raquetes com `core_thickness_mm < 16.0`.
+- **Camada 2 (IA)**: O prompt da IA é instruído a priorizar tecnologias de conforto e "Touch" para usuários com restrições físicas.
 
 ---
 
-## 4. Match Reasons and Tags
+## 4. Value Score Calculation
 
-The engine generates dynamic natural language reasons for each recommendation:
-- **Excepcional potência**: Power rating ≥ 8.
-- **Máxima estabilidade**: Control rating ≥ 8.
-- **Equilíbrio ideal**: Average of Power/Control ≥ 7.5 (for BALANCED style).
-- **Conforto**: 16mm core for tennis elbow users.
+O `value_score` ajuda usuários a identificar "best deals" comparando a performance técnica agregada ao preço de mercado em BRL.
 
-Tags like **"Top Pick"**, **"Spin Machine"**, and **"Elite Control"** are applied based on top rankings and metric thresholds (≥ 9.0).
+- **Fórmula**: `(Performance Agregada / Preço) * 1000`
+- **Uso**: Serve como critério de desempate no pool de candidatos antes do ranking final de IA.
+
+---
+
+## 5. Dossiê e Insights
+
+Diferente do v1.7 (tags estáticas), o v1.8 gera um **Dossiê Técnico** dinâmico:
+- **Tom**: Treinador Profissional.
+- **Adaptação**: O vocabulário muda conforme o nível do aluno (explicativo para iniciantes, técnico para avançados).
+- **Objetividade**: Cita specs reais (RPM, Swing Weight) se a confiança dos dados (`specs_confidence`) for alta.
