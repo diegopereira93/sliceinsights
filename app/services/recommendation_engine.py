@@ -78,6 +78,31 @@ class RecommendationEngine:
         result = await self.session.exec(query)
         rows = result.all()
         
+        # 4.5 Fallback: If literal filters are too strict, relax budget to find at least 3
+        if len(rows) < 3 and profile.budget_max_brl:
+            logger.warning("Fewer than 3 paddles found. Relaxing budget filter to fulfill the 3-suggestion rule.")
+            # Re-run query without budget limit but keeping medical safety
+            query_relaxed = (
+                select(
+                    PaddleMaster,
+                    Brand.name.label("brand_name"),
+                    offers_subquery.c.min_price,
+                    offers_subquery.c.offers_count
+                )
+                .join(Brand, PaddleMaster.brand_id == Brand.id)
+                .outerjoin(offers_subquery, PaddleMaster.id == offers_subquery.c.paddle_id)
+                .where(PaddleMaster.specs_confidence >= 0.0)
+            )
+            if profile.has_tennis_elbow:
+                query_relaxed = query_relaxed.where(
+                    (PaddleMaster.core_thickness_mm >= 16.0) | 
+                    (PaddleMaster.model_name.ilike("%16mm%")) |
+                    (PaddleMaster.model_name.ilike("%touch%"))
+                )
+            query_relaxed = query_relaxed.order_by(func.random()).limit(10)
+            result = await self.session.exec(query_relaxed)
+            rows = result.all()
+        
         # 5. Ranking Process
         paddles_data = []
         for paddle, brand_name, min_price, offers_count in rows:
@@ -126,7 +151,7 @@ class RecommendationEngine:
         
         # 6. Build final recommendations
         recommendations = []
-        for rank, data in enumerate(ranked_paddles[:limit], 1):
+        for rank, data in enumerate(ranked_paddles[:3], 1): # Strictly enforce top 3
             paddle = data["paddle"]
             ratings = data["ratings"]
             
