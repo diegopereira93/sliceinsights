@@ -45,7 +45,7 @@ async def health_check(session: AsyncSession = Depends(get_session)):
         await session.execute(text("SELECT 1"))
         return {
             "status": "healthy",
-            "version": "1.0.0",
+            "version": settings.app_version,
             "database": "connected"
         }
     except Exception as e:
