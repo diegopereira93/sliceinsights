@@ -1,5 +1,6 @@
-from typing import Optional
+from typing import Optional, List, Dict, Any
 from decimal import Decimal
+import structlog
 
 from sqlmodel import select, func
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -11,6 +12,8 @@ from app.schemas.user_profile import UserProfile, RecommendationResult, PaddleRe
 import json
 import hashlib
 from app.services.llm_service import llm_service
+
+logger = structlog.get_logger(__name__)
 
 class RecommendationEngine:
     def __init__(self, session: AsyncSession):
