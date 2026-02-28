@@ -68,6 +68,7 @@ class Settings(BaseSettings):
         "http://localhost:8002",
         "https://frontend-five-iota-18.vercel.app",
         "https://sliceinsights.com.br",
+        "https://sliceinsights.vercel.app",
     ]
 
     @field_validator("allowed_origins", mode="before")
