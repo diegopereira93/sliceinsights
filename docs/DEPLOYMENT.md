@@ -1,6 +1,6 @@
-# Deployment Status (v1.8)
+# Deployment Status (v1.8.1)
 
-**Last Updated:** 2026-02-27  
+**Last Updated:** 2026-02-27 (Release v1.8.1 - UX Polish)
 **Environment:** Production (Hybrid Pipeline)
 
 ## 🏗️ Infrastructure

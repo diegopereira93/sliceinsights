@@ -37,9 +37,13 @@ DADOS ESTRUTURADOS fornecidos:
 - Raquetes Filtradas: specs técnicos, ratings, custo-benefício
 
 DIRETRIZES DE RECOMENDAÇÃO:
-1. Avalie o campo "specs_confidence" para ajustar seu tom.
-2. NUNCA mencione variáveis de sistema como `specs_confidence` ou `value_score`.
-3. Seja natural, cite marcas e modelos reais.
+1. Fale DIRETAMENTE com o usuário em segunda pessoa (use "você", "seu", "sua").
+2. NUNCA se refira ao usuário como "o aluno", "o jogador" ou "o usuário".
+3. Comece o dossiê mencionando a raquete número 1 pelo nome (Ex: "Sua melhor escolha é a [Nome]").
+4. Avalie o campo "specs_confidence" para ajustar seu tom.
+5. NUNCA mencione variáveis de sistema como `specs_confidence` ou `value_score`.
+6. Seja natural, cite marcas e modelos reais.
+7. Vocabulário de Treinador Profissional.
 
 CONTEÚDO:
 - 2 a 3 parágrafos diretos e amigáveis."""
@@ -83,13 +87,18 @@ REGRAS DE RANKING (CRÍTICO):
    - POWER: Priorize 13-14mm ou termos como "Power/Attack/Speed/TKO/Bantam".
    - BALANCED: Procure raquetes híbridas ou marcas premium versáteis.
 3. **Budget vs Qualidade**: Se o orçamento permitir, nunca escolha o modelo mais barato só por segurança. Procure a melhor tecnologia que o dinheiro pode comprar.
-4. **Análise Léxica**: Use o 'model_name' para inferir qualidade. "Pro" geralmente significa performance superior.
+5. **Dossiê Direto e Pessoal (CRÍTICO)**: 
+   - Fale DIRETAMENTE com o usuário (use "você"). Proibido usar "o aluno".
+   - Comece o texto citando o modelo que ficou em 1º lugar como o seu "Match Perfeito".
+   - Reconheça explicitamente a existência das outras 2 sugestões do Top 3 logo na sequência.
+   - Explique por que estas 3 foram as únicas selecionadas (estilo, orçamento e segurança).
+   - Evite introduções genéricas.
 
 SAÍDA OBRIGATÓRIA (JSON):
 Responda APENAS o JSON:
 {
   "ranked_ids": ["uuid1", "uuid2", "uuid3"],
-  "dossier": "Análise técnica do Coach focada no nível do aluno..."
+  "dossier": "O Match Perfeito para você é a [Raquete 1]. Também selecionei a [Raquete 2] e a [Raquete 3] como alternativas sólidas porque seu estilo..."
 }"""
 
         user_prompt = f"Perfil: {user_profile}\nCandidatos: {candidate_paddles}"
@@ -117,7 +126,15 @@ Responda APENAS o JSON:
         """Consultor Técnico de Raquetes Chat."""
         if not self.client:
             return "Chat indisponível."
-        system_prompt = f"Você é o Consultor Técnico. Responda APENAS sobre: {context}"
+            
+        system_prompt = f"""Você é o Consultor Técnico Especialista do SliceInsights.
+Sua missão é ajudar o usuário a entender profundamente as raquetes recomendadas: {context}
+
+DIRETRIZES:
+1. Responda com foco técnico nos modelos citados no contexto.
+2. Se o usuário pedir por outras opções, você pode mencionar que estas 3 foram as pré-selecionadas pelo algoritmo de elite, mas mantenha a conversa útil e informativa.
+3. Não invente especificações técnicas. Use os dados de core, superfície e peso fornecidos.
+"""
         messages = [{"role": "system", "content": system_prompt}] + chat_history
         try:
             response = await self.client.chat.completions.create(

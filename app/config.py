@@ -60,7 +60,7 @@ class Settings(BaseSettings):
     
     # App
     app_name: str = "SliceInsights"
-    app_version: str = "1.8.0"
+    app_version: str = "1.8.1"
     
     # CORS - include Vercel production and preview URLs
     allowed_origins: list[str] = [

@@ -1,4 +1,5 @@
-# SliceInsights v1.8 - Insights precisos para sua melhor jogada
+# SliceInsights v1.8.1
+![Version](https://img.shields.io/badge/version-1.8.1-brightgreen)
 
 ![CI Quality Gate](https://github.com/diegogp/sliceinsights/actions/workflows/production-pipeline.yml/badge.svg)
 
