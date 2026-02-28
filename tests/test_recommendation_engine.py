@@ -21,6 +21,7 @@ class MockPaddle:
         self.brand = MagicMock()
         self.brand.name = "Test Brand"
         self.available_in_brazil = True
+        self.specs_confidence = 0.95
 
 def test_normalization():
     engine = RecommendationEngine(session=None)
@@ -30,8 +31,8 @@ def test_normalization():
 
 def test_ranking_logic_slider():
     engine = RecommendationEngine(session=None)
-    p1 = {"paddle": MockPaddle(power_rating=9.0, twist_weight=5.5, name="PowerPaddle")} 
-    p2 = {"paddle": MockPaddle(power_rating=5.0, twist_weight=7.5, name="ControlPaddle")} 
+    p1 = {"paddle": MockPaddle(power_rating=9.0, twist_weight=5.5, name="PowerPaddle"), "min_price": 1000} 
+    p2 = {"paddle": MockPaddle(power_rating=5.0, twist_weight=7.5, name="ControlPaddle"), "min_price": 1200} 
     data = [p1, p2]
     
     # 50/50 Balanced

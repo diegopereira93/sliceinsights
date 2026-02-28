@@ -15,6 +15,7 @@ from slowapi import Limiter
 from slowapi.util import get_remote_address
 
 from app.db.database import get_session
+from app.config import get_settings
 from app.models import Brand, PaddleMaster, MarketOffer
 from app.models.paddle import PaddleRead
 from app.models.brand import BrandRead
@@ -43,6 +44,7 @@ async def health_check(session: AsyncSession = Depends(get_session)):
         from sqlalchemy import text
         # Use a short timeout for the health check to avoid hanging
         await session.execute(text("SELECT 1"))
+        settings = get_settings()
         return {
             "status": "healthy",
             "version": settings.app_version,
