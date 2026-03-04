@@ -4,7 +4,7 @@
 
 ```
 Development: http://localhost:8002/api/v1
-Production:  https://sliceinsights.onrender.com/api/v1
+Production:  https://sliceinsights-4rmf.onrender.com/api/v1
 Frontend:    https://sliceinsights.vercel.app
 ```
 

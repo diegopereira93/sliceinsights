@@ -4,7 +4,7 @@
     "buildCommand": "next build",
     "outputDirectory": ".next",
     "env": {
-        "NEXT_PUBLIC_API_URL": "https://sliceinsights.onrender.com/api/v1",
-        "BACKEND_URL": "https://sliceinsights.onrender.com"
+        "NEXT_PUBLIC_API_URL": "https://sliceinsights-4rmf.onrender.com/api/v1",
+        "BACKEND_URL": "https://sliceinsights-4rmf.onrender.com"
     }
 }
