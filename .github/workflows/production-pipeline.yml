@@ -62,7 +62,7 @@ jobs:
         # Verifies if the project builds successfully (catches TS errors, etc)
         run: npm run build
         env:
-          NEXT_PUBLIC_API_URL: "https://sliceinsights.onrender.com/api/v1"
+          NEXT_PUBLIC_API_URL: "https://sliceinsights-4rmf.onrender.com/api/v1"
 
   # ------------------------------------------------------------------
   # 🚀 DEPLOYMENT (CD)
@@ -126,7 +126,7 @@ jobs:
           echo "Checking Backend Health..."
           MAX_RETRIES=24 # 4 minutes
           COUNT=0
-          until curl -s https://sliceinsights.onrender.com/api/v1/health | grep "healthy"; do
+          until curl -s https://sliceinsights-4rmf.onrender.com/api/v1/health | grep "healthy"; do
             if [ $COUNT -eq $MAX_RETRIES ]; then
               echo "❌ Backend health check failed after 4 minutes."
               exit 1
@@ -142,4 +142,4 @@ jobs:
           npx playwright test e2e/sliceinsights.spec.ts
         env:
           BASE_URL: "https://sliceinsights.vercel.app"
-          API_URL: "https://sliceinsights.onrender.com/api/v1"
+          API_URL: "https://sliceinsights-4rmf.onrender.com/api/v1"

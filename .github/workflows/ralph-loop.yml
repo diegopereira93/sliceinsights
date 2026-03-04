@@ -19,6 +19,6 @@ jobs:
       - name: Run Ralph-Loop
         run: python scripts/autonomous_health_check.py
         env:
-          BACKEND_URL: "https://sliceinsights.onrender.com/api/v1"
+          BACKEND_URL: "https://sliceinsights-4rmf.onrender.com/api/v1"
           FRONTEND_URL: "https://frontend-five-iota-18.vercel.app"
           ADMIN_SEED_SECRET: ${{ secrets.ADMIN_SEED_SECRET }}

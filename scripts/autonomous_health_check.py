@@ -4,7 +4,7 @@ import time
 import sys
 
 # Configuration
-BACKEND_URL = os.getenv("BACKEND_URL", "https://sliceinsights.onrender.com/api/v1")
+BACKEND_URL = os.getenv("BACKEND_URL", "https://sliceinsights-4rmf.onrender.com/api/v1")
 FRONTEND_URL = os.getenv("FRONTEND_URL", "https://frontend-five-iota-18.vercel.app")
 SECRET = os.getenv("ADMIN_SEED_SECRET", "sliceinsights2026")
 

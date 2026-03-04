@@ -1,6 +1,6 @@
 // Production Render backend URL - hardcoded fallback for SSR on Vercel
 // (vercel.json env vars are not available at runtime for SSR)
-const RENDER_BACKEND_URL = 'https://sliceinsights.onrender.com/api/v1';
+const RENDER_BACKEND_URL = 'https://sliceinsights-4rmf.onrender.com/api/v1';
 
 // Get API base URL at runtime - called for each request, not at module load time
 // This is critical for proper SSR behavior on Vercel where env vars behave differently
