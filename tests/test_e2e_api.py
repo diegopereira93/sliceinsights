@@ -221,3 +221,46 @@ class TestDataIntegrity:
         body = r.json()
         # Data quality roadmap: catalog may shrink to 35-55 with complete specs only
         assert body["total"] >= 10, f"Expected ≥10 paddles, got {body['total']}"
+
+    def test_quality_gate_all_specs_complete(self, client: httpx.Client):
+        """Phase 4: ALL paddles from /paddles MUST have complete spec fields."""
+        r = client.get("/paddles", params={"limit": 100})
+        body = r.json()
+        required_spec_fields = [
+            "core_thickness_mm", "swing_weight", "spin_rpm", "handle_length"
+        ]
+        for p in body["data"]:
+            specs = p.get("specs", {})
+            for field in required_spec_fields:
+                assert specs.get(field) is not None, \
+                    f"{p['brand_name']} {p['model_name']} missing spec: {field}"
+
+    def test_no_fabricated_ratings(self, client: httpx.Client):
+        """Phase 4: NO paddle should have all ratings == 5 (fabricated defaults)."""
+        r = client.get("/paddles", params={"limit": 100})
+        body = r.json()
+        for p in body["data"]:
+            ratings = p.get("ratings", {})
+            r_vals = [
+                v for k, v in ratings.items()
+                if k in ("control_rating", "spin_rating", "sweet_spot_rating") and v is not None
+            ]
+            if len(r_vals) >= 3:
+                assert not all(v == 5 for v in r_vals), \
+                    f"{p['brand_name']} {p['model_name']} has all-default ratings (fabricated)"
+
+    def test_recommendations_only_verified(self, client: httpx.Client):
+        """Phase 4: ALL recommendations must come from fully-verified paddles."""
+        payload = {
+            "skill_level": "intermediate",
+            "play_style": "balanced",
+            "has_tennis_elbow": False,
+            "limit": 5,
+        }
+        r = client.post("/recommendations", json=payload)
+        assert r.status_code == 200
+        body = r.json()
+        for rec in body.get("recommendations", []):
+            assert rec.get("model_name"), "Recommendation missing model_name"
+            assert rec.get("brand_name"), "Recommendation missing brand_name"
+
