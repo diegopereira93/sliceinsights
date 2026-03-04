@@ -66,15 +66,6 @@ async def lifespan(app: FastAPI):
     # Startup
     logger.info("Starting application", app_name=settings.app_name, version=settings.app_version)
     await init_db()
-    
-    # Run force migrations to ensure columns exist (Run synchronously on startup)
-    try:
-        from app.db.force_migrations import run_migration
-        run_migration()
-        logger.info("Force migrations completed successfully")
-    except Exception as e:
-        logger.error("Force migrations failed", error=str(e))
-        
     logger.info("Database initialized")
     yield
     # Shutdown
