@@ -39,11 +39,12 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
 
 
 async def init_db():
-    """Initialize database tables."""
+    """Initialize database tables and sync missing columns."""
     async with async_engine.begin() as conn:
         from sqlalchemy import text
         await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
         await conn.run_sync(SQLModel.metadata.create_all)
+        await conn.run_sync(_sync_missing_columns)
 
 
 def init_db_sync():
@@ -52,3 +53,62 @@ def init_db_sync():
     with sync_engine.begin() as conn:
         conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
     SQLModel.metadata.create_all(sync_engine)
+    with sync_engine.begin() as conn:
+        _sync_missing_columns(conn)
+
+
+def _sync_missing_columns(conn):
+    """Detect and add missing columns to existing tables.
+    
+    SQLModel.metadata.create_all only creates missing TABLES, not missing COLUMNS.
+    This function bridges that gap by inspecting existing tables and adding
+    any columns defined in the models but absent from the database.
+    """
+    from sqlalchemy import inspect, text, String, Float, Integer, Boolean
+    
+    inspector = inspect(conn)
+    existing_tables = inspector.get_table_names()
+    
+    type_map = {
+        "VARCHAR": "VARCHAR",
+        "TEXT": "VARCHAR",
+        "FLOAT": "FLOAT",
+        "DOUBLE": "FLOAT",
+        "DOUBLE PRECISION": "FLOAT",
+        "INTEGER": "INTEGER",
+        "BIGINT": "INTEGER",
+        "BOOLEAN": "BOOLEAN",
+        "TIMESTAMP WITHOUT TIME ZONE": "TIMESTAMP",
+    }
+    
+    for table in SQLModel.metadata.sorted_tables:
+        if table.name not in existing_tables:
+            continue
+            
+        existing_cols = {col["name"] for col in inspector.get_columns(table.name)}
+        
+        for column in table.columns:
+            if column.name in existing_cols:
+                continue
+            
+            # Map SQLAlchemy type to SQL type string
+            col_type = str(column.type)
+            sql_type = type_map.get(col_type.upper(), col_type)
+            
+            # Build default clause
+            default_clause = ""
+            if column.default is not None:
+                default_val = column.default.arg
+                if isinstance(default_val, bool):
+                    default_clause = f" DEFAULT {'TRUE' if default_val else 'FALSE'}"
+                elif isinstance(default_val, (int, float)):
+                    default_clause = f" DEFAULT {default_val}"
+                elif isinstance(default_val, str):
+                    default_clause = f" DEFAULT '{default_val}'"
+            
+            sql = f'ALTER TABLE "{table.name}" ADD COLUMN IF NOT EXISTS "{column.name}" {sql_type}{default_clause}'
+            try:
+                conn.execute(text(sql))
+            except Exception:
+                pass  # Column might already exist or type might be complex (e.g. ARRAY, Vector)
+
