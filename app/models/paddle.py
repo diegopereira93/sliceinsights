@@ -194,7 +194,12 @@ class PaddleRead(SQLModel):
                 handle_length=paddle.handle_length,
                 grip_circumference=paddle.grip_circumference,
             ),
-            ratings=PaddleRatings(**ratings_dict),
+            ratings=PaddleRatings(
+                power=ratings_dict.get("power"),
+                control=ratings_dict.get("control"),
+                spin=ratings_dict.get("spin"),
+                sweet_spot=ratings_dict.get("sweet_spot"),
+            ),
             specs_source=paddle.specs_source,
             specs_confidence=paddle.specs_confidence,
             is_synthetic=ratings_dict.get("is_synthetic", False),
