@@ -111,18 +111,40 @@ class PaddleSpecs(SQLModel):
     grip_circumference: Optional[str] = None
 
 
+# ── Data Quality ──────────────────────────────────────────────────────────────
+
+REQUIRED_FIELDS = [
+    'core_thickness_mm', 'face_material', 'core_material', 'shape',
+    'swing_weight', 'spin_rpm', 'power_rating', 'handle_length',
+]
+
+
+def calculate_specs_confidence(paddle: "PaddleMaster") -> float:
+    """Binary confidence: 1.0 if ALL required fields are filled, 0.0 otherwise."""
+    for field in REQUIRED_FIELDS:
+        if getattr(paddle, field, None) is None:
+            return 0.0
+    return 1.0
+
+
+def calculate_control(core_thickness_mm: Optional[float]) -> Optional[int]:
+    """Derive control rating from core thickness (physically grounded: dwell time).
+
+    13mm → 1/10, 14mm → 3/10, 16mm → 6/10, 19mm → 10/10
+    """
+    if core_thickness_mm is None:
+        return None
+    control = (core_thickness_mm - 12) / 7 * 10
+    return int(round(min(max(control, 0), 10)))
+
+
+# ── Ratings ───────────────────────────────────────────────────────────────────
+
 def calculate_paddle_ratings(paddle: "PaddleMaster") -> dict:
     """Calculate ratings from REAL data only. Returns None for missing fields — never fabricates."""
 
-    # 1. Control (based on twist_weight) — REAL DATA ONLY
-    control = None
-    twist = paddle.twist_weight
-    if twist is not None:
-        if twist > 100:  # Large scale (150-600)
-            control = (twist - 150) / 450 * 10 if twist >= 150 else 0
-        else:  # Small scale (5.0-7.5)
-            control = twist * 1.5 if twist > 0 else 5.0
-        control = int(round(min(max(control, 0), 10)))
+    # 1. Control — derived from core_thickness_mm (physically grounded)
+    control = calculate_control(paddle.core_thickness_mm)
 
     # 2. Spin (based on spin_rpm) — REAL DATA ONLY
     spin = None

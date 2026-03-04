@@ -237,6 +237,7 @@ async def list_paddles(
         )
         .options(selectinload(PaddleMaster.brand))
         .outerjoin(offer_subq, PaddleMaster.id == offer_subq.c.paddle_id)
+        .where(PaddleMaster.specs_confidence == 1.0)  # Quality gate
     )
     
     # Apply filters
@@ -273,7 +274,7 @@ async def list_paddles(
         )
     
     # Count total (without pagination)
-    count_query = select(func.count(PaddleMaster.id))
+    count_query = select(func.count(PaddleMaster.id)).where(PaddleMaster.specs_confidence == 1.0)
     if brand_id:
         count_query = count_query.where(PaddleMaster.brand_id == brand_id)
     if skill_level:
@@ -382,7 +383,11 @@ async def search_paddles(
     session: AsyncSession = Depends(get_session)
 ):
     """Fuzzy search for paddles."""
-    result = await session.exec(select(PaddleMaster).options(selectinload(PaddleMaster.brand)))
+    result = await session.exec(
+        select(PaddleMaster)
+        .options(selectinload(PaddleMaster.brand))
+        .where(PaddleMaster.specs_confidence == 1.0)  # Quality gate
+    )
     all_paddles = result.all()
     
     # Score each paddle

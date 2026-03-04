@@ -21,7 +21,7 @@ class MockPaddle:
         self.brand = MagicMock()
         self.brand.name = "Test Brand"
         self.available_in_brazil = True
-        self.specs_confidence = 0.95
+        self.specs_confidence = 1.0
 
 def test_normalization():
     engine = RecommendationEngine(session=None)
@@ -49,13 +49,16 @@ def test_ranking_logic_slider():
 def test_value_score():
     engine = RecommendationEngine(session=None)
     profile = UserProfile(skill_level="intermediate", play_style=PlayStyle.BALANCED)
-    pA = MockPaddle(power_rating=8.0, twist_weight=7.5) # Avg 9.0
+    pA = MockPaddle(power_rating=8.0)  # core_thickness_mm=16.0 by default
     from app.models.paddle import calculate_paddle_ratings
     data_A = {"paddle": pA, "min_price": 1000, "ratings": calculate_paddle_ratings(pA)}
     score_A = engine._calculate_value_score(data_A, profile)
-    # performance = (8.0 + 10.0 + 10.0) / 3 = 9.333
-    # value = (9.333 / 1000) * 1000 = 9.3
-    assert score_A == 9.3
+    # control from core_thickness_mm (16.0): (16-12)/7*10 = 5.71 → 6
+    # spin from spin_rpm (2200): (2200-150)/150*10 = 136.67 → capped 10
+    # power = 8
+    # performance = (8 + 6 + 10) / 3 = 8.0
+    # value = (8.0 / 1000) * 1000 = 8.0
+    assert score_A == 8.0
 
 @pytest.mark.asyncio
 async def test_cache_logic():

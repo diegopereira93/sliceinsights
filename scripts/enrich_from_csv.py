@@ -9,6 +9,7 @@ Run with:
 import sys
 import re
 import argparse
+import json
 from pathlib import Path
 from difflib import SequenceMatcher
 
@@ -23,6 +24,7 @@ from app.models import Brand, PaddleMaster
 from app.models.enums import FaceMaterial, PaddleShape
 
 CSV_PATH = Path(__file__).parent.parent / "app" / "data" / "paddle_stats_dump.csv"
+MANUAL_SPECS_PATH = Path(__file__).parent.parent / "app" / "data" / "manual_specs.json"
 
 # CSV Column mapping (verified against actual data, 21 columns total)
 COL_BRAND = 0
@@ -39,7 +41,11 @@ COL_GRIP_CIRC = 9
 COL_SHAPE = 11          # 'Wide body', 'Elongated', etc.
 COL_FACE_MATERIAL_A = 12  # Primary face material text
 COL_FACE_MATERIAL_B = 13  # Secondary face material text
-COL_CORE_MATERIAL = 13
+COL_CORE_MATERIAL = 14    # 'Polymer Honeycomb', etc.
+
+# Known shape values for smart column detection (col11 sometimes contains face material)
+SHAPE_KEYWORDS = {'wide body', 'widebody', 'elongated', 'standard', 'hybrid',
+                  'classic', 'blade', 'extra elongated'}
 
 
 # ─── Text Cleaning ────────────────────────────────────────────────────────────
@@ -49,21 +55,46 @@ NOISE_TOKENS = {
     # Portuguese
     'raquete', 'de', 'pickleball', 'kit', 'paddle', 'raquetes',
     # English noise in thickness annotations
-    'mm', '14mm', '16mm', '13mm', '12mm', '19mm', '15mm',
+    'mm', '14mm', '16mm', '13mm', '12mm', '19mm', '15mm', '10mm',
     # Generic
     'pro', 'series',
+    # Editions/variants (noise for matching)
+    'edition', 'limited', 'especial', 'edicao', 'edição',
+    'regal', 'sunset',
+    # Player names (noise in product titles)
+    'anna', 'leight', 'waters', 'jack', 'sock', 'ben', 'johns', 'colin', 'shick',
+    # Tech terms
+    'infinigrit', 'raw', 'carbon', 'fiber', 'kevlar', '18k', '3k',
+    # Marketing
+    'new', 'novo', 'lancamento', 'lançamento', 'promo', 'promocao', 'promoção',
 }
 
 # Brand alias map: DB brand name → CSV brand name (lowercase)
-BRAND_ALIASES: dict[str, str] = {
-    '3rdshot': '3rdshot',
-    '3rd shot': '3rdshot',
-    'slk': 'slk',
-    'selkirk slk': 'slk',
-    'proxr': 'proxr',
-    'pro-xr': 'proxr',
-    'start': 'start',
+# Maps to a LIST of CSV brand names to search across
+BRAND_ALIASES: dict[str, list[str]] = {
+    '3rdshot': ['3rdshot'],
+    '3rd shot': ['3rdshot'],
+    'slk': ['slk'],
+    'selkirk slk': ['slk'],
+    'selkirk': ['selkirk', 'selkirk labs', 'slk'],  # Cross-match SLK under Selkirk
+    'selkirk labs': ['selkirk labs', 'selkirk', 'slk'],
+    'proxr': ['proxr', 'pro xr'],
+    'start': ['3rdshot'], # 3rdShot Start series
+    'joola': ['joola'],
+    'diadem': ['diadem'],
+    'engage': ['engage'],
+    'paddletek': ['paddletek'],
+    'head': ['head'],
+    'adidas': ['adidas'],
 }
+
+# Manual overrides for paddles that match CSV but have shifted columns
+# Key: (brand_norm_substring, model_substring) → fields to set
+MANUAL_OVERRIDES: list[tuple[str, str, dict]] = [
+    ('engage', 'pursuit pro1 innovation', {'shape': PaddleShape.STANDARD}),
+    ('engage', 'pursuit pro1 hybrid', {'face_material': FaceMaterial.CARBON}),
+    ('proxr', 'signature', {'shape': PaddleShape.ELONGATED}),
+]
 
 
 def normalize(text: str) -> str:
@@ -86,10 +117,10 @@ def clean_model(text: str) -> str:
     return ' '.join(w for w in words if w not in NOISE_TOKENS)
 
 
-def resolve_brand(db_brand: str) -> str:
-    """Normalize and resolve brand aliases."""
+def resolve_brands(db_brand: str) -> list[str]:
+    """Normalize and return all CSV brand names to search (supports cross-brand matching)."""
     nb = normalize(db_brand)
-    return BRAND_ALIASES.get(nb, nb)
+    return BRAND_ALIASES.get(nb, [nb])
 
 
 def clean_float(val) -> float | None:
@@ -130,22 +161,60 @@ def infer_face_material(name: str) -> FaceMaterial | None:
         return FaceMaterial.KEVLAR
     if 'fiberglass' in n or 'composite' in n:
         return FaceMaterial.FIBERGLASS
-    if 'hybrid' in n:
+    if 'hybrid' in n and 'carbon' not in n:
         return FaceMaterial.HYBRID
     if 'carbon' in n or 'graphite' in n:
         return FaceMaterial.CARBON
+    if 'titanium' in n:
+        return FaceMaterial.HYBRID
     return None
 
 
 def infer_shape(name: str) -> PaddleShape | None:
     n = name.lower()
-    if 'elongated' in n or 'blade' in n:
+    if 'extra elongated' in n:
+        return PaddleShape.ELONGATED
+    if 'elongated' in n or 'enlongated' in n or 'blade' in n:
         return PaddleShape.ELONGATED
     if 'wide' in n or 'widebody' in n:
         return PaddleShape.WIDEBODY
-    if 'standard' in n or 'classic' in n:
+    if 'invikta' in n:  # Selkirk Invikta = elongated
+        return PaddleShape.ELONGATED
+    if 'standard' in n or 'classic' in n or 'hybrid' in n:
         return PaddleShape.STANDARD
     return None
+
+
+def smart_extract_columns(csv_row):
+    """Extract shape, face_material, and core_material with smart column detection.
+
+    Col11 is usually shape but sometimes contains face material when the CSV
+    format shifts. Detect this by checking if the value is a known shape.
+    """
+    col11 = clean_str(csv_row[COL_SHAPE])
+    col12 = clean_str(csv_row[COL_FACE_MATERIAL_A])
+    col13 = clean_str(csv_row[COL_FACE_MATERIAL_B])
+    col14 = clean_str(csv_row[COL_CORE_MATERIAL]) if len(csv_row) > COL_CORE_MATERIAL else None
+
+    shape_str = None
+    face_str = None
+    core_mat = None
+
+    if col11 and col11.lower() in SHAPE_KEYWORDS:
+        # Normal layout: col11=shape, col12=face_a, col13=face_b, col14=core
+        shape_str = col11
+        face_str = col12 or col13
+        core_mat = col14
+    elif col11:
+        # Shifted layout: col11=face_material, col12=face_b, col13=core
+        face_str = col11
+        core_mat = col13
+        # Try to infer shape from model name later
+    else:
+        face_str = col12 or col13
+        core_mat = col14
+
+    return shape_str, face_str, core_mat
 
 
 def fuzzy_score(m1: str, m2: str) -> float:
@@ -182,6 +251,12 @@ def enrich(dry_run: bool = False):
 
         print(f"🎾 DB: {len(paddles)} paddles\n")
 
+        # Load manual specs if file exists
+        manual_specs = []
+        if MANUAL_SPECS_PATH.exists():
+            with open(MANUAL_SPECS_PATH, "r") as f:
+                manual_specs = json.load(f)
+
         # Build CSV lookup: {(brand_norm, model_norm): row}
         csv_lookup: dict[tuple[str, str], any] = {}
         for _, row in df.iterrows():
@@ -200,22 +275,30 @@ def enrich(dry_run: bool = False):
             if not brand:
                 continue
 
-            brand_norm = resolve_brand(brand.name)
+            brand_norms = resolve_brands(brand.name)
             model_norm = clean_model(paddle.model_name)
+            
+            updates = {}
+            csv_row = None
+            csv_model_display = ""
+            match_type = ""
 
-            # 1. Exact match
-            csv_row = csv_lookup.get((brand_norm, model_norm))
+            # 1. Exact match (try all brand aliases)
             match_type = "exact"
+            for bn in brand_norms:
+                csv_row = csv_lookup.get((bn, model_norm))
+                if csv_row is not None:
+                    break
 
-            # 2. Fuzzy match within same brand
+            # 2. Fuzzy match across all brand aliases
             if csv_row is None:
                 best_score = 0.0
                 best_row = None
                 for (cb, cm), row in csv_lookup.items():
-                    if cb != brand_norm:
+                    if cb not in brand_norms:
                         continue
                     s = fuzzy_score(model_norm, cm)
-                    if s > best_score and s >= 0.60:
+                    if s > best_score and s >= 0.50:  # Lowered to 0.50 as requested by product
                         best_score = s
                         best_row = row
                 if best_row is not None:
@@ -223,6 +306,25 @@ def enrich(dry_run: bool = False):
                     match_type = f"fuzzy({best_score:.2f})"
 
             if csv_row is None:
+                # 3. Manual Specs Match
+                brand_norm = normalize(brand.name)
+                for spec in manual_specs:
+                    if normalize(spec["brand"]) == brand_norm:
+                        s = fuzzy_score(model_norm, clean_model(spec["model_name"]))
+                        if s >= 0.85: # Strict for manual
+                             # Convert dict to a format similar to updates
+                             updates = {k: v for k, v in spec.items() if k not in ["brand", "model_name"]}
+                             # Handle Enums
+                             if 'face_material' in updates and updates['face_material']:
+                                 updates['face_material'] = FaceMaterial(updates['face_material'])
+                             if 'shape' in updates and updates['shape']:
+                                 updates['shape'] = PaddleShape(updates['shape'])
+                             
+                             csv_model_display = f"MANUAL: {spec['model_name']}"
+                             match_type = f"manual({s:.2f})"
+                             break
+
+            if csv_row is None and not updates:
                 no_match += 1
                 match_log.append(f"  ❌ NO MATCH  [{brand.name}] {paddle.model_name!r}")
                 continue
@@ -240,10 +342,9 @@ def enrich(dry_run: bool = False):
             cm = clean_float(csv_row[COL_CORE_MM])
             hl = clean_str(csv_row[COL_HANDLE_LENGTH])
             gc = clean_str(csv_row[COL_GRIP_CIRC])
-            core_mat = clean_material(csv_row[COL_CORE_MATERIAL])
-            shape_str = clean_str(csv_row[COL_SHAPE])
-            # Use first non-null face material text
-            face_str = clean_str(csv_row[COL_FACE_MATERIAL_A]) or clean_str(csv_row[COL_FACE_MATERIAL_B])
+
+            # Smart column extraction (handles shifted CSV rows)
+            shape_str, face_str, core_mat = smart_extract_columns(csv_row)
 
             if paddle.swing_weight is None and sw:
                 updates['swing_weight'] = sw
@@ -267,6 +368,11 @@ def enrich(dry_run: bool = False):
                 s = infer_shape(shape_str)
                 if s:
                     updates['shape'] = s
+            if paddle.shape is None and 'shape' not in updates:
+                # Fallback: infer shape from model name
+                s = infer_shape(paddle.model_name)
+                if s:
+                    updates['shape'] = s
             if paddle.face_material is None and face_str:
                 f = infer_face_material(face_str)
                 if f:
@@ -274,6 +380,20 @@ def enrich(dry_run: bool = False):
 
             if not updates:
                 continue
+
+            # Reject matches that barely enriched (likely wrong match)
+            if len(updates) < 3:
+                continue
+
+            # Apply manual overrides for known shifted-column paddles
+            brand_lower = brand.name.lower()
+            model_lower = paddle.model_name.lower()
+            for override_brand, override_model, override_fields in MANUAL_OVERRIDES:
+                if override_brand in brand_lower and override_model in model_lower:
+                    for field, value in override_fields.items():
+                        if getattr(paddle, field) is None and field not in updates:
+                            updates[field] = value
+                    break
 
             enriched += 1
             for field, value in updates.items():
@@ -284,11 +404,9 @@ def enrich(dry_run: bool = False):
                     setattr(paddle, field, value)
 
                 paddle.specs_source = f"csv_enriched+{match_type}"
-                real_fields = sum(1 for v in [
-                    paddle.swing_weight, paddle.twist_weight,
-                    paddle.spin_rpm, paddle.power_rating
-                ] if v is not None)
-                paddle.specs_confidence = real_fields / 4.0
+                # Use the new binary specs_confidence from roadmap
+                from app.models.paddle import calculate_specs_confidence
+                paddle.specs_confidence = calculate_specs_confidence(paddle)
 
         if not dry_run:
             session.commit()

@@ -33,6 +33,9 @@ SOURCES = [
     ("data/raw/propadel_products.csv", "ProPadel"),
     ("data/raw/prospin_products.csv", "ProSpin"),
     ("data/raw/joola_brazil.csv", "Joola Brasil"),
+    ("data/raw/yosports.csv", "yoSports"),
+    ("data/raw/loja_supremo.csv", "Loja Supremo"),
+    ("data/raw/shark.csv", "Shark"),
 ]
 
 EXCLUDED = {"nan", "none", "unknown", "0", "n/a", ""}
