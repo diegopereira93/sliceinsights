@@ -9,24 +9,18 @@ export const getApiBaseUrl = (): string => {
 
     // SERVER-SIDE (Docker/Local): Use internal network to avoid ECONNREFUSED
     if (!isBrowser && process.env.BACKEND_URL) {
-        // BACKEND_URL is typically "http://backend:8000" or "https://url.com"
-        // We ensure we don't double apppend /api/v1 if it's already there (though usually it's not)
         return process.env.BACKEND_URL.includes('/api/v1')
             ? process.env.BACKEND_URL
             : `${process.env.BACKEND_URL}/api/v1`;
     }
 
-    // CLIENT-SIDE or Vercel Fallback: Use configured public URL
+    // CLIENT-SIDE or Vercel SSR: Use NEXT_PUBLIC env var if baked into bundle
     if (process.env.NEXT_PUBLIC_API_URL) {
         return process.env.NEXT_PUBLIC_API_URL;
     }
 
-    // Browser Fallback: use relative path (rewrites will handle it)
-    if (isBrowser) {
-        return `${window.location.origin}/api/v1`;
-    }
-
-    // Ultimate Fallback
+    // Fallback: Always use the hardcoded Render backend URL
+    // Note: window.location.origin would hit Vercel (no backend!) not Render
     return RENDER_BACKEND_URL;
 };
 
