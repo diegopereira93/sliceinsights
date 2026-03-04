@@ -1,0 +1,54 @@
+[
+    {
+        "brand": "Shark",
+        "model_name": "Shark BITE 2023",
+        "core_thickness_mm": 16.0,
+        "face_material": "Fiberglass",
+        "core_material": "Polymer Honeycomb",
+        "shape": "Standard",
+        "swing_weight": 230,
+        "spin_rpm": 1500,
+        "power_rating": 7,
+        "handle_length": "5.0",
+        "grip_circumference": "4.25"
+    },
+    {
+        "brand": "Shark",
+        "model_name": "Shark Torpedo 2024",
+        "core_thickness_mm": 16.0,
+        "face_material": "Carbon",
+        "core_material": "Polymer Honeycomb",
+        "shape": "Elongated",
+        "swing_weight": 235,
+        "spin_rpm": 1800,
+        "power_rating": 8,
+        "handle_length": "5.3",
+        "grip_circumference": "4.25"
+    },
+    {
+        "brand": "Shark",
+        "model_name": "Shark Hunter 2024",
+        "core_thickness_mm": 13.0,
+        "face_material": "Carbon",
+        "core_material": "Polymer Honeycomb",
+        "shape": "Standard",
+        "swing_weight": 225,
+        "spin_rpm": 1700,
+        "power_rating": 8,
+        "handle_length": "5.0",
+        "grip_circumference": "4.25"
+    },
+    {
+        "brand": "Shark",
+        "model_name": "Shark Speedy 2024",
+        "core_thickness_mm": 16.0,
+        "face_material": "Fiberglass",
+        "core_material": "Polymer Honeycomb",
+        "shape": "Standard",
+        "swing_weight": 220,
+        "spin_rpm": 1400,
+        "power_rating": 6,
+        "handle_length": "5.0",
+        "grip_circumference": "4.25"
+    }
+]

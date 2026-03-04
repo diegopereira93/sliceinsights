@@ -9,6 +9,7 @@ Run with:
 import sys
 import re
 import argparse
+import json
 from pathlib import Path
 from difflib import SequenceMatcher
 
@@ -23,6 +24,7 @@ from app.models import Brand, PaddleMaster
 from app.models.enums import FaceMaterial, PaddleShape
 
 CSV_PATH = Path(__file__).parent.parent / "app" / "data" / "paddle_stats_dump.csv"
+MANUAL_SPECS_PATH = Path(__file__).parent.parent / "app" / "data" / "manual_specs.json"
 
 # CSV Column mapping (verified against actual data, 21 columns total)
 COL_BRAND = 0
@@ -60,7 +62,11 @@ NOISE_TOKENS = {
     'edition', 'limited', 'especial', 'edicao', 'edição',
     'regal', 'sunset',
     # Player names (noise in product titles)
-    'anna', 'leight', 'waters', 'jack', 'sock',
+    'anna', 'leight', 'waters', 'jack', 'sock', 'ben', 'johns', 'colin', 'shick',
+    # Tech terms
+    'infinigrit', 'raw', 'carbon', 'fiber', 'kevlar', '18k', '3k',
+    # Marketing
+    'new', 'novo', 'lancamento', 'lançamento', 'promo', 'promocao', 'promoção',
 }
 
 # Brand alias map: DB brand name → CSV brand name (lowercase)
@@ -70,11 +76,16 @@ BRAND_ALIASES: dict[str, list[str]] = {
     '3rd shot': ['3rdshot'],
     'slk': ['slk'],
     'selkirk slk': ['slk'],
-    'selkirk': ['selkirk', 'selkirk labs'],  # Cross-match Labs variants
-    'selkirk labs': ['selkirk labs', 'selkirk'],
-    'proxr': ['proxr'],
-    'pro xr': ['proxr'],
-    'start': ['start'],
+    'selkirk': ['selkirk', 'selkirk labs', 'slk'],  # Cross-match SLK under Selkirk
+    'selkirk labs': ['selkirk labs', 'selkirk', 'slk'],
+    'proxr': ['proxr', 'pro xr'],
+    'start': ['3rdshot'], # 3rdShot Start series
+    'joola': ['joola'],
+    'diadem': ['diadem'],
+    'engage': ['engage'],
+    'paddletek': ['paddletek'],
+    'head': ['head'],
+    'adidas': ['adidas'],
 }
 
 # Manual overrides for paddles that match CSV but have shifted columns
@@ -240,6 +251,12 @@ def enrich(dry_run: bool = False):
 
         print(f"🎾 DB: {len(paddles)} paddles\n")
 
+        # Load manual specs if file exists
+        manual_specs = []
+        if MANUAL_SPECS_PATH.exists():
+            with open(MANUAL_SPECS_PATH, "r") as f:
+                manual_specs = json.load(f)
+
         # Build CSV lookup: {(brand_norm, model_norm): row}
         csv_lookup: dict[tuple[str, str], any] = {}
         for _, row in df.iterrows():
@@ -260,9 +277,13 @@ def enrich(dry_run: bool = False):
 
             brand_norms = resolve_brands(brand.name)
             model_norm = clean_model(paddle.model_name)
+            
+            updates = {}
+            csv_row = None
+            csv_model_display = ""
+            match_type = ""
 
             # 1. Exact match (try all brand aliases)
-            csv_row = None
             match_type = "exact"
             for bn in brand_norms:
                 csv_row = csv_lookup.get((bn, model_norm))
@@ -277,7 +298,7 @@ def enrich(dry_run: bool = False):
                     if cb not in brand_norms:
                         continue
                     s = fuzzy_score(model_norm, cm)
-                    if s > best_score and s >= 0.55:  # Lowered from 0.60
+                    if s > best_score and s >= 0.50:  # Lowered to 0.50 as requested by product
                         best_score = s
                         best_row = row
                 if best_row is not None:
@@ -285,6 +306,25 @@ def enrich(dry_run: bool = False):
                     match_type = f"fuzzy({best_score:.2f})"
 
             if csv_row is None:
+                # 3. Manual Specs Match
+                brand_norm = normalize(brand.name)
+                for spec in manual_specs:
+                    if normalize(spec["brand"]) == brand_norm:
+                        s = fuzzy_score(model_norm, clean_model(spec["model_name"]))
+                        if s >= 0.85: # Strict for manual
+                             # Convert dict to a format similar to updates
+                             updates = {k: v for k, v in spec.items() if k not in ["brand", "model_name"]}
+                             # Handle Enums
+                             if 'face_material' in updates and updates['face_material']:
+                                 updates['face_material'] = FaceMaterial(updates['face_material'])
+                             if 'shape' in updates and updates['shape']:
+                                 updates['shape'] = PaddleShape(updates['shape'])
+                             
+                             csv_model_display = f"MANUAL: {spec['model_name']}"
+                             match_type = f"manual({s:.2f})"
+                             break
+
+            if csv_row is None and not updates:
                 no_match += 1
                 match_log.append(f"  ❌ NO MATCH  [{brand.name}] {paddle.model_name!r}")
                 continue
