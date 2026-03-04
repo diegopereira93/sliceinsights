@@ -577,6 +577,15 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
                             <h2 className="text-2xl font-bold">Match Perfeito Encontrado!</h2>
                             <p className="text-zinc-400 max-w-[280px] mb-2">Preparamos uma recomendação personalizada baseada no seu perfil.</p>
 
+                            {recommendedPaddle && (
+                                <div className="w-full text-left mb-4">
+                                    <CoachChatInterface
+                                        grokDossier={grokDossier || `Olá! Analisei as suas respostas e a ${recommendedPaddle.brand} ${recommendedPaddle.name} é a raquete ideal para o seu perfil. O que gostaria de saber sobre ela?`}
+                                        contextString={`O usuário recebeu a raquete ${recommendedPaddle.brand} ${recommendedPaddle.name} por R$${recommendedPaddle.price}. Responda dúvidas sobre essa raquete.`}
+                                    />
+                                </div>
+                            )}
+
                             {recommendedPaddle ? (
                                 <motion.div
                                     initial={{ scale: 0.9, opacity: 0 }}
@@ -603,20 +612,10 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
                                 </div>
                             )}
 
-                            {recommendedPaddle && (
-                                <div className="w-full text-left mb-4">
-                                    <CoachChatInterface
-                                        grokDossier={grokDossier || `Olá! Analisei as suas respostas e a ${recommendedPaddle.brand} ${recommendedPaddle.name} é a raquete ideal para o seu perfil. O que gostaria de saber sobre ela?`}
-                                        contextString={`O usuário recebeu a raquete ${recommendedPaddle.brand} ${recommendedPaddle.name} por R$${recommendedPaddle.price}. Responda dúvidas sobre essa raquete.`}
-                                    />
-                                </div>
-                            )}
-
                             <div className="flex flex-col gap-2 w-full">
                                 <Button
                                     onClick={() => {
                                         if (recommendedPaddle) onRecommend(recommendedPaddle);
-                                        setShowResults(false);
                                     }}
                                     variant="default"
                                     className="w-full font-bold h-12 rounded-xl"
