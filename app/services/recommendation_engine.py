@@ -57,7 +57,7 @@ class RecommendationEngine:
             )
             .join(Brand, PaddleMaster.brand_id == Brand.id)
             .outerjoin(offers_subquery, PaddleMaster.id == offers_subquery.c.paddle_id)
-            .where(PaddleMaster.specs_confidence >= 0.0)
+            .where(PaddleMaster.specs_confidence == 1.0)  # Quality gate: only fully-verified paddles
         )
         
         # 3. Apply Hard Filters
@@ -94,7 +94,7 @@ class RecommendationEngine:
                 )
                 .join(Brand, PaddleMaster.brand_id == Brand.id)
                 .outerjoin(offers_subquery, PaddleMaster.id == offers_subquery.c.paddle_id)
-                .where(PaddleMaster.specs_confidence >= 0.0)
+                .where(PaddleMaster.specs_confidence == 1.0)  # Quality gate: only fully-verified paddles
             )
             if profile.has_tennis_elbow:
                 query_relaxed = query_relaxed.where(
@@ -132,7 +132,6 @@ class RecommendationEngine:
                     "model": p["model_name"],
                     "price": p["min_price"],
                     "ratings": p["ratings"],
-                    "confidence": p["paddle"].specs_confidence
                 } for p in paddles_data[:candidate_pool_limit]
             ]
             
@@ -236,12 +235,11 @@ class RecommendationEngine:
                 else:  # BALANCED
                     main_score = (p_val + c_val) / 2
 
-            # 2. Tie-Breaker Logic
-            confidence = paddle.specs_confidence or 0.0
+            # 2. Tie-Breaker Logic (all paddles have specs_confidence == 1.0)
             price = float(item["min_price"]) if item["min_price"] else 9999.0
             jitter = (hash(paddle.model_name) % 100) / 1000.0
 
-            return (main_score, confidence, -price, jitter)
+            return (main_score, -price, jitter)
 
         return sorted(paddles_data, key=score_fn, reverse=True)
 

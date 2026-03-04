@@ -77,6 +77,14 @@ BRAND_ALIASES: dict[str, list[str]] = {
     'start': ['start'],
 }
 
+# Manual overrides for paddles that match CSV but have shifted columns
+# Key: (brand_norm_substring, model_substring) → fields to set
+MANUAL_OVERRIDES: list[tuple[str, str, dict]] = [
+    ('engage', 'pursuit pro1 innovation', {'shape': PaddleShape.STANDARD}),
+    ('engage', 'pursuit pro1 hybrid', {'face_material': FaceMaterial.CARBON}),
+    ('proxr', 'signature', {'shape': PaddleShape.ELONGATED}),
+]
+
 
 def normalize(text: str) -> str:
     """Lowercase, strip accents, remove non-alphanumeric except spaces."""
@@ -336,6 +344,16 @@ def enrich(dry_run: bool = False):
             # Reject matches that barely enriched (likely wrong match)
             if len(updates) < 3:
                 continue
+
+            # Apply manual overrides for known shifted-column paddles
+            brand_lower = brand.name.lower()
+            model_lower = paddle.model_name.lower()
+            for override_brand, override_model, override_fields in MANUAL_OVERRIDES:
+                if override_brand in brand_lower and override_model in model_lower:
+                    for field, value in override_fields.items():
+                        if getattr(paddle, field) is None and field not in updates:
+                            updates[field] = value
+                    break
 
             enriched += 1
             for field, value in updates.items():
