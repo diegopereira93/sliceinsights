@@ -155,3 +155,61 @@ class TestCalculatePaddleRatings:
         paddle = _make_paddle(power_rating=7)
         ratings = calculate_paddle_ratings(paddle)
         assert ratings['power'] == 7
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Inference Functions (Phase 2)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+class TestInferFaceMaterial:
+    def test_raw_carbon_fiber(self):
+        from app.models.enums import FaceMaterial
+        from scripts.enrich_from_csv import infer_face_material
+        assert infer_face_material("Raw carbon fiber") == FaceMaterial.CARBON
+
+    def test_3k_carbon_fiber(self):
+        from app.models.enums import FaceMaterial
+        from scripts.enrich_from_csv import infer_face_material
+        assert infer_face_material("3k carbon fiber") == FaceMaterial.CARBON
+
+    def test_kevlar(self):
+        from app.models.enums import FaceMaterial
+        from scripts.enrich_from_csv import infer_face_material
+        assert infer_face_material("Kevlar") == FaceMaterial.KEVLAR
+
+    def test_composite_is_fiberglass(self):
+        from app.models.enums import FaceMaterial
+        from scripts.enrich_from_csv import infer_face_material
+        assert infer_face_material("(Composite)") == FaceMaterial.FIBERGLASS
+
+    def test_titanium_is_hybrid(self):
+        from app.models.enums import FaceMaterial
+        from scripts.enrich_from_csv import infer_face_material
+        assert infer_face_material("titanium (polyester threads)") == FaceMaterial.HYBRID
+
+
+class TestInferShape:
+    def test_wide_body(self):
+        from app.models.enums import PaddleShape
+        from scripts.enrich_from_csv import infer_shape
+        assert infer_shape("Wide body") == PaddleShape.WIDEBODY
+
+    def test_hybrid_is_standard(self):
+        from app.models.enums import PaddleShape
+        from scripts.enrich_from_csv import infer_shape
+        assert infer_shape("Hybrid") == PaddleShape.STANDARD
+
+    def test_extra_elongated(self):
+        from app.models.enums import PaddleShape
+        from scripts.enrich_from_csv import infer_shape
+        assert infer_shape("Extra Elongated") == PaddleShape.ELONGATED
+
+    def test_model_name_widebody(self):
+        from app.models.enums import PaddleShape
+        from scripts.enrich_from_csv import infer_shape
+        assert infer_shape("Labs Project Boom Stik Widebody 16mm") == PaddleShape.WIDEBODY
+
+    def test_model_name_elongated(self):
+        from app.models.enums import PaddleShape
+        from scripts.enrich_from_csv import infer_shape
+        assert infer_shape("ERA Enlongated 16mm") == PaddleShape.ELONGATED
