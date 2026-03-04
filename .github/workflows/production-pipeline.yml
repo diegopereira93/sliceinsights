@@ -124,11 +124,11 @@ jobs:
       - name: 🏥 Health Check Gate
         run: |
           echo "Checking Backend Health..."
-          MAX_RETRIES=12 # 2 minutes
+          MAX_RETRIES=24 # 4 minutes
           COUNT=0
           until curl -s https://sliceinsights.onrender.com/api/v1/health | grep "healthy"; do
             if [ $COUNT -eq $MAX_RETRIES ]; then
-              echo "❌ Backend health check failed after 2 minutes."
+              echo "❌ Backend health check failed after 4 minutes."
               exit 1
             fi
             echo "Waiting for backend (Render Cold Start)... ($COUNT/$MAX_RETRIES)"
