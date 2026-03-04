@@ -74,14 +74,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Deploy to Vercel
-        working-directory: ./
+        working-directory: ./frontend
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: team_ZFJC51ofDNBpjeDzsdlrte9W
           VERCEL_PROJECT_ID: prj_CCR3NNe9rBgZO8xXFglQN58NP6AZ
         run: |
           npm install --global vercel@latest
-          vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
 
   deploy-backend:
     name: 🚀 Deploy Backend (Render)
