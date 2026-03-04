@@ -240,7 +240,7 @@ def enrich(dry_run: bool = False):
             cm = clean_float(csv_row[COL_CORE_MM])
             hl = clean_str(csv_row[COL_HANDLE_LENGTH])
             gc = clean_str(csv_row[COL_GRIP_CIRC])
-            core_mat = clean_material(csv_row[COL_CORE_MATERIAL])
+            core_mat = clean_str(csv_row[COL_CORE_MATERIAL])
             shape_str = clean_str(csv_row[COL_SHAPE])
             # Use first non-null face material text
             face_str = clean_str(csv_row[COL_FACE_MATERIAL_A]) or clean_str(csv_row[COL_FACE_MATERIAL_B])
@@ -284,11 +284,9 @@ def enrich(dry_run: bool = False):
                     setattr(paddle, field, value)
 
                 paddle.specs_source = f"csv_enriched+{match_type}"
-                real_fields = sum(1 for v in [
-                    paddle.swing_weight, paddle.twist_weight,
-                    paddle.spin_rpm, paddle.power_rating
-                ] if v is not None)
-                paddle.specs_confidence = real_fields / 4.0
+                # Use the new binary specs_confidence from roadmap
+                from app.models.paddle import calculate_specs_confidence
+                paddle.specs_confidence = calculate_specs_confidence(paddle)
 
         if not dry_run:
             session.commit()
