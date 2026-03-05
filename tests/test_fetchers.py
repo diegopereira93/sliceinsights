@@ -16,6 +16,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from scripts.fetch_johnkew import (
     read_from_env_base64,
+    download_with_playwright,
     download_file,
     convert_to_csv,
     main as fetch_johnkew_main,
@@ -124,6 +125,7 @@ class TestFetchJohnkewMain:
         with patch.dict(os.environ, {}, clear=False):
             os.environ.pop("JOHNKEW_XLSX_B64", None)
         with patch("scripts.fetch_johnkew.read_from_env_base64", return_value=None), \
+             patch("scripts.fetch_johnkew.download_with_playwright", return_value=False), \
              patch("scripts.fetch_johnkew.download_file", return_value=None), \
              patch("scripts.fetch_johnkew.scrape_page_for_share_link", return_value=None):
             result = fetch_johnkew_main(output=out)
