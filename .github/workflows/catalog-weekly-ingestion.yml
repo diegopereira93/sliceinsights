@@ -26,8 +26,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install uv
-          uv pip install --system pandas sqlmodel sqlalchemy psycopg2-binary playwright httpx
+          pip install -r requirements.txt
           playwright install chromium
 
       # 1. SCRAPING COMERCIAL (Swing/Twist from product pages)
@@ -39,11 +38,13 @@ jobs:
       - name: Download JohnKew CSV
         run: |
           URL="${{ secrets.JOHNKEW_CSV_URL }}"
-          if [[ "$URL" == *.csv ]]; then
+          if [[ -z "$URL" ]]; then
+            echo "⚠️  JOHNKEW_CSV_URL secret is not set -- skipping"
+          elif [[ "$URL" == *.csv ]]; then
             curl -L "$URL" -o /tmp/johnkew.csv
             echo "JOHNKEW_CSV=/tmp/johnkew.csv" >> $GITHUB_ENV
           else
-            echo "JOHNKEW_CSV_URL is not a direct .csv link -- skipping download"
+            echo "⚠️  JOHNKEW_CSV_URL is not a direct .csv link (got: $URL) -- skipping"
           fi
 
       - name: Ingest JohnKew Data
@@ -53,11 +54,13 @@ jobs:
       - name: Download PB Studio CSV
         run: |
           URL="${{ secrets.PB_STUDIO_CSV_URL }}"
-          if [[ "$URL" == *.csv ]]; then
+          if [[ -z "$URL" ]]; then
+            echo "⚠️  PB_STUDIO_CSV_URL secret is not set -- skipping"
+          elif [[ "$URL" == *.csv ]]; then
             curl -L "$URL" -o /tmp/pbstudio.csv
             echo "PB_STUDIO_CSV=/tmp/pbstudio.csv" >> $GITHUB_ENV
           else
-            echo "PB_STUDIO_CSV_URL is not a direct .csv link -- skipping download"
+            echo "⚠️  PB_STUDIO_CSV_URL is not a direct .csv link (got: $URL) -- skipping"
           fi
 
       - name: Ingest PB Studio Data
