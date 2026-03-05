@@ -12,6 +12,14 @@ import argparse
 from pathlib import Path
 
 import pandas as pd
+
+
+def _read_file(path: Path) -> pd.DataFrame:
+    """Read a CSV or Excel file transparently."""
+    suffix = path.suffix.lower()
+    if suffix in (".xlsx", ".xls"):
+        return pd.read_excel(path, engine="openpyxl" if suffix == ".xlsx" else "xlrd")
+    return pd.read_csv(path, on_bad_lines='skip')
 from sqlmodel import Session, select
 from sqlalchemy.orm import attributes
 
@@ -43,8 +51,8 @@ def ingest(csv_path: str, dry_run: bool = False):
         print(f"❌ CSV not found: {path}")
         return
 
-    df = pd.read_csv(path, on_bad_lines='skip')
-    print(f"📦 CSV: {len(df)} rows loaded")
+    df = _read_file(path)
+    print(f"📦 File: {len(df)} rows loaded")
 
     # Detect Columns
     brand_col = find_column(df, ["brand"])

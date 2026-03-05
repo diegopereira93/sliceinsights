@@ -9,6 +9,12 @@ on:
 env:
   DATABASE_URL_SYNC: ${{ secrets.DATABASE_URL_SYNC }}
   GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+  # JohnKew Excel database encoded as base64.
+  # Generate: base64 -w 0 Paddle-Metrics-Master.xlsx
+  # Then add the output as JOHNKEW_XLSX_B64 in GitHub Secrets.
+  JOHNKEW_XLSX_B64: ${{ secrets.JOHNKEW_XLSX_B64 }}
+  # Optional: Notion token to access private databases (not needed for public PB Studio DB)
+  # NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
 
 jobs:
   ingest-and-enrich:
@@ -29,44 +35,59 @@ jobs:
           pip install -r requirements.txt
           playwright install chromium
 
+      # ──────────────────────────────────────────────────────────
       # 1. SCRAPING COMERCIAL (Swing/Twist from product pages)
+      # ──────────────────────────────────────────────────────────
       - name: Scrape JustPaddles Paddle Lab
         run: python scripts/scrape_justpaddles.py
         continue-on-error: true  # Don't fail the whole run if scraping is blocked
 
-      # 2. CSV INGESTION (Technical lab data)
-      - name: Download JohnKew CSV
+      # ──────────────────────────────────────────────────────────
+      # 2. DATA INGESTION — JohnKew (public Excel database)
+      # ──────────────────────────────────────────────────────────
+      - name: Fetch JohnKew Database (auto)
+        id: fetch_johnkew
         run: |
-          URL="${{ secrets.JOHNKEW_CSV_URL }}"
-          if [[ -z "$URL" ]]; then
-            echo "⚠️  JOHNKEW_CSV_URL secret is not set -- skipping"
-          elif [[ "$URL" == *.csv ]]; then
-            curl -L "$URL" -o /tmp/johnkew.csv
+          python scripts/fetch_johnkew.py --out /tmp/johnkew.csv
+          if [[ -f /tmp/johnkew.csv ]]; then
             echo "JOHNKEW_CSV=/tmp/johnkew.csv" >> $GITHUB_ENV
+            echo "fetched=true" >> $GITHUB_OUTPUT
           else
-            echo "⚠️  JOHNKEW_CSV_URL is not a direct .csv link (got: $URL) -- skipping"
+            echo "⚠️  JohnKew fetch produced no output file"
+            echo "fetched=false" >> $GITHUB_OUTPUT
           fi
+        continue-on-error: true  # Don't block pipeline if site is temporarily down
 
       - name: Ingest JohnKew Data
-        if: env.JOHNKEW_CSV != ''
+        if: steps.fetch_johnkew.outputs.fetched == 'true'
         run: python scripts/ingest_johnkew_csv.py --csv "$JOHNKEW_CSV"
 
-      - name: Download PB Studio CSV
+      # ──────────────────────────────────────────────────────────
+      # 3. DATA INGESTION — PB Studio (public Notion database)
+      # ──────────────────────────────────────────────────────────
+      - name: Fetch PB Studio Database (auto)
+        id: fetch_pbstudio
         run: |
-          URL="${{ secrets.PB_STUDIO_CSV_URL }}"
-          if [[ -z "$URL" ]]; then
-            echo "⚠️  PB_STUDIO_CSV_URL secret is not set -- skipping"
-          elif [[ "$URL" == *.csv ]]; then
-            curl -L "$URL" -o /tmp/pbstudio.csv
-            echo "PB_STUDIO_CSV=/tmp/pbstudio.csv" >> $GITHUB_ENV
-          else
-            echo "⚠️  PB_STUDIO_CSV_URL is not a direct .csv link (got: $URL) -- skipping"
+          NOTION_ARGS=""
+          if [[ -n "${{ secrets.NOTION_TOKEN }}" ]]; then
+            NOTION_ARGS="--token ${{ secrets.NOTION_TOKEN }}"
           fi
+          python scripts/fetch_pb_studio.py --out /tmp/pbstudio.csv $NOTION_ARGS
+          if [[ -f /tmp/pbstudio.csv ]]; then
+            echo "PB_STUDIO_CSV=/tmp/pbstudio.csv" >> $GITHUB_ENV
+            echo "fetched=true" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️  PB Studio fetch produced no output file"
+            echo "fetched=false" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true  # Don't block pipeline if Notion API is down
 
       - name: Ingest PB Studio Data
-        if: env.PB_STUDIO_CSV != ''
+        if: steps.fetch_pbstudio.outputs.fetched == 'true'
         run: python scripts/ingest_pb_studio_csv.py --csv "$PB_STUDIO_CSV"
 
-      # 3. AUDIT & RECALCULATE CONFIDENCE SCORES
+      # ──────────────────────────────────────────────────────────
+      # 4. AUDIT & RECALCULATE CONFIDENCE SCORES
+      # ──────────────────────────────────────────────────────────
       - name: Audit and Fix Data Quality
         run: python scripts/audit_data_quality.py --fix
