@@ -1,0 +1,75 @@
+name: 🎾 Catalog Weekly Ingestion
+
+on:
+  schedule:
+    # Run every Sunday at 00:00 UTC (Saturdays 21:00 Brasília)
+    - cron: '0 0 * * 0'
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+env:
+  DATABASE_URL_SYNC: ${{ secrets.DATABASE_URL_SYNC }}
+  GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+
+jobs:
+  ingest-and-enrich:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install --system pandas sqlmodel sqlalchemy psycopg2-binary playwright httpx
+          playwright install chromium
+
+      # ──────────────────────────────────────────────────────────
+      # 1. SCRAPING COMERCIAL (Swing/Twist from product pages)
+      # ──────────────────────────────────────────────────────────
+      - name: 🕸️ Scrape JustPaddles Paddle Lab
+        run: python scripts/scrape_justpaddles.py
+        continue-on-error: true  # Don't fail the whole run if scraping is blocked
+
+      # ──────────────────────────────────────────────────────────
+      # 2. CSV INGESTION (Technical lab data)
+      # ──────────────────────────────────────────────────────────
+      - name: 📥 Download JohnKew CSV
+        run: |
+          URL="${{ secrets.JOHNKEW_CSV_URL }}"
+          if [[ "$URL" == *.csv ]]; then
+            curl -L "$URL" -o /tmp/johnkew.csv
+            echo "JOHNKEW_CSV=/tmp/johnkew.csv" >> $GITHUB_ENV
+          else
+            echo "⚠️ JOHNKEW_CSV_URL is not a direct .csv link — skipping download"
+          fi
+
+      - name: 🧠 Ingest JohnKew Data
+        if: env.JOHNKEW_CSV != ''
+        run: python scripts/ingest_johnkew_csv.py --csv "$JOHNKEW_CSV"
+
+      - name: 📥 Download PB Studio CSV
+        run: |
+          URL="${{ secrets.PB_STUDIO_CSV_URL }}"
+          if [[ "$URL" == *.csv ]]; then
+            curl -L "$URL" -o /tmp/pbstudio.csv
+            echo "PB_STUDIO_CSV=/tmp/pbstudio.csv" >> $GITHUB_ENV
+          else
+            echo "⚠️ PB_STUDIO_CSV_URL is not a direct .csv link — skipping download"
+          fi
+
+      - name: 🧠 Ingest PB Studio Data
+        if: env.PB_STUDIO_CSV != ''
+        run: python scripts/ingest_pb_studio_csv.py --csv "$PB_STUDIO_CSV"
+
+      # ──────────────────────────────────────────────────────────
+      # 3. AUDIT & RECALCULATE CONFIDENCE SCORES
+      # ──────────────────────────────────────────────────────────
+      - name: 📊 Audit & Fix Data Quality
+        run: python scripts/audit_data_quality.py --fix

@@ -32,6 +32,7 @@ def _make_paddle(**overrides):
         'twist_weight': 6.5,
         'power_original': 8.5,
         'grip_circumference': '4.125',
+        'validation_sources': [],
     }
     defaults.update(overrides)
     paddle = MagicMock()
@@ -45,11 +46,19 @@ def _make_paddle(**overrides):
 # ═══════════════════════════════════════════════════════════════════════════════
 
 class TestCalculateSpecsConfidence:
+    def test_2_sources_returns_1(self):
+        paddle = _make_paddle(validation_sources=["johnkew", "pbstudio"])
+        assert calculate_specs_confidence(paddle) == 1.0
+
     def test_all_fields_filled_returns_1(self):
         paddle = _make_paddle()
         assert calculate_specs_confidence(paddle) == 1.0
 
-    def test_one_field_missing_returns_0(self):
+    def test_1_source_not_all_fields_returns_0_5(self):
+        paddle = _make_paddle(validation_sources=["pbstudio"], swing_weight=None)
+        assert calculate_specs_confidence(paddle) == 0.5
+
+    def test_no_sources_not_all_fields_returns_0(self):
         for field in REQUIRED_FIELDS:
             paddle = _make_paddle(**{field: None})
             assert calculate_specs_confidence(paddle) == 0.0, (
