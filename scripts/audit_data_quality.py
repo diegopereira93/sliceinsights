@@ -196,6 +196,24 @@ def audit(fix: bool = False):
                 print(f"     [{brand}] {model}")
 
         # ═══════════════════════════════════════════════════════════════════
+        # 2.5. VALIDATION SOURCES DISTRIBUTION
+        # ═══════════════════════════════════════════════════════════════════
+        print(f"\n{'─'*50}")
+        print("  ✅ 2.5. VALIDATION SOURCES")
+        print(f"{'─'*50}")
+
+        sources_counts = defaultdict(int)
+        for paddle in paddles:
+            sources = getattr(paddle, 'validation_sources', [])
+            if not sources:
+                sources_counts["none"] += 1
+            for source in sources:
+                sources_counts[source] += 1
+                
+        for source, count in sorted(sources_counts.items(), key=lambda x: -x[1]):
+            print(f"  {source:15s}: {count:3d} paddles")
+
+        # ═══════════════════════════════════════════════════════════════════
         # 3. NON-PADDLE DETECTION
         # ═══════════════════════════════════════════════════════════════════
         print(f"\n{'─'*50}")
@@ -316,7 +334,12 @@ def audit(fix: bool = False):
             1 for p in paddles
             if calculate_specs_confidence(p) == 1.0 and p.id in offer_counts
         )
-        print(f"     {ready} paddles ready for production")
+        ready_hybrid = sum(
+            1 for p in paddles
+            if calculate_specs_confidence(p) == 1.0 and p.id in offer_counts and len(getattr(p, 'validation_sources', [])) >= 1
+        )
+        print(f"     {ready} paddles ready for production (Total)")
+        print(f"     {ready_hybrid} paddles ready for production (Hybrid Pipeline Coverage)")
         print(f"{'='*70}\n")
 
 

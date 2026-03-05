@@ -85,6 +85,10 @@ class PaddleMaster(PaddleMasterBase, table=True):
 
     # Data Quality
     specs_source: str = Field(default="manual")
+    validation_sources: List[str] = Field(
+        default=[],
+        sa_column=Column(ARRAY(String), nullable=False, server_default="{}")
+    )
     specs_confidence: float = Field(default=1.0)
 
 
@@ -120,11 +124,24 @@ REQUIRED_FIELDS = [
 
 
 def calculate_specs_confidence(paddle: "PaddleMaster") -> float:
-    """Binary confidence: 1.0 if ALL required fields are filled, 0.0 otherwise."""
+    """Confidence: 1.0 if verified by 2+ sources, 0.5 if 1 source. Fallback to 1.0 if all fields are filled."""
+    sources = getattr(paddle, 'validation_sources', [])
+    if len(sources) >= 2:
+        return 1.0
+
+    all_filled = True
     for field in REQUIRED_FIELDS:
         if getattr(paddle, field, None) is None:
-            return 0.0
-    return 1.0
+            all_filled = False
+            break
+            
+    if all_filled:
+        return 1.0
+        
+    if len(sources) == 1:
+        return 0.5
+        
+    return 0.0
 
 
 def calculate_control(core_thickness_mm: Optional[float]) -> Optional[int]:
@@ -188,6 +205,7 @@ class PaddleRead(SQLModel):
     ratings: PaddleRatings
     specs_source: str
     specs_confidence: float
+    validation_sources: List[str] = []
     is_synthetic: bool = False
     image_url: Optional[str] = None
     is_featured: bool = False
@@ -224,6 +242,7 @@ class PaddleRead(SQLModel):
             ),
             specs_source=paddle.specs_source,
             specs_confidence=paddle.specs_confidence,
+            validation_sources=getattr(paddle, 'validation_sources', []),
             is_synthetic=ratings_dict.get("is_synthetic", False),
             image_url=paddle.image_url,
             is_featured=paddle.is_featured,
