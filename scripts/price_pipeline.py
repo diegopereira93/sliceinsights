@@ -59,7 +59,14 @@ def price_snapshots_source(paddle_map):
             print("   Execute primeiro: python scripts/scrape_brazil_store.py")
             return
         
-        df = pd.read_csv(CSV_PATH)
+        try:
+            if not os.path.exists(CSV_PATH) or os.path.getsize(CSV_PATH) == 0:
+                print(f"⚠️ Arquivo {CSV_PATH} não encontrado ou vazio. Pulando...")
+                return
+            df = pd.read_csv(CSV_PATH)
+        except Exception as e:
+            print(f"❌ Erro ao ler {CSV_PATH}: {e}")
+            return
         snapshot_date = datetime.now().strftime("%Y-%m-%d")
         
         for _, row in df.iterrows():
@@ -97,10 +104,14 @@ def run_pipeline():
         return
     
     # 2. Configurar pipeline dlt
+    db_url = os.getenv("DATABASE_URL_SYNC") or os.getenv("DATABASE_URL")
+    if db_url and db_url.startswith("postgresql+asyncpg://"):
+        db_url = db_url.replace("postgresql+asyncpg://", "postgresql://")
+        
     pipeline = dlt.pipeline(
         pipeline_name="price_history_sync",
-        destination="postgres",
-        dataset_name="public", # Usar public para alinhar com SQLModel
+        destination=dlt.destinations.postgres(credentials=db_url) if db_url else "postgres",
+        dataset_name="price_data",
     )
     
     print(f"🚀 Iniciando pipeline para {len(paddle_map)} paddles mapeados...")
@@ -137,7 +148,7 @@ def detect_price_drops(threshold_pct: float = 10.0):
             ps.price_brl as current_price,
             ps.url as product_url,
             ps.snapshot_date as latest_date
-        FROM public.price_snapshots ps
+        FROM price_data.price_snapshots ps
         ORDER BY ps.paddle_id, ps.store_name, ps.snapshot_date DESC
     ),
     previous_prices AS (
@@ -146,7 +157,7 @@ def detect_price_drops(threshold_pct: float = 10.0):
             ps.store_name,
             ps.price_brl as previous_price,
             ps.snapshot_date as previous_date
-        FROM public.price_snapshots ps
+        FROM price_data.price_snapshots ps
         WHERE ps.snapshot_date < (SELECT MAX(snapshot_date) FROM public.price_snapshots)
         ORDER BY ps.paddle_id, ps.store_name, ps.snapshot_date DESC
     )
