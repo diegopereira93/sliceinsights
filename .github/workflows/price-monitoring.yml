@@ -24,7 +24,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          uv pip install --system dlt[postgres] pandas playwright psycopg2-binary httpx python-dotenv
+          uv pip install --system dlt[postgres] pandas playwright psycopg2-binary httpx python-dotenv bs4
           playwright install chromium
       
       - name: Run Scraper
