@@ -115,5 +115,64 @@ def run_pipeline():
     return load_info
 
 
+def detect_price_drops(threshold_pct: float = 10.0):
+    """
+    Detecta quedas de preço significativas comparando com o histórico.
+    
+    Args:
+        threshold_pct: Percentual mínimo de queda para alertar
+        
+    Returns:
+        Lista de produtos com queda de preço
+    """
+    import psycopg2
+    
+    conn = psycopg2.connect(os.getenv("DATABASE_URL_SYNC"))
+    
+    query = """
+    WITH latest_prices AS (
+        SELECT DISTINCT ON (ps.paddle_id, ps.store_name)
+            ps.paddle_id,
+            ps.store_name,
+            ps.price_brl as current_price,
+            ps.url as product_url,
+            ps.snapshot_date as latest_date
+        FROM public.price_snapshots ps
+        ORDER BY ps.paddle_id, ps.store_name, ps.snapshot_date DESC
+    ),
+    previous_prices AS (
+        SELECT DISTINCT ON (ps.paddle_id, ps.store_name)
+            ps.paddle_id,
+            ps.store_name,
+            ps.price_brl as previous_price,
+            ps.snapshot_date as previous_date
+        FROM public.price_snapshots ps
+        WHERE ps.snapshot_date < (SELECT MAX(snapshot_date) FROM public.price_snapshots)
+        ORDER BY ps.paddle_id, ps.store_name, ps.snapshot_date DESC
+    )
+    SELECT 
+        l.paddle_id,
+        b.name as brand_name,
+        pm.model_name,
+        p.previous_price,
+        l.current_price,
+        ROUND(((p.previous_price - l.current_price) / p.previous_price * 100)::numeric, 1) as drop_pct,
+        l.product_url,
+        l.store_name
+    FROM latest_prices l
+    JOIN previous_prices p ON l.paddle_id = p.paddle_id AND l.store_name = p.store_name
+    JOIN public.paddle_master pm ON l.paddle_id = pm.id::varchar
+    JOIN public.brands b ON pm.brand_id = b.id
+    WHERE l.current_price < p.previous_price * (1 - %s / 100)
+    ORDER BY drop_pct DESC
+    """
+    
+    try:
+        df = pd.read_sql(query, conn, params=(threshold_pct,))
+        return df.to_dict("records")
+    finally:
+        conn.close()
+
+
 if __name__ == "__main__":
     run_pipeline()
