@@ -158,7 +158,7 @@ def detect_price_drops(threshold_pct: float = 10.0):
             ps.price_brl as previous_price,
             ps.snapshot_date as previous_date
         FROM price_data.price_snapshots ps
-        WHERE ps.snapshot_date < (SELECT MAX(snapshot_date) FROM public.price_snapshots)
+        WHERE ps.snapshot_date < (SELECT MAX(snapshot_date) FROM price_data.price_snapshots)
         ORDER BY ps.paddle_id, ps.store_name, ps.snapshot_date DESC
     )
     SELECT 
@@ -181,6 +181,9 @@ def detect_price_drops(threshold_pct: float = 10.0):
     try:
         df = pd.read_sql(query, conn, params=(threshold_pct,))
         return df.to_dict("records")
+    except Exception as e:
+        print(f"⚠️ Aviso: Não foi possível detectar quedas de preço (a tabela pode estar vazia ou ausente). Detalhes: {e}")
+        return []
     finally:
         conn.close()
 

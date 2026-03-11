@@ -79,6 +79,7 @@ def _sync_missing_columns(conn):
         "BIGINT": "INTEGER",
         "BOOLEAN": "BOOLEAN",
         "TIMESTAMP WITHOUT TIME ZONE": "TIMESTAMP",
+        "ARRAY": "VARCHAR[]",
     }
     
     for table in SQLModel.metadata.sorted_tables:
@@ -108,7 +109,8 @@ def _sync_missing_columns(conn):
             
             sql = f'ALTER TABLE "{table.name}" ADD COLUMN IF NOT EXISTS "{column.name}" {sql_type}{default_clause}'
             try:
-                conn.execute(text(sql))
+                with conn.begin_nested():
+                    conn.execute(text(sql))
             except Exception:
                 pass  # Column might already exist or type might be complex (e.g. ARRAY, Vector)
 
