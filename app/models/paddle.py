@@ -125,7 +125,7 @@ REQUIRED_FIELDS = [
 
 def calculate_specs_confidence(paddle: "PaddleMaster") -> float:
     """Confidence: 1.0 if verified by 2+ sources, 0.5 if 1 source. Fallback to 1.0 if all fields are filled."""
-    sources = getattr(paddle, 'validation_sources', [])
+    sources = getattr(paddle, 'validation_sources', []) or []
     if len(sources) >= 2:
         return 1.0
 
