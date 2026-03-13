@@ -79,6 +79,7 @@ def _sync_missing_columns(conn):
         "BIGINT": "INTEGER",
         "BOOLEAN": "BOOLEAN",
         "TIMESTAMP WITHOUT TIME ZONE": "TIMESTAMP",
+        # Default fallback for ARRAY types if not matched by logic below
         "ARRAY": "VARCHAR[]",
     }
     
@@ -93,13 +94,18 @@ def _sync_missing_columns(conn):
                 continue
             
             # Map SQLAlchemy type to SQL type string
-            col_type = str(column.type)
-            sql_type = type_map.get(col_type.upper(), col_type)
+            col_type = str(column.type).upper()
+            
+            # Robust mapping for ARRAY types
+            if "ARRAY" in col_type:
+                sql_type = "VARCHAR[]"
+            else:
+                sql_type = type_map.get(col_type, col_type)
             
             # Build default clause
             default_clause = ""
             if column.default is not None:
-                default_val = column.default.arg
+                default_val = getattr(column.default, 'arg', None)
                 if isinstance(default_val, bool):
                     default_clause = f" DEFAULT {'TRUE' if default_val else 'FALSE'}"
                 elif isinstance(default_val, (int, float)):
@@ -109,8 +115,12 @@ def _sync_missing_columns(conn):
             
             sql = f'ALTER TABLE "{table.name}" ADD COLUMN IF NOT EXISTS "{column.name}" {sql_type}{default_clause}'
             try:
+                # Use a nested transaction (SAVEPOINT) to isolate this ALTER TABLE
+                # This ensures that if the syntax is wrong, it doesn't abort the global transaction
                 with conn.begin_nested():
                     conn.execute(text(sql))
             except Exception:
-                pass  # Column might already exist or type might be complex (e.g. ARRAY, Vector)
+                # Column might already exist or type might be complex (e.g. Vector)
+                # We skip and let the application handle potential missing column errors later
+                pass
 
