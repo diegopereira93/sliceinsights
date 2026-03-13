@@ -84,7 +84,7 @@ async def extract_lab_data(page) -> dict:
         
     return data
 
-async def run_scraper(dry_run: bool = False):
+async def run_scraper(dry_run: bool = False, limit: int = None):
     mode = "DRY-RUN" if dry_run else "LIVE"
     print(f"🧠 JustPaddles Scraper Pipeline — PostgreSQL [{mode}]")
     print("=" * 60)
@@ -92,62 +92,75 @@ async def run_scraper(dry_run: bool = False):
     init_db_sync()
 
     with Session(sync_engine) as session:
+        # Filter for paddles that actually need verification
         paddles = session.exec(
-            select(PaddleMaster).join(Brand, PaddleMaster.brand_id == Brand.id)
+            select(PaddleMaster)
+            .join(Brand, PaddleMaster.brand_id == Brand.id)
+            .where(PaddleMaster.specs_confidence < 1.0)
         ).all()
+        
         brands = {b.id: b for b in session.exec(select(Brand)).all()}
+
+        if limit:
+            paddles = paddles[:limit]
 
         print(f"🎾 DB: {len(paddles)} paddles to check\n")
         
         updated_count = 0
         no_match = 0
         
+        semaphore = asyncio.Semaphore(3)  # Max 3 concurrent pages to avoid blocking
+
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
-            page = await browser.new_page()
             
-            # Identify paddles missing specs
-            for paddle in paddles:
-                # Skip if already fully confident
-                if paddle.specs_confidence == 1.0:
-                    continue
-                    
-                brand = brands.get(paddle.brand_id)
-                if not brand:
-                    continue
-                    
-                query = f"{brand.name} {paddle.model_name}"
-                print(f"🔍 Searching: {query!r}...")
-                
-                lab_data = await scrape_paddle_lab(page, query)
-                
-                if not lab_data:
-                    no_match += 1
-                    continue
-                    
-                print(f"  ✅ Found Lab Data: {lab_data}")
-                
-                updates = {}
-                if 'swing_weight' in lab_data and not paddle.swing_weight:
-                    updates['swing_weight'] = lab_data['swing_weight']
-                if 'twist_weight' in lab_data and not paddle.twist_weight:
-                    updates['twist_weight'] = lab_data['twist_weight']
-                    
-                # Update validation sources
-                current_sources = list(paddle.validation_sources or [])
-                if SOURCE_NAME not in current_sources:
-                    updates['validation_sources'] = current_sources + [SOURCE_NAME]
-                    
-                if updates:
-                    updated_count += 1
-                    if not dry_run:
-                        for field, value in updates.items():
-                            setattr(paddle, field, value)
-                            
-                        attributes.flag_modified(paddle, "validation_sources")
-                        paddle.specs_confidence = calculate_specs_confidence(paddle)
-                        session.commit()
+            async def process_paddle(paddle):
+                nonlocal updated_count, no_match
+                async with semaphore:
+                    brand = brands.get(paddle.brand_id)
+                    if not brand:
+                        return
                         
+                    query = f"{brand.name} {paddle.model_name}"
+                    print(f"🔍 Searching: {query!r}...")
+                    
+                    # Create a fresh page for each request to avoid state issues
+                    p_page = await browser.new_page()
+                    try:
+                        lab_data = await scrape_paddle_lab(p_page, query)
+                        
+                        if not lab_data:
+                            no_match += 1
+                            return
+                            
+                        print(f"  ✅ Found Lab Data: {lab_data}")
+                        
+                        updates = {}
+                        if 'swing_weight' in lab_data and not paddle.swing_weight:
+                            updates['swing_weight'] = lab_data['swing_weight']
+                        if 'twist_weight' in lab_data and not paddle.twist_weight:
+                            updates['twist_weight'] = lab_data['twist_weight']
+                            
+                        # Update validation sources
+                        current_sources = list(paddle.validation_sources or [])
+                        if SOURCE_NAME not in current_sources:
+                            updates['validation_sources'] = current_sources + [SOURCE_NAME]
+                            
+                        if updates:
+                            updated_count += 1
+                            if not dry_run:
+                                for field, value in updates.items():
+                                    setattr(paddle, field, value)
+                                    
+                                attributes.flag_modified(paddle, "validation_sources")
+                                paddle.specs_confidence = calculate_specs_confidence(paddle)
+                                session.add(paddle) # Ensure it's tracked
+                                session.commit()
+                    finally:
+                        await p_page.close()
+
+            # Process in batches or gather all if small
+            await asyncio.gather(*(process_paddle(p) for p in paddles))
             await browser.close()
             
         print(f"\n{'=' * 60}")
@@ -158,8 +171,9 @@ async def run_scraper(dry_run: bool = False):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true", help="Preview without writing to DB")
+    parser.add_argument("--limit", type=int, help="Limit number of paddles to process")
     args = parser.parse_args()
-    asyncio.run(run_scraper(dry_run=args.dry_run))
+    asyncio.run(run_scraper(dry_run=args.dry_run, limit=args.limit))
 
 if __name__ == "__main__":
     main()
