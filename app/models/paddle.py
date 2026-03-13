@@ -242,7 +242,7 @@ class PaddleRead(SQLModel):
             ),
             specs_source=paddle.specs_source,
             specs_confidence=paddle.specs_confidence,
-            validation_sources=getattr(paddle, 'validation_sources') or [],
+            validation_sources=getattr(paddle, 'validation_sources', []) or [],
             is_synthetic=ratings_dict.get("is_synthetic", False),
             image_url=paddle.image_url,
             is_featured=paddle.is_featured or False,
