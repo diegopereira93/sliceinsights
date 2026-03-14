@@ -120,6 +120,7 @@ class PaddleSpecs(SQLModel):
 REQUIRED_FIELDS = [
     'core_thickness_mm', 'face_material', 'core_material', 'shape',
     'swing_weight', 'spin_rpm', 'power_rating', 'handle_length',
+    'image_url',
 ]
 
 
