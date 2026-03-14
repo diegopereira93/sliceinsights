@@ -72,6 +72,10 @@ def audit(fix: bool = False):
     print(f"  📊 DATA QUALITY AUDIT — Phase 1 [{mode}]")
     print(f"{'='*70}\n")
 
+    import os
+    if not os.getenv("DATABASE_URL_SYNC") and not os.getenv("DATABASE_URL"):
+        print("⚠️ WARNING: No DATABASE_URL_SYNC or DATABASE_URL found. Using default localhost (likely to fail in CI).")
+    
     init_db_sync()
 
     # Load US dump
@@ -96,13 +100,17 @@ def audit(fix: bool = False):
         brands = {b.id: b for b in session.exec(select(Brand)).all()}
 
         total = len(paddles)
+        if total == 0:
+            print("⚠️ WARNING: No paddles found in database. Audit skipped.")
+            return
+
         print(f"🎾 DB Catalog: {total} paddles\n")
 
         # ═══════════════════════════════════════════════════════════════════
         # 1. FIELD COVERAGE
         # ═══════════════════════════════════════════════════════════════════
         print(f"{'─'*50}")
-        print("  📐 1. FIELD COVERAGE (8 Required Fields)")
+        print(f"  📐 1. FIELD COVERAGE ({len(REQUIRED_FIELDS)} Required Fields)")
         print(f"{'─'*50}")
 
         field_filled = defaultdict(int)
@@ -138,7 +146,8 @@ def audit(fix: bool = False):
             status = "✅" if pct == 100 else "⚠️" if pct >= 50 else "🔴"
             print(f"  {status} {field:25s} {bar} {filled:3d}/{total} ({pct:.0f}%)")
 
-        print(f"\n  📊 Complete specs (all 8 fields): {complete_count}/{total} ({complete_count/total*100:.0f}%)")
+        pct_complete = complete_count / total * 100 if total > 0 else 0
+        print(f"\n  📊 Complete specs (all {len(REQUIRED_FIELDS)} fields): {complete_count}/{total} ({pct_complete:.0f}%)")
         print(f"  📊 Incomplete:                    {len(incomplete_paddles)}/{total}")
 
         # ═══════════════════════════════════════════════════════════════════
@@ -323,8 +332,10 @@ def audit(fix: bool = False):
         print(f"  📊 AUDIT SUMMARY")
         print(f"{'='*70}")
         print(f"  Total paddles:           {total}")
-        print(f"  Complete specs (100%):   {complete_count} ({complete_count/total*100:.0f}%)")
-        print(f"  US dump matches:         {len(matched)} ({len(matched)/total*100:.0f}%)")
+        pct_complete_final = complete_count / total * 100 if total > 0 else 0
+        print(f"  Complete specs (100%):   {complete_count} ({pct_complete_final:.0f}%)")
+        pct_matched = len(matched) / total * 100 if total > 0 else 0
+        print(f"  US dump matches:         {len(matched)} ({pct_matched:.0f}%)")
         print(f"  Non-paddles detected:    {len(non_paddles)}")
         print(f"  Duplicates:              {len(dupes)} groups")
         print(f"  With market offers:      {with_offers}")
