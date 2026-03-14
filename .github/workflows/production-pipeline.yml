@@ -104,10 +104,33 @@ jobs:
           fi
 
   # ------------------------------------------------------------------
+  # 🔄 DATA CONSISTENCY SYNC
+  # ------------------------------------------------------------------
+  sync-data-quality:
+    name: 🔄 Sync Data Quality
+    needs: [deploy-backend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run Data Quality Audit & Fix
+        run: python scripts/audit_data_quality.py --fix
+        env:
+          DATABASE_URL_SYNC: ${{ secrets.DATABASE_URL_SYNC }}
+
+  # ------------------------------------------------------------------
   # 🕵️‍♀️ VERIFICATION IN PRODUCTION
   verify-deployment:
     name: 🕵️‍♀️ Verify Live Deployment
-    needs: [deploy-frontend]
+    needs: [deploy-frontend, sync-data-quality]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
