@@ -76,6 +76,10 @@ jobs:
         if: steps.fetch_pbstudio.outputs.fetched == 'true'
         run: python scripts/ingest_pb_studio_csv.py --csv "$PB_STUDIO_CSV"
 
-      # 4. AUDIT
+      # 4. TECHNICAL ENRICHMENT (Hybrid Mapper)
+      - name: Enrich BR Paddles with Technical Specs
+        run: python scripts/enrich_paddles.py
+
+      # 5. AUDIT
       - name: Audit and Fix Data Quality
         run: python scripts/audit_data_quality.py --fix
