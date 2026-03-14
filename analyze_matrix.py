@@ -20,9 +20,12 @@ def analyze():
     counts = Counter(all_picks)
     
     print("\n🏆 Top Recommended Paddles (Distribution):")
-    for paddle, count in counts.most_common():
-        pct = (count / len(successes)) * 100
-        print(f" - {paddle}: {count} ({pct:.1f}%)")
+    if not successes:
+        print(" - (No successful recommendations found)")
+    else:
+        for paddle, count in counts.most_common():
+            pct = (count / len(successes)) * 100
+            print(f" - {paddle}: {count} ({pct:.1f}%)")
         
     # 2. Skill Level Check
     regressions = []
