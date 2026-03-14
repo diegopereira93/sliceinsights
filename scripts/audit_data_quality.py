@@ -110,7 +110,7 @@ def audit(fix: bool = False):
         # 1. FIELD COVERAGE
         # ═══════════════════════════════════════════════════════════════════
         print(f"{'─'*50}")
-        print("  📐 1. FIELD COVERAGE (8 Required Fields)")
+        print(f"  📐 1. FIELD COVERAGE ({len(REQUIRED_FIELDS)} Required Fields)")
         print(f"{'─'*50}")
 
         field_filled = defaultdict(int)
@@ -334,7 +334,6 @@ def audit(fix: bool = False):
         print(f"  Total paddles:           {total}")
         pct_complete_final = complete_count / total * 100 if total > 0 else 0
         print(f"  Complete specs (100%):   {complete_count} ({pct_complete_final:.0f}%)")
-        # pct_matched already handled above if needed, but matched is a list
         pct_matched = len(matched) / total * 100 if total > 0 else 0
         print(f"  US dump matches:         {len(matched)} ({pct_matched:.0f}%)")
         print(f"  Non-paddles detected:    {len(non_paddles)}")
