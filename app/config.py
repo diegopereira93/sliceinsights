@@ -39,11 +39,10 @@ class Settings(BaseSettings):
     @property
     def sync_database_url(self) -> str:
         """Get a synchronous version of the database URL for psycopg2."""
-        if self.database_url_sync:
-            return self.database_url_sync
+        # Use database_url_sync if provided, otherwise fallback to database_url
+        v = self.database_url_sync or self.database_url
         
-        # Fallback to transforming database_url
-        v = self.database_url
+        # Ensure we remove any async driver prefix
         if "+asyncpg" in v:
             v = v.replace("+asyncpg", "")
         
