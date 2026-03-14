@@ -77,6 +77,7 @@ def audit(fix: bool = False):
         print("⚠️ WARNING: No DATABASE_URL_SYNC or DATABASE_URL found. Using default localhost (likely to fail in CI).")
     
     init_db_sync()
+    print("✅ Database connection successful.")
 
     # Load US dump
     if not CSV_PATH.exists():
@@ -214,7 +215,7 @@ def audit(fix: bool = False):
 
         sources_counts = defaultdict(int)
         for paddle in paddles:
-            sources = getattr(paddle, 'validation_sources', [])
+            sources = getattr(paddle, 'validation_sources', []) or []
             if not sources:
                 sources_counts["none"] += 1
             for source in sources:
@@ -348,7 +349,7 @@ def audit(fix: bool = False):
         )
         ready_hybrid = sum(
             1 for p in paddles
-            if calculate_specs_confidence(p) == 1.0 and p.id in offer_counts and len(getattr(p, 'validation_sources', [])) >= 1
+            if calculate_specs_confidence(p) == 1.0 and p.id in offer_counts and len(getattr(p, 'validation_sources', []) or []) >= 1
         )
         print(f"     {ready} paddles ready for production (Total)")
         print(f"     {ready_hybrid} paddles ready for production (Hybrid Pipeline Coverage)")
