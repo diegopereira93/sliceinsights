@@ -1,6 +1,6 @@
 'use client';
 
-import { Paddle } from '@/components/paddle/paddle-card';
+import { Paddle } from '@/types/paddle';
 import {
     Sheet,
     SheetContent,

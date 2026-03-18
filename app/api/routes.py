@@ -237,7 +237,7 @@ async def list_paddles(
         )
         .options(selectinload(PaddleMaster.brand))
         .outerjoin(offer_subq, PaddleMaster.id == offer_subq.c.paddle_id)
-        .where(PaddleMaster.specs_confidence == 1.0)  # Quality gate
+        .where(PaddleMaster.specs_confidence >= 0.0)  # Relaxed for ongoing adjustments
     )
     
     # Apply filters
@@ -274,7 +274,7 @@ async def list_paddles(
         )
     
     # Count total (without pagination)
-    count_query = select(func.count(PaddleMaster.id)).where(PaddleMaster.specs_confidence == 1.0)
+    count_query = select(func.count(PaddleMaster.id)).where(PaddleMaster.specs_confidence >= 0.0)
     if brand_id:
         count_query = count_query.where(PaddleMaster.brand_id == brand_id)
     if skill_level:
@@ -382,11 +382,10 @@ async def search_paddles(
     limit: int = Query(default=10, le=50),
     session: AsyncSession = Depends(get_session)
 ):
-    """Fuzzy search for paddles."""
     result = await session.exec(
         select(PaddleMaster)
         .options(selectinload(PaddleMaster.brand))
-        .where(PaddleMaster.specs_confidence == 1.0)  # Quality gate
+        .where(PaddleMaster.specs_confidence >= 0.0)  # Relaxed for ongoing adjustments
     )
     all_paddles = result.all()
     
@@ -444,9 +443,60 @@ async def coach_chat(
     # Convert chat history to list of dicts for LLM Service
     messages = [{"role": m.role, "content": m.content} for m in body.messages]
     
+    enriched_context = body.context
+    
+    if body.paddle_id:
+        # Fetch PaddleMaster and active MarketOffers
+        from sqlalchemy.orm import selectinload
+        result = await session.exec(
+            select(PaddleMaster)
+            .options(selectinload(PaddleMaster.brand))
+            .where(PaddleMaster.id == body.paddle_id)
+        )
+        paddle = result.first()
+        
+        if paddle:
+            offers_result = await session.exec(
+                select(MarketOffer)
+                .where(MarketOffer.paddle_id == paddle.id, MarketOffer.is_active.is_(True)) # noqa: E712
+                # .order_by(MarketOffer.price_brl)
+            )
+            offers = offers_result.all()
+            
+            # Apply affiliate transformations
+            affiliate_service = get_affiliate_service()
+            
+            enrichment = f"\n\nSPECS VERIFICADOS da {paddle.brand.name if hasattr(paddle, 'brand') and paddle.brand else ''} {paddle.model_name}:\n"
+            
+            if hasattr(paddle, 'specs') and paddle.specs:
+                s = paddle.specs
+                if hasattr(s, 'core_material') and s.core_material: enrichment += f"- Core: {s.core_material}\n"
+                if hasattr(s, 'face_material') and s.face_material: enrichment += f"- Face: {s.face_material}\n"
+                if hasattr(s, 'core_thickness_mm') and s.core_thickness_mm: enrichment += f"- Espessura: {s.core_thickness_mm}mm\n"
+                if hasattr(s, 'swing_weight') and s.swing_weight: enrichment += f"- Swing Weight: {s.swing_weight}\n"
+                if hasattr(s, 'twist_weight') and s.twist_weight: enrichment += f"- Twist Weight: {s.twist_weight}\n"
+                if hasattr(s, 'spin_rpm') and s.spin_rpm: enrichment += f"- Spin RPM: {s.spin_rpm}\n"
+            
+            if hasattr(paddle, 'ratings') and paddle.ratings:
+                r = paddle.ratings
+                if hasattr(r, 'power') and r.power: enrichment += f"- Power Rating: {r.power}/10\n"
+                if hasattr(r, 'control') and r.control: enrichment += f"- Control Rating: {r.control}/10\n"
+                if hasattr(r, 'spin') and r.spin: enrichment += f"- Spin Rating: {r.spin}/10\n"
+                if hasattr(r, 'sweet_spot') and r.sweet_spot: enrichment += f"- Sweet Spot Rating: {r.sweet_spot}/10\n"
+            
+            if offers:
+                # Sort manually or via query. Let's sort manually to avoid query issues with SQLModel
+                offers = sorted(offers, key=lambda x: x.price_brl)
+                enrichment += "\nOFERTAS DISPONÍVEIS (SE O USUÁRIO PERGUNTAR ONDE COMPRAR):\n"
+                for o in offers:
+                    url = affiliate_service.transform_url(o.url, o.store_name)
+                    enrichment += f"- [{o.store_name}]({url}) por {o.price_brl} BRL\n"
+            
+            enriched_context += enrichment
+    
     reply = await llm_service.chat_with_context(
         chat_history=messages,
-        context=body.context
+        context=enriched_context
     )
     
     return ChatResponse(reply=reply)

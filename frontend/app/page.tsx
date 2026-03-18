@@ -1,45 +1,31 @@
-import { HomeClient } from '@/components/home-client';
+import HomeClient from '@/components/home-client';
 import { getPaddles, getBrands, mapBackendToFrontendPaddle } from '@/lib/api';
-import { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'SliceInsights - Encontre Sua Raquete Ideal',
-  description: 'Use nossa análise de dados para descobrir a raquete perfeita para seu estilo de jogo. Insights precisos para sua melhor jogada.',
-};
-
-export const dynamic = 'force-dynamic'; // Ensure fresh data on each request
+export const revalidate = 3600; // Revalidate every hour
 
 export default async function Home() {
-  // Fetch data on the server
-  let paddles = [];
-  let brands: string[] = [];
-  let totalPaddles = 0;
+    let paddles: ReturnType<typeof mapBackendToFrontendPaddle>[] = [];
+    let brands: string[] = [];
 
-  try {
-    const [paddlesRes, brandsRes] = await Promise.all([
-      getPaddles({ limit: 100 }), // API max limit is 100 per request
-      getBrands()
-    ]);
+    try {
+        const [paddlesData, brandsData] = await Promise.all([
+            getPaddles({ available_in_brazil: true }),
+            getBrands({ available_in_brazil: true }),
+        ]);
 
-    if (paddlesRes && paddlesRes.data) {
-      paddles = paddlesRes.data.map(mapBackendToFrontendPaddle);
-      totalPaddles = paddlesRes.total || paddles.length;
+        paddles = paddlesData.data.map(mapBackendToFrontendPaddle);
+        brands = (brandsData.data || []).map((b: any) =>
+            typeof b === 'string' ? b : b.name
+        );
+    } catch (err) {
+        console.error('[Home] Failed to fetch initial data:', err);
+        // Renders with empty state — HomeClient handles the empty case gracefully
     }
 
-    if (brandsRes && brandsRes.data) {
-      // Show only brands that actually have products in the catalog
-      // or at least available locally
-      brands = brandsRes.data.map((b: any) => b.name).sort();
-    }
-  } catch (error) {
-    console.error('Failed to fetch initial data:', error);
-  }
-
-  return (
-    <HomeClient
-      initialPaddles={paddles}
-      availableBrands={brands}
-      totalPaddlesCount={totalPaddles}
-    />
-  );
+    return (
+        <HomeClient
+            initialPaddles={paddles}
+            brands={brands}
+        />
+    );
 }

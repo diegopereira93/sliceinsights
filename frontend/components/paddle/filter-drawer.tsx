@@ -40,7 +40,11 @@ export function FilterDrawer({
     const [brandSearch, setBrandSearch] = React.useState("");
 
     const filteredBrands = React.useMemo(() => {
-        return brands.filter(b => b.toLowerCase().includes(brandSearch.toLowerCase()));
+        if (!Array.isArray(brands)) return [];
+        return brands.filter(b => {
+            if (typeof b !== 'string') return false;
+            return b.toLowerCase().includes(brandSearch.toLowerCase());
+        });
     }, [brands, brandSearch]);
 
     // Count active filters (price is active if min > 0 or max < 4000)

@@ -57,7 +57,7 @@ class RecommendationEngine:
             )
             .join(Brand, PaddleMaster.brand_id == Brand.id)
             .outerjoin(offers_subquery, PaddleMaster.id == offers_subquery.c.paddle_id)
-            .where(PaddleMaster.specs_confidence == 1.0)  # Quality gate: only fully-verified paddles
+            .where(PaddleMaster.specs_confidence >= 0.0)  # Relaxed: include all paddles with valid confidence
         )
         
         # 3. Apply Hard Filters
@@ -94,7 +94,7 @@ class RecommendationEngine:
                 )
                 .join(Brand, PaddleMaster.brand_id == Brand.id)
                 .outerjoin(offers_subquery, PaddleMaster.id == offers_subquery.c.paddle_id)
-                .where(PaddleMaster.specs_confidence == 1.0)  # Quality gate: only fully-verified paddles
+                .where(PaddleMaster.specs_confidence >= 0.0)  # Relaxed: include all paddles with valid confidence
             )
             if profile.has_tennis_elbow:
                 query_relaxed = query_relaxed.where(

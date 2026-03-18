@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Paddle } from './paddle-card';
+import { Paddle } from '@/types/paddle';
 import {
     Drawer,
     DrawerClose,

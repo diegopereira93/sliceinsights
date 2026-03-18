@@ -1,4 +1,4 @@
-import { Paddle } from "@/components/paddle/paddle-card";
+import { Paddle } from "@/types/paddle";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Trophy, Medal, Crown, ArrowRight, ExternalLink, ChevronRight } from "lucide-react";

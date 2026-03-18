@@ -93,11 +93,11 @@ export interface ChatMessage {
     content: string;
 }
 
-export async function chatWithCoach(messages: ChatMessage[], context: string) {
+export async function chatWithCoach(messages: ChatMessage[], context: string, paddle_id?: string) {
     const response = await fetch(`${getApiBaseUrl()}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages, context }),
+        body: JSON.stringify({ messages, context, paddle_id }),
     });
     if (!response.ok) throw new Error('Failed to chat with coach');
     return response.json();
@@ -207,7 +207,7 @@ export async function getPaddlePriceHistory(id: string, days: number = 30) {
     return response.json();
 }
 
-import { Paddle } from '@/components/paddle/paddle-card';
+import { Paddle } from '@/types/paddle';
 
 export function mapBackendToFrontendPaddle(bp: BackendPaddle): Paddle {
     // Helper: Generate deterministic pseudo-random number from string

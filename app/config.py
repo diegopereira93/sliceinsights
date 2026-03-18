@@ -64,6 +64,7 @@ class Settings(BaseSettings):
     # CORS - include Vercel production and preview URLs
     allowed_origins: list[str] = [
         "http://localhost:3000",
+        "http://localhost:3002",
         "http://localhost:8002",
         "https://frontend-five-iota-18.vercel.app",
         "https://sliceinsights.com.br",

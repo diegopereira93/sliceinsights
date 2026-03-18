@@ -10,9 +10,10 @@ import { chatWithCoach, ChatMessage } from '@/lib/api';
 interface CoachChatInterfaceProps {
     grokDossier: string;
     contextString: string;
+    paddleId?: string;
 }
 
-export function CoachChatInterface({ grokDossier, contextString }: CoachChatInterfaceProps) {
+export function CoachChatInterface({ grokDossier, contextString, paddleId }: CoachChatInterfaceProps) {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -49,7 +50,7 @@ export function CoachChatInterface({ grokDossier, contextString }: CoachChatInte
             // Only send the last 6 messages to save context limits, but always include system context
             const historyToSend = newMessages.slice(-6);
 
-            const response = await chatWithCoach(historyToSend, contextString);
+            const response = await chatWithCoach(historyToSend, contextString, paddleId);
 
             if (response && response.reply) {
                 setMessages(prev => [...prev, { role: 'assistant', content: response.reply }]);

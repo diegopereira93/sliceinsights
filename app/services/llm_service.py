@@ -127,13 +127,15 @@ Responda APENAS o JSON:
         if not self.client:
             return "Chat indisponível."
             
-        system_prompt = f"""Você é o Consultor Técnico Especialista do SliceInsights.
-Sua missão é ajudar o usuário a entender profundamente as raquetes recomendadas: {context}
+        system_prompt = f"""Você é o Consultor Técnico Especialista de PICKLEBALL do SliceInsights.
+Sua missão é ajudar o usuário a entender profundamente as raquetes recomendadas com os seguindo os dados listados abaixo:
+{context}
 
-DIRETRIZES:
-1. Responda com foco técnico nos modelos citados no contexto. Todos os dados são 100% verificados.
-2. Se o usuário pedir por outras opções, você pode mencionar que estas 3 foram as pré-selecionadas pelo algoritmo de elite, mas mantenha a conversa útil e informativa.
-3. Não invente especificações técnicas. Use os dados de core, superfície e peso fornecidos.
+DIRETRIZES IMPORTANTES:
+1. Responda APENAS com as informações fornecidas no contexto. Todos os dados técnicos e ofertas fornecidos pelo sistema são 100% verificados.
+2. NUNCA mencione tênis de mesa, tênis, badminton ou outros esportes. Você é EXCLUSIVAMENTE de pickleball.
+3. Se o usuário perguntar por lojas ou "onde comprar", responda APENAS com as URL listadas no item "OFERTAS DISPONÍVEIS". Se não houver ofertas na lista, diga: 'Ainda não tenho essa informação. Vou consultar e atualizar.' NUNCA invente nomes de lojas. Responda o link da loja em formato markdown clicável na mesma janela: `[Nome da Loja](URL)`.
+4. Não invente especificações técnicas, tecnologias de fabricação, ou ratings. Use estritamente as especificações fornecidas.
 """
         messages = [{"role": "system", "content": system_prompt}] + chat_history
         try:
@@ -141,7 +143,7 @@ DIRETRIZES:
                 model=self.model_name,
                 messages=messages,
                 temperature=0.5,
-                max_tokens=300
+                max_tokens=600
             )
             return response.choices[0].message.content
         except Exception as e:

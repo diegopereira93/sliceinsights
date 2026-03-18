@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Paddle } from '@/components/paddle/paddle-card';
+import { Paddle } from '@/types/paddle';
 import { motion } from 'framer-motion';
 import { TrendingDown, Scale, TrendingUp, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';

@@ -22,7 +22,7 @@ import {
     Activity
 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
-import { Paddle } from './paddle-card';
+import { Paddle } from '@/types/paddle';
 import { getRecommendations, RecommendationRequest, captureLead } from '@/lib/api';
 import { CoachChatInterface } from './coach-chat-interface';
 
@@ -488,8 +488,7 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
             }
         } catch (error) {
             console.error('Failed to get recommendation:', error);
-            // Fallback to local logic if API fails
-            onRecommend(paddles[0]);
+            // Show results view even on error — user can still use the chat or retry
         } finally {
             setIsRecommending(false);
             setShowResults(true);
@@ -575,22 +574,14 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
                                 <Zap className="w-8 h-8 text-primary-text shadow-glow" />
                             </div>
                             <h2 className="text-2xl font-bold">Match Perfeito Encontrado!</h2>
-                            <p className="text-zinc-400 max-w-[280px] mb-2">Preparamos uma recomendação personalizada baseada no seu perfil.</p>
+                            <p className="text-zinc-400 max-w-[280px] mb-2">Converse com nosso Treinador xAI sobre a sua recomendação.</p>
 
-                            {recommendedPaddle && (
-                                <div className="w-full text-left mb-4">
-                                    <CoachChatInterface
-                                        grokDossier={grokDossier || `Olá! Analisei as suas respostas e a ${recommendedPaddle.brand} ${recommendedPaddle.name} é a raquete ideal para o seu perfil. O que gostaria de saber sobre ela?`}
-                                        contextString={`O usuário recebeu a raquete ${recommendedPaddle.brand} ${recommendedPaddle.name} por R$${recommendedPaddle.price}. Responda dúvidas sobre essa raquete.`}
-                                    />
-                                </div>
-                            )}
-
+                            {/* Paddle Info Card — compact summary above chat */}
                             {recommendedPaddle ? (
                                 <motion.div
                                     initial={{ scale: 0.9, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4 mb-4"
+                                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4 mb-2"
                                 >
                                     <div className="w-16 h-16 rounded-xl overflow-hidden bg-muted flex-shrink-0">
                                         <img src={recommendedPaddle.image} alt={recommendedPaddle.name} className="w-full h-full object-cover" />
@@ -606,19 +597,31 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
                                     </div>
                                 </motion.div>
                             ) : (
-                                <div className="w-full bg-white/5 border border-dashed border-white/10 rounded-2xl p-8 mb-4">
+                                <div className="w-full bg-white/5 border border-dashed border-white/10 rounded-2xl p-8 mb-2">
                                     <Heart className="w-8 h-8 text-zinc-500 mx-auto mb-2 opacity-20" />
                                     <p className="text-sm text-zinc-400">Não encontramos uma raquete exata para seu orçamento ou nível no momento.</p>
                                 </div>
                             )}
 
-                            <div className="flex flex-col gap-2 w-full">
+                            {/* AI Coach Chat — primary interaction after quiz */}
+                            {recommendedPaddle && (
+                                <div className="w-full text-left">
+                                    <CoachChatInterface
+                                        grokDossier={grokDossier || `Olá! Analisei as suas respostas e a ${recommendedPaddle.brand} ${recommendedPaddle.name} é a raquete ideal para o seu perfil. O que gostaria de saber sobre ela?`}
+                                        contextString={`O usuário recebeu a raquete ${recommendedPaddle.brand} ${recommendedPaddle.name} por R$${recommendedPaddle.price}. Responda dúvidas sobre essa raquete.`}
+                                        paddleId={recommendedPaddle.id}
+                                    />
+                                </div>
+                            )}
+
+                            {/* Secondary actions — below chat */}
+                            <div className="flex flex-col gap-2 w-full mt-2">
                                 <Button
                                     onClick={() => {
                                         if (recommendedPaddle) onRecommend(recommendedPaddle);
                                     }}
-                                    variant="default"
-                                    className="w-full font-bold h-12 rounded-xl"
+                                    variant="outline"
+                                    className="w-full font-bold h-12 rounded-xl border-white/10 bg-white/5 hover:bg-white/10"
                                 >
                                     Ver Detalhes da Raquete
                                 </Button>
