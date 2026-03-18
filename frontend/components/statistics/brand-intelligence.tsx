@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Paddle } from '@/components/paddle/paddle-card';
+import { Paddle } from '@/types/paddle';
 import {
     ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend

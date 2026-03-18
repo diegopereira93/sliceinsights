@@ -1,18 +1,33 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
-import { MobileLayout } from "@/components/layout/mobile-layout";
-import { Toaster } from "@/components/ui/toaster";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+});
 
 export const metadata: Metadata = {
   title: {
     default: "SliceInsights - Encontre Sua Raquete Ideal de Pickleball",
-    template: "%s | SliceInsights"
+    template: "%s | SliceInsights",
   },
-  description: "Encontre a raquete de pickleball perfeita para seu estilo de jogo. Quiz inteligente, catálogo brasileiro com 37+ raquetes, preços atualizados e recomendações personalizadas.",
-  keywords: ["pickleball", "raquete pickleball", "paddle pickleball", "pickleball brasil", "recomendação raquete", "quiz pickleball", "comprar raquete pickleball"],
+  description:
+    "Encontre a raquete de pickleball perfeita para seu estilo de jogo. Quiz inteligente, catálogo brasileiro com 37+ raquetes, preços atualizados e recomendações personalizadas.",
+  keywords: [
+    "pickleball",
+    "raquete pickleball",
+    "paddle pickleball",
+    "pickleball brasil",
+    "recomendação raquete",
+    "quiz pickleball",
+    "comprar raquete pickleball",
+  ],
   authors: [{ name: "SliceInsights" }],
   creator: "SliceInsights",
   metadataBase: new URL("https://sliceinsights.vercel.app"),
@@ -20,14 +35,12 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-    },
+    googleBot: { index: true, follow: true },
   },
   openGraph: {
     title: "SliceInsights - Encontre Sua Raquete Ideal de Pickleball",
-    description: "Quiz inteligente para encontrar a raquete perfeita. Catálogo brasileiro com preços atualizados.",
+    description:
+      "Quiz inteligente para encontrar a raquete perfeita. Catálogo brasileiro com preços atualizados.",
     url: "https://sliceinsights.vercel.app",
     siteName: "SliceInsights",
     images: [
@@ -44,7 +57,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "SliceInsights - Encontre Sua Raquete Ideal",
-    description: "Quiz inteligente para recomendar a raquete de pickleball perfeita para você.",
+    description:
+      "Quiz inteligente para recomendar a raquete de pickleball perfeita para você.",
     images: ["/og-image.jpg"],
   },
   alternates: {
@@ -57,25 +71,36 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#ffffff",
+  themeColor: "#0f172a",
 };
 
-import ErrorBoundary from "@/components/ui/error-boundary";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="pt-BR">
-      <body className={`${inter.className} antialiased`}>
-        <MobileLayout>
-          <ErrorBoundary>
-            {children}
-          </ErrorBoundary>
-          <Toaster />
-        </MobileLayout>
+    <html lang="pt-BR" className={`${inter.variable} ${outfit.variable} dark`}>
+      <body className="min-h-screen bg-transparent font-sans antialiased selection:bg-blue-500/30">
+        <script dangerouslySetInnerHTML={{ __html: `
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+              for (const registration of registrations) {
+                registration.unregister();
+              }
+            });
+          }
+          // Clear all caches
+          if ('caches' in window) {
+            caches.keys().then(names => {
+              for (const name of names) caches.delete(name);
+            });
+          }
+        ` }} />
+        {children}
+        <Toaster />
       </body>
     </html>
   );

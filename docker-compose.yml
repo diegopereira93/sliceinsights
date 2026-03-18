@@ -53,11 +53,13 @@ services:
       target: builder
     container_name: picklematch_ui_v3
     environment:
-      BACKEND_URL: http://backend_v3:8000
-      NEXT_PUBLIC_API_URL: http://localhost:8002/api/v1
-      NODE_ENV: development
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:8002/api/v1
+      - BACKEND_URL=http://backend_v3:8000
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
     ports:
-      - "3000:3000"
+      - "3002:3000"
     volumes:
       - ./frontend:/app
       - /app/node_modules
