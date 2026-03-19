@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app.config import get_settings
 from app.models.slo import SLOLog  # noqa: F401 — registers SLOLog with SQLModel metadata
+from app.models.slo_alert import SLOAlert  # noqa: F401 — registers SLOAlert with SQLModel metadata
 
 settings = get_settings()
 
