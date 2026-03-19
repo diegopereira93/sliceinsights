@@ -83,6 +83,12 @@
 - Email configuration and templates
 - Alert routing logic (P1 vs P2 vs P3)
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — SLOAlert model, SLOAlertService (Telegram + GitHub + Email), dedup logic, unit tests
+- [ ] 07-02-PLAN.md — Alert worker CLI, GitHub Actions workflow integration, human verification
+
 ---
 
 ## Phase 8: Deploy & Release Strategy
