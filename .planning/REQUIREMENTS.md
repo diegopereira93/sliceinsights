@@ -1,117 +1,108 @@
-# Requirements: SliceInsights Data Pipeline Audit & Automation
+# Requirements: SliceInsights v2.0 Workflows & Automation
 
 **Defined:** 2026-03-19
 **Core Value:** Every piece of data flowing into recommendations must be trustworthy.
 
-## v1 Requirements
+## v2.0 Requirements
 
-### Scraper Health
+Automation of the entire data pipeline with validated quality gates, real-time monitoring, and reliable deployments.
 
-- [x] **AUDIT-01**: Audit all 24 scrapers for functionality (run each, capture success/failure)
-- [x] **AUDIT-02**: Map which scrapers currently work vs which fail
-- [x] **AUDIT-03**: Identify root cause of failures (network? parsing? missing selectors? API changes?)
-- [x] **AUDIT-04**: Document last successful run time for each scraper
-- [ ] **AUDIT-05**: Measure data freshness (how old is the oldest product record?)
+### CI/CD & Testing
 
-### Data Quality
+- [ ] **CI-01**: GitHub Actions workflow runs on every push to main
+- [ ] **CI-02**: Workflow executes unit tests for all scraper modules
+- [ ] **CI-03**: Workflow executes smoke tests (audit_data_quality.py) for sample scrapers
+- [ ] **CI-04**: Tests must pass before allowing merge to main
+- [ ] **CI-05**: Linting/format checks are optional (fail-warn only, not fail-hard)
 
-- [ ] **QUAL-01**: Define data quality metrics (completeness %, duplicates, missing fields)
-- [ ] **QUAL-02**: Run audit_data_quality.py and capture results
-- [ ] **QUAL-03**: Identify incomplete or corrupted records in production DB
-- [ ] **QUAL-04**: Document validation rules (required fields, value ranges, constraints)
-- [ ] **QUAL-05**: Measure coverage per scraper (how many products per source?)
+### SLO Enforcement & Validation
 
-### Automation & Reliability
+- [ ] **SLO-01**: Real-time SLO validation after each scraper completes
+- [ ] **SLO-02**: Scheduled SLO validation job runs 4x daily (every 6 hours)
+- [ ] **SLO-03**: Freshness SLO enforced: 24h for Market Offers (prices)
+- [ ] **SLO-04**: Completeness SLO enforced: 7 days for Product Master Data (specs)
+- [ ] **SLO-05**: SLO validation results logged and queryable for debugging
 
-- [ ] **AUTO-01**: Map which scrapers have retry logic (if errors, do they retry?)
-- [ ] **AUTO-02**: Document error handling patterns across all scripts
-- [ ] **AUTO-03**: Identify missing error recovery (timeouts, network errors, parse failures)
-- [ ] **AUTO-04**: Establish SLOs for data freshness (daily? hourly?)
-- [ ] **AUTO-05**: List dependencies for each scraper (selectors, API endpoints, rate limits)
+### Alerts & Monitoring
 
-### Logging & Monitoring
+- [ ] **ALT-01**: Telegram webhook fires when P1 breaches detected (invisible failures, 0 products)
+- [ ] **ALT-02**: GitHub Issues created automatically for P1 breaches with remediation context
+- [ ] **ALT-03**: Email alerts sent to admin group on P1 SLO breaches
+- [ ] **ALT-04**: Alert includes scraper name, breach type, timestamp, last successful run
+- [ ] **ALT-05**: Alert contains direct link to RUNBOOK_SCRAPERS.md for troubleshooting
 
-- [ ] **LOG-01**: Audit logging coverage (which scripts log? what detail level?)
-- [ ] **LOG-02**: Identify silent failures (scripts that fail without alerting)
-- [ ] **LOG-03**: Document where logs are stored/accessible
-- [ ] **LOG-04**: Check for structured vs unstructured logging
-- [ ] **LOG-05**: Identify which failure modes would be invisible in production
+### Deploy & Release Strategy
 
-### Artifacts
+- [ ] **DEP-01**: Nightly batch job aggregates all successful scraper runs
+- [ ] **DEP-02**: Pre-deploy validation runs (freshness check, corruption audit)
+- [ ] **DEP-03**: Data published to production database after validation passes
+- [ ] **DEP-04**: Deploy workflow includes rollback capability if validation fails
+- [ ] **DEP-05**: Deploy log recorded with timestamp, scraper count, data records published
 
-- [x] **ART-01**: Generate audit report with scraper health summary
-- [x] **ART-02**: Create data quality dashboard/document
-- [x] **ART-03**: Document failure analysis (why scripts fail, impact assessment)
-- [x] **ART-04**: List recommendations for Phase 2 (refactoring priorities)
-- [ ] **ART-05**: Create runbook for manual scraper execution/debugging
+### Data Quality Checks & Reporting
 
-## v2 Requirements
+- [ ] **QC-01**: Hourly data quality audit job runs for all 11 active scrapers
+- [ ] **QC-02**: Audit measures: freshness, completeness, coverage per scraper
+- [ ] **QC-03**: Metrics stored in database for historical trending
+- [ ] **QC-04**: Quality dashboard endpoint (HTTP GET) returns current metrics as JSON
+- [ ] **QC-05**: Weekly quality report generated showing trends and anomalies
+- [ ] **QC-06**: Report highlights which scrapers are degrading or improving
 
-### Automation & CI/CD
+## v2.1+ Requirements (Deferred)
 
-- **AUTO-02**: GitHub Actions workflow for daily scraper runs
-- **AUTO-03**: Automated alerts (Slack/email) when scrapers fail
-- **AUTO-04**: Automated rollback or data validation on ingestion
-- **AUTO-05**: Performance monitoring (scrape time, data volume, success rate)
+### Advanced Automation
 
-### Enhanced Quality
-
-- **QUAL-06**: Anomaly detection for data drift (prices, product counts)
-- **QUAL-07**: Schema validation on all ingested data
-- **QUAL-08**: Integration tests validating end-to-end data flow
-
-### Scraper Improvements
-
-- **SCRAPE-01**: Unified retry logic across all scrapers
-- **SCRAPE-02**: Rate limiting and politeness headers
-- **SCRAPE-03**: Incremental scraping (only fetch new/changed data)
+- **ADVA-01**: Docker image building and pushing to container registry
+- **ADVA-02**: Multi-environment deployments (staging → prod approval gates)
+- **ADVA-03**: Automated rollback on data corruption detection
+- **ADVA-04**: ML-based anomaly detection for quality metrics
+- **ADVA-05**: Automated retry logic with exponential backoff for failed scrapers
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| Refactoring scraper code | Phase 2 work — understand scope first |
-| Adding new scrapers | Defer until existing 24 are stable |
-| Real-time streaming | Batch pipeline sufficient; streaming adds complexity |
-| ML anomaly detection | Manual validation gates first, then ML if needed |
-| User-facing data quality dashboards | Internal audit first; expose findings later |
+| Container registry setup | Infrastructure concern; can be v2.1 |
+| Real-time data streaming | Batch pipeline sufficient; revisit based on volume growth |
+| Multi-region deployments | Single-region sufficient for current scale |
+| Kubernetes orchestration | Docker Compose sufficient; revisit if workload increases |
 
 ## Traceability
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUDIT-01 | Phase 1 | Complete |
-| AUDIT-02 | Phase 1 | Complete |
-| AUDIT-03 | Phase 1 | Complete |
-| AUDIT-04 | Phase 1 | Complete |
-| AUDIT-05 | Phase 1 | Pending |
-| QUAL-01 | Phase 2 | Pending |
-| QUAL-02 | Phase 2 | Pending |
-| QUAL-03 | Phase 2 | Pending |
-| QUAL-04 | Phase 2 | Pending |
-| QUAL-05 | Phase 2 | Pending |
-| AUTO-01 | Phase 3 | Pending |
-| AUTO-02 | Phase 3 | Pending |
-| AUTO-03 | Phase 3 | Pending |
-| AUTO-04 | Phase 3 | Pending |
-| AUTO-05 | Phase 3 | Pending |
-| LOG-01 | Phase 3 | Pending |
-| LOG-02 | Phase 3 | Pending |
-| LOG-03 | Phase 3 | Pending |
-| LOG-04 | Phase 3 | Pending |
-| LOG-05 | Phase 3 | Pending |
-| ART-01 | Phase 4 | Complete |
-| ART-02 | Phase 4 | Complete |
-| ART-03 | Phase 4 | Complete |
-| ART-04 | Phase 4 | Complete |
-| ART-05 | Phase 4 | Pending |
+| CI-01 | Phase 5 | Pending |
+| CI-02 | Phase 5 | Pending |
+| CI-03 | Phase 5 | Pending |
+| CI-04 | Phase 5 | Pending |
+| CI-05 | Phase 5 | Pending |
+| SLO-01 | Phase 6 | Pending |
+| SLO-02 | Phase 6 | Pending |
+| SLO-03 | Phase 6 | Pending |
+| SLO-04 | Phase 6 | Pending |
+| SLO-05 | Phase 6 | Pending |
+| ALT-01 | Phase 7 | Pending |
+| ALT-02 | Phase 7 | Pending |
+| ALT-03 | Phase 7 | Pending |
+| ALT-04 | Phase 7 | Pending |
+| ALT-05 | Phase 7 | Pending |
+| DEP-01 | Phase 8 | Pending |
+| DEP-02 | Phase 8 | Pending |
+| DEP-03 | Phase 8 | Pending |
+| DEP-04 | Phase 8 | Pending |
+| DEP-05 | Phase 8 | Pending |
+| QC-01 | Phase 9 | Pending |
+| QC-02 | Phase 9 | Pending |
+| QC-03 | Phase 9 | Pending |
+| QC-04 | Phase 9 | Pending |
+| QC-05 | Phase 9 | Pending |
+| QC-06 | Phase 9 | Pending |
 
 **Coverage:**
-- v1 requirements: 25 total
-- Mapped to phases: 25
+- v2.0 requirements: 26 total
+- Mapped to phases: 26
 - Unmapped: 0 ✓
 
 ---
-
 *Requirements defined: 2026-03-19*
-*Last updated: 2026-03-19 during project initialization*
+*Last updated: 2026-03-19 after defining v2.0 scope*

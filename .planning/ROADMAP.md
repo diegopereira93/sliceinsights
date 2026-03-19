@@ -1,157 +1,162 @@
-# Roadmap: SliceInsights Data Pipeline Audit & Automation
+# Roadmap: SliceInsights v2.0 Workflows & Automation
 
-**Milestone:** Data Pipeline v1 Audit
+**Milestone:** v2.0 Workflows & Automation
 **Created:** 2026-03-19
-**Target:** Complete diagnostic and establish roadmap for Phase 2 (Refactoring)
+**Target:** Complete automation of data pipeline with quality gates, monitoring, and reliable deployments
 
 ---
 
-## Phase 1: Scraper Health Audit
+## Phase 5: CI/CD & Testing
 
-**Goal:** Run all 11 active scrapers (not 24 as initially assumed), identify which work and which fail, document root causes.
+**Goal:** Establish automated testing pipeline that validates scrapers on every push to main.
 
 **Requirements:**
-- AUDIT-01: Audit all scrapers for functionality
-- AUDIT-02: Map which scrapers work vs fail
-- AUDIT-03: Identify root causes of failures
-- AUDIT-04: Document last successful run time
-
-**Plans:**
-4/3 plans complete
-- [ ] 01-scraper-health-audit/01-02-PLAN.md — Wave 2: Analyze results, generate detailed reports, assess production readiness
+- CI-01: GitHub Actions workflow runs on every push to main
+- CI-02: Workflow executes unit tests for all scraper modules
+- CI-03: Workflow executes smoke tests (audit_data_quality.py) for sample scrapers
+- CI-04: Tests must pass before allowing merge to main
+- CI-05: Linting/format checks are optional (fail-warn only, not fail-hard)
 
 **Success Criteria:**
-1. All 11 active scrapers executed in test environment
-2. Clear status table: working / failing / unknown
-3. Root cause identified for each failure (network? parsing? API change?)
-4. Report showing which scrapers are safe for production use
+1. All new commits to main trigger CI/CD workflow automatically
+2. Unit tests run and report pass/fail status
+3. Smoke tests validate data pipeline integrity
+4. Merge protection requires CI to pass
+5. Workflow execution logs are accessible for debugging
 
 **Deliverables:**
-- Scraper execution log (stdout/stderr for each)
-- Status matrix (green/yellow/red per scraper)
-- Root cause analysis document
-- Detailed audit report with remediation guidance
-- Health summary metrics
-- Recommendations for quick fixes vs refactoring
+- `.github/workflows/ci.yml` — CI/CD workflow definition
+- Unit test suite for scrapers
+- Smoke test configuration
+- PR protection rules configured
 
 ---
 
-## Phase 2: Data Quality Analysis
+## Phase 6: SLO Enforcement & Validation
 
-**Goal:** Audit data already in production database, measure quality metrics, identify corrupt/incomplete records.
+**Goal:** Implement real-time and scheduled SLO validation to detect quality breaches as they happen.
 
 **Requirements:**
-- AUDIT-05: Measure data freshness
-- QUAL-01: Define data quality metrics
-- QUAL-02: Run audit_data_quality.py
-- QUAL-03: Identify corrupt/incomplete records
-- QUAL-04: Document validation rules
-- QUAL-05: Measure coverage per scraper
+- SLO-01: Real-time SLO validation after each scraper completes
+- SLO-02: Scheduled SLO validation job runs 4x daily (every 6 hours)
+- SLO-03: Freshness SLO enforced: 24h for Market Offers (prices)
+- SLO-04: Completeness SLO enforced: 7 days for Product Master Data (specs)
+- SLO-05: SLO validation results logged and queryable for debugging
 
 **Success Criteria:**
-1. Quality metrics defined and measured (completeness %, duplicates, missing fields)
-2. Audit report showing data freshness per source
-3. List of problematic records (with remediation steps)
-4. Validation rules documented
+1. SLO checks execute both real-time (post-scraper) and scheduled (4x daily)
+2. Breaches are detected within 1 hour of occurring
+3. SLO status is queryable for alerting systems
+4. Validation results include root cause context (which scraper, which metric)
+5. Historical logs retained for trend analysis
 
 **Deliverables:**
-- Data quality dashboard/document
-- List of corrupt records and cleanup SQL
-- Quality metrics baseline
-- Schema validation rules
+- `.github/workflows/slo-check.yml` — Scheduled SLO validation
+- SLO validation script (Python)
+- SLO definition config (24h freshness, 7d completeness)
+- Database schema for SLO logs
 
 ---
 
-## Phase 3: Automation & Reliability Mapping
+## Phase 7: Alerts & Monitoring
 
-**Goal:** Document error handling, retry logic, logging, dependencies—identify automation gaps.
+**Goal:** Multi-channel notification system that alerts admins immediately when P1 breaches occur.
 
 **Requirements:**
-- AUTO-01: Map retry logic across scrapers
-- AUTO-02: Document error handling patterns
-- AUTO-03: Identify missing error recovery
-- AUTO-04: Establish data freshness SLOs
-- AUTO-05: List scraper dependencies
-- LOG-01: Audit logging coverage
-- LOG-02: Identify silent failures
-- LOG-03: Document log locations
-- LOG-04: Check logging patterns
-- LOG-05: Identify invisible failure modes
+- ALT-01: Telegram webhook fires when P1 breaches detected (invisible failures, 0 products)
+- ALT-02: GitHub Issues created automatically for P1 breaches with remediation context
+- ALT-03: Email alerts sent to admin group on P1 SLO breaches
+- ALT-04: Alert includes scraper name, breach type, timestamp, last successful run
+- ALT-05: Alert contains direct link to RUNBOOK_SCRAPERS.md for troubleshooting
 
 **Success Criteria:**
-1. Dependency graph (which selectors/APIs each scraper uses)
-2. Error handling comparison (which scripts retry? which don't?)
-3. SLOs defined (data must refresh every X hours)
-4. Logging audit complete (coverage %, visibility of failures)
-5. List of silent failures that need alerting
+1. P1 breach triggers all 3 channels (Telegram, GitHub, Email) within 5 minutes
+2. Alert message includes actionable context (scraper name, what failed, runbook link)
+3. GitHub Issues are deduplicated (no duplicate issues for same breach)
+4. Email recipients can be configured per team
+5. Alert history is searchable and retained for audit
 
 **Deliverables:**
-- Dependency matrix document
-- Error handling comparison table
-- SLO specification
-- Logging coverage report
-- Failure mode analysis
+- Alert notification service (Python)
+- Telegram bot integration
+- GitHub Issue auto-creation workflow
+- Email configuration and templates
+- Alert routing logic (P1 vs P2 vs P3)
 
 ---
 
-## Phase 4: Audit Report & Recommendations
+## Phase 8: Deploy & Release Strategy
 
-**Goal:** Synthesize findings, generate comprehensive audit report, prioritize Phase 2 work (refactoring).
+**Goal:** Implement safe, nightly batch deployments with validation and rollback capability.
 
 **Requirements:**
-- ART-01: Generate audit report with scraper health summary
-- ART-02: Create data quality dashboard
-- ART-03: Document failure analysis
-- ART-04: List recommendations for refactoring
-- ART-05: Create runbook for manual execution
+- DEP-01: Nightly batch job aggregates all successful scraper runs
+- DEP-02: Pre-deploy validation runs (freshness check, corruption audit)
+- DEP-03: Data published to production database after validation passes
+- DEP-04: Deploy workflow includes rollback capability if validation fails
+- DEP-05: Deploy log recorded with timestamp, scraper count, data records published
 
 **Success Criteria:**
-1. Comprehensive audit report (40-60 pages)
-2. Executive summary with health score
-3. Phase 2 roadmap with prioritized fixes
-4. Operational runbook for manual scraper execution
-5. SLA/SLO recommendations for production
+1. Nightly batch aggregates all successful runs from past 24 hours
+2. Pre-deploy validation confirms data integrity before publishing
+3. Data is published to production database atomically
+4. Failed validation prevents deploy (safe fail)
+5. Rollback can restore previous state if needed
+6. Each deploy generates audit log
 
 **Deliverables:**
-- Audit Report (AUDIT_REPORT.md)
-- Data Quality Dashboard (DATA_QUALITY.md)
-- Phase 2 Implementation Plan
-- Operational Runbook
+- `.github/workflows/deploy-nightly.yml` — Nightly deploy workflow
+- Data aggregation script (Python)
+- Pre-deploy validation script
+- Database transaction management
+- Rollback procedure documentation
+- Deploy audit logging
 
 ---
 
-## Milestone Status
+## Phase 9: Data Quality Checks & Reporting
 
-| Phase | Status | Plans | Requirements | Completion |
-|-------|--------|-------|--------------|------------|
-| 1 | Complete | 3/3 | AUDIT-01..04 | 100% |
-| 2 | Not Started | 0/1 | QUAL-01..06 | 0% |
-| 3 | Complete | 1/1 | AUTO-01..05, LOG-01..05 | 100% |
-| 4 | 2/3 | In Progress|  | 0% |
-| **Total** | **In Progress** | **4/6** | **25** | **50%** |
+**Goal:** Continuous quality monitoring with historical metrics and weekly trend reports.
 
----
+**Requirements:**
+- QC-01: Hourly data quality audit job runs for all 11 active scrapers
+- QC-02: Audit measures: freshness, completeness, coverage per scraper
+- QC-03: Metrics stored in database for historical trending
+- QC-04: Quality dashboard endpoint (HTTP GET) returns current metrics as JSON
+- QC-05: Weekly quality report generated showing trends and anomalies
+- QC-06: Report highlights which scrapers are degrading or improving
 
-## Key Assumptions
+**Success Criteria:**
+1. Hourly audit job runs on schedule and captures all 11 scrapers
+2. Metrics include freshness, completeness, coverage, timestamp
+3. All metrics are persisted for at least 90 days
+4. Dashboard endpoint returns metrics in < 500ms
+5. Weekly report automatically generated and emailed
+6. Report shows scraper trends and highlights anomalies
+7. Quality metrics are queryable for debugging
 
-1. All scrapers can run in isolation (no dependencies between them)
-2. Test environment mirrors production database schema
-3. Scrapers won't corrupt production data if they fail
-4. 11 active scrapers (research updated from initial 24 estimate)
-5. Current audit tools (audit_data_quality.py, smoke_test_quality.py) are functional and usable
-
----
-
-## Risks & Mitigations
-
-| Risk | Impact | Mitigation |
-|------|--------|-----------|
-| Scrapers modify production DB during audit | Data corruption | Run audit in test DB only |
-| Some scrapers have undocumented dependencies | Audit blocked | Document as we find them |
-| Audit takes longer than expected | Timeline slip | Parallelize Phase 1 execution in 2 waves |
-| Findings reveal major refactoring needed | Scope creep | Document for Phase 2 planning only |
-| Discrepancy: 24 vs 11 scrapers | Incomplete audit | Verify all scraper sources; document inactive ones |
+**Deliverables:**
+- `.github/workflows/quality-audit.yml` — Hourly quality check
+- Quality audit aggregator (Python)
+- Dashboard API endpoint
+- Database schema for metrics history
+- Weekly report generator
+- Report templates and styling
 
 ---
 
-*Roadmap updated: 2026-03-19 with Phase 1 planning complete*
+## Milestone Success Criteria
+
+- [ ] All 26 requirements implemented and tested
+- [ ] CI/CD pipeline enforces quality gates
+- [ ] Admins receive alerts within 5 minutes of P1 breaches
+- [ ] Nightly deployments are safe and auditable
+- [ ] Historical quality data enables trend analysis
+- [ ] System requires minimal manual intervention
+- [ ] All workflows are documented and runbook accessible
+
+---
+
+*Roadmap created: 2026-03-19*
+*Phases: 5 (continuing from v1.0 Phase 4)*
+*Requirements: 26 total*

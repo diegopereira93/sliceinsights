@@ -22,16 +22,17 @@ Comprehensive audit and automation of SliceInsights' paddle data scraping system
 - ✓ Establish quality SLOs (two-tier: 24h prices, 7d specs) — v1.0 (from Phase 3 work)
 - ✓ Document dependencies and failure points — v1.0 (dependency matrix + failure mode taxonomy)
 
-### Active — v2.0 Refactoring
+### Active — v2.0 Workflows & Automation
 
-- [ ] Implement minimum product count assertions in all scrapers (prevents invisible failures)
-- [ ] Add `--max-age-hours` SLO enforcement to `measure_freshness.py`
-- [ ] Replace `print()` with structured logging module across all scrapers
-- [ ] Add post-run summary events for anomaly detection
-- [ ] Complete 0% specs gap via US dump enrichment (32 matched, 37% catalog completion)
-- [ ] Design unified error handling with retry logic (`tenacity` library)
-- [ ] Create CI/CD workflows for automated scraper validation
-- [ ] Build automated alert system for SLO breaches
+**Goal:** Automate entire data pipeline with quality gates, monitoring, and reliable deployments.
+
+**Requirements (26 total, 5 phases):**
+
+- [ ] **CI/CD & Testing** (Phase 5): Unit tests, smoke tests, PR protection, linting
+- [ ] **SLO Enforcement** (Phase 6): Real-time + scheduled validation for freshness (24h) and completeness (7d)
+- [ ] **Alerts & Monitoring** (Phase 7): Telegram, GitHub Issues, Email alerts for P1 breaches
+- [ ] **Deploy & Release** (Phase 8): Nightly batch deployments with validation and rollback
+- [ ] **Data Quality & Reporting** (Phase 9): Hourly audits, historical metrics, weekly trend reports
 
 ### Out of Scope
 
@@ -98,8 +99,8 @@ Comprehensive audit and automation of SliceInsights' paddle data scraping system
 - ⚠️ **0/24 scrapers have retry logic** — all catch Exception with no recovery
 - ⚠️ **No SLO enforcement** — freshness measured but not validated
 
-**v2.0 Next:** Implement P1/P2/P3 priorities from AUDIT_REPORT.md (8 new requirements)
+**v2.0 Next:** Automate the entire pipeline with CI/CD, SLO enforcement, alerts, deployments, and quality reporting (26 requirements across 5 phases)
 
 ---
 
-*Last updated: 2026-03-19 — v1.0 Data Pipeline Audit milestone shipped and archived*
+*Last updated: 2026-03-19 — v2.0 Workflows & Automation milestone initiated*
