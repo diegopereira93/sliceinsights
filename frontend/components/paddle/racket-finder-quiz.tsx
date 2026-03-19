@@ -581,7 +581,8 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
                                 <motion.div
                                     initial={{ scale: 0.9, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4 mb-2"
+                                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4 mb-2 cursor-pointer hover:bg-white/10 hover:border-white/20 transition-all"
+                                    onClick={() => onRecommend(recommendedPaddle)}
                                 >
                                     <div className="w-16 h-16 rounded-xl overflow-hidden bg-muted flex-shrink-0">
                                         <img src={recommendedPaddle.image} alt={recommendedPaddle.name} className="w-full h-full object-cover" />
