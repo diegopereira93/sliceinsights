@@ -611,7 +611,7 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
                                         contextString={`O usuário recebeu a raquete ${recommendedPaddle.brand} ${recommendedPaddle.name} por R$${recommendedPaddle.price}. Responda dúvidas sobre essa raquete.`}
                                         paddleId={recommendedPaddle.id}
                                         paddles={paddles}
-                                        onPaddleClick={(paddle) => setSelectedPaddle(paddle)}
+                                        onPaddleClick={(paddle) => onRecommend(paddle)}
                                     />
                                 </div>
                             )}
