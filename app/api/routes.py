@@ -135,8 +135,8 @@ async def trigger_seed(
         os.environ["SEED_FORCE_CLEAR"] = "true"
         
         # Import and run synchronously for better error handling
-        from app.db.seed_data_hybrid import seed_database_hybrid
-        seed_database_hybrid()
+        from app.db.seed_brazil_catalog import seed
+        seed()
         
         # Count results
         from sqlmodel import select

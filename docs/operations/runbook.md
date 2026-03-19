@@ -78,7 +78,7 @@ Copie `.env.example` para `.env` e configure:
 ### Popular Base de Dados (Seed):
 O serviço `seed_v3` roda automaticamente no `docker compose up`. Se precisar rodar manualmente:
 ```bash
-docker exec -it backend_v3 python -m app.db.seed_data_hybrid
+docker exec -it backend_v3 python -m app.db.seed_brazil_catalog
 ```
 
 ### Limpar e Reiniciar Banco:

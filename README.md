@@ -74,7 +74,7 @@ cd sliceinsights
 docker compose up -d
 
 # Popular o banco de dados
-docker compose exec backend_v3 python -m app.db.seed_data_hybrid
+docker compose exec backend_v3 python -m app.db.seed_brazil_catalog
 
 # Acessar aplicação
 # Frontend: http://localhost:3000
@@ -115,7 +115,7 @@ Após executar os scrapers:
 
 ```bash
 # Repopular banco com novos dados
-docker compose exec backend_v3 python -m app.db.seed_data_hybrid
+docker compose exec backend_v3 python -m app.db.seed_brazil_catalog
 ```
 
 O seed híbrido:
@@ -155,7 +155,7 @@ sliceinsights/
 ├── app/                      # Backend FastAPI
 │   ├── api/                  # Endpoints REST
 │   ├── db/                   # Database & ORM
-│   │   ├── seed_data_hybrid.py  # Seed híbrido
+│   │   ├── seed_brazil_catalog.py  # Seed híbrido
 │   │   └── database.py
 │   ├── models/               # SQLModel schemas
 │   └── main.py
