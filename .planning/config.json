@@ -2,5 +2,8 @@
   "mode": "yolo",
   "granularity": "standard",
   "parallelization": true,
-  "commit_docs": true
+  "commit_docs": true,
+  "workflow": {
+    "_auto_chain_active": false
+  }
 }
