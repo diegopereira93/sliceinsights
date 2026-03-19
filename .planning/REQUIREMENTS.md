@@ -18,9 +18,9 @@ Automation of the entire data pipeline with validated quality gates, real-time m
 ### SLO Enforcement & Validation
 
 - [x] **SLO-01**: Real-time SLO validation after each scraper completes
-- [ ] **SLO-02**: Scheduled SLO validation job runs 4x daily (every 6 hours)
-- [ ] **SLO-03**: Freshness SLO enforced: 24h for Market Offers (prices)
-- [ ] **SLO-04**: Completeness SLO enforced: 7 days for Product Master Data (specs)
+- [x] **SLO-02**: Scheduled SLO validation job runs 4x daily (every 6 hours)
+- [x] **SLO-03**: Freshness SLO enforced: 24h for Market Offers (prices)
+- [x] **SLO-04**: Completeness SLO enforced: 7 days for Product Master Data (specs)
 - [x] **SLO-05**: SLO validation results logged and queryable for debugging
 
 ### Alerts & Monitoring
@@ -77,10 +77,10 @@ Automation of the entire data pipeline with validated quality gates, real-time m
 | CI-04 | Phase 5 | Complete |
 | CI-05 | Phase 5 | Complete |
 | SLO-01 | Phase 6 | Complete |
-| SLO-02 | Phase 6 | Pending |
-| SLO-03 | Phase 6 | Pending |
-| SLO-04 | Phase 6 | Pending |
-| SLO-05 | Phase 6 | Done — 06-01 |
+| SLO-02 | Phase 6 | Complete — 06-03 |
+| SLO-03 | Phase 6 | Complete — 06-02 |
+| SLO-04 | Phase 6 | Complete — 06-02 |
+| SLO-05 | Phase 6 | Complete — 06-01 |
 | ALT-01 | Phase 7 | Pending |
 | ALT-02 | Phase 7 | Pending |
 | ALT-03 | Phase 7 | Pending |
