@@ -7,10 +7,10 @@
 
 ### Scraper Health
 
-- [ ] **AUDIT-01**: Audit all 24 scrapers for functionality (run each, capture success/failure)
-- [ ] **AUDIT-02**: Map which scrapers currently work vs which fail
-- [ ] **AUDIT-03**: Identify root cause of failures (network? parsing? missing selectors? API changes?)
-- [ ] **AUDIT-04**: Document last successful run time for each scraper
+- [x] **AUDIT-01**: Audit all 24 scrapers for functionality (run each, capture success/failure)
+- [x] **AUDIT-02**: Map which scrapers currently work vs which fail
+- [x] **AUDIT-03**: Identify root cause of failures (network? parsing? missing selectors? API changes?)
+- [x] **AUDIT-04**: Document last successful run time for each scraper
 - [ ] **AUDIT-05**: Measure data freshness (how old is the oldest product record?)
 
 ### Data Quality
@@ -80,10 +80,10 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUDIT-01 | Phase 1 | Pending |
-| AUDIT-02 | Phase 1 | Pending |
-| AUDIT-03 | Phase 1 | Pending |
-| AUDIT-04 | Phase 1 | Pending |
+| AUDIT-01 | Phase 1 | Complete |
+| AUDIT-02 | Phase 1 | Complete |
+| AUDIT-03 | Phase 1 | Complete |
+| AUDIT-04 | Phase 1 | Complete |
 | AUDIT-05 | Phase 1 | Pending |
 | QUAL-01 | Phase 2 | Pending |
 | QUAL-02 | Phase 2 | Pending |
