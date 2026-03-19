@@ -471,6 +471,26 @@ def fetch_woocommerce_products(domain: str, category_path: str) -> list[dict]:
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
+# --- SLO Validation hook ---
+
+def finish_run(scraper_name: str) -> None:
+    """Call after a scraper successfully commits data to the database.
+
+    Triggers real-time SLO validation for *scraper_name* and writes the
+    result to slo_logs.  This is intentionally non-blocking — any exception
+    inside validate_job_slo is caught and logged so that scraper success is
+    never dependent on the SLO check.
+    """
+    print(f"[SLO] SLO validation triggered for {scraper_name}")
+    try:
+        import sys
+        sys.path.insert(0, str(PROJECT_ROOT))
+        from scripts.slo_validator import validate_job_slo
+        validate_job_slo(scraper_name)
+    except Exception as exc:
+        print(f"[SLO] WARNING: SLO validation failed (non-blocking): {exc}")
+
+
 def save_to_csv(rows: list[dict], output_path: str) -> None:
     """Save scraped rows to CSV. Path is relative to project root."""
     path = PROJECT_ROOT / output_path
