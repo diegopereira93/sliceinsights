@@ -27,6 +27,7 @@ jobs:
           pip install -r requirements.txt -r requirements-dev.txt
 
       - name: Install Playwright browsers
+        continue-on-error: true
         run: |
           playwright install chromium
           playwright install-deps chromium
