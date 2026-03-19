@@ -8,16 +8,20 @@
 
 ## Phase 1: Scraper Health Audit
 
-**Goal:** Run all 24 scrapers, identify which work and which fail, document root causes.
+**Goal:** Run all 11 active scrapers (not 24 as initially assumed), identify which work and which fail, document root causes.
 
 **Requirements:**
-- AUDIT-01: Audit all 24 scrapers for functionality
+- AUDIT-01: Audit all scrapers for functionality
 - AUDIT-02: Map which scrapers work vs fail
 - AUDIT-03: Identify root causes of failures
 - AUDIT-04: Document last successful run time
 
+**Plans:**
+- [ ] 01-scraper-health-audit/01-01-PLAN.md — Wave 1: Build execution harness, run all 11 scrapers, capture metadata
+- [ ] 01-scraper-health-audit/01-02-PLAN.md — Wave 2: Analyze results, generate detailed reports, assess production readiness
+
 **Success Criteria:**
-1. All 24 scrapers executed in test environment
+1. All 11 active scrapers executed in test environment
 2. Clear status table: working / failing / unknown
 3. Root cause identified for each failure (network? parsing? API change?)
 4. Report showing which scrapers are safe for production use
@@ -26,6 +30,8 @@
 - Scraper execution log (stdout/stderr for each)
 - Status matrix (green/yellow/red per scraper)
 - Root cause analysis document
+- Detailed audit report with remediation guidance
+- Health summary metrics
 - Recommendations for quick fixes vs refactoring
 
 ---
@@ -116,13 +122,13 @@
 
 ## Milestone Status
 
-| Phase | Status | Requirements | Completion |
-|-------|--------|--------------|------------|
-| 1 | Not Started | 4 | 0% |
-| 2 | Not Started | 5 | 0% |
-| 3 | Not Started | 9 | 0% |
-| 4 | Not Started | 5 | 0% |
-| **Total** | **Planned** | **25** | **0%** |
+| Phase | Status | Plans | Requirements | Completion |
+|-------|--------|-------|--------------|------------|
+| 1 | Planned | 2 | 4 | 0% |
+| 2 | Not Started | 0 | 5 | 0% |
+| 3 | Not Started | 0 | 9 | 0% |
+| 4 | Not Started | 0 | 5 | 0% |
+| **Total** | **Planned** | **2** | **25** | **0%** |
 
 ---
 
@@ -131,7 +137,7 @@
 1. All scrapers can run in isolation (no dependencies between them)
 2. Test environment mirrors production database schema
 3. Scrapers won't corrupt production data if they fail
-4. 24 scrapers can be parallelized for faster execution
+4. 11 active scrapers (research updated from initial 24 estimate)
 5. Current audit tools (audit_data_quality.py, smoke_test_quality.py) are functional and usable
 
 ---
@@ -142,9 +148,10 @@
 |------|--------|-----------|
 | Scrapers modify production DB during audit | Data corruption | Run audit in test DB only |
 | Some scrapers have undocumented dependencies | Audit blocked | Document as we find them |
-| Audit takes longer than expected | Timeline slip | Parallelize Phase 1-2 execution |
+| Audit takes longer than expected | Timeline slip | Parallelize Phase 1 execution in 2 waves |
 | Findings reveal major refactoring needed | Scope creep | Document for Phase 2 planning only |
+| Discrepancy: 24 vs 11 scrapers | Incomplete audit | Verify all scraper sources; document inactive ones |
 
 ---
 
-*Roadmap created: 2026-03-19*
+*Roadmap updated: 2026-03-19 with Phase 1 planning complete*
