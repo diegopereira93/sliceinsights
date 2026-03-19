@@ -6,18 +6,106 @@ import { Send, User, Bot, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { chatWithCoach, ChatMessage } from '@/lib/api';
+import { Paddle } from '@/types/paddle';
 
 interface CoachChatInterfaceProps {
     grokDossier: string;
     contextString: string;
     paddleId?: string;
+    paddles?: Paddle[];
+    onPaddleClick?: (paddle: Paddle) => void;
 }
 
-export function CoachChatInterface({ grokDossier, contextString, paddleId }: CoachChatInterfaceProps) {
+export function CoachChatInterface({ grokDossier, contextString, paddleId, paddles = [], onPaddleClick }: CoachChatInterfaceProps) {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // Function to find paddle in the list and return it
+    const findPaddleByName = (text: string): Paddle | null => {
+        if (!paddles) return null;
+        return paddles.find(p => {
+            const fullName = `${p.brand} ${p.name}`;
+            return text.toLowerCase().includes(fullName.toLowerCase()) ||
+                   text.toLowerCase().includes(p.name.toLowerCase());
+        }) || null;
+    };
+
+    // Function to parse message content and create links for paddle names
+    const renderMessageWithLinks = (content: string) => {
+        // Split by newlines
+        return content.split('\n').map((paragraph, paraIdx) => {
+            // Process paragraph for bold text and paddle links
+            const parts = paragraph.split(/(\*\*[^*]+\*\*)/g);
+
+            const processedParts = parts.map((part, partIdx) => {
+                if (part.startsWith('**') && part.endsWith('**')) {
+                    // Bold text
+                    const boldText = part.slice(2, -2);
+                    return <strong key={partIdx} className="text-white font-bold">{boldText}</strong>;
+                }
+
+                // Check for paddle names in this part
+                const words = part.split(/(\s+)/);
+                const nodes = [];
+
+                for (let i = 0; i < words.length; i += 2) {
+                    const word = words[i];
+                    const space = words[i + 1] || '';
+
+                    // Try to find paddle by this word and next word combined
+                    let paddle = findPaddleByName(word);
+                    let textToUse = word;
+
+                    if (!paddle && i + 2 < words.length) {
+                        textToUse = `${word} ${words[i + 2]}`;
+                        paddle = findPaddleByName(textToUse);
+                        if (paddle) {
+                            nodes.push(
+                                <button
+                                    key={`${partIdx}-${nodes.length}`}
+                                    onClick={() => paddle && onPaddleClick?.(paddle)}
+                                    className="text-primary hover:text-primary/80 underline cursor-pointer transition-colors font-semibold"
+                                    title={`R$ ${paddle.price}`}
+                                >
+                                    {textToUse}
+                                </button>
+                            );
+                            nodes.push(space);
+                            nodes.push(words[i + 3] || '');
+                            i += 2;
+                            continue;
+                        }
+                    }
+
+                    if (paddle) {
+                        nodes.push(
+                            <button
+                                key={`${partIdx}-${nodes.length}`}
+                                onClick={() => paddle && onPaddleClick?.(paddle)}
+                                className="text-primary hover:text-primary/80 underline cursor-pointer transition-colors font-semibold"
+                                title={`R$ ${paddle.price}`}
+                            >
+                                {word}
+                            </button>
+                        );
+                    } else {
+                        nodes.push(word);
+                    }
+                    nodes.push(space);
+                }
+
+                return nodes;
+            });
+
+            return (
+                <p key={paraIdx} className={paraIdx > 0 ? 'mt-2' : ''}>
+                    {processedParts}
+                </p>
+            );
+        });
+    };
 
     // Initial Coach Message using the Dossier
     useEffect(() => {
@@ -100,14 +188,12 @@ export function CoachChatInterface({ grokDossier, contextString, paddleId }: Coa
                             ? 'bg-primary text-primary-foreground rounded-tr-sm'
                             : 'bg-white/5 text-zinc-300 rounded-tl-sm border border-white/5'
                             }`}>
-                            {/* Make bold text actually bold and add paragraphs */}
-                            {msg.content.split('\n').map((paragraph, i) => (
-                                <p key={i} className={i > 0 ? 'mt-2' : ''}>
-                                    {paragraph.split('**').map((text, j) =>
-                                        j % 2 === 1 ? <strong key={j} className="text-white font-bold">{text}</strong> : text
-                                    )}
-                                </p>
-                            ))}
+                            {/* Render message with paddle links */}
+                            {msg.role === 'user' ? (
+                                msg.content
+                            ) : (
+                                renderMessageWithLinks(msg.content)
+                            )}
                         </div>
                     </motion.div>
                 ))}
