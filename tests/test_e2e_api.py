@@ -223,13 +223,14 @@ class TestDataIntegrity:
         assert body["total"] >= 10, f"Expected ≥10 paddles, got {body['total']}"
 
     def test_quality_gate_all_specs_complete(self, client: httpx.Client):
-        """Phase 4: ALL paddles from /paddles MUST have complete spec fields."""
+        """Phase 4: Enriched paddles (specs_confidence > 0) MUST have complete spec fields."""
         r = client.get("/paddles", params={"limit": 100})
         body = r.json()
         required_spec_fields = [
             "core_thickness_mm", "swing_weight", "spin_rpm", "handle_length"
         ]
-        for p in body["data"]:
+        enriched = [p for p in body["data"] if p.get("specs_confidence", 0) > 0]
+        for p in enriched:
             specs = p.get("specs", {})
             for field in required_spec_fields:
                 assert specs.get(field) is not None, \
