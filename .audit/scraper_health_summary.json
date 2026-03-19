@@ -1,0 +1,169 @@
+{
+  "audit_timestamp": "2026-03-19T13:34:00.000000",
+  "total_scrapers": 11,
+  "health_metrics": {
+    "passing": 6,
+    "failing": 5,
+    "unknown": 0
+  },
+  "failure_breakdown": {
+    "PLAYWRIGHT": 2,
+    "FILE": 2,
+    "NETWORK": 1,
+    "PARSING": 0,
+    "API": 0,
+    "SCHEMA": 0,
+    "TIMEOUT": 0,
+    "DEPENDENCY": 0,
+    "UNKNOWN": 0
+  },
+  "remediation_priority": {
+    "PRIORITY_1_BLOCKING": [
+      {
+        "scraper": "scrape_justpaddles.py",
+        "issue": "INSTALL_MISSING_DEPENDENCY",
+        "error_category": "PLAYWRIGHT",
+        "last_run": "2026-03-19T13:28:03.932904",
+        "fix": "playwright install chromium inside backend_v3 container",
+        "effort": "Very Low (< 30 minutes)"
+      },
+      {
+        "scraper": "fetch_johnkew.py",
+        "issue": "INSTALL_MISSING_DEPENDENCY",
+        "error_category": "PLAYWRIGHT",
+        "last_run": "2026-03-19T13:28:07.687478",
+        "fix": "Same command as scrape_justpaddles.py — shared fix",
+        "effort": "Very Low (shared with above)"
+      }
+    ],
+    "PRIORITY_2_IMPORTANT": [
+      {
+        "scraper": "ingest_pb_studio_csv.py",
+        "issue": "CHECK_INPUT_FILES_AND_PATHS",
+        "error_category": "FILE",
+        "last_run": "2026-03-19T13:28:05.522544",
+        "fix": "Exclude from default audit run or invoke with --csv argument",
+        "effort": "Low (1 hour)"
+      },
+      {
+        "scraper": "ingest_johnkew_csv.py",
+        "issue": "CHECK_INPUT_FILES_AND_PATHS",
+        "error_category": "FILE",
+        "last_run": "2026-03-19T13:28:06.604080",
+        "fix": "Same as ingest_pb_studio_csv.py — update audit harness",
+        "effort": "Low (shared with above)"
+      },
+      {
+        "scraper": "fetch_pb_studio.py",
+        "issue": "ADD_RETRY_LOGIC",
+        "error_category": "NETWORK",
+        "last_run": "2026-03-19T13:28:08.676253",
+        "fix": "Verify in production environment; add network error handling",
+        "effort": "Low (1-2 hours)"
+      }
+    ],
+    "PRIORITY_3_INVESTIGATE": []
+  },
+  "production_safe": [
+    {
+      "scraper": "scrape_joola.py",
+      "status": "PASS",
+      "last_successful_run": "2026-03-19T13:26:53.697692",
+      "error_category": "SUCCESS",
+      "products_found": 158
+    },
+    {
+      "scraper": "scrape_yosports.py",
+      "status": "PASS",
+      "last_successful_run": "2026-03-19T13:27:00.292571",
+      "error_category": "SUCCESS",
+      "products_found": 64
+    },
+    {
+      "scraper": "scrape_pcklhouse.py",
+      "status": "PASS",
+      "last_successful_run": "2026-03-19T13:27:02.682530",
+      "error_category": "SUCCESS",
+      "products_found": 57
+    },
+    {
+      "scraper": "scrape_shark.py",
+      "status": "PASS",
+      "last_successful_run": "2026-03-19T13:26:57.663260",
+      "error_category": "SUCCESS",
+      "products_found": 0,
+      "note": "0 products — store may have empty catalog; monitor"
+    },
+    {
+      "scraper": "scrape_supremo.py",
+      "status": "PASS",
+      "last_successful_run": "2026-03-19T13:26:58.812305",
+      "error_category": "SUCCESS",
+      "products_found": 0,
+      "note": "0 products — store may have empty catalog; monitor"
+    },
+    {
+      "scraper": "scrape_propadel.py",
+      "status": "PASS",
+      "last_successful_run": "2026-03-19T13:28:03.629197",
+      "error_category": "SUCCESS",
+      "products_found": 0,
+      "note": "0 products in test env due to DNS isolation; verify in production"
+    }
+  ],
+  "transient_failures": [
+    {
+      "scraper": "scrape_justpaddles.py",
+      "error_category": "PLAYWRIGHT",
+      "is_transient": true,
+      "recommendation": "Install Chromium browser binary with 'playwright install chromium' — no code changes needed"
+    },
+    {
+      "scraper": "fetch_johnkew.py",
+      "error_category": "PLAYWRIGHT",
+      "is_transient": true,
+      "recommendation": "Same Chromium fix as scrape_justpaddles.py — shared single command resolution"
+    },
+    {
+      "scraper": "fetch_pb_studio.py",
+      "error_category": "NETWORK",
+      "is_transient": true,
+      "recommendation": "DNS/network isolation in test container — likely functional in production; verify and add connection error handling"
+    }
+  ],
+  "last_audit_run": "2026-03-19T13:28:08.676253",
+  "last_run_timestamps": {
+    "scrape_joola.py": "2026-03-19T13:26:53.697692",
+    "scrape_shark.py": "2026-03-19T13:26:57.663260",
+    "scrape_supremo.py": "2026-03-19T13:26:58.812305",
+    "scrape_yosports.py": "2026-03-19T13:27:00.292571",
+    "scrape_pcklhouse.py": "2026-03-19T13:27:02.682530",
+    "scrape_propadel.py": "2026-03-19T13:28:03.629197",
+    "scrape_justpaddles.py": "2026-03-19T13:28:03.932904",
+    "ingest_pb_studio_csv.py": "2026-03-19T13:28:05.522544",
+    "ingest_johnkew_csv.py": "2026-03-19T13:28:06.604080",
+    "fetch_johnkew.py": "2026-03-19T13:28:07.687478",
+    "fetch_pb_studio.py": "2026-03-19T13:28:08.676253"
+  },
+  "classifier_gaps_identified": [
+    {
+      "scraper": "fetch_pb_studio.py",
+      "issue": "Error logged to stdout, not stderr — classifier only checks stderr",
+      "result": "Classified as UNKNOWN instead of NETWORK",
+      "fix": "Update error_categorization.py to also scan stdout for network error patterns"
+    },
+    {
+      "scrapers": ["ingest_pb_studio_csv.py", "ingest_johnkew_csv.py"],
+      "issue": "argparse exit code 2 not recognized as FILE category",
+      "result": "Classified as UNKNOWN instead of FILE",
+      "fix": "Add pattern for 'error: the following arguments are required' mapping to FILE category"
+    }
+  ],
+  "recommendations": [
+    "Priority 1: Fix 2 blocking Playwright scrapers — run 'playwright install chromium' in backend_v3 container (single command, < 30 min)",
+    "Priority 2: Update audit harness to exclude CSV ingesters from default run (they require --csv argument)",
+    "Priority 2: Verify fetch_pb_studio.py works in production environment (DNS/network issue in test container)",
+    "Monitor: 3 zero-product scrapers (shark, supremo, propadel) — confirm they return data in production",
+    "Improve: Update error classifier to scan stdout and add argparse error pattern for FILE category"
+  ]
+}
