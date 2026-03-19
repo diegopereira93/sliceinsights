@@ -25,11 +25,11 @@ Automation of the entire data pipeline with validated quality gates, real-time m
 
 ### Alerts & Monitoring
 
-- [ ] **ALT-01**: Telegram webhook fires when P1 breaches detected (invisible failures, 0 products)
-- [ ] **ALT-02**: GitHub Issues created automatically for P1 breaches with remediation context
-- [ ] **ALT-03**: Email alerts sent to admin group on P1 SLO breaches
-- [ ] **ALT-04**: Alert includes scraper name, breach type, timestamp, last successful run
-- [ ] **ALT-05**: Alert contains direct link to RUNBOOK_SCRAPERS.md for troubleshooting
+- [x] **ALT-01**: Telegram webhook fires when P1 breaches detected (invisible failures, 0 products)
+- [x] **ALT-02**: GitHub Issues created automatically for P1 breaches with remediation context
+- [x] **ALT-03**: Email alerts sent to admin group on P1 SLO breaches
+- [x] **ALT-04**: Alert includes scraper name, breach type, timestamp, last successful run
+- [x] **ALT-05**: Alert contains direct link to RUNBOOK_SCRAPERS.md for troubleshooting
 
 ### Deploy & Release Strategy
 
@@ -81,11 +81,11 @@ Automation of the entire data pipeline with validated quality gates, real-time m
 | SLO-03 | Phase 6 | Complete — 06-02 |
 | SLO-04 | Phase 6 | Complete — 06-02 |
 | SLO-05 | Phase 6 | Complete — 06-01 |
-| ALT-01 | Phase 7 | Pending |
-| ALT-02 | Phase 7 | Pending |
-| ALT-03 | Phase 7 | Pending |
-| ALT-04 | Phase 7 | Pending |
-| ALT-05 | Phase 7 | Pending |
+| ALT-01 | Phase 7 | Complete |
+| ALT-02 | Phase 7 | Complete |
+| ALT-03 | Phase 7 | Complete |
+| ALT-04 | Phase 7 | Complete |
+| ALT-05 | Phase 7 | Complete |
 | DEP-01 | Phase 8 | Pending |
 | DEP-02 | Phase 8 | Pending |
 | DEP-03 | Phase 8 | Pending |
