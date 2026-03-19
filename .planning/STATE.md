@@ -4,7 +4,7 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 01
 status: executing
-last_updated: "2026-03-19T13:47:00.000Z"
+last_updated: "2026-03-19T13:50:00.000Z"
 progress:
   total_phases: 4
   completed_phases: 0
@@ -15,7 +15,7 @@ progress:
 # Project State: SliceInsights Data Pipeline Audit
 
 **Last Updated:** 2026-03-19
-**Status:** Executing Phase 01 — Plan 01-00 complete (Wave 0 test infrastructure), Plan 01-01 next
+**Status:** Executing Phase 01 — Plans 01-00 and 01-01 complete, Plan 01-02 next
 **Current Phase:** 01
 
 ## Project Reference
@@ -27,7 +27,7 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 
 **Milestone:** Data Pipeline v1 Audit
 **Phases:** 4
-**Completion:** 0% (planning complete)
+**Completion:** 25% (Phase 1 Wave 1 complete)
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
@@ -44,8 +44,8 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 | Use existing audit tools | audit_data_quality.py and smoke_test_quality.py already built | ✓ Confirmed |
 | 4-phase structure | Phase 1 = health, Phase 2 = quality, Phase 3 = automation, Phase 4 = report | ✓ Confirmed |
 | Parallel execution where possible | Speed up audit of 24 scrapers | ✓ Planned |
-| Root-level conftest.py for audit_runner_test.py | pytest only propagates conftest.py upward from test file location; .audit/conftest.py needed for fixtures in root-level test | ✓ Applied (01-00) |
-| test_db_init.py falls back to psycopg2 | SQLModel not guaranteed available at test time; psycopg2 fallback ensures script works | ✓ Applied (01-00) |
+| sys.path insert to .audit/ dir | Python cannot import dot-prefixed packages normally; direct path insert is cleanest workaround | ✓ 01-01 |
+| Run harness from host via docker compose exec | Non-interactive capture with -T flag; avoids complexity of running inside container | ✓ 01-01 |
 
 ## Known Constraints
 
@@ -55,20 +55,15 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 
 ## Blockers
 
-None currently. Ready to proceed.
-
-## Performance Metrics
-
-| Phase | Plan | Duration | Tasks | Files |
-|-------|------|----------|-------|-------|
-| 01 | 00 | 5min | 4 | 7 |
+None currently.
 
 ## Next Steps
 
-1. Execute Plan 01-01 — implement error_categorization.py (Wave 1)
-2. Execute Plan 01-02 — implement audit_runner.py (Wave 1)
-3. Run full audit against 11 scrapers, capture execution_log.json
+1. Execute Plan 01-02 — Wave 2: analyze execution results, investigate 5 failures, generate detailed report
+2. Fix PLAYWRIGHT failures: playwright install chromium in backend_v3 container
+3. Investigate 3 UNKNOWN failures (CSV ingesters and fetch_pb_studio.py)
+4. Based on Phase 1 findings, refine Phase 2-4 scope
 
 ---
 
-*State initialized: 2026-03-19 after project setup*
+*State updated: 2026-03-19 after Plan 01-01 execution (scraper harness + audit run)*
