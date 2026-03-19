@@ -127,7 +127,7 @@
 | 1 | Complete | 3/3 | AUDIT-01..04 | 100% |
 | 2 | Not Started | 0/1 | QUAL-01..06 | 0% |
 | 3 | Complete | 1/1 | AUTO-01..05, LOG-01..05 | 100% |
-| 4 | 1/3 | In Progress|  | 0% |
+| 4 | 2/3 | In Progress|  | 0% |
 | **Total** | **In Progress** | **4/6** | **25** | **50%** |
 
 ---
