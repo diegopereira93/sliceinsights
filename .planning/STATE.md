@@ -4,12 +4,12 @@ milestone: v2.0
 milestone_name: milestone
 current_phase: 6
 status: executing
-last_updated: "2026-03-19T20:30:00.000Z"
+last_updated: "2026-03-19T20:20:48.498Z"
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 8
-  completed_plans: 4
+  completed_plans: 6
 ---
 
 # Project State: SliceInsights Workflows & Automation
@@ -32,7 +32,7 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
 | 5 | CI/CD & Testing | ◆ Executing | 2/3 |
-| 6 | SLO Enforcement | ◆ Executing | 2/5 |
+| 6 | SLO Enforcement | ◆ Executing | 3/5 |
 | 7 | Alerts & Monitoring | ○ Pending | 0/5 |
 | 8 | Deploy & Release | ○ Pending | 0/5 |
 | 9 | Data Quality & Reporting | ○ Pending | 0/6 |
@@ -46,6 +46,8 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 | Group freshness by store_name (not scraper_name column) | MarketOffer has no scraper_name; store_name is the per-source identifier | ✓ 06-02 |
 | Completeness checks global paddle_master catalog | No per-scraper partition on paddle specs; single global staleness metric | ✓ 06-02 |
 | validate_job_slo is non-blocking (try/except) | SLO check failure must never halt data ingestion | ✓ 06-02 |
+| SLO workflow continue-on-error at job level | SLO failures are informational; never block other workflows | ✓ 06-03 |
+| Only requirements.txt in SLO workflow | Dev tools not needed to run validator; keeps install lean | ✓ 06-03 |
 | 5-phase automation structure | Phase 5 = CI/CD, Phase 6 = SLO, Phase 7 = alerts, Phase 8 = deploy, Phase 9 = reporting | ✓ Confirmed |
 | Ruff runs with continue-on-error: true | Linting is advisory only; never blocks merges in Phase 5 | ✓ 05-01 |
 | smoke-tests needs unit-tests | Smoke tests are skipped entirely if unit tests fail (fast-fail) | ✓ 05-01 |
@@ -79,3 +81,4 @@ None currently.
 
 *State updated: 2026-03-19 — 06-01 complete: SLOLog model, Alembic migration (slo_logs table with JSONB), and slo_config.py created.*
 *State updated: 2026-03-19 — 06-02 complete: scripts/slo_validator.py with check_freshness, check_completeness, validate_job_slo hook, and CLI --all/--scraper flags.*
+*State updated: 2026-03-19 — 06-03 complete: .github/workflows/slo-check.yml created with cron '0 */6 * * *', workflow_dispatch, DATABASE_URL_SYNC secret injection.*
