@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine
 from sqlalchemy.orm import sessionmaker
 
 from app.config import get_settings
+from app.models.slo import SLOLog  # noqa: F401 — registers SLOLog with SQLModel metadata
 
 settings = get_settings()
 
