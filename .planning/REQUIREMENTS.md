@@ -9,11 +9,11 @@ Automation of the entire data pipeline with validated quality gates, real-time m
 
 ### CI/CD & Testing
 
-- [ ] **CI-01**: GitHub Actions workflow runs on every push to main
+- [x] **CI-01**: GitHub Actions workflow runs on every push to main
 - [ ] **CI-02**: Workflow executes unit tests for all scraper modules
-- [ ] **CI-03**: Workflow executes smoke tests (audit_data_quality.py) for sample scrapers
+- [x] **CI-03**: Workflow executes smoke tests (audit_data_quality.py) for sample scrapers
 - [ ] **CI-04**: Tests must pass before allowing merge to main
-- [ ] **CI-05**: Linting/format checks are optional (fail-warn only, not fail-hard)
+- [x] **CI-05**: Linting/format checks are optional (fail-warn only, not fail-hard)
 
 ### SLO Enforcement & Validation
 
@@ -71,11 +71,11 @@ Automation of the entire data pipeline with validated quality gates, real-time m
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CI-01 | Phase 5 | Pending |
+| CI-01 | Phase 5 | Complete |
 | CI-02 | Phase 5 | Pending |
-| CI-03 | Phase 5 | Pending |
+| CI-03 | Phase 5 | Complete |
 | CI-04 | Phase 5 | Pending |
-| CI-05 | Phase 5 | Pending |
+| CI-05 | Phase 5 | Complete |
 | SLO-01 | Phase 6 | Pending |
 | SLO-02 | Phase 6 | Pending |
 | SLO-03 | Phase 6 | Pending |

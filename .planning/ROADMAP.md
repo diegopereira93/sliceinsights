@@ -25,7 +25,7 @@
 5. Workflow execution logs are accessible for debugging
 
 **Deliverables:**
-- `.github/workflows/ci.yml` — CI/CD workflow definition
+- `.github/workflows/ci.yml` — CI/CD workflow definition [DONE — 05-01, commit 3e8307d]
 - Unit test suite for scrapers
 - Smoke test configuration
 - PR protection rules configured
