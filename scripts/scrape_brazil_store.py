@@ -3,7 +3,7 @@ Scraper: Brazil Pickleball Store (Nuvemshop/TiendaNube)
 Domain: brazilpickleballstore.com.br
 Output: data/raw/brazil_pickleball_store.csv
 """
-from scraper_utils import fetch_nuvemshop_products, save_to_csv
+from scripts.scraper_utils import fetch_nuvemshop_products, save_to_csv
 
 DOMAIN = "www.brazilpickleballstore.com.br"
 STORE = "Brazil Pickleball Store"

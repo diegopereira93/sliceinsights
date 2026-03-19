@@ -9,7 +9,7 @@ import re
 import time
 import requests
 from bs4 import BeautifulSoup
-from scraper_utils import parse_brand_model, save_to_csv
+from scripts.scraper_utils import parse_brand_model, save_to_csv
 
 DOMAIN = "www.lojapropadel.com.br"
 STORE = "ProPadel"

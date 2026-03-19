@@ -3,7 +3,7 @@ Scraper: Shark Beach Tennis (WooCommerce)
 Domain: sharkbeachtennis.com.br
 Output: data/raw/shark.csv
 """
-from scraper_utils import fetch_woocommerce_products, save_to_csv
+from scripts.scraper_utils import fetch_woocommerce_products, save_to_csv
 
 DOMAIN = "sharkbeachtennis.com.br"
 STORE = "Shark"

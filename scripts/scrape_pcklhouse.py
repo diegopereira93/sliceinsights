@@ -3,7 +3,7 @@ Scraper: PCKL House (Nuvemshop/TiendaNube)
 Domain: pcklhouse.com.br
 Output: data/raw/pcklhouse_products.csv
 """
-from scraper_utils import fetch_nuvemshop_products, save_to_csv
+from scripts.scraper_utils import fetch_nuvemshop_products, save_to_csv
 
 DOMAIN = "www.pcklhouse.com.br"
 STORE = "PCKL House"

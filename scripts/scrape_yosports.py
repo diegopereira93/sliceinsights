@@ -3,7 +3,7 @@ Scraper: yoSports (Shopify)
 Domain: yosports.com.br
 Output: data/raw/yosports.csv
 """
-from scraper_utils import fetch_shopify_products, shopify_product_to_row, save_to_csv, parse_brand_model
+from scripts.scraper_utils import fetch_shopify_products, shopify_product_to_row, save_to_csv, parse_brand_model
 
 DOMAIN = "yosports.com.br"
 STORE = "yoSports"

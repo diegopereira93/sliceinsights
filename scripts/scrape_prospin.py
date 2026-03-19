@@ -3,7 +3,7 @@ Scraper: ProSpin (WooCommerce)
 Domain: prospin.com.br
 Output: data/raw/prospin_products.csv
 """
-from scraper_utils import fetch_woocommerce_products, save_to_csv
+from scripts.scraper_utils import fetch_woocommerce_products, save_to_csv
 
 DOMAIN = "www.prospin.com.br"
 STORE = "ProSpin"

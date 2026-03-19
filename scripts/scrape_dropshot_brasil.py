@@ -1,5 +1,5 @@
 import asyncio
-from scraper_utils import fetch_dynamic_products, save_to_csv
+from scripts.scraper_utils import fetch_dynamic_products, save_to_csv
 
 STORE = "Drop Shot Brasil"
 OUTPUT = "data/raw/dropshot_brasil_products.csv"

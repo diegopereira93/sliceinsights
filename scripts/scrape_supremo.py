@@ -1,4 +1,4 @@
-from scraper_utils import fetch_html_products, save_to_csv
+from scripts.scraper_utils import fetch_html_products, save_to_csv
 
 DOMAIN = "www.lojasupremo.com.br"
 STORE = "Loja Supremo"

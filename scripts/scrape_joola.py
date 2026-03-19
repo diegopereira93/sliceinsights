@@ -3,7 +3,7 @@ Scraper: Joola Brasil (Shopify API)
 Domain: joola.com.br
 Output: data/raw/joola_brazil.csv
 """
-from scraper_utils import (
+from scripts.scraper_utils import (
     fetch_shopify_products,
     shopify_product_to_row,
     save_to_csv,
