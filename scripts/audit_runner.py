@@ -15,10 +15,11 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-# Add project root to sys.path so .audit package is importable
+# Add project root to sys.path so error_categorization is importable
 _PROJECT_ROOT = Path(__file__).parent.parent
-sys.path.insert(0, str(_PROJECT_ROOT))
-from audit import error_categorization  # noqa: E402
+_AUDIT_DIR = _PROJECT_ROOT / ".audit"
+sys.path.insert(0, str(_AUDIT_DIR))
+import error_categorization  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Scraper registry
@@ -305,14 +306,15 @@ def main() -> None:
     )
     parser.add_argument(
         "--log-file",
-        default=str(LOG_FILE),
-        help="Output path for execution_log.json",
+        default=None,
+        help="Output path for execution_log.json (default: .audit/execution_log.json)",
     )
     args = parser.parse_args()
 
-    # Override global paths if provided
-    global LOG_FILE  # noqa: PLW0603
-    LOG_FILE = Path(args.log_file)
+    # Override global log path if provided
+    if args.log_file:
+        global LOG_FILE  # noqa: PLW0603
+        LOG_FILE = Path(args.log_file)
 
     execution_log = run_all_scrapers(
         SCRAPERS,
