@@ -10,50 +10,57 @@ Comprehensive audit and automation of SliceInsights' paddle data scraping system
 
 ## Requirements
 
-### Validated
+### Validated — v1.0 Audit Complete
 
-- ✓ 24 scraper scripts exist (Brazil Store, Joola, Prospin, Propadel, Shark, Supremo, Yosports, JustPaddles, Dropshot, etc.)
-- ✓ Quality audit tools exist (audit_data_quality.py, smoke_test_quality.py, autonomous_health_check.py)
-- ✓ Database seed pipeline works (seed_brazil_catalog.py)
-- ✓ Price alert system functional (Telegram, webhooks)
+- ✓ 24 scraper scripts exist (Brazil Store, Joola, Prospin, Propadel, Shark, Supremo, Yosports, JustPaddles, Dropshot, etc.) — v1.0
+- ✓ Quality audit tools exist (audit_data_quality.py, smoke_test_quality.py, autonomous_health_check.py) — v1.0
+- ✓ Database seed pipeline works (seed_brazil_catalog.py) — v1.0
+- ✓ Price alert system functional (Telegram, webhooks) — v1.0
+- ✓ Audit all 11 active scrapers for functionality — v1.0 (6 passing, 5 failing with root causes documented)
+- ✓ Map data quality metrics (coverage, completeness, freshness) — v1.0 (86 paddles, 0% specs completeness critical)
+- ✓ Identify automation gaps (no retry logic, no SLO enforcement) — v1.0 (all documented in AUDIT_REPORT.md)
+- ✓ Establish quality SLOs (two-tier: 24h prices, 7d specs) — v1.0 (from Phase 3 work)
+- ✓ Document dependencies and failure points — v1.0 (dependency matrix + failure mode taxonomy)
 
-### Active
+### Active — v2.0 Refactoring
 
-- [ ] Audit all 24 scrapers for functionality (which work? which fail? why?)
-- [ ] Map data quality metrics (coverage, completeness, freshness, accuracy)
-- [ ] Identify automation gaps (no scheduled runs, no error recovery, no retry logic)
-- [ ] Establish quality SLOs (data must refresh daily? hourly? how stale is acceptable?)
-- [ ] Design unified error handling and logging across all scrapers
-- [ ] Create CI/CD workflows for scraper validation (GitHub Actions)
-- [ ] Document dependencies and failure points
-- [ ] Build automated alert system for data quality failures
+- [ ] Implement minimum product count assertions in all scrapers (prevents invisible failures)
+- [ ] Add `--max-age-hours` SLO enforcement to `measure_freshness.py`
+- [ ] Replace `print()` with structured logging module across all scrapers
+- [ ] Add post-run summary events for anomaly detection
+- [ ] Complete 0% specs gap via US dump enrichment (32 matched, 37% catalog completion)
+- [ ] Design unified error handling with retry logic (`tenacity` library)
+- [ ] Create CI/CD workflows for automated scraper validation
+- [ ] Build automated alert system for SLO breaches
 
 ### Out of Scope
 
-- Refactoring individual scraper code (will come in Phase 2)
 - Adding new scraper sources (defer to Phase 3)
 - Real-time streaming (batch-based pipeline sufficient for now)
 - ML-based anomaly detection (manual validation gates first)
+- Rewriting individual scraper architectures (incremental fixes only)
 
 ## Context
 
-**Current State:**
+**Current State (Post v1.0 Audit):**
 - SliceInsights v1.8.1 running in production with AI-powered paddle recommendations
-- Recommendations depend on accurate product data: specs, prices, availability
-- Data comes from 24 independent scrapers written at different times by different developers
-- No unified validation, no scheduled automation, no clear SLOs
+- Data pipeline audit complete: 11 active scrapers identified, 6 operational (54.5%)
+- Critical findings: invisible failures, 0% specs completeness, no SLO enforcement
+- Audit artifacts created: AUDIT_REPORT.md, DATA_QUALITY.md, RUNBOOK_SCRAPERS.md
+- Tech stack: Python scrapers, PostgreSQL (Docker), GitHub Actions (not yet automated)
 
-**Known Issues:**
-- Scrapers may fail silently or partially
-- No visibility into which data is stale
-- Manual intervention required to refresh catalog
-- Error handling inconsistent across scripts
-- No structured logging or monitoring
+**Known Issues (v1.0 Audit Results):**
+- 🔴 Invisible failures: Scraper can exit 0 (success) while writing 0 products
+- 🔴 0% specs completeness: All 86 paddles have NULL technical fields (blocks recommendations)
+- 🔴 No SLO enforcement: Freshness measured but not validated in CI/CD
+- ⚠️ No retry logic: All 24 scrapers use `except Exception` with no recovery
+- ⚠️ No structured logging: Silent failures go undetected
 
-**Why Now:**
-- User wants confidence that data pipeline is reliable before scaling
-- Current setup is fragile—single scraper failure could corrupt recommendations
-- Manual refresh process slows iteration
+**Why Audit Matters:**
+- Recommendations depend on trustworthy data; gaps directly impact conversions
+- Previous setup was fragile—any scraper failure could corrupt catalog
+- Manual refresh process prevented scaling
+- Now we have: baseline metrics, prioritized roadmap, runbook for operations
 
 ## Constraints
 
@@ -71,23 +78,28 @@ Comprehensive audit and automation of SliceInsights' paddle data scraping system
 | Establish SLOs upfront | Define "acceptable" before fixing | ✓ Phase 3: Two-tier SLO defined (24h prices, 7d specs) |
 | Parallel audit runs | Test all 24 scrapers simultaneously to see cross-sectional view | ✓ Phase 1: 11 active scrapers identified & tested; 6 passing (54.5%) |
 
-## Phase 1-4 Audit Completion Summary
+## Shipped in v1.0: Data Pipeline Audit
 
-**Validation Complete:** All 4 audit phases executed end-to-end.
+| Phase | Name | Deliverables | Status |
+|-------|------|--------------|--------|
+| 1 | Scraper Health Audit | Health report, root cause analysis, production readiness matrix | ✓ Complete (3 plans) |
+| 2 | Data Quality Analysis | Data quality dashboard, corruption audit, validation rules | ✓ Complete (2 plans) |
+| 3 | Automation & Reliability Mapping | Failure mode taxonomy, SLO spec, logging audit, dependency matrix | ✓ Complete (1 plan) |
+| 4 | Audit Report & Recommendations | Master audit report, quality dashboard, operational runbook | ✓ Complete (3 plans) |
 
-- **Phase 1: Scraper Health Audit** → 6/11 scrapers operational; 5 failing
-- **Phase 2: Data Quality Analysis** → 86 paddles cataloged; 0% specs completeness (critical gap)
-- **Phase 3: Automation & Reliability Mapping** → Invisible/soft/hard failures classified; SLOs defined
-- **Phase 4: Audit Report & Recommendations** → AUDIT_REPORT.md, DATA_QUALITY.md, RUNBOOK_SCRAPERS.md created
+**Audit Artifacts (docs/):**
+- `docs/AUDIT_REPORT.md` — 332 lines, 54.5% fleet health, P1/P2/P3 roadmap
+- `docs/DATA_QUALITY.md` — 160 lines, action items for 0% specs gap
+- `docs/operations/RUNBOOK_SCRAPERS.md` — 290 lines, exact docker commands for all 11 scrapers
 
 **Key Findings:**
-- Invisible failures (0 products written but exit 0) are undetected — primary risk
-- 0% specs completeness blocks recommendation engine
-- 0/24 scrapers have retry logic — all use `except Exception` with no recovery
-- No SLO enforcement — freshness measured but not validated
+- 🔴 **Invisible failures** are undetected (primary risk class)
+- 🔴 **0% specs completeness** blocks recommendation engine (critical blocker)
+- ⚠️ **0/24 scrapers have retry logic** — all catch Exception with no recovery
+- ⚠️ **No SLO enforcement** — freshness measured but not validated
 
-**Next Milestone:** Phase 2 (Refactoring) — implement fixes prioritized in AUDIT_REPORT.md P1/P2/P3
+**v2.0 Next:** Implement P1/P2/P3 priorities from AUDIT_REPORT.md (8 new requirements)
 
 ---
 
-*Last updated: 2026-03-19 after Phase 4 execution — Audit milestone complete*
+*Last updated: 2026-03-19 — v1.0 Data Pipeline Audit milestone shipped and archived*
