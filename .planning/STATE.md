@@ -4,19 +4,19 @@ milestone: v2.0
 milestone_name: milestone
 current_phase: 7
 status: planning
-last_updated: "2026-03-19T23:08:00Z"
+last_updated: "2026-03-19T23:30:00Z"
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 11
-  completed_plans: 10
+  completed_plans: 11
 ---
 
 # Project State: SliceInsights Workflows & Automation
 
 **Last Updated:** 2026-03-19
 **Status:** Executing
-**Current Phase:** 7 (Plan 1/2 complete)
+**Current Phase:** 7 (Plan 2/2 — awaiting human verification checkpoint)
 
 ## Project Reference
 
@@ -33,7 +33,7 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 |-------|------|--------|-------|
 | 5 | CI/CD & Testing | ✓ Complete | 3/3 |
 | 6 | SLO Enforcement | ✓ Complete | 5/5 |
-| 7 | Alerts & Monitoring | ◆ Executing | 1/2 |
+| 7 | Alerts & Monitoring | ◆ Checkpoint | 2/2 |
 | 8 | Deploy & Release | ○ Pending | 0/5 |
 | 9 | Data Quality & Reporting | ○ Pending | 0/6 |
 
@@ -58,6 +58,9 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 | Multi-channel alerting (Telegram + GitHub + Email) | Ensures P1 breaches reach responsible parties across platforms | ✓ Confirmed |
 | SLOBreach dataclass in slo_alert.py alongside ORM model | Cohesion: breach value object and dedup model are always imported together | ✓ 07-01 |
 | Dedup functions module-level (not class methods) | Simplifies unit testing with mock sessions; no service instantiation needed | ✓ 07-01 |
+| LOOKBACK_HOURS=7 in alert_worker | Slightly exceeds 6h cron cycle to avoid missing breaches at cycle boundary | ✓ 07-02 |
+| alert job uses if: always() | Runs even when slo-check job fails; pre-existing breach data in slo_logs still gets processed | ✓ 07-02 |
+| GITHUB_REPOSITORY via github.repository context | Not a secret; built-in Actions context variable, auto-set by GitHub | ✓ 07-02 |
 | Hourly data quality checks (all 11 scrapers) | Detect degradation quickly; keep baseline on failing scrapers too | ✓ Confirmed |
 | No container registry in v2.0 | Infrastructure concern; defer to v2.1 after core automation works | ✓ Confirmed |
 
@@ -90,3 +93,4 @@ None currently.
 *State updated: 2026-03-19 — 06-04 complete: finish_run(scraper_name) hook added to scraper_utils.py; scripts/run_scraper.py created as unified dispatcher with non-blocking SLO validation after each scraper run.*
 *State updated: 2026-03-19 — 06-05 complete: docs/slo-guide.md created (architecture, schema, runbook, breach simulation, SLO-01..SLO-05 traceability); Phase 6 SUMMARY created; Phase 6 closed.*
 *State updated: 2026-03-19 — 07-01 complete: SLOAlert ORM model (slo_alerts table), SLOBreach dataclass with P1/P2/P3 severity, SLOAlertService with Telegram+GitHub+Email channels, 27 unit tests all passing; PyGithub==2.8.1 added.*
+*State updated: 2026-03-19 — 07-02 checkpoint: alert_worker.py CLI created (queries slo_logs, 24h dedup, dispatches via SLOAlertService, resolution detection); slo-check.yml extended with alert job (needs/if-always/continue-on-error, 10 secrets); 39 tests passing; awaiting human verification.*
