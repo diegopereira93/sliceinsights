@@ -3,19 +3,19 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
 current_phase: 6
-status: planning
-last_updated: "2026-03-19T18:43:39.807Z"
+status: executing
+last_updated: "2026-03-19T20:15:00.000Z"
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 8
+  completed_plans: 4
 ---
 
 # Project State: SliceInsights Workflows & Automation
 
 **Last Updated:** 2026-03-19
-**Status:** Ready to plan
+**Status:** Executing Phase 6
 **Current Phase:** 6
 
 ## Project Reference
@@ -32,7 +32,7 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
 | 5 | CI/CD & Testing | ◆ Executing | 2/3 |
-| 6 | SLO Enforcement | ○ Pending | 0/5 |
+| 6 | SLO Enforcement | ◆ Executing | 1/5 |
 | 7 | Alerts & Monitoring | ○ Pending | 0/5 |
 | 8 | Deploy & Release | ○ Pending | 0/5 |
 | 9 | Data Quality & Reporting | ○ Pending | 0/6 |
@@ -41,6 +41,8 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 
 | Decision | Rationale | Status |
 |----------|-----------|--------|
+| Stamp alembic at 837c5f246923 to fix out-of-sync DB | init_db_sync() bypasses alembic; stamp records existing state before new migration | ✓ 06-01 |
+| Import SLOLog in both database.py and alembic/env.py | Ensures model registered for both app runtime and alembic autogenerate | ✓ 06-01 |
 | 5-phase automation structure | Phase 5 = CI/CD, Phase 6 = SLO, Phase 7 = alerts, Phase 8 = deploy, Phase 9 = reporting | ✓ Confirmed |
 | Ruff runs with continue-on-error: true | Linting is advisory only; never blocks merges in Phase 5 | ✓ 05-01 |
 | smoke-tests needs unit-tests | Smoke tests are skipped entirely if unit tests fail (fast-fail) | ✓ 05-01 |
@@ -72,4 +74,4 @@ None currently.
 
 ---
 
-*State updated: 2026-03-19 — 05-03 complete: docs/ci-setup.md created with branch protection setup instructions and troubleshooting guide.*
+*State updated: 2026-03-19 — 06-01 complete: SLOLog model, Alembic migration (slo_logs table with JSONB), and slo_config.py created.*
