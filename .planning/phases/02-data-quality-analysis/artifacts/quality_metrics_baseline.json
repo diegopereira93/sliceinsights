@@ -1,0 +1,66 @@
+{
+  "generated": "2026-03-19",
+  "database": "picklematch",
+  "phase": "02-data-quality-analysis",
+  "metrics": {
+    "total_paddles": 86,
+    "complete_specs_count": 0,
+    "complete_specs_pct": 0,
+    "us_dump_match_count": 32,
+    "us_dump_match_pct": 37,
+    "us_dump_near_miss_count": 11,
+    "non_paddles_count": 0,
+    "duplicate_groups": 0,
+    "paddles_with_offers": 86,
+    "paddles_without_offers": 0,
+    "low_price_count": 3,
+    "smoke_test_passed": true,
+    "store_count": 3,
+    "total_offers": 93,
+    "oldest_data_days": 0,
+    "freshest_data_days": 0,
+    "validation_sources_none": 86,
+    "brands_count": 11,
+    "production_ready_paddles": 0
+  },
+  "field_coverage": {
+    "core_thickness_mm": {"filled": 0, "total": 86, "pct": 0},
+    "face_material": {"filled": 0, "total": 86, "pct": 0},
+    "core_material": {"filled": 0, "total": 86, "pct": 0},
+    "shape": {"filled": 0, "total": 86, "pct": 0},
+    "swing_weight": {"filled": 0, "total": 86, "pct": 0},
+    "spin_rpm": {"filled": 0, "total": 86, "pct": 0},
+    "power_rating": {"filled": 0, "total": 86, "pct": 0},
+    "handle_length": {"filled": 0, "total": 86, "pct": 0},
+    "image_url": {"filled": 86, "total": 86, "pct": 100}
+  },
+  "per_store": [
+    {
+      "store_name": "yoSports",
+      "unique_paddles": 38,
+      "total_offers": 45,
+      "oldest_record": "2026-03-18 22:18:02.252577",
+      "newest_record": "2026-03-18 22:18:02.423007",
+      "age_days": 0,
+      "freshness_days": 0
+    },
+    {
+      "store_name": "Brazil Pickleball Store",
+      "unique_paddles": 35,
+      "total_offers": 35,
+      "oldest_record": "2026-03-18 22:18:01.936448",
+      "newest_record": "2026-03-18 22:18:02.125840",
+      "age_days": 0,
+      "freshness_days": 0
+    },
+    {
+      "store_name": "Drop Shot Brasil",
+      "unique_paddles": 13,
+      "total_offers": 13,
+      "oldest_record": "2026-03-18 22:18:02.143035",
+      "newest_record": "2026-03-18 22:18:02.203321",
+      "age_days": 0,
+      "freshness_days": 0
+    }
+  ]
+}
