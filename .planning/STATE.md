@@ -4,12 +4,12 @@ milestone: v2.0
 milestone_name: milestone
 current_phase: 05
 status: executing
-last_updated: "2026-03-19T18:37:49.001Z"
+last_updated: "2026-03-19T18:40:39.966Z"
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State: SliceInsights Workflows & Automation
@@ -31,7 +31,7 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
-| 5 | CI/CD & Testing | ◆ Executing | 1/3 |
+| 5 | CI/CD & Testing | ◆ Executing | 2/3 |
 | 6 | SLO Enforcement | ○ Pending | 0/5 |
 | 7 | Alerts & Monitoring | ○ Pending | 0/5 |
 | 8 | Deploy & Release | ○ Pending | 0/5 |
@@ -64,7 +64,7 @@ None currently.
 
 1. ~~Phase 5 (CI/CD): Set up GitHub Actions workflow for unit + smoke tests~~ DONE (05-01)
 2. Phase 5 (CI/CD): Add unit tests for scraper modules (05-02)
-3. Phase 5 (CI/CD): Add pytest fixtures and integration coverage (05-03)
+3. ~~Phase 5 (CI/CD): Create CI/CD operator guide (docs/ci-setup.md)~~ DONE (05-03)
 2. Phase 6 (SLO): Implement freshness (24h) and completeness (7d) validation scripts
 3. Phase 7 (Alerts): Configure Telegram bot, GitHub issue automation, email service
 4. Phase 8 (Deploy): Build nightly batch aggregation and safe deployment workflow
@@ -72,4 +72,4 @@ None currently.
 
 ---
 
-*State updated: 2026-03-19 — 05-01 complete: .github/workflows/ci.yml created with unit-tests and smoke-tests jobs.*
+*State updated: 2026-03-19 — 05-03 complete: docs/ci-setup.md created with branch protection setup instructions and troubleshooting guide.*
