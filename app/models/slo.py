@@ -13,7 +13,7 @@ class SLOLog(SQLModel, table=True):
     metric_type: str                                # "freshness" | "completeness"
     value_hours: float                              # measured age in hours
     threshold_hours: float                          # configured threshold
-    status: str                                     # "pass" | "fail"
+    status: str                                     # "pass" | "skip" | "fail"
     checked_at: datetime = Field(default_factory=datetime.utcnow)
     details: Dict = Field(default={}, sa_column=Column(JSONB))
-    # details example: {"breach_count": 3, "oldest_record_id": 42, "scraper": "loja_x"}
+    # details example: {"reason": "recently_updated", "age_hours": 12.5, "newest_record": "2026-03-19T20:00:00+00:00"}

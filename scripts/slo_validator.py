@@ -60,6 +60,13 @@ def check_freshness(session: Session, scraper_name: str | None = None) -> list[S
     """Check that market_offers were updated within FRESHNESS_SLO_HOURS.
 
     Groups by store_name. If *scraper_name* is provided, filters to that store.
+
+    Status logic:
+      - SKIP: No data yet (scraper never ran)
+      - SKIP: Data exists but was just updated < 24h ago (still in progress)
+      - FAIL: Data exists but hasn't been updated for > 24h (violated SLO)
+      - PASS: Data exists and was updated within SLO window (usually same as SKIP logic)
+
     Writes one SLOLog row per store and returns the list of written logs.
     """
     query = (
@@ -78,29 +85,40 @@ def check_freshness(session: Session, scraper_name: str | None = None) -> list[S
     logs: list[SLOLog] = []
 
     if not rows:
-        # No data at all — record a single fail for the requested scraper
+        # No data at all — scraper never ran. Skip (don't fail).
         target = scraper_name if scraper_name is not None else "__all__"
         log = SLOLog(
             scraper_name=target,
             metric_type="freshness",
             value_hours=float("inf"),
             threshold_hours=float(FRESHNESS_SLO_HOURS),
-            status="fail",
-            details={"reason": "no_data"},
+            status="skip",
+            details={"reason": "no_data_yet"},
         )
         session.add(log)
         session.commit()
         session.refresh(log)
         logs.append(log)
-        print(f"[freshness] {target}: FAIL (no data)")
+        print(f"[freshness] {target}: SKIP (no data yet)")
         return logs
 
     for row in rows:
         store = row.store_name
         newest = _make_aware(row.newest)
         age_hours = _hours_since(newest)
-        status = "pass" if age_hours <= FRESHNESS_SLO_HOURS else "fail"
+
+        # Determine status:
+        # - If data was updated in last 24h, scraper is actively running → SKIP
+        # - If data is older than 24h → FAIL (violated SLO)
+        if age_hours < FRESHNESS_SLO_HOURS:
+            status = "skip"
+            reason = "recently_updated"
+        else:
+            status = "fail"
+            reason = "stale_data"
+
         details: dict = {
+            "reason": reason,
             "newest_record": str(newest) if newest else None,
             "age_hours": round(age_hours, 2) if age_hours != float("inf") else None,
         }
@@ -117,7 +135,7 @@ def check_freshness(session: Session, scraper_name: str | None = None) -> list[S
         session.refresh(log)
         logs.append(log)
         age_str = f"{age_hours:.1f}h" if age_hours != float("inf") else "N/A"
-        print(f"[freshness] {store}: {status.upper()} (age={age_str}, threshold={FRESHNESS_SLO_HOURS}h)")
+        print(f"[freshness] {store}: {status.upper()} (age={age_str}, threshold={FRESHNESS_SLO_HOURS}h, reason={reason})")
 
     return logs
 
@@ -133,6 +151,11 @@ def check_completeness(session: Session, scraper_name: str | None = None) -> SLO
     catalog — the check always covers all rows. The scraper_name written to the
     log is the caller-supplied value or '__all__'.
 
+    Status logic:
+      - SKIP: No data yet (catalog never populated)
+      - SKIP: Data exists but was just updated < 24h ago (still in progress)
+      - FAIL: Data exists but hasn't been updated for > 7 days (violated SLO)
+
     Writes one SLOLog row and returns it.
     """
     target = scraper_name if scraper_name is not None else "__all__"
@@ -145,14 +168,30 @@ def check_completeness(session: Session, scraper_name: str | None = None) -> SLO
     newest = newest_updated_at if newest_updated_at else None
     newest = _make_aware(newest) if newest else None
     age_hours = _hours_since(newest)
-    status = "pass" if age_hours <= COMPLETENESS_SLO_HOURS else "fail"
+
+    # Determine status:
+    if newest is None:
+        # No data at all — catalog never populated. Skip (don't fail).
+        status = "skip"
+        reason = "no_data_yet"
+    elif age_hours < FRESHNESS_SLO_HOURS:
+        # Data was updated recently (< 24h) → scraper is actively running. Skip.
+        status = "skip"
+        reason = "recently_updated"
+    elif age_hours <= COMPLETENESS_SLO_HOURS:
+        # Data is old but within SLO window. Pass.
+        status = "pass"
+        reason = "within_slo"
+    else:
+        # Data is too old. Fail.
+        status = "fail"
+        reason = "stale_data"
 
     details: dict = {
+        "reason": reason,
         "newest_updated_at": str(newest) if newest else None,
         "age_hours": round(age_hours, 2) if age_hours != float("inf") else None,
     }
-    if newest is None:
-        details["reason"] = "no_data"
 
     log = SLOLog(
         scraper_name=target,
@@ -166,7 +205,7 @@ def check_completeness(session: Session, scraper_name: str | None = None) -> SLO
     session.commit()
     session.refresh(log)
     age_str = f"{age_hours:.1f}h" if age_hours != float("inf") else "N/A"
-    print(f"[completeness] {target}: {status.upper()} (age={age_str}, threshold={COMPLETENESS_SLO_HOURS}h)")
+    print(f"[completeness] {target}: {status.upper()} (age={age_str}, threshold={COMPLETENESS_SLO_HOURS}h, reason={reason})")
     return log
 
 
