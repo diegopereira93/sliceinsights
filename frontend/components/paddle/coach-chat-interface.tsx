@@ -27,8 +27,10 @@ export function CoachChatInterface({ grokDossier, contextString, paddleId, paddl
         if (!paddles) return null;
         return paddles.find(p => {
             const fullName = `${p.brand} ${p.name}`;
-            return text.toLowerCase().includes(fullName.toLowerCase()) ||
-                   text.toLowerCase().includes(p.name.toLowerCase());
+            const textLower = text.toLowerCase();
+            return textLower.includes(fullName.toLowerCase()) ||
+                   textLower.includes(p.name.toLowerCase()) ||
+                   textLower.includes(`${p.brand.toLowerCase()} ${p.name.toLowerCase()}`);
         }) || null;
     };
 
@@ -62,15 +64,24 @@ export function CoachChatInterface({ grokDossier, contextString, paddleId, paddl
                         textToUse = `${word} ${words[i + 2]}`;
                         paddle = findPaddleByName(textToUse);
                         if (paddle) {
+                            const link = paddle.affiliateUrl || `javascript:void(0)`;
                             nodes.push(
-                                <button
+                                <a
                                     key={`${partIdx}-${nodes.length}`}
-                                    onClick={() => paddle && onPaddleClick?.(paddle)}
+                                    href={link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => {
+                                        if (!paddle.affiliateUrl) {
+                                            e.preventDefault();
+                                            onPaddleClick?.(paddle);
+                                        }
+                                    }}
                                     className="text-primary hover:text-primary/80 underline cursor-pointer transition-colors font-semibold"
                                     title={`R$ ${paddle.price}`}
                                 >
                                     {textToUse}
-                                </button>
+                                </a>
                             );
                             nodes.push(space);
                             nodes.push(words[i + 3] || '');
@@ -80,15 +91,24 @@ export function CoachChatInterface({ grokDossier, contextString, paddleId, paddl
                     }
 
                     if (paddle) {
+                        const link = paddle.affiliateUrl || `javascript:void(0)`;
                         nodes.push(
-                            <button
+                            <a
                                 key={`${partIdx}-${nodes.length}`}
-                                onClick={() => paddle && onPaddleClick?.(paddle)}
+                                href={link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => {
+                                    if (!paddle.affiliateUrl) {
+                                        e.preventDefault();
+                                        onPaddleClick?.(paddle);
+                                    }
+                                }}
                                 className="text-primary hover:text-primary/80 underline cursor-pointer transition-colors font-semibold"
                                 title={`R$ ${paddle.price}`}
                             >
                                 {word}
-                            </button>
+                            </a>
                         );
                     } else {
                         nodes.push(word);
