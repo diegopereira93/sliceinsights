@@ -34,7 +34,7 @@ jobs:
 
       - name: Run unit tests
         run: |
-          pytest tests/ -v --ignore=tests/test_e2e_api.py
+          PYTHONPATH=. pytest tests/ -v --ignore=tests/test_e2e_api.py
         env:
           # No real DB needed for unit tests (mocked sessions)
           DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/picklematch
