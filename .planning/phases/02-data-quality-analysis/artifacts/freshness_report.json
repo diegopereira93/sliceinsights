@@ -1,0 +1,26 @@
+[
+  {
+    "store_name": "Brazil Pickleball Store",
+    "offer_count": 35,
+    "oldest_record": "2026-03-18 22:18:01.936448",
+    "newest_record": "2026-03-18 22:18:02.125840",
+    "age_days": 0,
+    "freshness_days": 0
+  },
+  {
+    "store_name": "Drop Shot Brasil",
+    "offer_count": 13,
+    "oldest_record": "2026-03-18 22:18:02.143035",
+    "newest_record": "2026-03-18 22:18:02.203321",
+    "age_days": 0,
+    "freshness_days": 0
+  },
+  {
+    "store_name": "yoSports",
+    "offer_count": 45,
+    "oldest_record": "2026-03-18 22:18:02.252577",
+    "newest_record": "2026-03-18 22:18:02.423007",
+    "age_days": 0,
+    "freshness_days": 0
+  }
+]

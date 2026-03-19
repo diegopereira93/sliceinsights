@@ -1,0 +1,22 @@
+[
+  {
+    "store_name": "yoSports",
+    "unique_paddles": 38,
+    "total_offers": 45
+  },
+  {
+    "store_name": "Brazil Pickleball Store",
+    "unique_paddles": 35,
+    "total_offers": 35
+  },
+  {
+    "store_name": "Drop Shot Brasil",
+    "unique_paddles": 13,
+    "total_offers": 13
+  },
+  {
+    "store_name": "_TOTAL",
+    "unique_paddles": 86,
+    "total_offers": 93
+  }
+]

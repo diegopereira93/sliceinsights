@@ -6,13 +6,18 @@ Counts unique paddles and total offers per store_name in market_offers.
 Run with:
   docker compose exec -T backend_v3 python scripts/measure_coverage.py
 """
-import sys, json
+import sys, json, logging, warnings
 from pathlib import Path
+
+warnings.filterwarnings("ignore")
+logging.getLogger("sqlalchemy").setLevel(logging.WARNING)
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from app.db.database import sync_engine, init_db_sync
 from sqlmodel import Session, select, func
 from app.models.market_offer import MarketOffer
+
+sync_engine.echo = False
 
 init_db_sync()
 with Session(sync_engine) as session:

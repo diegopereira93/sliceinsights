@@ -1,0 +1,640 @@
+/usr/local/lib/python3.11/site-packages/pydantic/_internal/_fields.py:132: UserWarning: Field "model_name" in PaddleMasterBase has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+/usr/local/lib/python3.11/site-packages/pydantic/_internal/_fields.py:132: UserWarning: Field "model_name" in PaddleMaster has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+/usr/local/lib/python3.11/site-packages/pydantic/_internal/_fields.py:132: UserWarning: Field "model_name" in PaddleRead has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+/usr/local/lib/python3.11/site-packages/pydantic/_internal/_fields.py:132: UserWarning: Field "model_name" in PaddleCreate has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+
+======================================================================
+  📊 DATA QUALITY AUDIT — Phase 1 [AUDIT ONLY]
+======================================================================
+
+2026-03-19 14:41:22,928 INFO sqlalchemy.engine.Engine select pg_catalog.version()
+2026-03-19 14:41:22,928 INFO sqlalchemy.engine.Engine [raw sql] {}
+2026-03-19 14:41:22,929 INFO sqlalchemy.engine.Engine select current_schema()
+2026-03-19 14:41:22,929 INFO sqlalchemy.engine.Engine [raw sql] {}
+2026-03-19 14:41:22,929 INFO sqlalchemy.engine.Engine show standard_conforming_strings
+2026-03-19 14:41:22,929 INFO sqlalchemy.engine.Engine [raw sql] {}
+2026-03-19 14:41:22,930 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-03-19 14:41:22,930 INFO sqlalchemy.engine.Engine CREATE EXTENSION IF NOT EXISTS vector
+2026-03-19 14:41:22,930 INFO sqlalchemy.engine.Engine [generated in 0.00012s] {}
+2026-03-19 14:41:22,931 INFO sqlalchemy.engine.Engine COMMIT
+2026-03-19 14:41:22,931 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-03-19 14:41:22,934 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-03-19 14:41:22,934 INFO sqlalchemy.engine.Engine [generated in 0.00015s] {'table_name': 'brands', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2026-03-19 14:41:22,936 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-03-19 14:41:22,936 INFO sqlalchemy.engine.Engine [cached since 0.001946s ago] {'table_name': 'paddle_master', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2026-03-19 14:41:22,937 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-03-19 14:41:22,937 INFO sqlalchemy.engine.Engine [cached since 0.002635s ago] {'table_name': 'market_offers', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2026-03-19 14:41:22,937 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-03-19 14:41:22,937 INFO sqlalchemy.engine.Engine [cached since 0.003158s ago] {'table_name': 'price_snapshots', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2026-03-19 14:41:22,938 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-03-19 14:41:22,938 INFO sqlalchemy.engine.Engine [cached since 0.004053s ago] {'table_name': 'ai_knowledge_base', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2026-03-19 14:41:22,939 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-03-19 14:41:22,939 INFO sqlalchemy.engine.Engine [cached since 0.004593s ago] {'table_name': 'leads', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2026-03-19 14:41:22,941 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace 
+WHERE pg_catalog.pg_type.typname = %(typname_1)s AND pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-03-19 14:41:22,942 INFO sqlalchemy.engine.Engine [generated in 0.00044s] {'typname_1': 'facematerial', 'nspname_1': 'pg_catalog'}
+2026-03-19 14:41:22,943 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace 
+WHERE pg_catalog.pg_type.typname = %(typname_1)s AND pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-03-19 14:41:22,943 INFO sqlalchemy.engine.Engine [cached since 0.002115s ago] {'typname_1': 'paddleshape', 'nspname_1': 'pg_catalog'}
+2026-03-19 14:41:22,944 INFO sqlalchemy.engine.Engine COMMIT
+2026-03-19 14:41:22,945 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-03-19 14:41:22,947 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-03-19 14:41:22,947 INFO sqlalchemy.engine.Engine [generated in 0.00018s] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-03-19 14:41:22,954 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-03-19 14:41:22,954 INFO sqlalchemy.engine.Engine [generated in 0.00022s] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'brands'}
+2026-03-19 14:41:22,959 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.format_type(pg_catalog.pg_type.typbasetype, pg_catalog.pg_type.typtypmod) AS attype, NOT pg_catalog.pg_type.typnotnull AS nullable, pg_catalog.pg_type.typdefault AS "default", pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, domain_constraints.condefs, domain_constraints.connames, pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN pg_catalog.pg_collation ON pg_catalog.pg_type.typcollation = pg_catalog.pg_collation.oid LEFT OUTER JOIN (SELECT pg_catalog.pg_constraint.contypid AS contypid, array_agg(pg_catalog.pg_get_constraintdef(pg_catalog.pg_constraint.oid, %(pg_get_constraintdef_1)s)) AS condefs, array_agg(CAST(pg_catalog.pg_constraint.conname AS TEXT)) AS connames 
+FROM pg_catalog.pg_constraint 
+WHERE pg_catalog.pg_constraint.contypid != %(contypid_1)s GROUP BY pg_catalog.pg_constraint.contypid) AS domain_constraints ON pg_catalog.pg_type.oid = domain_constraints.contypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-03-19 14:41:22,959 INFO sqlalchemy.engine.Engine [generated in 0.00022s] {'pg_get_constraintdef_1': True, 'contypid_1': 0, 'typtype_1': 'd'}
+2026-03-19 14:41:22,963 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, lbl_agg.labels AS labels 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN (SELECT pg_catalog.pg_enum.enumtypid AS enumtypid, array_agg(CAST(pg_catalog.pg_enum.enumlabel AS TEXT) ORDER BY pg_catalog.pg_enum.enumsortorder) AS labels 
+FROM pg_catalog.pg_enum GROUP BY pg_catalog.pg_enum.enumtypid) AS lbl_agg ON pg_catalog.pg_type.oid = lbl_agg.enumtypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-03-19 14:41:22,963 INFO sqlalchemy.engine.Engine [generated in 0.00013s] {'typtype_1': 'e'}
+2026-03-19 14:41:22,965 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-03-19 14:41:22,965 INFO sqlalchemy.engine.Engine [cached since 0.01131s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'leads'}
+2026-03-19 14:41:22,966 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-03-19 14:41:22,966 INFO sqlalchemy.engine.Engine [cached since 0.01294s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'paddle_master'}
+2026-03-19 14:41:22,968 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-03-19 14:41:22,968 INFO sqlalchemy.engine.Engine [cached since 0.01441s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'ai_knowledge_base'}
+/app/app/db/database.py:90: SAWarning: Did not recognize type 'vector' of column 'embedding'
+  existing_cols = {col["name"] for col in inspector.get_columns(table.name)}
+2026-03-19 14:41:22,970 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-03-19 14:41:22,970 INFO sqlalchemy.engine.Engine [cached since 0.01625s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'market_offers'}
+2026-03-19 14:41:22,972 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-03-19 14:41:22,972 INFO sqlalchemy.engine.Engine [cached since 0.0181s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'price_snapshots'}
+2026-03-19 14:41:22,973 INFO sqlalchemy.engine.Engine COMMIT
+✅ Database connection successful.
+📦 US Dump: 461 paddles loaded
+
+2026-03-19 14:41:23,015 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-03-19 14:41:23,026 INFO sqlalchemy.engine.Engine SELECT paddle_master.model_name, paddle_master.core_thickness_mm, paddle_master.core_material, paddle_master.face_material, paddle_master.shape, paddle_master.swing_weight, paddle_master.twist_weight, paddle_master.spin_rpm, paddle_master.power_original, paddle_master.handle_length, paddle_master.grip_circumference, paddle_master.power_rating, paddle_master.control_rating, paddle_master.spin_rating, paddle_master.sweet_spot_rating, paddle_master.available_in_brazil, paddle_master.image_url, paddle_master.is_featured, paddle_master.id, paddle_master.brand_id, paddle_master.search_keywords, paddle_master.created_at, paddle_master.updated_at, paddle_master.specs_source, paddle_master.validation_sources, paddle_master.specs_confidence 
+FROM paddle_master JOIN brands ON paddle_master.brand_id = brands.id
+2026-03-19 14:41:23,026 INFO sqlalchemy.engine.Engine [generated in 0.00015s] {}
+2026-03-19 14:41:23,031 INFO sqlalchemy.engine.Engine SELECT brands.name, brands.website, brands.id 
+FROM brands
+2026-03-19 14:41:23,031 INFO sqlalchemy.engine.Engine [generated in 0.00011s] {}
+🎾 DB Catalog: 86 paddles
+
+──────────────────────────────────────────────────
+  📐 1. FIELD COVERAGE (9 Required Fields)
+──────────────────────────────────────────────────
+  🔴 core_thickness_mm         ░░░░░░░░░░░░░░░░░░░░   0/86 (0%)
+  🔴 face_material             ░░░░░░░░░░░░░░░░░░░░   0/86 (0%)
+  🔴 core_material             ░░░░░░░░░░░░░░░░░░░░   0/86 (0%)
+  🔴 shape                     ░░░░░░░░░░░░░░░░░░░░   0/86 (0%)
+  🔴 swing_weight              ░░░░░░░░░░░░░░░░░░░░   0/86 (0%)
+  🔴 spin_rpm                  ░░░░░░░░░░░░░░░░░░░░   0/86 (0%)
+  🔴 power_rating              ░░░░░░░░░░░░░░░░░░░░   0/86 (0%)
+  🔴 handle_length             ░░░░░░░░░░░░░░░░░░░░   0/86 (0%)
+  ✅ image_url                 ████████████████████  86/86 (100%)
+
+  📊 Complete specs (all 9 fields): 0/86 (0%)
+  📊 Incomplete:                    86/86
+
+──────────────────────────────────────────────────
+  🔗 2. BR → US DUMP MATCH
+──────────────────────────────────────────────────
+  ✅ Matched:       32/86
+  🟡 Near miss:     11/86  (0.50-0.59)
+  ❌ No match:      43/86
+
+  🟡 Near Misses (consider lowering threshold):
+     [Joola] Ben Johns Hyperion 3S (score: 0.59)
+     [Paddletek] Tempest Wave PRO-C 14.3mm (score: 0.59)
+     [Selkirk] Invikta Luxx Control InfiniGrit 19mm (score: 0.58)
+     [Joola] Ben Johns Perseus 3S (score: 0.57)
+     [Joola] Hyperion Double Vision (score: 0.57)
+     [Joola] Tyson McGuffin Magnus PRO IV (score: 0.57)
+     [Joola] Anna Bright Scorpeus 3S (score: 0.56)
+     [Joola] Scorpeus Heat Vision (score: 0.56)
+     [Joola] Perseus Double Vision (score: 0.55)
+     [Joola] Collin Johns Scorpeus 3S (score: 0.55)
+     [Joola] Kosmos Pro V - 14mm - Tyson McGuffin (score: 0.52)
+
+  ❌ No Match (candidates for removal):
+     [3Rdshot] Touch Control 16MM
+     [3Rdshot] Oberon Mini
+     [3Rdshot] Venus 16mm
+     [3Rdshot] Oberon 16mm
+     [3Rdshot] 4x   Start 16mm
+     [3Rdshot] Touch Control 16MM Edição Especial
+     [3Rdshot] Start 16mm
+     [Drop Shot] KIBO COMFORT PK
+     [Drop Shot] KIBO CONTROL PK
+     [Drop Shot] KIBO ATTACK PK
+     [Drop Shot] EXPLORER COMFORT PK
+     [Drop Shot] EXPLORER CONTROL PK
+     [Drop Shot] EXPLORER ATTACK PK
+     [Drop Shot] FURIA COMFORT PK
+     [Drop Shot] FURIA CONTROL PK
+     [Drop Shot] FURIA ATTACK PK
+     [Drop Shot] CONQUEROR CONTROL PK
+     [Drop Shot] CONQUEROR ATTACK PK
+     [Drop Shot] AXION CONTROL PK
+     [Drop Shot] AXION ATTACK PK
+     [Drop Shot] Conqueror Attack
+     [Joola] Steffi Graf Pro V
+     [Joola] Kosmos Pro V - 16mm - Federico Staksrud
+     [Joola] Agassi Champion SS25
+     [Joola] Agassi Edge SS25
+     [Joola] Agassi Edge Heat Vision
+     [Joola] Graf Edge SS25
+     [Joola] Anna Bright Scorpeus Gen 3
+     [Proxr] Sweet Spot Max Series 13mm
+     [Proxr] Sweet Spot Max Series 16mm
+     [Selkirk] Invikta Amped Pro Air
+     [Selkirk] Labs Project Boom Stik Widebody 16mm
+     [Selkirk] Labs Project BoomStik Widebody 16mm Regal - Edition Limited
+     [Selkirk] Labs Project BoomStik Enlongated 16mm Regal - Edition Limited
+     [Selkirk] Labs Project 008 Invikta 16mm
+     [Selkirk] Invikta Amped Pro Air Jack Sock
+     [Selkirk] Labs Project Boom Stik Enlongated 16mm
+     [Selkirk] Labs Project BoomStik Enlongated 16mm - JACK SOCK
+     [Slk] ERA Enlongated 16mm Sunset - Edition Limited
+     [Starvie] Astrum
+     [Zcebra] Black Mamba
+     [Zcebra] Totem Trinom
+     [Zcebra] Osprey ShotCore
+
+──────────────────────────────────────────────────
+  ✅ 2.5. VALIDATION SOURCES
+──────────────────────────────────────────────────
+  none           :  86 paddles
+
+──────────────────────────────────────────────────
+  🧹 3. NON-PADDLE DETECTION
+──────────────────────────────────────────────────
+  ✅ No non-paddles detected
+
+──────────────────────────────────────────────────
+  🔍 4. DUPLICATE DETECTION (cross-store)
+──────────────────────────────────────────────────
+  ✅ No duplicates detected
+
+──────────────────────────────────────────────────
+  💰 5. MARKET OFFER CHECK
+──────────────────────────────────────────────────
+2026-03-19 14:41:23,089 INFO sqlalchemy.engine.Engine SELECT market_offers.paddle_id, count(market_offers.id) AS count_1 
+FROM market_offers 
+WHERE market_offers.is_active = true GROUP BY market_offers.paddle_id
+2026-03-19 14:41:23,089 INFO sqlalchemy.engine.Engine [generated in 0.00011s] {}
+  ✅ With active offers:    86
+  🔴 Without active offers: 0
+2026-03-19 14:41:23,092 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,092 INFO sqlalchemy.engine.Engine [generated in 0.00022s] {'paddle_id_1': 'f0cc128b-ba24-4ef8-bb48-f4c013705ba3'}
+2026-03-19 14:41:23,093 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,093 INFO sqlalchemy.engine.Engine [cached since 0.001741s ago] {'paddle_id_1': '8b404b45-2754-4da5-b929-3d299893a6f4'}
+2026-03-19 14:41:23,095 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,095 INFO sqlalchemy.engine.Engine [cached since 0.003314s ago] {'paddle_id_1': '22dcd0a0-c4cf-4bd6-8e59-22a71d0ea210'}
+2026-03-19 14:41:23,096 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,096 INFO sqlalchemy.engine.Engine [cached since 0.004282s ago] {'paddle_id_1': 'abecb13b-85fe-41a9-82ff-1bc8a6d56c0c'}
+2026-03-19 14:41:23,097 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,097 INFO sqlalchemy.engine.Engine [cached since 0.005109s ago] {'paddle_id_1': '19ec8283-2eb7-45dd-bc00-190be775c879'}
+2026-03-19 14:41:23,098 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,098 INFO sqlalchemy.engine.Engine [cached since 0.005891s ago] {'paddle_id_1': '27fb4780-de00-4417-9bf5-cda04a523fda'}
+2026-03-19 14:41:23,098 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,098 INFO sqlalchemy.engine.Engine [cached since 0.006599s ago] {'paddle_id_1': 'b59671b7-8419-4c2a-ad54-f448fd1d0d84'}
+2026-03-19 14:41:23,099 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,099 INFO sqlalchemy.engine.Engine [cached since 0.007333s ago] {'paddle_id_1': '7b2c7e3a-77c2-42d3-85ac-1dad62559a8f'}
+2026-03-19 14:41:23,100 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,100 INFO sqlalchemy.engine.Engine [cached since 0.007958s ago] {'paddle_id_1': '533b2465-24ce-4995-8f55-17953b561748'}
+2026-03-19 14:41:23,100 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,100 INFO sqlalchemy.engine.Engine [cached since 0.008625s ago] {'paddle_id_1': '603bdf23-eeee-49ff-9330-dafcb865e27a'}
+2026-03-19 14:41:23,101 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,101 INFO sqlalchemy.engine.Engine [cached since 0.009349s ago] {'paddle_id_1': '5e3466a0-f8ec-499a-bffc-44d77a0090cd'}
+2026-03-19 14:41:23,102 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,102 INFO sqlalchemy.engine.Engine [cached since 0.0101s ago] {'paddle_id_1': 'b3949857-f70c-4247-979f-391681be200a'}
+2026-03-19 14:41:23,102 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,102 INFO sqlalchemy.engine.Engine [cached since 0.01075s ago] {'paddle_id_1': '13ca5ac8-2e80-4d81-a118-da7429ad4197'}
+2026-03-19 14:41:23,103 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,103 INFO sqlalchemy.engine.Engine [cached since 0.01139s ago] {'paddle_id_1': '3e920a8c-7237-4316-89a9-f57ab44eec9e'}
+2026-03-19 14:41:23,104 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,104 INFO sqlalchemy.engine.Engine [cached since 0.01205s ago] {'paddle_id_1': '757274e5-28af-46b0-8ab2-017cd8d78acd'}
+2026-03-19 14:41:23,104 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,105 INFO sqlalchemy.engine.Engine [cached since 0.01278s ago] {'paddle_id_1': 'c6f9b583-568c-4cef-a986-30b130014d31'}
+2026-03-19 14:41:23,105 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,105 INFO sqlalchemy.engine.Engine [cached since 0.01368s ago] {'paddle_id_1': 'ff5501da-66bd-49c7-9c8c-bf2063acadc4'}
+2026-03-19 14:41:23,106 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,106 INFO sqlalchemy.engine.Engine [cached since 0.01449s ago] {'paddle_id_1': 'dc15718a-76c6-4a7c-8c50-149fb95b4417'}
+2026-03-19 14:41:23,107 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,107 INFO sqlalchemy.engine.Engine [cached since 0.01529s ago] {'paddle_id_1': 'db2b4fa3-cefd-4f7c-b17f-a5d5acdbfa77'}
+2026-03-19 14:41:23,109 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,109 INFO sqlalchemy.engine.Engine [cached since 0.01706s ago] {'paddle_id_1': 'd4b380bf-a9f4-4b17-acf0-7412fa479831'}
+2026-03-19 14:41:23,110 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,110 INFO sqlalchemy.engine.Engine [cached since 0.01867s ago] {'paddle_id_1': 'f6f6f5dd-2db1-4087-89e5-3b89f58808db'}
+2026-03-19 14:41:23,112 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,112 INFO sqlalchemy.engine.Engine [cached since 0.02027s ago] {'paddle_id_1': '06e97e29-d7e5-4786-805c-626be0380ad3'}
+2026-03-19 14:41:23,113 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,113 INFO sqlalchemy.engine.Engine [cached since 0.02108s ago] {'paddle_id_1': '55d9e94a-6103-4b23-9d3b-29c3eecb4ff8'}
+2026-03-19 14:41:23,114 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,114 INFO sqlalchemy.engine.Engine [cached since 0.02189s ago] {'paddle_id_1': '416f433d-cda3-46ba-a25c-310d79d8dc75'}
+2026-03-19 14:41:23,114 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,114 INFO sqlalchemy.engine.Engine [cached since 0.02276s ago] {'paddle_id_1': '2959283f-8afc-43e9-afae-6ec7e72b730b'}
+2026-03-19 14:41:23,115 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,115 INFO sqlalchemy.engine.Engine [cached since 0.02359s ago] {'paddle_id_1': 'ad2c0c4c-5dbb-4ee7-98ff-d2a63a4a35ea'}
+2026-03-19 14:41:23,116 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,116 INFO sqlalchemy.engine.Engine [cached since 0.02421s ago] {'paddle_id_1': '18be88ad-972b-45fa-8789-b308dc4a73be'}
+2026-03-19 14:41:23,117 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,117 INFO sqlalchemy.engine.Engine [cached since 0.0249s ago] {'paddle_id_1': 'd617d726-dcd8-4fa4-b6a7-728bc61d4eb3'}
+2026-03-19 14:41:23,117 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,117 INFO sqlalchemy.engine.Engine [cached since 0.02568s ago] {'paddle_id_1': 'b4f3be18-5395-44b8-8ebd-7663691f088d'}
+2026-03-19 14:41:23,118 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,118 INFO sqlalchemy.engine.Engine [cached since 0.02626s ago] {'paddle_id_1': 'c16de218-5ee0-4bf8-9e39-9fa21e34b58d'}
+2026-03-19 14:41:23,119 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,119 INFO sqlalchemy.engine.Engine [cached since 0.02692s ago] {'paddle_id_1': 'e48049b3-51f2-4647-88bb-adeddc6496a9'}
+2026-03-19 14:41:23,119 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,119 INFO sqlalchemy.engine.Engine [cached since 0.02756s ago] {'paddle_id_1': '1620f23e-dae0-4f9a-986a-8897543b18ab'}
+2026-03-19 14:41:23,120 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,120 INFO sqlalchemy.engine.Engine [cached since 0.02809s ago] {'paddle_id_1': '146b7252-d04c-4409-9d31-27d66b1ed73a'}
+2026-03-19 14:41:23,120 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,121 INFO sqlalchemy.engine.Engine [cached since 0.02881s ago] {'paddle_id_1': 'cf20da47-2c46-437a-861a-94fdbd7c5da0'}
+2026-03-19 14:41:23,121 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,121 INFO sqlalchemy.engine.Engine [cached since 0.02948s ago] {'paddle_id_1': 'c67baad3-130d-4cd9-9f1b-f8d7ee018ce6'}
+2026-03-19 14:41:23,122 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,122 INFO sqlalchemy.engine.Engine [cached since 0.02999s ago] {'paddle_id_1': 'e9b7be46-f98a-4ecf-bca1-90dba04af32d'}
+2026-03-19 14:41:23,122 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,122 INFO sqlalchemy.engine.Engine [cached since 0.03053s ago] {'paddle_id_1': 'aa81b28f-ab5d-4bd1-9c64-051972ef61ee'}
+2026-03-19 14:41:23,123 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,123 INFO sqlalchemy.engine.Engine [cached since 0.03122s ago] {'paddle_id_1': '78351f2c-7d76-41f9-a3a3-305bddaf72f8'}
+2026-03-19 14:41:23,124 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,124 INFO sqlalchemy.engine.Engine [cached since 0.03196s ago] {'paddle_id_1': '76148e2a-86a9-416d-8fc9-0cdf5ec29913'}
+2026-03-19 14:41:23,125 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,125 INFO sqlalchemy.engine.Engine [cached since 0.03323s ago] {'paddle_id_1': '9462f738-53cf-4619-80cc-3426f0158c3c'}
+2026-03-19 14:41:23,126 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,126 INFO sqlalchemy.engine.Engine [cached since 0.03459s ago] {'paddle_id_1': '3258b49a-89af-44c0-915e-7d5d41099575'}
+2026-03-19 14:41:23,128 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,128 INFO sqlalchemy.engine.Engine [cached since 0.03642s ago] {'paddle_id_1': 'a9bc32e0-2556-440d-a711-625215aa4dec'}
+2026-03-19 14:41:23,129 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,129 INFO sqlalchemy.engine.Engine [cached since 0.03731s ago] {'paddle_id_1': 'aff25f0c-ccfc-4d99-bb96-fa8c369a948a'}
+2026-03-19 14:41:23,130 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,130 INFO sqlalchemy.engine.Engine [cached since 0.0381s ago] {'paddle_id_1': '05a3c0f7-aa76-4ce5-bd36-0a0f42aff659'}
+2026-03-19 14:41:23,131 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,131 INFO sqlalchemy.engine.Engine [cached since 0.03908s ago] {'paddle_id_1': '14b411ac-da91-4e53-9d2b-cc8dff57b260'}
+2026-03-19 14:41:23,132 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,132 INFO sqlalchemy.engine.Engine [cached since 0.03991s ago] {'paddle_id_1': '8b2f9efa-33bf-4fa1-989d-9cf16a1f3f09'}
+2026-03-19 14:41:23,132 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,132 INFO sqlalchemy.engine.Engine [cached since 0.04057s ago] {'paddle_id_1': 'c419e94e-f899-4264-a3eb-3d0e9b782e48'}
+2026-03-19 14:41:23,133 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,133 INFO sqlalchemy.engine.Engine [cached since 0.04122s ago] {'paddle_id_1': '9271cbcb-126b-45c3-81e3-f453c11da8f4'}
+2026-03-19 14:41:23,133 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,134 INFO sqlalchemy.engine.Engine [cached since 0.04182s ago] {'paddle_id_1': '8a00a375-8ae8-484b-b765-a2a531d3b620'}
+2026-03-19 14:41:23,134 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,134 INFO sqlalchemy.engine.Engine [cached since 0.04249s ago] {'paddle_id_1': '4a9045a1-9ef6-41f2-9404-ee9c9abf3a09'}
+2026-03-19 14:41:23,135 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,135 INFO sqlalchemy.engine.Engine [cached since 0.04308s ago] {'paddle_id_1': '8daab953-bc7d-4971-a01d-12c0bb7a0947'}
+2026-03-19 14:41:23,135 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,135 INFO sqlalchemy.engine.Engine [cached since 0.04371s ago] {'paddle_id_1': '4a38c1c8-734e-4385-b3ec-cc7609ede620'}
+2026-03-19 14:41:23,136 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,136 INFO sqlalchemy.engine.Engine [cached since 0.04437s ago] {'paddle_id_1': '15c3b9c2-8402-41b0-93d1-24122f77bdf4'}
+2026-03-19 14:41:23,137 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,137 INFO sqlalchemy.engine.Engine [cached since 0.04497s ago] {'paddle_id_1': '582f540a-3471-4655-9466-27533aa2ba3d'}
+2026-03-19 14:41:23,137 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,137 INFO sqlalchemy.engine.Engine [cached since 0.04549s ago] {'paddle_id_1': '33adc5a6-3282-4103-b18b-d03fa56daf35'}
+2026-03-19 14:41:23,138 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,138 INFO sqlalchemy.engine.Engine [cached since 0.04602s ago] {'paddle_id_1': 'd7d93d2a-1d07-4ac7-a7aa-c2436794e8b0'}
+2026-03-19 14:41:23,138 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,138 INFO sqlalchemy.engine.Engine [cached since 0.04667s ago] {'paddle_id_1': '204122a4-d0b8-4429-bb93-d8f64e259748'}
+2026-03-19 14:41:23,139 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,139 INFO sqlalchemy.engine.Engine [cached since 0.04726s ago] {'paddle_id_1': '7b402a70-27eb-4481-b195-69bf73917800'}
+2026-03-19 14:41:23,139 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,140 INFO sqlalchemy.engine.Engine [cached since 0.04782s ago] {'paddle_id_1': 'db2e0866-c8d7-479d-accc-2f2ed0fd0070'}
+2026-03-19 14:41:23,140 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,140 INFO sqlalchemy.engine.Engine [cached since 0.04834s ago] {'paddle_id_1': 'fc1884fa-9b79-4efb-ac83-8ea04c3a1e70'}
+2026-03-19 14:41:23,141 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,141 INFO sqlalchemy.engine.Engine [cached since 0.04894s ago] {'paddle_id_1': '81b92fa8-fb7f-4a46-8d3b-2f1ddcd41e9e'}
+2026-03-19 14:41:23,141 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,141 INFO sqlalchemy.engine.Engine [cached since 0.04974s ago] {'paddle_id_1': '79023803-a330-4c8e-8296-9974cb054e39'}
+2026-03-19 14:41:23,143 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,143 INFO sqlalchemy.engine.Engine [cached since 0.05117s ago] {'paddle_id_1': 'cee199db-e1b3-4249-b079-a26e618cdb99'}
+2026-03-19 14:41:23,144 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,144 INFO sqlalchemy.engine.Engine [cached since 0.05256s ago] {'paddle_id_1': '17f1f842-e81b-49c5-8539-752f892c3a4d'}
+2026-03-19 14:41:23,146 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,146 INFO sqlalchemy.engine.Engine [cached since 0.05416s ago] {'paddle_id_1': '9b80e7e8-8722-4537-920d-58fc242dee97'}
+2026-03-19 14:41:23,147 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,147 INFO sqlalchemy.engine.Engine [cached since 0.05497s ago] {'paddle_id_1': 'a0b618d6-31f7-4ac0-a3ba-0e6befa8a3ca'}
+2026-03-19 14:41:23,147 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,147 INFO sqlalchemy.engine.Engine [cached since 0.05575s ago] {'paddle_id_1': '8116b9db-3a17-46fa-a7ea-b6c1fe9a6d7d'}
+2026-03-19 14:41:23,148 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,149 INFO sqlalchemy.engine.Engine [cached since 0.05678s ago] {'paddle_id_1': '16558c16-e0bf-4206-8d0d-cbf98bdded02'}
+2026-03-19 14:41:23,149 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,149 INFO sqlalchemy.engine.Engine [cached since 0.05763s ago] {'paddle_id_1': '6dd82dd3-ade2-41d8-8f51-e015bc8b54bc'}
+2026-03-19 14:41:23,150 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,150 INFO sqlalchemy.engine.Engine [cached since 0.05823s ago] {'paddle_id_1': 'c6cd3d2b-3271-4b6f-a3f9-174aa55ef06f'}
+2026-03-19 14:41:23,150 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,150 INFO sqlalchemy.engine.Engine [cached since 0.05874s ago] {'paddle_id_1': 'f00eac0c-bd3a-4269-b9cb-293866adaa3d'}
+2026-03-19 14:41:23,151 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,151 INFO sqlalchemy.engine.Engine [cached since 0.05926s ago] {'paddle_id_1': '4c535bd7-56b6-4279-8271-224c52621afc'}
+2026-03-19 14:41:23,151 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,151 INFO sqlalchemy.engine.Engine [cached since 0.05975s ago] {'paddle_id_1': '1ac82a1c-9bf4-4d61-bfd1-7409dcb2ab34'}
+2026-03-19 14:41:23,152 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,152 INFO sqlalchemy.engine.Engine [cached since 0.06027s ago] {'paddle_id_1': '97977a83-aae3-478a-9a6e-1425800f2d97'}
+2026-03-19 14:41:23,153 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,153 INFO sqlalchemy.engine.Engine [cached since 0.06085s ago] {'paddle_id_1': 'f19eda7e-5c31-4574-8208-7764b42a16b0'}
+2026-03-19 14:41:23,153 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,153 INFO sqlalchemy.engine.Engine [cached since 0.06143s ago] {'paddle_id_1': '8316f299-be36-4403-ba75-6686f65d7da8'}
+2026-03-19 14:41:23,154 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,154 INFO sqlalchemy.engine.Engine [cached since 0.06211s ago] {'paddle_id_1': '380d0e1a-8632-48a8-8e27-bd938436333d'}
+2026-03-19 14:41:23,154 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,154 INFO sqlalchemy.engine.Engine [cached since 0.06273s ago] {'paddle_id_1': 'ad04e76a-7161-4115-b3e8-ae059de79364'}
+2026-03-19 14:41:23,155 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,155 INFO sqlalchemy.engine.Engine [cached since 0.06337s ago] {'paddle_id_1': '74ee434a-664a-4f0b-bf86-d6971d0b2112'}
+2026-03-19 14:41:23,156 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,156 INFO sqlalchemy.engine.Engine [cached since 0.06393s ago] {'paddle_id_1': '3bb575d2-1334-43af-9226-71ed5f93a696'}
+2026-03-19 14:41:23,156 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,156 INFO sqlalchemy.engine.Engine [cached since 0.0645s ago] {'paddle_id_1': '010689c5-0674-4242-91f1-37b3062695e7'}
+2026-03-19 14:41:23,157 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,157 INFO sqlalchemy.engine.Engine [cached since 0.06522s ago] {'paddle_id_1': 'c5c877fc-bcfc-402c-b8be-5ec2a21fc323'}
+2026-03-19 14:41:23,158 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,159 INFO sqlalchemy.engine.Engine [cached since 0.06683s ago] {'paddle_id_1': 'b3ef8dcc-e8cc-453c-80b1-4afd7f64be4d'}
+2026-03-19 14:41:23,160 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,160 INFO sqlalchemy.engine.Engine [cached since 0.06808s ago] {'paddle_id_1': '2247c70e-f34f-41fa-9f7f-5a6370102834'}
+2026-03-19 14:41:23,161 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,161 INFO sqlalchemy.engine.Engine [cached since 0.06952s ago] {'paddle_id_1': '26f39c4e-285f-4e00-bd3c-d65ce6db893e'}
+2026-03-19 14:41:23,162 INFO sqlalchemy.engine.Engine SELECT min(market_offers.price_brl) AS min_1 
+FROM market_offers 
+WHERE market_offers.paddle_id = %(paddle_id_1)s::UUID AND market_offers.is_active = true
+2026-03-19 14:41:23,162 INFO sqlalchemy.engine.Engine [cached since 0.07057s ago] {'paddle_id_1': 'b8709a94-6578-4f2c-8b68-0ef6454b82b9'}
+
+  ⚠️ Leisure paddles (< R$ 450):
+     [3Rdshot] Oberon Mini — R$ 109
+     [3Rdshot] Start 16mm — R$ 367
+     [Joola] Agassi Champion SS25 — R$ 449
+
+======================================================================
+  📊 AUDIT SUMMARY
+======================================================================
+  Total paddles:           86
+  Complete specs (100%):   0 (0%)
+  US dump matches:         32 (37%)
+  Non-paddles detected:    0
+  Duplicates:              0 groups
+  With market offers:      86
+  Low-price (< R$ 450):    3
+
+  🎯 Catalog after quality gate (specs=100% + offer):
+     0 paddles ready for production (Total)
+     0 paddles ready for production (Hybrid Pipeline Coverage)
+======================================================================
+
+2026-03-19 14:41:23,163 INFO sqlalchemy.engine.Engine ROLLBACK
