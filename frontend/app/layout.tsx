@@ -75,6 +75,7 @@ export const viewport: Viewport = {
 };
 
 import { Toaster } from "@/components/ui/toaster";
+import { MobileLayout } from "@/components/layout/mobile-layout";
 
 export default function RootLayout({
   children,
@@ -99,7 +100,7 @@ export default function RootLayout({
             });
           }
         ` }} />
-        {children}
+        <MobileLayout>{children}</MobileLayout>
         <Toaster />
       </body>
     </html>

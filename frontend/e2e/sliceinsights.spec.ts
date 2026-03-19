@@ -84,6 +84,9 @@ test.describe('Catalog', () => {
 test.describe('Quiz Flow', () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('/');
+        // Open the quiz modal by clicking the CTA button
+        await page.getByRole('button', { name: /encontrar minha raquete/i }).first().click();
+        await page.waitForLoadState('networkidle');
     });
 
     test('displays skill level options', async ({ page }) => {
@@ -106,7 +109,6 @@ test.describe('Quiz Flow', () => {
     });
 
     test('full quiz flow reaches results', async ({ page }) => {
-        // Select skill level
         const levels = page.locator(
             'button:has-text("Iniciante"), button:has-text("Intermediário"), button:has-text("Avançado")'
         );
@@ -176,7 +178,7 @@ test.describe('API Contract (via fetch)', () => {
     });
 
     test('paddles endpoint returns data with images', async ({ request }) => {
-        const r = await request.get(`${API}/paddles?limit=5`);
+        const r = await request.get(`${API}/paddles?limit=5&available_in_brazil=true`);
         expect(r.status()).toBe(200);
         const body = await r.json();
         expect(body.data.length).toBeGreaterThan(0);
