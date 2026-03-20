@@ -120,7 +120,7 @@ Plans:
 - Rollback procedure documentation
 - Deploy audit logging
 
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 
 Plans:
 - [ ] 08-01-PLAN.md — DeployLog model, version columns, staging table, Alembic migration, pre-deploy validator with tests

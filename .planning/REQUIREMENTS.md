@@ -35,8 +35,8 @@ Automation of the entire data pipeline with validated quality gates, real-time m
 
 - [x] **DEP-01**: Nightly batch job aggregates all successful scraper runs
 - [x] **DEP-02**: Pre-deploy validation runs (freshness check, corruption audit)
-- [ ] **DEP-03**: Data published to production database after validation passes
-- [ ] **DEP-04**: Deploy workflow includes rollback capability if validation fails
+- [x] **DEP-03**: Data published to production database after validation passes
+- [x] **DEP-04**: Deploy workflow includes rollback capability if validation fails
 - [x] **DEP-05**: Deploy log recorded with timestamp, scraper count, data records published
 
 ### Data Quality Checks & Reporting
@@ -88,8 +88,8 @@ Automation of the entire data pipeline with validated quality gates, real-time m
 | ALT-05 | Phase 7 | Complete |
 | DEP-01 | Phase 8 | Complete |
 | DEP-02 | Phase 8 | Complete |
-| DEP-03 | Phase 8 | Pending |
-| DEP-04 | Phase 8 | Pending |
+| DEP-03 | Phase 8 | Complete |
+| DEP-04 | Phase 8 | Complete |
 | DEP-05 | Phase 8 | Complete |
 | QC-01 | Phase 9 | Pending |
 | QC-02 | Phase 9 | Pending |
