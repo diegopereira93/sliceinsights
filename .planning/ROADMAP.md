@@ -163,9 +163,9 @@ Plans:
 **Plans:** 3/3 plans complete
 
 Plans:
-- [ ] 09-01-PLAN.md — QualityMetric model, Alembic migration, quality_aggregator.py CLI with compute/persist logic
-- [ ] 09-02-PLAN.md — Dashboard endpoint (GET /api/quality/dashboard), quality-audit.yml hourly workflow
-- [ ] 09-03-PLAN.md — Weekly report generator with anomaly detection, quality-report.yml workflow
+- [x] 09-01-PLAN.md — QualityMetric model, Alembic migration, quality_aggregator.py CLI with compute/persist logic
+- [x] 09-02-PLAN.md — Dashboard endpoint (GET /api/quality/dashboard), quality-audit.yml hourly workflow
+- [x] 09-03-PLAN.md — Weekly report generator with anomaly detection, quality-report.yml workflow
 
 ---
 
