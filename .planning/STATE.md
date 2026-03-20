@@ -2,21 +2,21 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
-current_phase: 7
-status: planning
-last_updated: "2026-03-19T20:29:08.103Z"
+current_phase: 9
+status: "Phase 9 shipped — PR #27"
+last_updated: "2026-03-20T20:01:41.098Z"
 progress:
   total_phases: 5
-  completed_phases: 2
-  total_plans: 8
-  completed_plans: 9
+  completed_phases: 5
+  total_plans: 16
+  completed_plans: 17
 ---
 
 # Project State: SliceInsights Workflows & Automation
 
-**Last Updated:** 2026-03-19
-**Status:** Ready to plan
-**Current Phase:** 7
+**Last Updated:** 2026-03-20
+**Status:** Phase 9 shipped — PR #27
+**Current Phase:** 9
 
 ## Project Reference
 
@@ -27,15 +27,15 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 
 **Milestone:** v2.0 Workflows & Automation
 **Phases:** 5
-**Completion:** 40% [████░░░░░░]
+**Completion:** 100% [██████████]
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
-| 5 | CI/CD & Testing | ◆ Executing | 2/3 |
+| 5 | CI/CD & Testing | ✓ Complete | 3/3 |
 | 6 | SLO Enforcement | ✓ Complete | 5/5 |
-| 7 | Alerts & Monitoring | ○ Pending | 0/5 |
-| 8 | Deploy & Release | ○ Pending | 0/5 |
-| 9 | Data Quality & Reporting | ○ Pending | 0/6 |
+| 7 | Alerts & Monitoring | ✓ Complete | 2/2 |
+| 8 | Deploy & Release | ✓ Complete | 3/3 |
+| 9 | Data Quality & Reporting | ✓ Shipped (PR #27) | 3/3 |
 
 ## Decisions Made (v2.0 Planning)
 
@@ -56,8 +56,19 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 | smoke-tests needs unit-tests | Smoke tests are skipped entirely if unit tests fail (fast-fail) | ✓ 05-01 |
 | Nightly batch deployments | Safe, auditable releases; not continuous (reduces risk of cascading failures) | ✓ Confirmed |
 | Multi-channel alerting (Telegram + GitHub + Email) | Ensures P1 breaches reach responsible parties across platforms | ✓ Confirmed |
+| SLOBreach dataclass in slo_alert.py alongside ORM model | Cohesion: breach value object and dedup model are always imported together | ✓ 07-01 |
+| Dedup functions module-level (not class methods) | Simplifies unit testing with mock sessions; no service instantiation needed | ✓ 07-01 |
+| LOOKBACK_HOURS=7 in alert_worker | Slightly exceeds 6h cron cycle to avoid missing breaches at cycle boundary | ✓ 07-02 |
+| alert job uses if: always() | Runs even when slo-check job fails; pre-existing breach data in slo_logs still gets processed | ✓ 07-02 |
+| GITHUB_REPOSITORY via github.repository context | Not a secret; built-in Actions context variable, auto-set by GitHub | ✓ 07-02 |
+| version_id on MarketOffer table class only (not Base) | Keeps API input schemas unaffected; versioning is a DB-level concern | ✓ 08-01 |
+| PaddleMaster rollback uses version_id only (no is_active) | Avoids schema bloat; version_id alone sufficient for flag-flip rollback | ✓ 08-01 |
+| run_corruption_audit uses raw text() SQL for staging | No ORM model for market_offers_staging; raw SQL is cleaner and testable | ✓ 08-01 |
 | Hourly data quality checks (all 11 scrapers) | Detect degradation quickly; keep baseline on failing scrapers too | ✓ Confirmed |
 | No container registry in v2.0 | Infrastructure concern; defer to v2.1 after core automation works | ✓ Confirmed |
+| No cron trigger on deploy-nightly.yml | Event-driven only via repository_dispatch; cron would cause double-runs | ✓ 08-03 |
+| notify job uses if:always() + failure condition | Runs always but alerts only on deploy failure; success is silent | ✓ 08-03 |
+| GH_DEPLOY_PAT used in scraper CI (not deploy workflow) | GITHUB_TOKEN cannot trigger new workflow runs; PAT with repo scope required | ✓ 08-03 |
 
 ## Known Constraints
 
@@ -73,12 +84,13 @@ None currently.
 ## Next Steps
 
 1. ~~Phase 5 (CI/CD): Set up GitHub Actions workflow for unit + smoke tests~~ DONE (05-01)
-2. Phase 5 (CI/CD): Add unit tests for scraper modules (05-02)
+2. ~~Phase 5 (CI/CD): Add unit tests for scraper modules (05-02)~~ DONE
 3. ~~Phase 5 (CI/CD): Create CI/CD operator guide (docs/ci-setup.md)~~ DONE (05-03)
-2. Phase 6 (SLO): Implement freshness (24h) and completeness (7d) validation scripts
-3. Phase 7 (Alerts): Configure Telegram bot, GitHub issue automation, email service
-4. Phase 8 (Deploy): Build nightly batch aggregation and safe deployment workflow
-5. Phase 9 (Quality): Create hourly audit job, metrics storage, weekly reports
+4. ~~Phase 6 (SLO): Implement freshness (24h) and completeness (7d) validation scripts~~ DONE (06)
+5. ~~Phase 7 (Alerts): Configure Telegram bot, GitHub issue automation, email service~~ DONE (07)
+6. ~~Phase 8 (Deploy): Build nightly batch aggregation and safe deployment workflow~~ DONE (08)
+7. ~~Phase 9 (Quality): Create hourly audit job, metrics storage, weekly reports~~ DONE (09) — PR #27
+8. **Milestone v2.0 complete** — all phases shipped, ready for merge to main
 
 ---
 
@@ -87,3 +99,9 @@ None currently.
 *State updated: 2026-03-19 — 06-03 complete: .github/workflows/slo-check.yml created with cron '0 */6 * * *', workflow_dispatch, DATABASE_URL_SYNC secret injection.*
 *State updated: 2026-03-19 — 06-04 complete: finish_run(scraper_name) hook added to scraper_utils.py; scripts/run_scraper.py created as unified dispatcher with non-blocking SLO validation after each scraper run.*
 *State updated: 2026-03-19 — 06-05 complete: docs/slo-guide.md created (architecture, schema, runbook, breach simulation, SLO-01..SLO-05 traceability); Phase 6 SUMMARY created; Phase 6 closed.*
+*State updated: 2026-03-19 — 07-01 complete: SLOAlert ORM model (slo_alerts table), SLOBreach dataclass with P1/P2/P3 severity, SLOAlertService with Telegram+GitHub+Email channels, 27 unit tests all passing; PyGithub==2.8.1 added.*
+*State updated: 2026-03-19 — 07-02 checkpoint: alert_worker.py CLI created (queries slo_logs, 24h dedup, dispatches via SLOAlertService, resolution detection); slo-check.yml extended with alert job (needs/if-always/continue-on-error, 10 secrets); 39 tests passing; awaiting human verification.*
+*State updated: 2026-03-20 — 08-01 complete: DeployLog model (deploy_logs table), version_id columns on market_offers+paddle_master, market_offers_staging table, Alembic migration a3f9c1d82e47, deploy_validator.py with check_slo_gate+run_corruption_audit+run_pre_deploy_validation, 15 tests passing.*
+*State updated: 2026-03-20 — 08-02 complete: deploy_worker.py with full deploy lifecycle (aggregate_batch, publish_batch with ON CONFLICT upsert, rollback_batch flag-flip, force_publish audit+alert, prune_old_versions, run_deploy orchestration), CLI --run/--validate-batch/--force-publish/--rollback, 21 tests passing.*
+*State updated: 2026-03-20 — 08-03 complete: deploy-nightly.yml (repository_dispatch scrapers-complete + workflow_dispatch, 150min timeout, failure alerts via alert_worker.py) + docs/deploy-guide.md (429 lines: CLI reference, rollback procedure, troubleshooting, DEP-01..DEP-05 traceability); human verification APPROVED — 31 tests passing, all 4 CLI subcommands working, no cron trigger. Phase 8 complete.*
+*State updated: 2026-03-20 — 09 shipped: PR #27 created (3 plans: QualityMetric model, Dashboard API, Weekly Report); 170 tests passing; QC-01..QC-06 all verified.*

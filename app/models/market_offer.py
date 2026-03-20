@@ -23,7 +23,8 @@ class MarketOffer(MarketOfferBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     paddle_id: UUID = Field(foreign_key="paddle_master.id")
     last_updated: datetime = Field(default_factory=datetime.utcnow)
-    
+    version_id: Optional[int] = None
+
     # Relationships
     paddle: Optional["PaddleMaster"] = Relationship(back_populates="market_offers")
 
@@ -36,6 +37,7 @@ class MarketOfferRead(SQLModel):
     url: str
     last_updated: datetime
     is_active: bool
+    version_id: Optional[int] = None
 
 
 class MarketOfferCreate(MarketOfferBase):

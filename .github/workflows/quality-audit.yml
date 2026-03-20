@@ -1,16 +1,30 @@
-name: SLO Validation
+name: Quality Audit
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 * * * *'
   workflow_dispatch: {}
 
 jobs:
-  slo-check:
-    name: SLO Validation (6-hourly)
+  audit:
+    name: Quality Audit (${{ matrix.scraper }})
     runs-on: ubuntu-latest
     continue-on-error: true
-
+    strategy:
+      fail-fast: false
+      matrix:
+        scraper:
+          - mercado_livre
+          - amazon_br
+          - netshoes
+          - centauro
+          - decathlon
+          - magalu
+          - shopee
+          - aliexpress
+          - casas_bahia
+          - americanas
+          - submarino
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -26,19 +40,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run SLO validation
+      - name: Run quality audit for ${{ matrix.scraper }}
         run: |
-          python scripts/slo_validator.py --all
+          python scripts/quality_aggregator.py --scraper ${{ matrix.scraper }}
         env:
           DATABASE_URL_SYNC: ${{ secrets.DATABASE_URL_SYNC }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
 
-  alert:
-    name: Alert on SLO Breaches
-    needs: slo-check
+  consolidate:
+    name: Consolidate Results
+    needs: audit
     if: always()
     runs-on: ubuntu-latest
-    continue-on-error: true
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -54,17 +67,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Dispatch alerts for SLO breaches
+      - name: Consolidate quality results
         run: |
-          python scripts/alert_worker.py --all
+          python scripts/quality_aggregator.py --consolidate
         env:
           DATABASE_URL_SYNC: ${{ secrets.DATABASE_URL_SYNC }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          ADMIN_EMAIL_GROUP: ${{ secrets.ADMIN_EMAIL_GROUP }}
-          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
-          EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
-          EMAIL_USER: ${{ secrets.EMAIL_USER }}
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          GITHUB_RUN_ID: ${{ github.run_id }}

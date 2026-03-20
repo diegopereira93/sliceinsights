@@ -29,9 +29,9 @@ Comprehensive audit and automation of SliceInsights' paddle data scraping system
 **Requirements (26 total, 5 phases):**
 
 - [x] **CI/CD & Testing** (Phase 5): Unit tests, smoke tests, PR protection, linting — Validated in Phase 5
-- [ ] **SLO Enforcement** (Phase 6): Real-time + scheduled validation for freshness (24h) and completeness (7d)
-- [ ] **Alerts & Monitoring** (Phase 7): Telegram, GitHub Issues, Email alerts for P1 breaches
-- [ ] **Deploy & Release** (Phase 8): Nightly batch deployments with validation and rollback
+- [x] **SLO Enforcement** (Phase 6): Real-time + scheduled validation for freshness (24h) and completeness (7d) — Validated in Phase 6
+- [x] **Alerts & Monitoring** (Phase 7): Telegram, GitHub Issues, Email alerts for P1 breaches — Validated in Phase 7
+- [x] **Deploy & Release** (Phase 8): Nightly batch deployments with validation and rollback — Validated in Phase 8
 - [ ] **Data Quality & Reporting** (Phase 9): Hourly audits, historical metrics, weekly trend reports
 
 ### Out of Scope
@@ -103,4 +103,4 @@ Comprehensive audit and automation of SliceInsights' paddle data scraping system
 
 ---
 
-*Last updated: 2026-03-19 — v2.0 Workflows & Automation milestone initiated*
+*Last updated: 2026-03-20 — Phase 8 (Deploy & Release Strategy) complete. Database foundation, deploy worker system, and GitHub Actions workflow implemented. 36 tests passing. 4/5 phases done. Phase 9 (Data Quality & Reporting) is next.*

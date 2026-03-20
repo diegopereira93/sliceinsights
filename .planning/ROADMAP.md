@@ -83,6 +83,14 @@
 - Email configuration and templates
 - Alert routing logic (P1 vs P2 vs P3)
 
+**Status:** [x] Complete (2026-03-19)
+
+**Plans:** 2/2 plans executed
+
+Plans:
+- [x] 07-01-PLAN.md — SLOAlert model, SLOAlertService (Telegram + GitHub + Email), dedup logic, unit tests
+- [x] 07-02-PLAN.md — Alert worker CLI, GitHub Actions workflow integration, human verification
+
 ---
 
 ## Phase 8: Deploy & Release Strategy
@@ -111,6 +119,15 @@
 - Database transaction management
 - Rollback procedure documentation
 - Deploy audit logging
+
+**Status:** [x] Complete (2026-03-20)
+
+**Plans:** 3/3 plans executed
+
+Plans:
+- [x] 08-01-PLAN.md — DeployLog model, version columns, staging table, Alembic migration, pre-deploy validator with tests
+- [x] 08-02-PLAN.md — Deploy worker: batch aggregation, atomic publish, rollback, force-publish, CLI operator tool
+- [x] 08-03-PLAN.md — GitHub Actions deploy-nightly.yml workflow, operator documentation, human verification
 
 ---
 
@@ -142,6 +159,13 @@
 - Database schema for metrics history
 - Weekly report generator
 - Report templates and styling
+
+**Plans:** 3/3 plans complete
+
+Plans:
+- [x] 09-01-PLAN.md — QualityMetric model, Alembic migration, quality_aggregator.py CLI with compute/persist logic
+- [x] 09-02-PLAN.md — Dashboard endpoint (GET /api/quality/dashboard), quality-audit.yml hourly workflow
+- [x] 09-03-PLAN.md — Weekly report generator with anomaly detection, quality-report.yml workflow
 
 ---
 

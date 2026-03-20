@@ -24,6 +24,7 @@ from app.schemas.user_profile import RecommendationRequest, RecommendationResult
 from app.services.recommendation_engine import RecommendationEngine
 from app.services.affiliate_service import get_affiliate_service
 from app.api.endpoints.history import router as history_router
+from app.api.endpoints.quality import router as quality_router
 from app.services.llm_service import llm_service
 from app.schemas.chat import ChatRequest, ChatResponse
 
@@ -527,3 +528,4 @@ async def create_lead(
 
 # Include child routers
 router.include_router(history_router, prefix="/paddles", tags=["paddles"])
+router.include_router(quality_router, prefix="/quality", tags=["quality"])

@@ -1,15 +1,15 @@
-name: SLO Validation
+name: Nightly Batch Deploy
 
 on:
-  schedule:
-    - cron: '0 */6 * * *'
+  repository_dispatch:
+    types: [scrapers-complete]
   workflow_dispatch: {}
 
 jobs:
-  slo-check:
-    name: SLO Validation (6-hourly)
+  deploy:
+    name: Nightly Batch Deploy
     runs-on: ubuntu-latest
-    continue-on-error: true
+    timeout-minutes: 150
 
     steps:
       - name: Checkout code
@@ -26,18 +26,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run SLO validation
+      - name: Run nightly deploy
         run: |
-          python scripts/slo_validator.py --all
+          python scripts/deploy_worker.py --run
         env:
           DATABASE_URL_SYNC: ${{ secrets.DATABASE_URL_SYNC }}
 
-  alert:
-    name: Alert on SLO Breaches
-    needs: slo-check
+  notify:
+    name: Deploy Notification
+    needs: deploy
     if: always()
     runs-on: ubuntu-latest
-    continue-on-error: true
 
     steps:
       - name: Checkout code
@@ -54,7 +53,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Dispatch alerts for SLO breaches
+      - name: Send deploy status alert
+        if: needs.deploy.result == 'failure'
         run: |
           python scripts/alert_worker.py --all
         env:
