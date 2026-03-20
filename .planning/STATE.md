@@ -34,7 +34,7 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 | 5 | CI/CD & Testing | ✓ Complete | 3/3 |
 | 6 | SLO Enforcement | ✓ Complete | 5/5 |
 | 7 | Alerts & Monitoring | ✓ Complete | 2/2 |
-| 8 | Deploy & Release | ◑ Executing | 2/5 |
+| 8 | Deploy & Release | ◑ Executing | 3/5 |
 | 9 | Data Quality & Reporting | ○ Pending | 0/6 |
 
 ## Decisions Made (v2.0 Planning)
@@ -66,6 +66,9 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 | run_corruption_audit uses raw text() SQL for staging | No ORM model for market_offers_staging; raw SQL is cleaner and testable | ✓ 08-01 |
 | Hourly data quality checks (all 11 scrapers) | Detect degradation quickly; keep baseline on failing scrapers too | ✓ Confirmed |
 | No container registry in v2.0 | Infrastructure concern; defer to v2.1 after core automation works | ✓ Confirmed |
+| No cron trigger on deploy-nightly.yml | Event-driven only via repository_dispatch; cron would cause double-runs | ✓ 08-03 |
+| notify job uses if:always() + failure condition | Runs always but alerts only on deploy failure; success is silent | ✓ 08-03 |
+| GH_DEPLOY_PAT used in scraper CI (not deploy workflow) | GITHUB_TOKEN cannot trigger new workflow runs; PAT with repo scope required | ✓ 08-03 |
 
 ## Known Constraints
 
@@ -99,3 +102,4 @@ None currently.
 *State updated: 2026-03-19 — 07-02 checkpoint: alert_worker.py CLI created (queries slo_logs, 24h dedup, dispatches via SLOAlertService, resolution detection); slo-check.yml extended with alert job (needs/if-always/continue-on-error, 10 secrets); 39 tests passing; awaiting human verification.*
 *State updated: 2026-03-20 — 08-01 complete: DeployLog model (deploy_logs table), version_id columns on market_offers+paddle_master, market_offers_staging table, Alembic migration a3f9c1d82e47, deploy_validator.py with check_slo_gate+run_corruption_audit+run_pre_deploy_validation, 15 tests passing.*
 *State updated: 2026-03-20 — 08-02 complete: deploy_worker.py with full deploy lifecycle (aggregate_batch, publish_batch with ON CONFLICT upsert, rollback_batch flag-flip, force_publish audit+alert, prune_old_versions, run_deploy orchestration), CLI --run/--validate-batch/--force-publish/--rollback, 21 tests passing.*
+*State updated: 2026-03-20 — 08-03 checkpoint: deploy-nightly.yml created (repository_dispatch scrapers-complete + workflow_dispatch, 150min timeout, failure notifications via alert_worker.py); docs/deploy-guide.md created (429 lines: CLI reference, rollback procedure, troubleshooting, DEP-01..DEP-05 traceability); awaiting human verification of end-to-end deploy system.*
