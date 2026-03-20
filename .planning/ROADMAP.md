@@ -160,6 +160,13 @@ Plans:
 - Weekly report generator
 - Report templates and styling
 
+**Plans:** 3 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — QualityMetric model, Alembic migration, quality_aggregator.py CLI with compute/persist logic
+- [ ] 09-02-PLAN.md — Dashboard endpoint (GET /api/quality/dashboard), quality-audit.yml hourly workflow
+- [ ] 09-03-PLAN.md — Weekly report generator with anomaly detection, quality-report.yml workflow
+
 ---
 
 ## Milestone Success Criteria
