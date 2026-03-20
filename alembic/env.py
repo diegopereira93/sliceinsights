@@ -14,6 +14,7 @@ from app.models import paddle, brand, market_offer  # noqa
 from app.models.slo import SLOLog  # noqa
 from app.models.slo_alert import SLOAlert  # noqa
 from app.models.deploy_log import DeployLog  # noqa
+from app.models.quality_metric import QualityMetric  # noqa
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

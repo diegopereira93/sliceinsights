@@ -8,6 +8,7 @@ from app.config import get_settings
 from app.models.slo import SLOLog  # noqa: F401 — registers SLOLog with SQLModel metadata
 from app.models.slo_alert import SLOAlert  # noqa: F401 — registers SLOAlert with SQLModel metadata
 from app.models.deploy_log import DeployLog  # noqa: F401 — registers DeployLog with SQLModel metadata
+from app.models.quality_metric import QualityMetric  # noqa: F401 — registers QualityMetric with SQLModel metadata
 
 settings = get_settings()
 
