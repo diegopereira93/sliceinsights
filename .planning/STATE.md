@@ -7,7 +7,7 @@ status: executing
 last_updated: "2026-03-20T01:30:00.000Z"
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 13
   completed_plans: 13
 ---
@@ -27,14 +27,14 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 
 **Milestone:** v2.0 Workflows & Automation
 **Phases:** 5
-**Completion:** 46% [████░░░░░░]
+**Completion:** 60% [██████░░░░]
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
 | 5 | CI/CD & Testing | ✓ Complete | 3/3 |
 | 6 | SLO Enforcement | ✓ Complete | 5/5 |
 | 7 | Alerts & Monitoring | ✓ Complete | 2/2 |
-| 8 | Deploy & Release | ◑ Executing | 3/5 |
+| 8 | Deploy & Release | ✓ Complete | 3/3 |
 | 9 | Data Quality & Reporting | ○ Pending | 0/6 |
 
 ## Decisions Made (v2.0 Planning)
@@ -102,4 +102,4 @@ None currently.
 *State updated: 2026-03-19 — 07-02 checkpoint: alert_worker.py CLI created (queries slo_logs, 24h dedup, dispatches via SLOAlertService, resolution detection); slo-check.yml extended with alert job (needs/if-always/continue-on-error, 10 secrets); 39 tests passing; awaiting human verification.*
 *State updated: 2026-03-20 — 08-01 complete: DeployLog model (deploy_logs table), version_id columns on market_offers+paddle_master, market_offers_staging table, Alembic migration a3f9c1d82e47, deploy_validator.py with check_slo_gate+run_corruption_audit+run_pre_deploy_validation, 15 tests passing.*
 *State updated: 2026-03-20 — 08-02 complete: deploy_worker.py with full deploy lifecycle (aggregate_batch, publish_batch with ON CONFLICT upsert, rollback_batch flag-flip, force_publish audit+alert, prune_old_versions, run_deploy orchestration), CLI --run/--validate-batch/--force-publish/--rollback, 21 tests passing.*
-*State updated: 2026-03-20 — 08-03 checkpoint: deploy-nightly.yml created (repository_dispatch scrapers-complete + workflow_dispatch, 150min timeout, failure notifications via alert_worker.py); docs/deploy-guide.md created (429 lines: CLI reference, rollback procedure, troubleshooting, DEP-01..DEP-05 traceability); awaiting human verification of end-to-end deploy system.*
+*State updated: 2026-03-20 — 08-03 complete: deploy-nightly.yml (repository_dispatch scrapers-complete + workflow_dispatch, 150min timeout, failure alerts via alert_worker.py) + docs/deploy-guide.md (429 lines: CLI reference, rollback procedure, troubleshooting, DEP-01..DEP-05 traceability); human verification APPROVED — 31 tests passing, all 4 CLI subcommands working, no cron trigger. Phase 8 complete.*

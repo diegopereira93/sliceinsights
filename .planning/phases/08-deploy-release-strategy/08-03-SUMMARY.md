@@ -54,7 +54,7 @@ completed: 2026-03-20
 - **Duration:** ~10 min
 - **Started:** 2026-03-20T01:26:10Z
 - **Completed:** 2026-03-20T01:36:00Z
-- **Tasks:** 2 of 3 complete (Task 3 is checkpoint:human-verify)
+- **Tasks:** 3 of 3 complete
 - **Files modified:** 2
 
 ## Accomplishments
@@ -70,7 +70,9 @@ Each task was committed atomically:
 1. **Task 1: GitHub Actions deploy-nightly.yml workflow** - `607e623` (feat)
 2. **Task 2: Operator guide (docs/deploy-guide.md)** - `a39119a` (feat)
 
-**Plan metadata:** (pending after checkpoint verification)
+3. **Task 3: Verify deploy system end-to-end** — checkpoint:human-verify APPROVED (31 tests passing, all 4 CLI subcommands working, no cron trigger, DeployLog model present, Alembic migration configured)
+
+**Plan metadata:** (docs commit — see final commit below)
 
 ## Files Created/Modified
 
@@ -104,8 +106,8 @@ All other secrets (`DATABASE_URL_SYNC`, `TELEGRAM_BOT_TOKEN`, etc.) were set up 
 
 ## Next Phase Readiness
 
-- Phase 8 deploy system complete pending human verification of end-to-end integrity
-- Phase 9 (Data Quality & Reporting) can proceed after checkpoint passes
+- Phase 8 deploy system complete — all plans executed and human-verified
+- Phase 9 (Data Quality & Reporting) can proceed immediately
 - Scraper CI pipeline integration point documented: add `gh api repos/.../dispatches -f event_type=scrapers-complete` with `GH_DEPLOY_PAT` to scraper CI "all done" job
 
 ---

@@ -120,12 +120,14 @@ Plans:
 - Rollback procedure documentation
 - Deploy audit logging
 
-**Plans:** 3/3 plans complete
+**Status:** [x] Complete (2026-03-20)
+
+**Plans:** 3/3 plans executed
 
 Plans:
-- [ ] 08-01-PLAN.md — DeployLog model, version columns, staging table, Alembic migration, pre-deploy validator with tests
-- [ ] 08-02-PLAN.md — Deploy worker: batch aggregation, atomic publish, rollback, force-publish, CLI operator tool
-- [ ] 08-03-PLAN.md — GitHub Actions deploy-nightly.yml workflow, operator documentation, human verification
+- [x] 08-01-PLAN.md — DeployLog model, version columns, staging table, Alembic migration, pre-deploy validator with tests
+- [x] 08-02-PLAN.md — Deploy worker: batch aggregation, atomic publish, rollback, force-publish, CLI operator tool
+- [x] 08-03-PLAN.md — GitHub Actions deploy-nightly.yml workflow, operator documentation, human verification
 
 ---
 
