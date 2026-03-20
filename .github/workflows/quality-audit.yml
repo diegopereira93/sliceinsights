@@ -1,0 +1,75 @@
+name: Quality Audit
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch: {}
+
+jobs:
+  audit:
+    name: Quality Audit (${{ matrix.scraper }})
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        scraper:
+          - mercado_livre
+          - amazon_br
+          - netshoes
+          - centauro
+          - decathlon
+          - magalu
+          - shopee
+          - aliexpress
+          - casas_bahia
+          - americanas
+          - submarino
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run quality audit for ${{ matrix.scraper }}
+        run: |
+          python scripts/quality_aggregator.py --scraper ${{ matrix.scraper }}
+        env:
+          DATABASE_URL_SYNC: ${{ secrets.DATABASE_URL_SYNC }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+
+  consolidate:
+    name: Consolidate Results
+    needs: audit
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Consolidate quality results
+        run: |
+          python scripts/quality_aggregator.py --consolidate
+        env:
+          DATABASE_URL_SYNC: ${{ secrets.DATABASE_URL_SYNC }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
