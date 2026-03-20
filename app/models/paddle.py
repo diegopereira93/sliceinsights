@@ -78,7 +78,8 @@ class PaddleMaster(PaddleMasterBase, table=True):
     # Timestamps
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
+    version_id: Optional[int] = None
+
     # Relationships
     brand: Optional["Brand"] = Relationship(back_populates="paddles")
     market_offers: List["MarketOffer"] = Relationship(back_populates="paddle")

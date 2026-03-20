@@ -9,10 +9,11 @@ from .market_offer import MarketOffer
 from .price_snapshot import PriceSnapshot
 from .ai_knowledge import AIKnowledgeBase
 from .lead import Lead
+from .deploy_log import DeployLog
 
 __all__ = [
     "FaceMaterial",
-    "PaddleShape", 
+    "PaddleShape",
     "SkillLevel",
     "PlayStyle",
     "Brand",
@@ -21,5 +22,6 @@ __all__ = [
     "PriceSnapshot",
     "AIKnowledgeBase",
     "Lead",
+    "DeployLog",
     "calculate_paddle_ratings",
 ]
