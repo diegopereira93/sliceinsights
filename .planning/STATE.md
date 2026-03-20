@@ -2,32 +2,33 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
-current_phase: 9
+current_phase: 10
 status: completed
-last_updated: "2026-03-20T18:35:04.489Z"
+last_updated: "2026-03-20T21:17:08.747Z"
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 16
-  completed_plans: 17
+  total_phases: 6
+  completed_phases: 6
+  total_plans: 17
+  completed_plans: 18
 ---
 
 # Project State: SliceInsights Workflows & Automation
 
-**Last Updated:** 2026-03-19
-**Status:** Milestone complete
-**Current Phase:** 9
+**Last Updated:** 2026-03-20
+**Status:** v2.0 milestone complete
+**Current Phase:** 10
 
 ## Project Reference
 
-See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
+See: `.planning/PROJECT.md` (updated 2026-03-20)
 **Core value:** Every piece of data flowing into recommendations must be trustworthy.
+**Current focus:** Planning v3.0 — run `/gsd:new-milestone`
 
 ## Milestone Progress
 
 **Milestone:** v2.0 Workflows & Automation
 **Phases:** 5
-**Completion:** 60% [██████░░░░]
+**Completion:** 100% [██████████]
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
@@ -35,7 +36,7 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 | 6 | SLO Enforcement | ✓ Complete | 5/5 |
 | 7 | Alerts & Monitoring | ✓ Complete | 2/2 |
 | 8 | Deploy & Release | ✓ Complete | 3/3 |
-| 9 | Data Quality & Reporting | ○ Pending | 0/6 |
+| 9 | Data Quality & Reporting | ✓ Shipped (PR #27) | 3/3 |
 
 ## Decisions Made (v2.0 Planning)
 
@@ -83,13 +84,9 @@ None currently.
 
 ## Next Steps
 
-1. ~~Phase 5 (CI/CD): Set up GitHub Actions workflow for unit + smoke tests~~ DONE (05-01)
-2. Phase 5 (CI/CD): Add unit tests for scraper modules (05-02)
-3. ~~Phase 5 (CI/CD): Create CI/CD operator guide (docs/ci-setup.md)~~ DONE (05-03)
-2. Phase 6 (SLO): Implement freshness (24h) and completeness (7d) validation scripts
-3. Phase 7 (Alerts): Configure Telegram bot, GitHub issue automation, email service
-4. Phase 8 (Deploy): Build nightly batch aggregation and safe deployment workflow
-5. Phase 9 (Quality): Create hourly audit job, metrics storage, weekly reports
+1. **Start v3.0** — run `/gsd:new-milestone` to define requirements and roadmap
+2. Merge feature branches to main (`/gsd:ship` or manual PR review)
+3. Human verifications pending: live alert delivery, live deploy end-to-end (requires production DB credentials)
 
 ---
 
@@ -103,3 +100,4 @@ None currently.
 *State updated: 2026-03-20 — 08-01 complete: DeployLog model (deploy_logs table), version_id columns on market_offers+paddle_master, market_offers_staging table, Alembic migration a3f9c1d82e47, deploy_validator.py with check_slo_gate+run_corruption_audit+run_pre_deploy_validation, 15 tests passing.*
 *State updated: 2026-03-20 — 08-02 complete: deploy_worker.py with full deploy lifecycle (aggregate_batch, publish_batch with ON CONFLICT upsert, rollback_batch flag-flip, force_publish audit+alert, prune_old_versions, run_deploy orchestration), CLI --run/--validate-batch/--force-publish/--rollback, 21 tests passing.*
 *State updated: 2026-03-20 — 08-03 complete: deploy-nightly.yml (repository_dispatch scrapers-complete + workflow_dispatch, 150min timeout, failure alerts via alert_worker.py) + docs/deploy-guide.md (429 lines: CLI reference, rollback procedure, troubleshooting, DEP-01..DEP-05 traceability); human verification APPROVED — 31 tests passing, all 4 CLI subcommands working, no cron trigger. Phase 8 complete.*
+*State updated: 2026-03-20 — 09 shipped: PR #27 created (3 plans: QualityMetric model, Dashboard API, Weekly Report); 170 tests passing; QC-01..QC-06 all verified.*

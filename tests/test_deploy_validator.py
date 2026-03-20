@@ -83,6 +83,43 @@ class TestCheckSloGate:
         assert "shopee" in passed
         assert "mercado_livre" in failed
 
+    def test_slo_gate_finds_freshness_pass_rows(self):
+        """Deploy gate finds scrapers with status='pass' written by fixed check_freshness."""
+        from scripts.deploy_validator import check_slo_gate
+
+        session = MagicMock()
+        batch_date = date(2026, 3, 20)
+
+        passed_result = _rows_result([_row("mercado_livre"), _row("shopee"), _row("amazon")])
+        failed_result = _rows_result([])
+
+        session.execute.side_effect = [passed_result, failed_result]
+
+        passed, failed = check_slo_gate(session, batch_date)
+
+        assert len(passed) == 3
+        assert "mercado_livre" in passed
+        assert "shopee" in passed
+        assert "amazon" in passed
+        assert failed == []
+
+    def test_slo_gate_mixed_pass_and_fail(self):
+        """Deploy gate correctly separates passed and failed scrapers."""
+        from scripts.deploy_validator import check_slo_gate
+
+        session = MagicMock()
+        batch_date = date(2026, 3, 20)
+
+        passed_result = _rows_result([_row("shopee")])
+        failed_result = _rows_result([_row("mercado_livre")])
+
+        session.execute.side_effect = [passed_result, failed_result]
+
+        passed, failed = check_slo_gate(session, batch_date)
+
+        assert passed == ["shopee"]
+        assert failed == ["mercado_livre"]
+
 
 # ---------------------------------------------------------------------------
 # Test 5 & 6: run_corruption_audit

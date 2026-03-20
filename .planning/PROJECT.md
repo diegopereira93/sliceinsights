@@ -2,7 +2,7 @@
 
 ## What This Is
 
-Comprehensive audit and automation of SliceInsights' paddle data scraping system. The project has 24 active scrapers collecting data from Brazilian and international paddle shops, but lacks unified quality validation, error recovery, and CI/CD automation. This initiative will diagnose the current state, identify quality gaps, and establish a reliable, production-grade data pipeline.
+A production-grade data pipeline automation system for SliceInsights' 24-scraper paddle data fleet. The project delivered a full audit of scraper health and data quality (v1.0), then automated the entire pipeline with CI/CD, real-time SLO enforcement, multi-channel alerting, safe nightly deployments, and continuous quality monitoring (v2.0).
 
 ## Core Value
 
@@ -22,17 +22,18 @@ Comprehensive audit and automation of SliceInsights' paddle data scraping system
 - ✓ Establish quality SLOs (two-tier: 24h prices, 7d specs) — v1.0 (from Phase 3 work)
 - ✓ Document dependencies and failure points — v1.0 (dependency matrix + failure mode taxonomy)
 
-### Active — v2.0 Workflows & Automation
+### Validated — v2.0 Workflows & Automation
 
-**Goal:** Automate entire data pipeline with quality gates, monitoring, and reliable deployments.
+- ✓ CI/CD pipeline (GitHub Actions) validates all scrapers on every push to main — v2.0
+- ✓ Real-time + scheduled (4×/day) SLO validation for freshness (24h) and completeness (7d) — v2.0
+- ✓ Multi-channel alert system (Telegram, GitHub Issues, Email) for P1 breaches — v2.0
+- ✓ Safe nightly batch deploy with pre-deploy validation, staging, and rollback — v2.0
+- ✓ Continuous quality monitoring: hourly audits, historical metrics DB, weekly trend reports — v2.0
+- ✓ SLO gate fix: check_freshness() emits `pass` so nightly deploy unblocks on healthy scrapers — v2.0
 
-**Requirements (26 total, 5 phases):**
+### Active — v3.0 (To Be Defined)
 
-- [x] **CI/CD & Testing** (Phase 5): Unit tests, smoke tests, PR protection, linting — Validated in Phase 5
-- [x] **SLO Enforcement** (Phase 6): Real-time + scheduled validation for freshness (24h) and completeness (7d) — Validated in Phase 6
-- [x] **Alerts & Monitoring** (Phase 7): Telegram, GitHub Issues, Email alerts for P1 breaches — Validated in Phase 7
-- [x] **Deploy & Release** (Phase 8): Nightly batch deployments with validation and rollback — Validated in Phase 8
-- [ ] **Data Quality & Reporting** (Phase 9): Hourly audits, historical metrics, weekly trend reports
+*(Next milestone to be planned. Candidates from backlog: retry logic, specs completeness fix, ML anomaly detection)*
 
 ### Out of Scope
 
@@ -43,25 +44,19 @@ Comprehensive audit and automation of SliceInsights' paddle data scraping system
 
 ## Context
 
-**Current State (Post v1.0 Audit):**
-- SliceInsights v1.8.1 running in production with AI-powered paddle recommendations
-- Data pipeline audit complete: 11 active scrapers identified, 6 operational (54.5%)
-- Critical findings: invisible failures, 0% specs completeness, no SLO enforcement
-- Audit artifacts created: AUDIT_REPORT.md, DATA_QUALITY.md, RUNBOOK_SCRAPERS.md
-- Tech stack: Python scrapers, PostgreSQL (Docker), GitHub Actions (not yet automated)
+**Current State (Post v2.0):**
+- SliceInsights data pipeline fully automated with CI/CD, SLO enforcement, alerting, deploy, and quality reporting
+- 11 active scrapers monitored; SLO validation runs real-time + 4×/day
+- P1 breaches trigger Telegram + GitHub Issues + Email within minutes
+- Nightly deploy pipeline: pre-validate → stage → publish → rollback; now unblocked after SLO gate fix
+- 178 tests passing; quality metrics stored in DB with 90-day retention and weekly trend reports
+- Tech stack: Python, PostgreSQL (Docker), GitHub Actions, SQLModel/Alembic
 
-**Known Issues (v1.0 Audit Results):**
-- 🔴 Invisible failures: Scraper can exit 0 (success) while writing 0 products
-- 🔴 0% specs completeness: All 86 paddles have NULL technical fields (blocks recommendations)
-- 🔴 No SLO enforcement: Freshness measured but not validated in CI/CD
+**Remaining Issues (carry-forward to v3.0):**
+- ⚠️ 0% specs completeness: 86 paddles still have NULL technical fields (blocks recommendations) — from v1.0 audit
 - ⚠️ No retry logic: All 24 scrapers use `except Exception` with no recovery
-- ⚠️ No structured logging: Silent failures go undetected
-
-**Why Audit Matters:**
-- Recommendations depend on trustworthy data; gaps directly impact conversions
-- Previous setup was fragile—any scraper failure could corrupt catalog
-- Manual refresh process prevented scaling
-- Now we have: baseline metrics, prioritized roadmap, runbook for operations
+- ⚠️ Human verifications pending: live alert delivery, live deploy end-to-end, production DB schema
+- ⚠️ All 36 deploy tests are mock-based; no integration with live database
 
 ## Constraints
 
@@ -78,6 +73,9 @@ Comprehensive audit and automation of SliceInsights' paddle data scraping system
 | Use existing audit tools | audit_data_quality.py and smoke_test_quality.py already built | ✓ Phase 1-3: All audit tools validated and operational |
 | Establish SLOs upfront | Define "acceptable" before fixing | ✓ Phase 3: Two-tier SLO defined (24h prices, 7d specs) |
 | Parallel audit runs | Test all 24 scrapers simultaneously to see cross-sectional view | ✓ Phase 1: 11 active scrapers identified & tested; 6 passing (54.5%) |
+| Mock-based deploy tests | Live database not available in CI; document human verification steps | ✓ Phase 8: 36 tests pass; live verification documented in deploy-guide.md |
+| Decimal phase numbering for gap closure | Insert Phase 10 between 9 and next milestone vs reopening Phase 6 | ✓ Phase 10: SLO gate fix shipped cleanly without disturbing prior phase records |
+| SLO gate fix as separate phase | Audit found bug post-verification; isolated as Phase 10 rather than patch Phase 8 | ✓ Phase 10: check_freshness() now emits pass; deploy pipeline unblocked |
 
 ## Shipped in v1.0: Data Pipeline Audit
 
@@ -99,8 +97,8 @@ Comprehensive audit and automation of SliceInsights' paddle data scraping system
 - ⚠️ **0/24 scrapers have retry logic** — all catch Exception with no recovery
 - ⚠️ **No SLO enforcement** — freshness measured but not validated
 
-**v2.0 Next:** Automate the entire pipeline with CI/CD, SLO enforcement, alerts, deployments, and quality reporting (26 requirements across 5 phases)
+**v2.0 shipped:** Full pipeline automation — CI/CD, SLO enforcement, multi-channel alerting, safe nightly deploys, quality reporting, SLO gate fix. 26/26 requirements complete. 178 tests passing.
 
 ---
 
-*Last updated: 2026-03-20 — Phase 8 (Deploy & Release Strategy) complete. Database foundation, deploy worker system, and GitHub Actions workflow implemented. 36 tests passing. 4/5 phases done. Phase 9 (Data Quality & Reporting) is next.*
+*Last updated: 2026-03-20 after v2.0 milestone — Workflows & Automation complete*

@@ -63,9 +63,8 @@ def check_freshness(session: Session, scraper_name: str | None = None) -> list[S
 
     Status logic:
       - SKIP: No data yet (scraper never ran)
-      - SKIP: Data exists but was just updated < 24h ago (still in progress)
+      - PASS: Data exists and was updated within SLO window (< 24h)
       - FAIL: Data exists but hasn't been updated for > 24h (violated SLO)
-      - PASS: Data exists and was updated within SLO window (usually same as SKIP logic)
 
     Writes one SLOLog row per store and returns the list of written logs.
     """
@@ -108,11 +107,11 @@ def check_freshness(session: Session, scraper_name: str | None = None) -> list[S
         age_hours = _hours_since(newest)
 
         # Determine status:
-        # - If data was updated in last 24h, scraper is actively running → SKIP
+        # - If data was updated in last 24h → PASS (within SLO)
         # - If data is older than 24h → FAIL (violated SLO)
         if age_hours < FRESHNESS_SLO_HOURS:
-            status = "skip"
-            reason = "recently_updated"
+            status = "pass"
+            reason = "within_slo"
         else:
             status = "fail"
             reason = "stale_data"
