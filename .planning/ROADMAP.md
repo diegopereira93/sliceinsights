@@ -160,7 +160,7 @@ Plans:
 - Weekly report generator
 - Report templates and styling
 
-**Plans:** 3 plans
+**Plans:** 3/3 plans complete
 
 Plans:
 - [ ] 09-01-PLAN.md — QualityMetric model, Alembic migration, quality_aggregator.py CLI with compute/persist logic
