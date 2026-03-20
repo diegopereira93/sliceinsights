@@ -120,6 +120,13 @@ Plans:
 - Rollback procedure documentation
 - Deploy audit logging
 
+**Plans:** 3 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — DeployLog model, version columns, staging table, Alembic migration, pre-deploy validator with tests
+- [ ] 08-02-PLAN.md — Deploy worker: batch aggregation, atomic publish, rollback, force-publish, CLI operator tool
+- [ ] 08-03-PLAN.md — GitHub Actions deploy-nightly.yml workflow, operator documentation, human verification
+
 ---
 
 ## Phase 9: Data Quality Checks & Reporting
