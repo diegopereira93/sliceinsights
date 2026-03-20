@@ -2,21 +2,21 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
-current_phase: 7
-status: planning
-last_updated: "2026-03-19T23:30:00Z"
+current_phase: 08
+status: executing
+last_updated: "2026-03-20T00:39:43.000Z"
 progress:
   total_phases: 5
-  completed_phases: 2
-  total_plans: 11
-  completed_plans: 11
+  completed_phases: 3
+  total_plans: 13
+  completed_plans: 12
 ---
 
 # Project State: SliceInsights Workflows & Automation
 
 **Last Updated:** 2026-03-19
-**Status:** Phase 7 Complete - Verification Passed (Human Testing Needed)
-**Current Phase:** 7 (2/2 plans complete - human_needed checkpoint resolved)
+**Status:** Executing Phase 08
+**Current Phase:** 08
 
 ## Project Reference
 
@@ -27,14 +27,14 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 
 **Milestone:** v2.0 Workflows & Automation
 **Phases:** 5
-**Completion:** 40% [████░░░░░░]
+**Completion:** 46% [████░░░░░░]
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
 | 5 | CI/CD & Testing | ✓ Complete | 3/3 |
 | 6 | SLO Enforcement | ✓ Complete | 5/5 |
 | 7 | Alerts & Monitoring | ✓ Complete | 2/2 |
-| 8 | Deploy & Release | ○ Pending | 0/5 |
+| 8 | Deploy & Release | ◑ Executing | 1/5 |
 | 9 | Data Quality & Reporting | ○ Pending | 0/6 |
 
 ## Decisions Made (v2.0 Planning)
@@ -61,6 +61,9 @@ See: `.planning/PROJECT.md` (Data Pipeline Audit & Automation)
 | LOOKBACK_HOURS=7 in alert_worker | Slightly exceeds 6h cron cycle to avoid missing breaches at cycle boundary | ✓ 07-02 |
 | alert job uses if: always() | Runs even when slo-check job fails; pre-existing breach data in slo_logs still gets processed | ✓ 07-02 |
 | GITHUB_REPOSITORY via github.repository context | Not a secret; built-in Actions context variable, auto-set by GitHub | ✓ 07-02 |
+| version_id on MarketOffer table class only (not Base) | Keeps API input schemas unaffected; versioning is a DB-level concern | ✓ 08-01 |
+| PaddleMaster rollback uses version_id only (no is_active) | Avoids schema bloat; version_id alone sufficient for flag-flip rollback | ✓ 08-01 |
+| run_corruption_audit uses raw text() SQL for staging | No ORM model for market_offers_staging; raw SQL is cleaner and testable | ✓ 08-01 |
 | Hourly data quality checks (all 11 scrapers) | Detect degradation quickly; keep baseline on failing scrapers too | ✓ Confirmed |
 | No container registry in v2.0 | Infrastructure concern; defer to v2.1 after core automation works | ✓ Confirmed |
 
@@ -94,3 +97,4 @@ None currently.
 *State updated: 2026-03-19 — 06-05 complete: docs/slo-guide.md created (architecture, schema, runbook, breach simulation, SLO-01..SLO-05 traceability); Phase 6 SUMMARY created; Phase 6 closed.*
 *State updated: 2026-03-19 — 07-01 complete: SLOAlert ORM model (slo_alerts table), SLOBreach dataclass with P1/P2/P3 severity, SLOAlertService with Telegram+GitHub+Email channels, 27 unit tests all passing; PyGithub==2.8.1 added.*
 *State updated: 2026-03-19 — 07-02 checkpoint: alert_worker.py CLI created (queries slo_logs, 24h dedup, dispatches via SLOAlertService, resolution detection); slo-check.yml extended with alert job (needs/if-always/continue-on-error, 10 secrets); 39 tests passing; awaiting human verification.*
+*State updated: 2026-03-20 — 08-01 complete: DeployLog model (deploy_logs table), version_id columns on market_offers+paddle_master, market_offers_staging table, Alembic migration a3f9c1d82e47, deploy_validator.py with check_slo_gate+run_corruption_audit+run_pre_deploy_validation, 15 tests passing.*
