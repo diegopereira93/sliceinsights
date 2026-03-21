@@ -6,11 +6,12 @@ from sqlmodel import SQLModel, Field, Relationship
 
 if TYPE_CHECKING:
     from .paddle import PaddleMaster
+    from .store import Store
 
 
 class MarketOfferBase(SQLModel):
     """Base market offer model with shared attributes."""
-    store_name: str
+    store_id: int = Field(foreign_key="stores.id")
     price_brl: Decimal = Field(decimal_places=2)
     url: str
     is_active: bool = True
@@ -27,12 +28,13 @@ class MarketOffer(MarketOfferBase, table=True):
 
     # Relationships
     paddle: Optional["PaddleMaster"] = Relationship(back_populates="market_offers")
+    store: Optional["Store"] = Relationship()
 
 
 class MarketOfferRead(SQLModel):
     """Market offer response schema."""
     id: int
-    store_name: str
+    store_id: int
     price_brl: float
     url: str
     last_updated: datetime
