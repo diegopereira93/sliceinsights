@@ -23,6 +23,9 @@ async_engine: AsyncEngine = create_async_engine(
 sync_engine = create_engine(
     settings.sync_database_url,
     echo=settings.debug,
+    pool_pre_ping=True,
+    pool_recycle=3600,
+    connect_args={"connect_timeout": 10},
 )
 
 # Async session factory
