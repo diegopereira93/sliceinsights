@@ -5,7 +5,7 @@ from sqlmodel import Session
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.db.database import sync_engine
-from app.services.enrichment import EnrichmentService
+from app.services._archived.enrichment import EnrichmentService
 
 def main():
     service = EnrichmentService()

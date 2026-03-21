@@ -93,7 +93,7 @@ class TestParseFreetextSpecs:
         specs = parse_freetext_specs(text)
         assert specs.get("core_thickness_mm") == 16.0
         assert specs.get("face_material") == "CARBON"
-        assert specs.get("weight_g") == 226.0
+        assert specs.get("weight_grams") == 226.0
         assert specs.get("shape") == "ELONGATED"
 
     def test_parse_freetext_specs_partial(self):
@@ -101,7 +101,104 @@ class TestParseFreetextSpecs:
         specs = parse_freetext_specs(text)
         assert specs.get("core_thickness_mm") == 14.0
         assert specs.get("face_material") == "CARBON"
+        assert "weight_grams" not in specs
+
+
+class TestFourFieldGate:
+    def test_weight_grams_renamed(self):
+        text = "Raquete com 16mm, carbono, 226g, formato elongada"
+        specs = parse_freetext_specs(text)
+        assert "weight_grams" in specs
         assert "weight_g" not in specs
+
+    def test_four_field_gate_complete(self):
+        from unittest.mock import MagicMock, patch
+        from app.models.paddle import PaddleMaster
+        from app.models.enums import FaceMaterial, PaddleShape
+
+        mock_paddle = MagicMock(spec=PaddleMaster)
+        mock_paddle.core_thickness_mm = None
+        mock_paddle.face_material = None
+        mock_paddle.shape = None
+        mock_paddle.weight_grams = None
+        mock_paddle.validation_sources = []
+
+        mock_session = MagicMock()
+        mock_brand = MagicMock()
+        mock_brand.id = 1
+        mock_session.exec.return_value.first.side_effect = [mock_brand, mock_paddle]
+
+        specs = {
+            "brand_name": "Test Brand",
+            "model_name": "Test Model",
+            "core_thickness_mm": 16.0,
+            "face_material": "CARBON",
+            "weight_grams": 226.0,
+            "shape": "ELONGATED",
+        }
+
+        from scripts.scrape_product_specs import update_paddle_specs
+        result = update_paddle_specs(specs, "test_store", mock_session)
+
+        assert result is True
+        assert mock_paddle.core_thickness_mm == 16.0
+        assert mock_paddle.face_material == FaceMaterial.CARBON
+        assert mock_paddle.shape == PaddleShape.ELONGATED
+        assert mock_paddle.weight_grams == 226.0
+        mock_session.add.assert_called_once_with(mock_paddle)
+
+    def test_four_field_gate_partial(self):
+        from unittest.mock import MagicMock
+
+        mock_session = MagicMock()
+        mock_brand = MagicMock()
+        mock_brand.id = 1
+        mock_session.exec.return_value.first.side_effect = [mock_brand, None]
+
+        specs = {
+            "brand_name": "Test Brand",
+            "model_name": "Test Model",
+            "core_thickness_mm": 16.0,
+            "face_material": "CARBON",
+            # missing weight_grams and shape
+        }
+
+        from scripts.scrape_product_specs import update_paddle_specs
+        result = update_paddle_specs(specs, "test_store", mock_session)
+
+        assert result is False
+
+    def test_validation_source_recorded(self):
+        from unittest.mock import MagicMock
+        from app.models.paddle import PaddleMaster
+        from app.models.enums import FaceMaterial, PaddleShape
+
+        mock_paddle = MagicMock(spec=PaddleMaster)
+        mock_paddle.core_thickness_mm = None
+        mock_paddle.face_material = None
+        mock_paddle.shape = None
+        mock_paddle.weight_grams = None
+        mock_paddle.validation_sources = []
+
+        mock_session = MagicMock()
+        mock_brand = MagicMock()
+        mock_brand.id = 1
+        mock_session.exec.return_value.first.side_effect = [mock_brand, mock_paddle]
+
+        specs = {
+            "brand_name": "Test Brand",
+            "model_name": "Test Model",
+            "core_thickness_mm": 16.0,
+            "face_material": "CARBON",
+            "weight_grams": 226.0,
+            "shape": "ELONGATED",
+        }
+
+        from scripts.scrape_product_specs import update_paddle_specs
+        result = update_paddle_specs(specs, "joola", mock_session)
+
+        assert result is True
+        assert "scraping_joola" in mock_paddle.validation_sources
 
 
 class TestWeightGramsFieldExists:

@@ -6,20 +6,21 @@ Targets:
   - brazilpickleballstore.com.br: Unstructured text in .user-content (regex parsing)
 
 Run:
-  python scripts/scrape_product_specs.py
-  python scripts/scrape_product_specs.py --dry-run   # preview URLs only
+  python scripts/scrape_product_specs.py --store joola
+  python scripts/scrape_product_specs.py --dry-run --store joola  # preview URLs only
 """
 import asyncio
-import json
 import re
 import sys
 import argparse
 from pathlib import Path
 
-# Add project root
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-OUTPUT_FILE = Path(__file__).parent.parent / "app" / "data" / "scraped_product_specs.json"
+STORE_SLUG_TO_ID = {
+    "joola": 2,
+    "brazil_pickleball_store": 1,
+}
 
 
 # ─── PT-BR → EN Mappings ─────────────────────────────────────────────────────
@@ -184,7 +185,7 @@ async def scrape_joola_page(page, url: str, paddle_id: str, model_name: str) -> 
             elif any(k in label for k in ['peso', 'weight']):
                 g = extract_weight_g(value)
                 if g:
-                    specs['weight_g'] = g
+                    specs['weight_grams'] = g
             elif any(k in label for k in ['comprimento da raquete', 'paddle length', 'comprimento']):
                 cm = extract_cm(value)
                 if cm:
@@ -292,18 +293,69 @@ def parse_freetext_specs(text: str) -> dict:
     # Weight
     w = extract_weight_g(text)
     if w and 150 <= w <= 350:
-        specs['weight_g'] = w
+        specs['weight_grams'] = w
 
     return specs
 
 
+# ─── DB Persistence ────────────────────────────────────────────────────────────
+
+def update_paddle_specs(specs: dict, store_slug: str, session) -> bool:
+    """
+    Write specs to paddle_master if all 4 required fields are present.
+    Returns True if paddle was updated, False if skipped.
+
+    Required fields: core_thickness_mm, face_material, weight_grams, shape
+    """
+    from sqlmodel import Session, select
+    from app.db.ingestor import normalize
+    from app.models.enums import FaceMaterial, PaddleShape
+    from app.models import Brand, PaddleMaster
+
+    required = ['core_thickness_mm', 'face_material', 'weight_grams', 'shape']
+    if not all(specs.get(f) is not None for f in required):
+        return False
+
+    brand_name = normalize(specs['brand_name'])
+    model_name = normalize(specs['model_name'])
+
+    brand = session.exec(select(Brand).where(Brand.name == brand_name)).first()
+    if not brand:
+        return False
+
+    paddle = session.exec(
+        select(PaddleMaster).where(
+            PaddleMaster.brand_id == brand.id,
+            PaddleMaster.model_name == model_name,
+        )
+    ).first()
+    if not paddle:
+        return False
+
+    paddle.core_thickness_mm = specs['core_thickness_mm']
+    paddle.face_material = FaceMaterial(specs['face_material'].lower())
+    paddle.shape = PaddleShape(specs['shape'].lower())
+    paddle.weight_grams = specs['weight_grams']
+    paddle.specs_source = "scraping"
+
+    source_key = f"scraping_{store_slug}"
+    sources = list(paddle.validation_sources or [])
+    if source_key not in sources:
+        sources.append(source_key)
+    paddle.validation_sources = sources
+
+    session.add(paddle)
+    return True
+
+
 # ─── Main ─────────────────────────────────────────────────────────────────────
 
-async def main(dry_run: bool = False):
+async def main(store: str | None = None, dry_run: bool = False):
     from sqlmodel import Session, select
     from app.db.database import sync_engine, init_db_sync
     from app.models import Brand, PaddleMaster
     from app.models.market_offer import MarketOffer
+
 
     print("🔍 Scraper Detalhado — Extração de Specs das Lojas BR")
     print("=" * 60)
@@ -311,82 +363,96 @@ async def main(dry_run: bool = False):
     init_db_sync()
 
     with Session(sync_engine) as session:
-        # Get all unenriched paddles with their URLs
-        paddles = session.exec(
-            select(PaddleMaster, Brand.name, MarketOffer.url)
-            .join(Brand, PaddleMaster.brand_id == Brand.id)
-            .join(MarketOffer, MarketOffer.paddle_id == PaddleMaster.id)
-            .where(PaddleMaster.specs_confidence == 0)
-            .where(MarketOffer.is_active == True)
-        ).all()
+        if store:
+            store_id = STORE_SLUG_TO_ID.get(store)
+            if not store_id:
+                print(f"Store '{store}' not found.")
+                return
+            print(f"Store: {store}")
+            offers = session.exec(
+                select(MarketOffer, PaddleMaster, Brand.name)
+                .join(PaddleMaster, MarketOffer.paddle_id == PaddleMaster.id)
+                .join(Brand, PaddleMaster.brand_id == Brand.id)
+                .where(MarketOffer.store_id == store_id)
+                .where(MarketOffer.is_active == True)
+            ).all()
+        else:
+            offers = session.exec(
+                select(MarketOffer, PaddleMaster, Brand.name)
+                .join(PaddleMaster, MarketOffer.paddle_id == PaddleMaster.id)
+                .join(Brand, PaddleMaster.brand_id == Brand.id)
+                .where(MarketOffer.is_active == True)
+            ).all()
 
-    # Deduplicate by paddle_id
-    paddle_map = {}
-    for paddle, brand_name, url in paddles:
-        pid = str(paddle.id)
-        if pid not in paddle_map:
-            paddle_map[pid] = {
-                "paddle_id": pid,
+    targets = [(offer, paddle, brand_name) for offer, paddle, brand_name in offers]
+    targets_unique = {}
+    for offer, paddle, brand_name in targets:
+        key = (paddle.id, offer.store_id)
+        if key not in targets_unique:
+            targets_unique[key] = {
+                "paddle_id": str(paddle.id),
                 "model_name": paddle.model_name,
-                "brand": brand_name,
-                "url": url,
+                "brand_name": brand_name,
+                "url": offer.url,
+                "store_id": offer.store_id,
             }
 
-    targets = list(paddle_map.values())
-    joola_targets = [t for t in targets if 'joola.com.br' in t['url']]
-    bps_targets = [t for t in targets if 'brazilpickleballstore' in t['url']]
-
-    print(f"📦 Targets: {len(targets)} total ({len(joola_targets)} Joola, {len(bps_targets)} BPS)")
+    target_list = list(targets_unique.values())
+    print(f"📦 Targets: {len(target_list)} paddles")
 
     if dry_run:
         print("\n🔎 DRY RUN — URLs that would be scraped:")
-        for t in targets:
-            print(f"  {t['brand']:10s} | {t['model_name'][:40]:40s} | {t['url'][:60]}")
+        for t in target_list:
+            print(f"  {t['brand_name']:10s} | {t['model_name'][:40]:40s} | {t['url'][:60]}")
         return
 
-    # Scrape with Playwright
     from playwright.async_api import async_playwright
-
-    all_specs = []
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         context = await browser.new_context(viewport={'width': 1280, 'height': 900})
         page = await context.new_page()
 
-        # Scrape Joola pages
-        print(f"\n🟢 Scraping {len(joola_targets)} Joola pages...")
-        for t in joola_targets:
-            specs = await scrape_joola_page(page, t['url'], t['paddle_id'], t['model_name'])
-            all_specs.append(specs)
-            await asyncio.sleep(1)  # Be polite
+        enriched, skipped, errors = 0, 0, 0
 
-        # Scrape BPS pages
-        print(f"\n🟢 Scraping {len(bps_targets)} BPS pages...")
-        for t in bps_targets:
-            specs = await scrape_bps_page(page, t['url'], t['paddle_id'], t['model_name'])
-            all_specs.append(specs)
-            await asyncio.sleep(1)
+        with Session(sync_engine) as session:
+            for t in target_list:
+                url_slug = store or "unknown"
+                if 'joola.com.br' in t['url'] and (not store or store == 'joola'):
+                    specs = await scrape_joola_page(page, t['url'], t['paddle_id'], t['model_name'])
+                    specs['brand_name'] = t['brand_name']
+                    slug = 'joola'
+                elif 'brazilpickleballstore' in t['url'] and (not store or store == 'brazil_pickleball_store'):
+                    specs = await scrape_bps_page(page, t['url'], t['paddle_id'], t['model_name'])
+                    specs['brand_name'] = t['brand_name']
+                    slug = 'brazil_pickleball_store'
+                else:
+                    print(f"  ⚠️ Store for {t['model_name']} not yet implemented")
+                    skipped += 1
+                    await asyncio.sleep(0.5)
+                    continue
+
+                if update_paddle_specs(specs, slug, session):
+                    enriched += 1
+                else:
+                    skipped += 1
+
+                await asyncio.sleep(1)
+
+            session.commit()
 
         await browser.close()
 
-    # Save results
-    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with open(OUTPUT_FILE, 'w') as f:
-        json.dump(all_specs, f, indent=2, ensure_ascii=False)
-
-    # Summary
-    with_data = [s for s in all_specs if len([k for k in s if k not in ('paddle_id', 'model_name', 'url', 'source')]) > 0]
     print(f"\n{'=' * 60}")
     print(f"✅ SCRAPING COMPLETE")
-    print(f"   📦 Total scraped:     {len(all_specs)}")
-    print(f"   🟢 With spec data:    {len(with_data)}")
-    print(f"   🔴 No data found:     {len(all_specs) - len(with_data)}")
-    print(f"   💾 Saved to: {OUTPUT_FILE}")
+    print(f"   🟢 Paddles enriched:  {enriched}")
+    print(f"   🔴 Paddles skipped:  {skipped}")
+    print(f"   ⚠️  Errors:           {errors}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--store", type=str, help="Store slug to enrich (e.g., joola, brazil_pickleball_store)")
     args = parser.parse_args()
-    asyncio.run(main(dry_run=args.dry_run))
+    asyncio.run(main(store=args.store, dry_run=args.dry_run))
