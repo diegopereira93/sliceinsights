@@ -296,6 +296,7 @@ async def get_paddle(
     # Get offers
     offers_result = await session.exec(
         select(MarketOffer)
+        .options(selectinload(MarketOffer.store))
         .where(MarketOffer.paddle_id == paddle_id, MarketOffer.is_active.is_(True)) # noqa: E712
         .order_by(MarketOffer.price_brl)
     )
@@ -320,10 +321,10 @@ async def get_paddle(
         "ratings": paddle_read.ratings.model_dump(),
         "market_offers": [
             {
-                "store_name": o.store_name,
+                "store_name": o.store.name if o.store else None,
                 "price_brl": float(o.price_brl),
-                "url": affiliate_service.transform_url(o.url, o.store_name),
-                "affiliate_url": affiliate_service.transform_url(o.url, o.store_name) if affiliate_service.is_affiliate_enabled() else None,
+                "url": affiliate_service.transform_url(o.url, o.store.name if o.store else None),
+                "affiliate_url": affiliate_service.transform_url(o.url, o.store.name if o.store else None) if affiliate_service.is_affiliate_enabled() else None,
                 "last_updated": o.last_updated.isoformat()
             }
             for o in offers
@@ -428,8 +429,6 @@ async def coach_chat(
     enriched_context = body.context
     
     if body.paddle_id:
-        # Fetch PaddleMaster and active MarketOffers
-        from sqlalchemy.orm import selectinload
         result = await session.exec(
             select(PaddleMaster)
             .options(selectinload(PaddleMaster.brand))
@@ -440,8 +439,8 @@ async def coach_chat(
         if paddle:
             offers_result = await session.exec(
                 select(MarketOffer)
+                .options(selectinload(MarketOffer.store))
                 .where(MarketOffer.paddle_id == paddle.id, MarketOffer.is_active.is_(True)) # noqa: E712
-                # .order_by(MarketOffer.price_brl)
             )
             offers = offers_result.all()
             
@@ -471,8 +470,9 @@ async def coach_chat(
                 offers = sorted(offers, key=lambda x: x.price_brl)
                 enrichment += "\nOFERTAS DISPONÍVEIS (SE O USUÁRIO PERGUNTAR ONDE COMPRAR):\n"
                 for o in offers:
-                    url = affiliate_service.transform_url(o.url, o.store_name)
-                    enrichment += f"- [{o.store_name}]({url}) por {o.price_brl} BRL\n"
+                    store_name = o.store.name if o.store else None
+                    url = affiliate_service.transform_url(o.url, store_name)
+                    enrichment += f"- [{store_name}]({url}) por {o.price_brl} BRL\n"
             
             enriched_context += enrichment
     
