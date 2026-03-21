@@ -1,0 +1,25 @@
+# Ruff configuration for sliceinsights
+# https://docs.astral.sh/ruff/configuration/
+
+line-length = 100
+target-version = "py311"
+
+[lint]
+# Enable pyflakes and pycodestyle rules
+select = ["E", "F", "F5", "F8", "F84", "F841", "F9"]
+# F401 (unused imports) handled by --fix
+# E402 (module level import not at top) - scripts need sys.path manipulation
+# E701 (multiple statements on one line) - one-liner if statements are intentional
+ignore = [
+    "E402",  # Scripts need sys.path manipulation before app imports
+    "E501",  # Line too long - codebase uses longer lines intentionally
+    "E701",  # One-liner if statements are intentional style
+    "E712",  # Comparing to True - common in SQLAlchemy boolean checks
+]
+
+[lint.per-file-ignores]
+"scripts/*" = ["E402"]  # All scripts have sys.path manipulation
+"app/services/_archived/*" = ["E402", "F401"]  # Archived code
+
+[lint.isort]
+known-first-party = ["app", "scripts"]
