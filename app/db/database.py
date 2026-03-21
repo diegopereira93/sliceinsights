@@ -9,6 +9,7 @@ from app.models.slo import SLOLog  # noqa: F401 — registers SLOLog with SQLMod
 from app.models.slo_alert import SLOAlert  # noqa: F401 — registers SLOAlert with SQLModel metadata
 from app.models.deploy_log import DeployLog  # noqa: F401 — registers DeployLog with SQLModel metadata
 from app.models.quality_metric import QualityMetric  # noqa: F401 — registers QualityMetric with SQLModel metadata
+from app.models.store import Store  # noqa: F401 — registers Store with SQLModel metadata
 
 settings = get_settings()
 
@@ -49,6 +50,7 @@ async def init_db():
     """Initialize database tables and sync missing columns."""
     async with async_engine.begin() as conn:
         from sqlalchemy import text
+
         await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
         await conn.run_sync(SQLModel.metadata.create_all)
         await conn.run_sync(_sync_missing_columns)
@@ -57,6 +59,7 @@ async def init_db():
 def init_db_sync():
     """Initialize database tables synchronously (for scripts)."""
     from sqlalchemy import text
+
     with sync_engine.begin() as conn:
         conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
     SQLModel.metadata.create_all(sync_engine)
@@ -66,16 +69,16 @@ def init_db_sync():
 
 def _sync_missing_columns(conn):
     """Detect and add missing columns to existing tables.
-    
+
     SQLModel.metadata.create_all only creates missing TABLES, not missing COLUMNS.
     This function bridges that gap by inspecting existing tables and adding
     any columns defined in the models but absent from the database.
     """
     from sqlalchemy import inspect, text
-    
+
     inspector = inspect(conn)
     existing_tables = inspector.get_table_names()
-    
+
     type_map = {
         "VARCHAR": "VARCHAR",
         "TEXT": "VARCHAR",
@@ -89,37 +92,37 @@ def _sync_missing_columns(conn):
         # Default fallback for ARRAY types if not matched by logic below
         "ARRAY": "VARCHAR[]",
     }
-    
+
     for table in SQLModel.metadata.sorted_tables:
         if table.name not in existing_tables:
             continue
-            
+
         existing_cols = {col["name"] for col in inspector.get_columns(table.name)}
-        
+
         for column in table.columns:
             if column.name in existing_cols:
                 continue
-            
+
             # Map SQLAlchemy type to SQL type string
             col_type = str(column.type).upper()
-            
+
             # Robust mapping for ARRAY types
             if "ARRAY" in col_type:
                 sql_type = "VARCHAR[]"
             else:
                 sql_type = type_map.get(col_type, col_type)
-            
+
             # Build default clause
             default_clause = ""
             if column.default is not None:
-                default_val = getattr(column.default, 'arg', None)
+                default_val = getattr(column.default, "arg", None)
                 if isinstance(default_val, bool):
                     default_clause = f" DEFAULT {'TRUE' if default_val else 'FALSE'}"
                 elif isinstance(default_val, (int, float)):
                     default_clause = f" DEFAULT {default_val}"
                 elif isinstance(default_val, str):
                     default_clause = f" DEFAULT '{default_val}'"
-            
+
             sql = f'ALTER TABLE "{table.name}" ADD COLUMN IF NOT EXISTS "{column.name}" {sql_type}{default_clause}'
             try:
                 # Use a nested transaction (SAVEPOINT) to isolate this ALTER TABLE
@@ -130,4 +133,3 @@ def _sync_missing_columns(conn):
                 # Column might already exist or type might be complex (e.g. Vector)
                 # We skip and let the application handle potential missing column errors later
                 pass
-
