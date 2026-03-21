@@ -88,7 +88,7 @@ Plans:
   4. All catalog endpoints return an empty list (not an error) when no matching paddles exist
 **Plans**: 2 plans
 Plans:
-- [ ] 13-01-PLAN.md — Store slug migration + catalog endpoints (paddles + stores) + router wiring
+- [x] 13-01-PLAN.md — Store slug migration + catalog endpoints (paddles + stores) + router wiring
 - [ ] 13-02-PLAN.md — Comprehensive test suite for all catalog requirements
 
 ### Phase 14: Web Catalog Page
@@ -131,6 +131,6 @@ Plans:
 | 10. SLO Gate Fix | v2.0 | 1/1 | ✅ Complete | 2026-03-20 |
 | 11. Seed Cleanup & Store Catalog | v3.0 | Complete | ✅ Complete | 2026-03-21 |
 | 12. Spec Enrichment Scrapers | v3.0 | 3/3 | ✅ Complete | 2026-03-21 |
-| 13. Catalog API | v3.0 | 0/2 | Planning complete | - |
+| 13. Catalog API | 1/2 | In Progress|  | - |
 | 14. Web Catalog Page | v3.0 | 0/? | Not started | - |
 | 15. AI Recommendation Assistant | v3.0 | 0/? | Not started | - |
