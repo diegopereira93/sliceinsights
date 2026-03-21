@@ -8,9 +8,11 @@ Usage:
   python scripts/alert_worker.py --all
   python scripts/alert_worker.py --scraper mercado_livre
 """
+import os
 import sys
 import argparse
 import logging
+import time
 from pathlib import Path
 from datetime import datetime, timedelta
 
@@ -27,6 +29,8 @@ from app.services.slo_alerts import (
 
 logger = logging.getLogger(__name__)
 LOOKBACK_HOURS = 7  # Slightly more than 6h cycle to avoid edge gaps
+MAX_RETRIES = 3
+RETRY_DELAY_SECONDS = 5
 
 
 # ---------------------------------------------------------------------------
@@ -167,9 +171,27 @@ def main() -> None:
     args = parser.parse_args()
     scraper_name = None if args.run_all else args.scraper
 
+    db_url = os.getenv("DATABASE_URL_SYNC") or os.getenv("DATABASE_URL")
+    if not db_url:
+        print("[alert_worker] ERROR: DATABASE_URL_SYNC or DATABASE_URL environment variable is required")
+        sys.exit(1)
+
     logging.basicConfig(level=logging.INFO)
     sync_engine.echo = False
-    init_db_sync()
+    
+    for attempt in range(MAX_RETRIES):
+        try:
+            init_db_sync()
+            break
+        except Exception as exc:
+            if attempt < MAX_RETRIES - 1:
+                print(f"[alert_worker] Connection attempt {attempt + 1}/{MAX_RETRIES} failed: {exc}")
+                print(f"[alert_worker] Retrying in {RETRY_DELAY_SECONDS}s...")
+                time.sleep(RETRY_DELAY_SECONDS)
+            else:
+                print(f"[alert_worker] ERROR: Failed to initialize database after {MAX_RETRIES} attempts: {exc}")
+                sys.exit(1)
+    
     service = get_slo_alert_service()
 
     with Session(sync_engine) as session:

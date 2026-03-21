@@ -86,7 +86,10 @@ Plans:
   2. Query parameters `core_thickness`, `surface_material`, `price_min`, `price_max`, `brand`, and `store` each filter results correctly
   3. `GET /catalog/stores` returns all 10 stores with metadata and supports filtering by available brand
   4. All catalog endpoints return an empty list (not an error) when no matching paddles exist
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 13-01-PLAN.md — Store slug migration + catalog endpoints (paddles + stores) + router wiring
+- [ ] 13-02-PLAN.md — Comprehensive test suite for all catalog requirements
 
 ### Phase 14: Web Catalog Page
 **Goal**: Qualquer pessoa pode navegar e filtrar o catálogo de raquetes disponíveis no Brasil via página web
@@ -97,7 +100,10 @@ Plans:
   2. The page displays filter controls for core thickness, surface material, price range, brand, and store
   3. Applying a filter updates the paddle listing to show only matching results
   4. Each paddle card includes a clickable link to the Brazilian store where it can be purchased
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 13-01-PLAN.md — Store slug migration + catalog endpoints (paddles + stores) + router wiring
+- [ ] 13-02-PLAN.md — Comprehensive test suite for all catalog requirements
 
 ### Phase 15: AI Recommendation Assistant
 **Goal**: Jogadores recebem recomendações personalizadas de raquetes com justificativa técnica e link de compra no Brasil
@@ -108,7 +114,10 @@ Plans:
   2. Each recommendation includes a plain-language technical justification referencing spec attributes (e.g., "núcleo 16mm para equilíbrio potência/controle")
   3. Each recommendation includes a direct purchase link to a Brazilian store
   4. When no catalog paddle matches the submitted profile, the assistant returns a meaningful "no match" message rather than an empty response or error
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 13-01-PLAN.md — Store slug migration + catalog endpoints (paddles + stores) + router wiring
+- [ ] 13-02-PLAN.md — Comprehensive test suite for all catalog requirements
 
 ## Progress
 
@@ -128,6 +137,6 @@ Plans:
 | 10. SLO Gate Fix | v2.0 | 1/1 | ✅ Complete | 2026-03-20 |
 | 11. Seed Cleanup & Store Catalog | v3.0 | Complete    | 2026-03-21 | - |
 | 12. Spec Enrichment Scrapers | 3/3 | Complete    | 2026-03-21 | - |
-| 13. Catalog API | v3.0 | 0/? | Not started | - |
+| 13. Catalog API | v3.0 | 0/2 | Planning complete | - |
 | 14. Web Catalog Page | v3.0 | 0/? | Not started | - |
 | 15. AI Recommendation Assistant | v3.0 | 0/? | Not started | - |
