@@ -18,16 +18,16 @@
 
 - [x] **STORE-01**: Sistema mantém catálogo de lojas especializadas com nome, URL base, status ativo e marcas disponíveis
 - [x] **STORE-02**: Cada oferta de mercado está associada à sua loja de origem com URL direta do produto
-- [ ] **STORE-03**: API retorna lista de lojas com metadados e filtro por marca disponível
+- [x] **STORE-03**: API retorna lista de lojas com metadados e filtro por marca disponível
 
 ### Catalog — API de Catálogo
 
-- [ ] **CAT-01**: Usuário pode listar todas as raquetes disponíveis no Brasil via endpoint da API
-- [ ] **CAT-02**: Usuário pode filtrar raquetes por espessura do núcleo (ex: 13mm, 16mm, 19mm)
-- [ ] **CAT-03**: Usuário pode filtrar raquetes por material da superfície
-- [ ] **CAT-04**: Usuário pode filtrar raquetes por faixa de preço (R$)
-- [ ] **CAT-05**: Usuário pode filtrar raquetes por marca e por loja
-- [ ] **CAT-06**: Cada raquete retornada pela API inclui URL da loja brasileira onde pode ser comprada
+- [x] **CAT-01**: Usuário pode listar todas as raquetes disponíveis no Brasil via endpoint da API
+- [x] **CAT-02**: Usuário pode filtrar raquetes por espessura do núcleo (ex: 13mm, 16mm, 19mm)
+- [x] **CAT-03**: Usuário pode filtrar raquetes por material da superfície
+- [x] **CAT-04**: Usuário pode filtrar raquetes por faixa de preço (R$)
+- [x] **CAT-05**: Usuário pode filtrar raquetes por marca e por loja
+- [x] **CAT-06**: Cada raquete retornada pela API inclui URL da loja brasileira onde pode ser comprada
 
 ### Web — Página de Catálogo
 
@@ -74,13 +74,13 @@
 | SCRP-06 | Phase 12 | Complete |
 | STORE-01 | Phase 11 | Complete |
 | STORE-02 | Phase 11 | Complete |
-| STORE-03 | Phase 13 | Pending |
-| CAT-01 | Phase 13 | Pending |
-| CAT-02 | Phase 13 | Pending |
-| CAT-03 | Phase 13 | Pending |
-| CAT-04 | Phase 13 | Pending |
-| CAT-05 | Phase 13 | Pending |
-| CAT-06 | Phase 13 | Pending |
+| STORE-03 | Phase 13 | Complete |
+| CAT-01 | Phase 13 | Complete |
+| CAT-02 | Phase 13 | Complete |
+| CAT-03 | Phase 13 | Complete |
+| CAT-04 | Phase 13 | Complete |
+| CAT-05 | Phase 13 | Complete |
+| CAT-06 | Phase 13 | Complete |
 | WEB-01 | Phase 14 | Pending |
 | WEB-02 | Phase 14 | Pending |
 | WEB-03 | Phase 14 | Pending |
