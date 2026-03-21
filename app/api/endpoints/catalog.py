@@ -4,7 +4,7 @@ from sqlmodel import select, func
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import selectinload
 from sqlalchemy import any_
-from cachetools import TTLCache
+
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
