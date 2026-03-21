@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -22,11 +23,12 @@ export function CatalogPaddleCard({ paddle, index }: CatalogPaddleCardProps) {
       transition={{ duration: 0.3, delay: index * 0.05 }}
     >
       <div className="aspect-[4/5] overflow-hidden">
-        <img
+        <Image
           src={paddle.image_url ?? '/placeholder-paddle.png'}
           alt={paddle.model_name}
           loading="lazy"
-          className="object-cover w-full h-full"
+          fill
+          className="object-cover"
         />
       </div>
       <div className="p-4 space-y-2">

@@ -129,8 +129,10 @@ export function CoachChatInterface({ grokDossier, contextString, paddleId, paddl
     };
 
     // Initial Coach Message using the Dossier
+    const initialMessageSet = useRef(false);
     useEffect(() => {
-        if (grokDossier && messages.length === 0) {
+        if (grokDossier && !initialMessageSet.current) {
+            initialMessageSet.current = true;
             setMessages([
                 { role: 'assistant', content: grokDossier }
             ]);

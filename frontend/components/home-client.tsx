@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import { 
     Search, 
     Zap, 
@@ -250,7 +251,7 @@ export default function HomeClient({ initialPaddles, brands }: HomeClientProps) 
                             <div className="flex -space-x-4">
                                 {comparisonList.map((p) => (
                                     <div key={p.id} className="w-12 h-12 rounded-full border-2 border-primary overflow-hidden bg-muted shadow-lg">
-                                        <img src={p.image || '/placeholder-paddle.png'} alt={p.name} className="w-full h-full object-cover" />
+                                        <Image src={p.image || "/placeholder-paddle.png"} alt={p.name} fill className="object-cover" />
                                     </div>
                                 ))}
                             </div>
