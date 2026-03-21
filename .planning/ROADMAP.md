@@ -127,7 +127,7 @@ Plans:
 | 9. Data Quality Checks & Reporting | v2.0 | 3/3 | ✅ Complete | 2026-03-20 |
 | 10. SLO Gate Fix | v2.0 | 1/1 | ✅ Complete | 2026-03-20 |
 | 11. Seed Cleanup & Store Catalog | v3.0 | Complete    | 2026-03-21 | - |
-| 12. Spec Enrichment Scrapers | 3/3 | Complete   | 2026-03-21 | - |
+| 12. Spec Enrichment Scrapers | 3/3 | Complete    | 2026-03-21 | - |
 | 13. Catalog API | v3.0 | 0/? | Not started | - |
 | 14. Web Catalog Page | v3.0 | 0/? | Not started | - |
 | 15. AI Recommendation Assistant | v3.0 | 0/? | Not started | - |
