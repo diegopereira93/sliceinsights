@@ -58,7 +58,9 @@ jobs:
         run: |
           python scripts/alert_worker.py --all
         env:
-          DATABASE_URL_SYNC: ${{ secrets.DATABASE_URL_SYNC }}
+          USE_FIRESTORE: 'true'
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          FIRESTORE_PROJECT_ID: ${{ secrets.FIRESTORE_PROJECT_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
