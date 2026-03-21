@@ -1,7 +1,6 @@
 """
 Scraper: ProPadel (HTML scraping)
 Domain: lojapropadel.com.br
-Output: data/raw/propadel_products.csv
 
 NOTE: Filter for pickleball products only — this store also sells padel equipment.
 """
@@ -9,11 +8,14 @@ import re
 import time
 import requests
 from bs4 import BeautifulSoup
-from scripts.scraper_utils import parse_brand_model, save_to_csv
+from sqlmodel import Session, select
+from scripts.scraper_utils import parse_brand_model
+from app.db.database import sync_engine, init_db_sync
+from app.db.ingestor import ingest_rows
+from app.models.store import Store
 
 DOMAIN = "www.lojapropadel.com.br"
-STORE = "ProPadel"
-OUTPUT = "data/raw/propadel_products.csv"
+STORE_NAME = "ProPadel"
 HEADERS = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"}
 
 PICKLEBALL_KEYWORDS = ["pickleball", "pickle"]
@@ -47,7 +49,6 @@ def scrape_category(category_path: str) -> list[dict]:
                     continue
                 title = title_el.get_text(strip=True)
 
-                # Filter: only pickleball products
                 combined = title.lower()
                 tags_el = item.get("data-tags", "")
                 combined += f" {tags_el}".lower()
@@ -85,7 +86,6 @@ def scrape_category(category_path: str) -> list[dict]:
                         "model_name": model,
                         "price_brl": price_brl,
                         "product_url": product_url,
-                        "store_name": STORE,
                         "image_url": image_url,
                     })
             except Exception:
@@ -98,7 +98,7 @@ def scrape_category(category_path: str) -> list[dict]:
 
 
 def main():
-    print(f"🏓 Scraping {STORE}...")
+    print(f"🏓 Scraping {STORE_NAME}...")
     rows = []
     for path in ["pickleball", "raquetes-pickleball", "raquetes", "colecao/pickleball"]:
         result = scrape_category(path)
@@ -110,7 +110,12 @@ def main():
     for r in rows:
         print(f"  ✅ {r['brand_name']} — {r['model_name']} — R$ {r['price_brl']:.2f}")
 
-    save_to_csv(rows, OUTPUT)
+    init_db_sync()
+    with Session(sync_engine) as session:
+        store = session.exec(select(Store).where(Store.name == STORE_NAME)).one()
+        result = ingest_rows(rows, store_id=store.id, session=session)
+        session.commit()
+    print(f"  Ingested: {result}")
 
 
 if __name__ == "__main__":
