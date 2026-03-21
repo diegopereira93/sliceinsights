@@ -31,8 +31,6 @@ SCRAPER_MODULES: dict[str, str] = {
     "shark": "scrape_shark",
     "supremo": "scrape_supremo",
     "yosports": "scrape_yosports",
-    # convenience aliases matching store_name values used in market_offers
-    "mercado_livre": "scrape_brazil_store",  # placeholder — replace when scraper exists
 }
 
 
