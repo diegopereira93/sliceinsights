@@ -19,7 +19,7 @@ function ActiveFilterChips({
   filters: CatalogFilters;
   onRemove: (key: keyof CatalogFilters) => void;
 }) {
-  const chips: { label: string; key: keyof CatalogFilters; clear?: keyof CatalogFilters[] }[] = [];
+  const chips: { label: string; key: keyof CatalogFilters; clear?: (keyof CatalogFilters)[] }[] = [];
 
   if (filters.brand) {
     chips.push({ label: filters.brand, key: 'brand' });
