@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Catálogo Confiável Brasileiro
-current_phase: 0
-status: defining_requirements
+current_phase: 11
+status: ready_to_plan
 last_updated: "2026-03-20T22:00:00.000Z"
 progress:
   total_phases: 5
@@ -15,45 +15,58 @@ progress:
 # Project State: SliceInsights Catálogo Confiável Brasileiro
 
 **Last Updated:** 2026-03-20
-**Status:** Defining requirements
-**Current Phase:** Not started
+**Status:** Ready to plan Phase 11
+**Current Phase:** 11 — Seed Cleanup & Store Catalog
 
 ## Project Reference
 
 See: `.planning/PROJECT.md` (updated 2026-03-20)
 **Core value:** Todo dado que flui para as recomendações deve ser confiável — vendido no Brasil, com specs verificadas via scraping.
-**Current focus:** Planning v3.0 — Catálogo Confiável Brasileiro
+**Current focus:** Phase 11 — Seed Cleanup & Store Catalog
 
-## Milestone Progress
+## Current Position
 
-**Milestone:** v3.0 Catálogo Confiável Brasileiro
-**Phases:** 5 (11–15)
-**Completion:** 0% [░░░░░░░░░░]
+Phase: 11 of 15 (Seed Cleanup & Store Catalog)
+Plan: 0 of ? in current phase
+Status: Ready to plan
+Last activity: 2026-03-20 — Roadmap created for v3.0; phases 11-15 defined
 
-| Phase | Name | Status | Plans |
-|-------|------|--------|-------|
-| 11 | Seed Cleanup & Store Catalog | ○ Pending | 0/? |
-| 12 | Spec Enrichment Scrapers | ○ Pending | 0/? |
-| 13 | Catalog API | ○ Pending | 0/? |
-| 14 | Web Catalog Page | ○ Pending | 0/? |
-| 15 | AI Recommendation Assistant | ○ Pending | 0/? |
+Progress: [░░░░░░░░░░] 0% (v3.0)
 
-## Accumulated Context (from v2.0)
+## Performance Metrics
 
-- SLO gate fix confirmed: `check_freshness()` emits `pass` — nightly deploy pipeline unblocked
-- 178 tests passing (v2.0 close)
-- Quality audit CI uses 10 specialized pickleball stores (updated from mass marketplaces 2026-03-20)
-- Seed CSVs to remove: `app/data/brazil_pickleball_store.csv`, `app/data/joola_brazil.csv`, `app/data/paddle_stats_dump.csv`, `data/raw/*.csv` (7 files)
-- Human verifications still pending: live alert delivery, live deploy end-to-end (requires production DB credentials)
+**Velocity (v2.0 reference):**
+- Total plans completed: 17 (v2.0)
+- Total phases completed: 10 (v1.0 + v2.0)
 
-## Blockers
+**By Phase (v3.0):**
 
-None currently.
+| Phase | Plans | Total | Avg/Plan |
+|-------|-------|-------|----------|
+| - | - | - | - |
 
-## Next Steps
+*Updated after each plan completion*
 
-1. Approve roadmap → `/gsd:plan-phase 11`
-2. Execute Phase 11: remove seed CSVs + model store catalog
+## Accumulated Context
 
----
-*State initialized: 2026-03-20 — v3.0 Catálogo Confiável Brasileiro started*
+### Decisions
+
+- [v2.0 Phase 10]: SLO gate fix as separate phase — check_freshness() now emits `pass`; deploy pipeline unblocked
+- [v3.0 start]: Seed CSVs to remove: `app/data/brazil_pickleball_store.csv`, `app/data/joola_brazil.csv`, `app/data/paddle_stats_dump.csv`, `data/raw/*.csv` (7 files)
+- [v3.0 start]: Weekly scraping cron is a NEW workflow separate from `quality-audit.yml`
+- [v3.0 start]: Web page uses HTML/Jinja2 consistent with existing Python/FastAPI stack
+
+### Pending Todos
+
+None.
+
+### Blockers/Concerns
+
+- Human verifications still pending from v2.0: live alert delivery, live deploy end-to-end (requires production DB credentials)
+- 10 scrapers exist but need spec field enrichment (SCRP-03/04/05) — Phase 12 work
+
+## Session Continuity
+
+Last session: 2026-03-20
+Stopped at: Roadmap written — v3.0 phases 11-15 defined and ready for planning
+Resume file: None

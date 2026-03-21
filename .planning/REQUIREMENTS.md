@@ -67,7 +67,7 @@
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | SCRP-01 | Phase 11 | Pending |
-| SCRP-02 | Phase 11 | Pending |
+| SCRP-02 | Phase 12 | Pending |
 | SCRP-03 | Phase 12 | Pending |
 | SCRP-04 | Phase 12 | Pending |
 | SCRP-05 | Phase 12 | Pending |
@@ -95,4 +95,4 @@
 
 ---
 *Requirements defined: 2026-03-20*
-*Last updated: 2026-03-20 after milestone v3.0 start*
+*Last updated: 2026-03-20 — roadmap created, traceability confirmed*
