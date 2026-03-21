@@ -36,7 +36,7 @@ Full archive: `.planning/milestones/v2.0-ROADMAP.md`
 
 ---
 
-### 🚧 v3.0 Catálogo Confiável Brasileiro (In Progress)
+### v3.0 Catálogo Confiável Brasileiro (In Progress)
 
 **Milestone Goal:** Construir um catálogo confiável de raquetes de pickleball vendidas no Brasil — enriquecido com specs técnicas via scraping semanal — entregando valor ao público brasileiro e alimentando o assistente de IA de recomendação.
 
@@ -100,10 +100,7 @@ Plans:
   2. The page displays filter controls for core thickness, surface material, price range, brand, and store
   3. Applying a filter updates the paddle listing to show only matching results
   4. Each paddle card includes a clickable link to the Brazilian store where it can be purchased
-**Plans**: 2 plans
-Plans:
-- [ ] 13-01-PLAN.md — Store slug migration + catalog endpoints (paddles + stores) + router wiring
-- [ ] 13-02-PLAN.md — Comprehensive test suite for all catalog requirements
+**Plans**: [To be planned]
 
 ### Phase 15: AI Recommendation Assistant
 **Goal**: Jogadores recebem recomendações personalizadas de raquetes com justificativa técnica e link de compra no Brasil
@@ -114,10 +111,7 @@ Plans:
   2. Each recommendation includes a plain-language technical justification referencing spec attributes (e.g., "núcleo 16mm para equilíbrio potência/controle")
   3. Each recommendation includes a direct purchase link to a Brazilian store
   4. When no catalog paddle matches the submitted profile, the assistant returns a meaningful "no match" message rather than an empty response or error
-**Plans**: 2 plans
-Plans:
-- [ ] 13-01-PLAN.md — Store slug migration + catalog endpoints (paddles + stores) + router wiring
-- [ ] 13-02-PLAN.md — Comprehensive test suite for all catalog requirements
+**Plans**: [To be planned]
 
 ## Progress
 
@@ -135,8 +129,8 @@ Plans:
 | 8. Deploy & Release Strategy | v2.0 | 3/3 | ✅ Complete | 2026-03-20 |
 | 9. Data Quality Checks & Reporting | v2.0 | 3/3 | ✅ Complete | 2026-03-20 |
 | 10. SLO Gate Fix | v2.0 | 1/1 | ✅ Complete | 2026-03-20 |
-| 11. Seed Cleanup & Store Catalog | v3.0 | Complete    | 2026-03-21 | - |
-| 12. Spec Enrichment Scrapers | 3/3 | Complete    | 2026-03-21 | - |
+| 11. Seed Cleanup & Store Catalog | v3.0 | Complete | ✅ Complete | 2026-03-21 |
+| 12. Spec Enrichment Scrapers | v3.0 | 3/3 | ✅ Complete | 2026-03-21 |
 | 13. Catalog API | v3.0 | 0/2 | Planning complete | - |
 | 14. Web Catalog Page | v3.0 | 0/? | Not started | - |
 | 15. AI Recommendation Assistant | v3.0 | 0/? | Not started | - |
