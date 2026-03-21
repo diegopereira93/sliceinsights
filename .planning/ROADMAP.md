@@ -102,7 +102,7 @@ Plans:
   4. Each paddle card includes a clickable link to the Brazilian store where it can be purchased
 **Plans**: 3 plans
 Plans:
-- [ ] 14-01-PLAN.md — Types, backend image_url fix, and presentational components (card, grid, skeleton, pagination)
+- [x] 14-01-PLAN.md — Types, backend image_url fix, and presentational components (card, grid, skeleton, pagination)
 - [ ] 14-02-PLAN.md — FilterDrawer extension, CatalogClient, SSR page, bottom-nav wiring
 - [ ] 14-03-PLAN.md — Build verification and human checkpoint
 
@@ -136,5 +136,5 @@ Plans:
 | 11. Seed Cleanup & Store Catalog | v3.0 | Complete | ✅ Complete | 2026-03-21 |
 | 12. Spec Enrichment Scrapers | v3.0 | 3/3 | ✅ Complete | 2026-03-21 |
 | 13. Catalog API | 2/2 | Complete    | 2026-03-21 | - |
-| 14. Web Catalog Page | v3.0 | 0/3 | Planning complete | - |
+| 14. Web Catalog Page | v3.0 | 1/3 | In Progress|  |
 | 15. AI Recommendation Assistant | v3.0 | 0/? | Not started | - |

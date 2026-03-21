@@ -31,7 +31,7 @@
 
 ### Web — Página de Catálogo
 
-- [ ] **WEB-01**: Usuário acessa página web de catálogo com listagem de raquetes
+- [x] **WEB-01**: Usuário acessa página web de catálogo com listagem de raquetes
 - [ ] **WEB-02**: Página exibe filtros laterais (espessura, material, preço, marca, loja)
 - [ ] **WEB-03**: Página atualiza listagem dinamicamente ao aplicar filtros
 
@@ -81,7 +81,7 @@
 | CAT-04 | Phase 13 | Complete |
 | CAT-05 | Phase 13 | Complete |
 | CAT-06 | Phase 13 | Complete |
-| WEB-01 | Phase 14 | Pending |
+| WEB-01 | Phase 14 | Complete |
 | WEB-02 | Phase 14 | Pending |
 | WEB-03 | Phase 14 | Pending |
 | REC-01 | Phase 15 | Pending |
