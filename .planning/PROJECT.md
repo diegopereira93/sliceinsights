@@ -31,13 +31,16 @@ A production-grade data pipeline automation system for SliceInsights' 24-scraper
 - ✓ Continuous quality monitoring: hourly audits, historical metrics DB, weekly trend reports — v2.0
 - ✓ SLO gate fix: check_freshness() emits `pass` so nightly deploy unblocks on healthy scrapers — v2.0
 
+### Validated — v3.0 Catálogo Confiável (Phase 11+)
+
+- ✓ Remover CSVs de seed — catálogo 100% via scraping — Phase 11
+- ✓ Catálogo de lojas especializadas com URL, marcas disponíveis e status ativo (Store model + MarketOffer FK) — Phase 11
+
 ### Active — v3.0 Catálogo Confiável
 
-- [ ] Remover CSVs de seed — catálogo 100% via scraping
 - [ ] Scrapers cobrem as 10 lojas especializadas em pickleball no Brasil (cron semanal)
 - [ ] Scrapers capturam specs técnicas: espessura do núcleo, material da superfície, peso, formato
 - [ ] Completude de specs do paddle_master sobe de 0% para ≥ 70%
-- [ ] Catálogo de lojas especializadas com URL, marcas disponíveis e status ativo
 - [ ] API de catálogo: listar, filtrar por specs/loja/marca/preço
 - [ ] Página web de catálogo com filtros
 - [ ] Assistente de IA recebe perfil do jogador (quiz) e retorna raquetes recomendadas com links para compra no Brasil
@@ -51,16 +54,18 @@ A production-grade data pipeline automation system for SliceInsights' 24-scraper
 
 ## Context
 
-**Current State (Post v2.0):**
+**Current State (Post v2.0 + Phase 11):**
 - SliceInsights data pipeline fully automated with CI/CD, SLO enforcement, alerting, deploy, and quality reporting
 - 11 active scrapers monitored; SLO validation runs real-time + 4×/day
 - P1 breaches trigger Telegram + GitHub Issues + Email within minutes
 - Nightly deploy pipeline: pre-validate → stage → publish → rollback; now unblocked after SLO gate fix
-- 178 tests passing; quality metrics stored in DB with 90-day retention and weekly trend reports
+- Seed CSVs removed — all data now sourced from scrapers + DB
+- Store catalog model (stores + MarketOffer FK) in place; all scrapers adapted to ingest_rows()
+- Phase 11 complete — catalog foundation ready for Phase 12 spec enrichment
 - Tech stack: Python, PostgreSQL (Docker), GitHub Actions, SQLModel/Alembic
 
 **Remaining Issues (carry-forward to v3.0):**
-- ⚠️ 0% specs completeness: 86 paddles still have NULL technical fields (blocks recommendations) — from v1.0 audit
+- ⚠️ 0% specs completeness: 86 paddles still have NULL technical fields (blocks recommendations) — Phase 12 target
 - ⚠️ No retry logic: All 24 scrapers use `except Exception` with no recovery
 - ⚠️ Human verifications pending: live alert delivery, live deploy end-to-end, production DB schema
 - ⚠️ All 36 deploy tests are mock-based; no integration with live database
@@ -120,4 +125,4 @@ A production-grade data pipeline automation system for SliceInsights' 24-scraper
 
 ---
 
-*Last updated: 2026-03-20 after v3.0 milestone start — Catálogo Confiável Brasileiro*
+*Last updated: 2026-03-21 after Phase 11 completion — Catálogo Confiável Brasileiro milestone*
