@@ -8,13 +8,12 @@ from sqlalchemy.orm import selectinload
 
 from slowapi import Limiter
 from slowapi.util import get_remote_address
-from uuid import UUID
 
 from app.db.database import get_session
 from app.models import PaddleMaster, MarketOffer
 from app.schemas.user_profile import (
     RecommendationRequest, RecommendationResult,
-    UserProfile, PaddleRecommendation, MarketOfferOut
+    UserProfile, MarketOfferOut
 )
 from app.schemas.chat import ChatRequest, ChatResponse
 from app.services.recommendation_engine import RecommendationEngine

@@ -9,7 +9,7 @@ from uuid import uuid4
 
 from app.main import app
 from app.db.database import get_session
-from app.schemas.user_profile import RecommendationResult, PaddleRecommendation, UserProfile
+from app.schemas.user_profile import RecommendationResult, UserProfile
 from app.models.enums import SkillLevel, PlayStyle
 
 
@@ -17,7 +17,7 @@ from app.models.enums import SkillLevel, PlayStyle
 async def test_recommend_valid_request():
     """Test /recommend endpoint with valid request."""
     paddle_id = uuid4()
-    from tests.conftest import MockPaddle, MockStore, MockMarketOfferWithStore
+    from tests.conftest import MockPaddle
     mock_row = (
         MockPaddle(
             id=paddle_id,
@@ -110,8 +110,6 @@ async def test_recommend_market_offers_present():
 @pytest.mark.asyncio
 async def test_recommend_no_match_returns_dossier():
     """Verify REC-01: no-match returns recommendations:[] plus grok_dossier (not HTTP error)."""
-    paddle_id = uuid4()
-    from tests.conftest import MockPaddle
     
     # Mock engine to return empty recommendations
     mock_result = RecommendationResult(
@@ -165,7 +163,6 @@ async def test_recommend_no_match_returns_dossier():
 @pytest.mark.asyncio
 async def test_recommend_chat_endpoint():
     """Verify chat endpoint works correctly."""
-    from app.schemas.chat import ChatRequest, ChatResponse
     
     # Create mock messages
     messages = [{"role": "user", "content": "Qual a melhor?"}]
