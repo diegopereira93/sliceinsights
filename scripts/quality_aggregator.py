@@ -168,8 +168,10 @@ def consolidate(run_id: str, session: Session) -> dict:
 
     scrapers = {}
     for r in rows:
+        fh = r.freshness_hours
+        json_freshness = None if (fh is not None and fh != fh) else (None if fh == float("inf") else fh)
         scrapers[r.scraper_name] = {
-            "freshness_hours": r.freshness_hours,
+            "freshness_hours": json_freshness,
             "completeness_pct": r.completeness_pct,
             "coverage_pct": r.coverage_pct,
             "product_count": r.product_count,
