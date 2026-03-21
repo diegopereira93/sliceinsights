@@ -39,6 +39,7 @@ class PaddleMasterBase(SQLModel):
     core_material: Optional[str] = None # e.g. "Polymer Honeycomb"
     face_material: Optional[FaceMaterial] = None # e.g. "Carbon"
     shape: Optional[PaddleShape] = None # e.g. "Elongated"
+    weight_grams: Optional[float] = None
     
     # Advanced Physics Specs (New from verified data)
     swing_weight: Optional[int] = None
