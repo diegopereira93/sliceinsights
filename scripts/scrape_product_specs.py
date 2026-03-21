@@ -21,6 +21,27 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 STORE_SLUG_TO_ID = {
     "joola": 2,
     "brazil_pickleball_store": 1,
+    "yosports": 3,
+    "supremo": 4,
+    "shark": 5,
+    "prospin": 6,
+    "drop_shot_brasil": 7,
+    "just_paddles": 10,
+    "pcklhouse": 8,
+    "propadel": 9,
+}
+
+STORE_HANDLERS = {
+    "joola": {"func": "scrape_joola_page", "async": True},
+    "brazil_pickleball_store": {"func": "scrape_bps_page", "async": True},
+    "yosports": {"func": "scrape_yosports_specs", "async": False},
+    "supremo": {"func": "scrape_supremo_specs", "async": False},
+    "shark": {"func": "scrape_shark_specs", "async": False},
+    "prospin": {"func": "scrape_prospin_specs", "async": False},
+    "drop_shot_brasil": {"func": "scrape_drop_shot_specs", "async": True},
+    "just_paddles": {"func": "scrape_just_paddles_specs", "async": True},
+    "pcklhouse": {"func": "scrape_pcklhouse_specs", "async": False},
+    "propadel": {"func": "scrape_propadel_specs", "async": False},
 }
 
 
@@ -504,6 +525,70 @@ def scrape_propadel_specs(product_url: str, brand_name: str, model_name: str) ->
     return specs
 
 
+# ─── Playwright Store Extractors ───────────────────────────────────────────────
+
+async def scrape_drop_shot_specs(page, url: str, brand_name: str, model_name: str) -> dict:
+    """Extract specs from dropshot.com.br using Playwright (JS dynamic content)."""
+    specs = {"brand_name": brand_name, "model_name": model_name}
+    try:
+        await page.goto(url, wait_until="domcontentloaded", timeout=20000)
+        await asyncio.sleep(2)
+
+        for sel in [".product-description", ".product-specs", "[itemprop='description']"]:
+            try:
+                el = page.locator(sel).first
+                if await el.is_visible(timeout=3000):
+                    text = await el.inner_text()
+                    parsed = parse_freetext_specs(text)
+                    specs.update(parsed)
+                    break
+            except Exception:
+                continue
+
+        if "core_thickness_mm" not in specs:
+            text = await page.inner_text("body")
+            parsed = parse_freetext_specs(text)
+            specs.update(parsed)
+
+        has_data = any(specs.get(f) for f in ["core_thickness_mm", "face_material", "weight_grams", "shape"])
+        status = "✅" if has_data else "⚠️ "
+        print(f"  {status} [DropShot] {model_name}: {sum(1 for f in ['core_thickness_mm','face_material','weight_grams','shape'] if specs.get(f))}/4 fields")
+    except Exception as e:
+        print(f"  ❌ [DropShot] {model_name}: {e}")
+    return specs
+
+
+async def scrape_just_paddles_specs(page, url: str, brand_name: str, model_name: str) -> dict:
+    """Extract specs from justpaddles.com using Playwright (JS dynamic content)."""
+    specs = {"brand_name": brand_name, "model_name": model_name}
+    try:
+        await page.goto(url, wait_until="domcontentloaded", timeout=20000)
+        await asyncio.sleep(2)
+
+        for sel in [".product-description", ".product-details", "[itemprop='description']"]:
+            try:
+                el = page.locator(sel).first
+                if await el.is_visible(timeout=3000):
+                    text = await el.inner_text()
+                    parsed = parse_freetext_specs(text)
+                    specs.update(parsed)
+                    break
+            except Exception:
+                continue
+
+        if "core_thickness_mm" not in specs:
+            text = await page.inner_text("body")
+            parsed = parse_freetext_specs(text)
+            specs.update(parsed)
+
+        has_data = any(specs.get(f) for f in ["core_thickness_mm", "face_material", "weight_grams", "shape"])
+        status = "✅" if has_data else "⚠️ "
+        print(f"  {status} [JustPaddles] {model_name}: {sum(1 for f in ['core_thickness_mm','face_material','weight_grams','shape'] if specs.get(f))}/4 fields")
+    except Exception as e:
+        print(f"  ❌ [JustPaddles] {model_name}: {e}")
+    return specs
+
+
 # ─── DB Persistence ────────────────────────────────────────────────────────────
 
 def update_paddle_specs(specs: dict, store_slug: str, session) -> bool:
@@ -569,6 +654,7 @@ async def main(store: str | None = None, dry_run: bool = False):
     init_db_sync()
 
     with Session(sync_engine) as session:
+        id_to_slug = {v: k for k, v in STORE_SLUG_TO_ID.items()}
         if store:
             store_id = STORE_SLUG_TO_ID.get(store)
             if not store_id:
@@ -595,12 +681,14 @@ async def main(store: str | None = None, dry_run: bool = False):
     for offer, paddle, brand_name in targets:
         key = (paddle.id, offer.store_id)
         if key not in targets_unique:
+            slug = id_to_slug.get(offer.store_id)
             targets_unique[key] = {
                 "paddle_id": str(paddle.id),
                 "model_name": paddle.model_name,
                 "brand_name": brand_name,
                 "url": offer.url,
                 "store_id": offer.store_id,
+                "store_slug": slug,
             }
 
     target_list = list(targets_unique.values())
@@ -614,6 +702,8 @@ async def main(store: str | None = None, dry_run: bool = False):
 
     from playwright.async_api import async_playwright
 
+    stores_to_scrape = [store] if store else list(STORE_HANDLERS.keys())
+
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         context = await browser.new_context(viewport={'width': 1280, 'height': 900})
@@ -621,32 +711,45 @@ async def main(store: str | None = None, dry_run: bool = False):
 
         enriched, skipped, errors = 0, 0, 0
 
-        with Session(sync_engine) as session:
-            for t in target_list:
-                url_slug = store or "unknown"
-                if 'joola.com.br' in t['url'] and (not store or store == 'joola'):
-                    specs = await scrape_joola_page(page, t['url'], t['paddle_id'], t['model_name'])
-                    specs['brand_name'] = t['brand_name']
-                    slug = 'joola'
-                elif 'brazilpickleballstore' in t['url'] and (not store or store == 'brazil_pickleball_store'):
-                    specs = await scrape_bps_page(page, t['url'], t['paddle_id'], t['model_name'])
-                    specs['brand_name'] = t['brand_name']
-                    slug = 'brazil_pickleball_store'
-                else:
-                    print(f"  ⚠️ Store for {t['model_name']} not yet implemented")
-                    skipped += 1
-                    await asyncio.sleep(0.5)
-                    continue
+        for slug in stores_to_scrape:
+            handler_info = STORE_HANDLERS.get(slug)
+            if not handler_info:
+                print(f"  ⚠️  Store '{slug}' not yet implemented")
+                continue
 
-                if update_paddle_specs(specs, slug, session):
-                    enriched += 1
-                else:
-                    skipped += 1
+            handler_name = handler_info["func"]
+            is_async = handler_info["async"]
+            store_targets = [t for t in target_list if t.get("store_slug") == slug or
+                             (slug == "joola" and "joola.com.br" in t["url"]) or
+                             (slug == "brazil_pickleball_store" and "brazilpickleballstore" in t["url"])]
 
-                await asyncio.sleep(1)
+            if not store_targets:
+                continue
 
-            session.commit()
+            print(f"\n🟢 Scraping {len(store_targets)} paddles from {slug}...")
+            handler_func = globals()[handler_name]
 
+            for t in store_targets:
+                try:
+                    if is_async:
+                        specs = await handler_func(page, t["url"], t["brand_name"], t["model_name"])
+                    else:
+                        specs = handler_func(t["url"], t["brand_name"], t["model_name"])
+                    specs["brand_name"] = t["brand_name"]
+
+                    if update_paddle_specs(specs, slug, session):
+                        enriched += 1
+                    else:
+                        skipped += 1
+
+                    await asyncio.sleep(1)
+                except Exception as e:
+                    print(f"  ❌ [{slug}] {t['model_name']}: {e}")
+                    errors += 1
+
+            print(f"  ✅ {slug}: {enriched}/{len(store_targets)} enriched")
+
+        session.commit()
         await browser.close()
 
     print(f"\n{'=' * 60}")

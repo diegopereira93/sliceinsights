@@ -275,6 +275,35 @@ class TestStoreExtractors:
         assert callable(scrape_propadel_specs)
 
 
+class TestStoreRegistration:
+    def test_all_10_stores_registered(self):
+        from scripts.scrape_product_specs import STORE_HANDLERS
+        assert len(STORE_HANDLERS) == 10, f"Expected 10 stores, got {len(STORE_HANDLERS)}"
+
+    def test_store_handler_keys(self):
+        from scripts.scrape_product_specs import STORE_HANDLERS
+        expected = {
+            "joola", "brazil_pickleball_store", "yosports", "supremo", "shark",
+            "prospin", "drop_shot_brasil", "just_paddles", "pcklhouse", "propadel"
+        }
+        assert set(STORE_HANDLERS.keys()) == expected
+
+    def test_async_vs_sync_handlers(self):
+        from scripts.scrape_product_specs import STORE_HANDLERS
+        async_stores = {k for k, v in STORE_HANDLERS.items() if v["async"]}
+        sync_stores = {k for k, v in STORE_HANDLERS.items() if not v["async"]}
+        assert "joola" in async_stores
+        assert "brazil_pickleball_store" in async_stores
+        assert "drop_shot_brasil" in async_stores
+        assert "just_paddles" in async_stores
+        assert "yosports" in sync_stores
+        assert "supremo" in sync_stores
+        assert "shark" in sync_stores
+        assert "prospin" in sync_stores
+        assert "pcklhouse" in sync_stores
+        assert "propadel" in sync_stores
+
+
 class TestWeightGramsFieldExists:
     def test_weight_grams_field_exists(self):
         assert "weight_grams" in PaddleMasterBase.model_fields
