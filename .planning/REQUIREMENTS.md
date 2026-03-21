@@ -37,9 +37,9 @@
 
 ### Recommend — Assistente de IA
 
-- [ ] **REC-01**: Assistente de IA recebe perfil do jogador (nível de jogo, estilo, orçamento) e retorna raquetes recomendadas do catálogo
-- [ ] **REC-02**: Cada recomendação inclui justificativa técnica (ex: "núcleo 16mm para equilíbrio potência/controle") e link de compra no Brasil
-- [ ] **REC-03**: Assistente consulta catálogo em tempo real (não depende de dados estáticos)
+- [x] **REC-01**: Assistente de IA recebe perfil do jogador (nível de jogo, estilo, orçamento) e retorna raquetes recomendadas do catálogo
+- [x] **REC-02**: Cada recomendação inclui justificativa técnica (ex: "núcleo 16mm para equilíbrio potência/controle") e link de compra no Brasil
+- [x] **REC-03**: Assistente consulta catálogo em tempo real (não depende de dados estáticos)
 
 ## v4 Requirements (Deferred)
 
@@ -84,9 +84,9 @@
 | WEB-01 | Phase 14 | Complete |
 | WEB-02 | Phase 14 | Complete |
 | WEB-03 | Phase 14 | Complete |
-| REC-01 | Phase 15 | Pending |
-| REC-02 | Phase 15 | Pending |
-| REC-03 | Phase 15 | Pending |
+| REC-01 | Phase 15 | Complete |
+| REC-02 | Phase 15 | Complete |
+| REC-03 | Phase 15 | Complete |
 
 **Coverage:**
 - v3 requirements: 21 total

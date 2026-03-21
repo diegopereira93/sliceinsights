@@ -117,7 +117,7 @@ Plans:
   4. When no catalog paddle matches the submitted profile, the assistant returns a meaningful "no match" message rather than an empty response or error
 **Plans**: 3 plans
 Plans:
-- [ ] 15-01-PLAN.md — Backend: schema extension (MarketOfferOut, image_url) + /recommend and /recommend/chat endpoints + tests
+- [x] 15-01-PLAN.md — Backend: schema extension (MarketOfferOut, image_url) + /recommend and /recommend/chat endpoints + tests
 - [ ] 15-02-PLAN.md — Frontend: TypeScript types + wizard page + result cards + chat panel + catalog CTA
 - [ ] 15-03-PLAN.md — Build verification and human checkpoint
 
@@ -141,4 +141,4 @@ Plans:
 | 12. Spec Enrichment Scrapers | v3.0 | 3/3 | ✅ Complete | 2026-03-21 |
 | 13. Catalog API | 2/2 | Complete    | 2026-03-21 | - |
 | 14. Web Catalog Page | v3.0 | 2/3 | In Progress|  |
-| 15. AI Recommendation Assistant | v3.0 | 0/3 | Not started | - |
+| 15. AI Recommendation Assistant | v3.0 | 1/3 | In Progress|  |

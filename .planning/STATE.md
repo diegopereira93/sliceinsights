@@ -4,13 +4,13 @@ milestone: v3.0
 milestone_name: Catálogo Confiável Brasileiro
 current_phase: 14
 status: executing
-stopped_at: Completed 14-02-PLAN.md
-last_updated: "2026-03-21T20:14:58.303Z"
+stopped_at: Completed 15-01-PLAN.md
+last_updated: "2026-03-21T21:44:53.777Z"
 progress:
   total_phases: 5
   completed_phases: 3
-  total_plans: 10
-  completed_plans: 10
+  total_plans: 13
+  completed_plans: 11
 ---
 
 # Project State: SliceInsights Catálogo Confiável Brasileiro
@@ -22,7 +22,7 @@ progress:
 ## Current Position
 
 Phase: 14 (web-catalog-page) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -53,6 +53,7 @@ Plan: 2 of 3
 - [v3.0 start]: Web page uses HTML/Jinja2 consistent with existing Python/FastAPI stack
 - [v3.0 Phase 13]: INNER JOIN on offer subquery excludes paddles with no active offers (CAT-06)
 - [v3.0 Phase 13]: o.store_name column was dropped in Phase 11 migration — all endpoints must use o.store.name via selectinload
+- [Phase ?]: Rate limit: 30/min for /recommend (LLM call), 60/min for /chat
 
 ### Pending Todos
 
@@ -65,6 +66,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-21T20:14:58.300Z
-Stopped at: Completed 14-02-PLAN.md
+Last session: 2026-03-21T21:44:33.019Z
+Stopped at: Completed 15-01-PLAN.md
 Resume file: None
