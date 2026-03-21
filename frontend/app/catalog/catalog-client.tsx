@@ -1,6 +1,7 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { getApiBaseUrl } from '@/lib/api';
 import { CatalogResponse, CatalogStore, CatalogFilters } from '@/types/catalog';
@@ -113,6 +114,18 @@ export default function CatalogClient({ initialData, initialStores }: CatalogCli
       <p className="text-sm text-muted-foreground mb-4">
         {data.total} raquetes disponiveis no Brasil
       </p>
+
+      <Link
+        href="/recommend"
+        className="block mt-3 mb-4 rounded-xl border border-[#ceff00]/30 bg-[#ceff00]/5 px-4 py-3 hover:bg-[#ceff00]/10 transition-colors"
+      >
+        <span className="text-sm font-semibold text-[#ceff00]">
+          Nao sabe qual raquete escolher?
+        </span>
+        <span className="text-xs text-gray-400 ml-2">
+          Responda 3 perguntas e receba recomendacoes personalizadas →
+        </span>
+      </Link>
 
       <CatalogFilterBar
         filters={filters}
