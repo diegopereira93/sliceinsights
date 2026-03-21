@@ -11,7 +11,6 @@ Usage:
   python scripts/fetch_pb_studio.py --token {NOTION_TOKEN}  # official API
 """
 import sys
-import json
 import argparse
 from pathlib import Path
 from typing import Any

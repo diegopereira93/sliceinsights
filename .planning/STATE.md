@@ -2,34 +2,34 @@
 gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Catálogo Confiável Brasileiro
-current_phase: 14
-status: "Phase 15 shipped — PR #30 (with lint fixes)"
-stopped_at: Completed 15-01-PLAN.md
-last_updated: "2026-03-21T22:06:42.241Z"
+current_phase: 15
+status: Phase 14 shipped
+stopped_at: Phase 14 complete — ship workflow
+last_updated: "2026-03-21T23:00:00.000Z"
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 5
   total_plans: 13
-  completed_plans: 11
+  completed_plans: 13
 ---
 
 # Project State: SliceInsights Catálogo Confiável Brasileiro
 
 **Last Updated:** 2026-03-21
-**Status:** Phase 15 shipped — PR #30 (with lint fixes)
-**Current Phase:** 14
+**Status:** Phase 14 shipped — Milestone v3.0 complete
+**Current Phase:** 15 (all phases done)
 
 ## Current Position
 
-Phase: 14 (web-catalog-page) — EXECUTING
-Plan: 3 of 3
+Phase: 15 (ai-recommendation-assistant) — COMPLETE
+All 5 phases of v3.0 complete. Ready to ship.
 
 ## Performance Metrics
 
 **Velocity (v3.0):**
 
-- Total plans completed: 7 (v3.0 phases 11-12)
-- Total phases completed: 2 (v3.0)
+- Total plans completed: 13 (v3.0 phases 11-15)
+- Total phases completed: 5 (v3.0)
 
 **By Phase (v3.0):**
 
@@ -37,11 +37,9 @@ Plan: 3 of 3
 |-------|-------|-------|----------|
 | 11 | 3 | 3 | - |
 | 12 | 3 | 3 | - |
-| 13 | 1 | 2 | - |
-
-*Updated after each plan completion*
-| Phase 14-web-catalog-page P01 | 4min | 2 tasks | 5 files |
-| Phase 14 P02 | 9 min | 2 tasks | 5 files |
+| 13 | 2 | 2 | - |
+| 14 | 3 | 3 | - |
+| 15 | 3 | 3 | - |
 
 ## Accumulated Context
 
@@ -54,6 +52,7 @@ Plan: 3 of 3
 - [v3.0 Phase 13]: INNER JOIN on offer subquery excludes paddles with no active offers (CAT-06)
 - [v3.0 Phase 13]: o.store_name column was dropped in Phase 11 migration — all endpoints must use o.store.name via selectinload
 - [Phase ?]: Rate limit: 30/min for /recommend (LLM call), 60/min for /chat
+- [v3.0 Phase 14]: seed_test_data.py enhanced to provide 5 brands, 5 stores, 5 paddles, 11 market offers for local dev
 
 ### Pending Todos
 
@@ -62,10 +61,9 @@ None.
 ### Blockers/Concerns
 
 - Human verifications still pending from v2.0: live alert delivery, live deploy end-to-end (requires production DB credentials)
-- Alembic migration must be applied (`alembic upgrade head`) before catalog API returns slug data
+- Local dev DB needs `seed_test_data.py` to be run for seed data (improved in phase 14)
 
 ## Session Continuity
 
-Last session: 2026-03-21T21:44:33.019Z
-Stopped at: Completed 15-01-PLAN.md
-Resume file: None
+Last session: 2026-03-21T23:00:00.000Z
+Stopped at: Phase 14 shipped — v3.0 milestone complete

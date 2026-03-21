@@ -71,7 +71,7 @@ def _sync_missing_columns(conn):
     This function bridges that gap by inspecting existing tables and adding
     any columns defined in the models but absent from the database.
     """
-    from sqlalchemy import inspect, text, String, Float, Integer, Boolean
+    from sqlalchemy import inspect, text
     
     inspector = inspect(conn)
     existing_tables = inspector.get_table_names()

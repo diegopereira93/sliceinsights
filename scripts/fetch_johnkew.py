@@ -147,9 +147,8 @@ def download_file(url: str) -> bytes | None:
 def scrape_page_for_share_link() -> str | None:
     """Scrape the JohnKew page to find any updated share link."""
     import requests
-    from bs4 import BeautifulSoup
     import re
-    print(f"🔍 Scraping JohnKew page...")
+    print("🔍 Scraping JohnKew page...")
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
     try:
         r = requests.get("https://www.johnkewpickleball.com/paddle-database", headers=headers, timeout=30)

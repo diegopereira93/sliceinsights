@@ -310,7 +310,7 @@ async def fetch_dynamic_products(
                             "store_name": store_name,
                             "image_url": image_url,
                         })
-                except Exception as e:
+                except Exception:
                     # print(f"  ⚠️  Error parsing card: {e}")
                     continue
         except Exception as e:

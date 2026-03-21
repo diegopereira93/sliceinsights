@@ -1,5 +1,4 @@
 import os
-import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 from openai import OpenAI

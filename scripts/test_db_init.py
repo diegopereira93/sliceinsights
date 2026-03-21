@@ -72,7 +72,7 @@ def init_test_db(seed=False, dry_run=False):
     try:
         # Try SQLModel/SQLAlchemy approach first
         try:
-            from sqlmodel import create_engine, SQLModel, Session
+            from sqlmodel import create_engine, SQLModel
 
             engine = create_engine(db_url, echo=False)
 
@@ -120,7 +120,7 @@ def init_test_db(seed=False, dry_run=False):
 def _seed_with_sqlmodel(engine):
     """Insert minimal test data using SQLModel session."""
     try:
-        from sqlmodel import Session, select
+        from sqlmodel import Session
         from app.models import PaddleMaster
 
         with Session(engine) as session:

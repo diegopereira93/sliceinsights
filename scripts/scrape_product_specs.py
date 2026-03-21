@@ -598,7 +598,7 @@ def update_paddle_specs(specs: dict, store_slug: str, session) -> bool:
 
     Required fields: core_thickness_mm, face_material, weight_grams, shape
     """
-    from sqlmodel import Session, select
+    from sqlmodel import select
     from app.db.ingestor import normalize
     from app.models.enums import FaceMaterial, PaddleShape
     from app.models import Brand, PaddleMaster
@@ -753,7 +753,7 @@ async def main(store: str | None = None, dry_run: bool = False):
         await browser.close()
 
     print(f"\n{'=' * 60}")
-    print(f"✅ SCRAPING COMPLETE")
+    print("✅ SCRAPING COMPLETE")
     print(f"   🟢 Paddles enriched:  {enriched}")
     print(f"   🔴 Paddles skipped:  {skipped}")
     print(f"   ⚠️  Errors:           {errors}")

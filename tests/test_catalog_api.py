@@ -6,7 +6,6 @@ import pytest
 from httpx import AsyncClient, ASGITransport
 from unittest.mock import AsyncMock, MagicMock
 from decimal import Decimal
-from uuid import uuid4
 
 from app.main import app
 from app.db.database import get_session

@@ -1,9 +1,8 @@
 """Tests for app.db.ingestor — paddle filtering, normalization, and DB ingestion."""
-import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 from decimal import Decimal
 
-from app.db.ingestor import ingest_rows, is_paddle, normalize, SKIP_KEYWORDS
+from app.db.ingestor import ingest_rows, is_paddle, normalize
 
 
 class TestIsPaddle:

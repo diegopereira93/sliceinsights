@@ -43,8 +43,8 @@ Full archive: `.planning/milestones/v2.0-ROADMAP.md`
 - [x] **Phase 11: Seed Cleanup & Store Catalog** - Fix remaining issues: migration bug, tracked CSVs, justpaddles market-offer ingestion (completed 2026-03-21)
 - [x] **Phase 12: Spec Enrichment Scrapers** - Enrich all 10 scrapers with technical spec extraction; run weekly via new cron (completed 2026-03-21)
 - [x] **Phase 13: Catalog API** - REST endpoints to list and filter paddles by specs, store, brand, and price (completed 2026-03-21)
-- [ ] **Phase 14: Web Catalog Page** - Browser-accessible catalog page with live filter controls
-- [ ] **Phase 15: AI Recommendation Assistant** - Player profile quiz returns personalized paddle recommendations with Brazilian purchase links
+- [x] **Phase 14: Web Catalog Page** - Browser-accessible catalog page with live filter controls (completed 2026-03-21)
+- [x] **Phase 15: AI Recommendation Assistant** - Player profile quiz returns personalized paddle recommendations with Brazilian purchase links (completed 2026-03-21)
 
 ## Phase Details
 
@@ -118,8 +118,8 @@ Plans:
 **Plans**: 3 plans
 Plans:
 - [x] 15-01-PLAN.md — Backend: schema extension (MarketOfferOut, image_url) + /recommend and /recommend/chat endpoints + tests
-- [ ] 15-02-PLAN.md — Frontend: TypeScript types + wizard page + result cards + chat panel + catalog CTA
-- [ ] 15-03-PLAN.md — Build verification and human checkpoint
+- [x] 15-02-PLAN.md — Frontend: TypeScript types + wizard page + result cards + chat panel + catalog CTA
+- [x] 15-03-PLAN.md — Build verification and human checkpoint
 
 ## Progress
 
@@ -139,6 +139,6 @@ Plans:
 | 10. SLO Gate Fix | v2.0 | 1/1 | ✅ Complete | 2026-03-20 |
 | 11. Seed Cleanup & Store Catalog | v3.0 | Complete | ✅ Complete | 2026-03-21 |
 | 12. Spec Enrichment Scrapers | v3.0 | 3/3 | ✅ Complete | 2026-03-21 |
-| 13. Catalog API | 2/2 | Complete    | 2026-03-21 | - |
-| 14. Web Catalog Page | v3.0 | 2/3 | In Progress|  |
-| 15. AI Recommendation Assistant | v3.0 | 1/3 | In Progress|  |
+| 13. Catalog API | 2/2 | Complete    | ✅ Complete | 2026-03-21 |
+| 14. Web Catalog Page | v3.0 | Complete | ✅ Complete   | 2026-03-21 |
+| 15. AI Recommendation Assistant | v3.0 | 3/3 | Complete   | 2026-03-21 |

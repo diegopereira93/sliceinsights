@@ -10,7 +10,6 @@ Coverage:
 - Test 6: check_completeness returns status="fail" when age_hours > 168
 """
 
-import pytest
 from unittest.mock import MagicMock, patch
 from datetime import datetime, timezone, timedelta
 

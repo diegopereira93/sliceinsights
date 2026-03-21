@@ -120,8 +120,8 @@ def run_smoke_tests() -> bool:
         brands_with_specs = len(set(p.brand_id for p in active))
         total_brands = len(set(p.brand_id for p in all_paddles))
 
-        print(f"\n  | Métrica                          | Valor          | Meta    |")
-        print(f"  |:---------------------------------|:---------------|:--------|")
+        print("\n  | Métrica                          | Valor          | Meta    |")
+        print("  |:---------------------------------|:---------------|:--------|")
         print(f"  | Paddles 100% completos           | {len(active)}/{len(all_paddles)} ({active_pct:.0f}%)     | 100%    |")
         print(f"  | Ratings fabricados               | {len(fabricated)}              | 0       |")
         print(f"  | Campos NULL no catálogo ativo    | {len(incomplete)}              | 0       |")

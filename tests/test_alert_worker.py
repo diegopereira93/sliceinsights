@@ -8,16 +8,14 @@ Tests cover:
 - process_passes resolution detection
 - Error handling in process_failures
 """
-import pytest
-from unittest.mock import patch, MagicMock, call
-from datetime import datetime, timezone, timedelta
+from unittest.mock import patch, MagicMock
+from datetime import datetime
 
 from app.models.slo import SLOLog
 from app.models.slo_alert import SLOBreach
 from scripts.alert_worker import (
     slo_log_to_breach,
     get_recent_failures,
-    get_recent_passes,
     process_failures,
     process_passes,
     main,
@@ -246,7 +244,7 @@ def test_lookback_hours_value():
 def test_main_orchestrates_without_raising():
     """main() must call get_recent_failures, process_failures, and process_passes."""
     with patch("scripts.alert_worker.init_db_sync"), \
-         patch("scripts.alert_worker.get_slo_alert_service") as mock_svc_factory, \
+         patch("scripts.alert_worker.get_slo_alert_service"), \
          patch("scripts.alert_worker.get_recent_failures", return_value=[]) as mock_failures, \
          patch("scripts.alert_worker.get_recent_passes", return_value=[]) as mock_passes, \
          patch("scripts.alert_worker.process_failures", return_value={"processed": 0, "sent": 0, "throttled": 0, "errors": 0}) as mock_proc_fail, \

@@ -4,14 +4,10 @@ Tests for Phase 1 Data Quality functions.
 Tests calculate_specs_confidence, calculate_control, and the updated
 calculate_paddle_ratings (control via core_thickness_mm).
 """
-import pytest
 from unittest.mock import MagicMock
-from uuid import uuid4
 
 from app.models.paddle import (
     calculate_specs_confidence,
-    calculate_control,
-    calculate_paddle_ratings,
     REQUIRED_FIELDS,
 )
 from app.models.enums import FaceMaterial, PaddleShape

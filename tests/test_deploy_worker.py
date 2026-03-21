@@ -13,8 +13,8 @@ Tests cover:
 """
 import re
 import pytest
-from unittest.mock import patch, MagicMock, call
-from datetime import date, datetime, timezone
+from unittest.mock import patch, MagicMock
+from datetime import date
 
 from scripts.deploy_worker import (
     generate_batch_id,
@@ -24,7 +24,6 @@ from scripts.deploy_worker import (
     rollback_batch,
     force_publish,
     prune_old_versions,
-    run_deploy,
     _build_parser,
 )
 

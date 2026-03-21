@@ -2,9 +2,8 @@ import pandas as pd
 from sqlmodel import Session, select
 from difflib import SequenceMatcher
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Optional, Tuple
 
-from app.db.database import sync_engine
 from app.models import PaddleMaster, Brand
 
 class EnrichmentService:

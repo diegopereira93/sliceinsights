@@ -1,8 +1,6 @@
 import pytest
 from unittest.mock import MagicMock, patch, AsyncMock
 from datetime import datetime, timezone
-from fastapi.testclient import TestClient
-from httpx import AsyncClient
 
 
 @pytest.fixture
@@ -75,7 +73,6 @@ def test_dashboard_returns_critical_status(mock_quality_rows):
 def test_dashboard_response_shape(mock_quality_rows):
     """Test dashboard returns correct JSON shape with status, scrapers, summary."""
     from app.api.endpoints.quality import quality_dashboard
-    from unittest.mock import MagicMock
     
     mock_session = MagicMock()
     mock_result = MagicMock()
@@ -94,7 +91,6 @@ def test_dashboard_response_shape(mock_quality_rows):
 def test_dashboard_scraper_object_keys(mock_quality_rows):
     """Test each scraper object has required keys."""
     from app.api.endpoints.quality import quality_dashboard
-    from unittest.mock import MagicMock
     
     mock_session = MagicMock()
     mock_result = MagicMock()
@@ -119,7 +115,6 @@ def test_dashboard_scraper_object_keys(mock_quality_rows):
 def test_dashboard_empty_db(mock_empty_rows):
     """Test response returns empty scrapers list (not error) when no data."""
     from app.api.endpoints.quality import quality_dashboard
-    from unittest.mock import MagicMock
     
     mock_session = MagicMock()
     mock_result = MagicMock()
