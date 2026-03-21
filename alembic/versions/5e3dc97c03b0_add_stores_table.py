@@ -1,7 +1,7 @@
 """add_stores_table
 
 Revision ID: 5e3dc97c03b0
-Revises: e68bd0ed63d5
+Revises: add_quality_metrics
 Create Date: 2026-03-20 02:00:00.000000
 
 """
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 revision: str = '5e3dc97c03b0'
-down_revision: Union[str, Sequence[str], None] = 'e68bd0ed63d5'
+down_revision: Union[str, Sequence[str], None] = 'add_quality_metrics'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
