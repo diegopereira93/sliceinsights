@@ -40,7 +40,7 @@ Full archive: `.planning/milestones/v2.0-ROADMAP.md`
 
 **Milestone Goal:** Construir um catálogo confiável de raquetes de pickleball vendidas no Brasil — enriquecido com specs técnicas via scraping semanal — entregando valor ao público brasileiro e alimentando o assistente de IA de recomendação.
 
-- [x] **Phase 11: Seed Cleanup & Store Catalog** - Remove seed CSVs; model the 10 specialized stores as managed catalog entities (completed 2026-03-21)
+- [ ] **Phase 11: Seed Cleanup & Store Catalog** - Fix remaining issues: migration bug, tracked CSVs, justpaddles market-offer ingestion
 - [ ] **Phase 12: Spec Enrichment Scrapers** - Enrich all 10 scrapers with technical spec extraction; run weekly via new cron
 - [ ] **Phase 13: Catalog API** - REST endpoints to list and filter paddles by specs, store, brand, and price
 - [ ] **Phase 14: Web Catalog Page** - Browser-accessible catalog page with live filter controls
@@ -57,11 +57,10 @@ Full archive: `.planning/milestones/v2.0-ROADMAP.md`
   2. A `stores` table exists with name, base URL, active status, and available brands for each of the 10 specialized stores
   3. Every market offer row in the database has a non-null `store_id` and a direct product URL pointing to the source store
   4. Deleting the seed CSV files does not break the application or any existing test
-**Plans:** 3/3 plans complete
+**Plans:** 2 plans
 Plans:
-- [ ] 11-01-PLAN.md — Store model + Alembic migrations (stores table + store_id FK)
-- [ ] 11-02-PLAN.md — Ingestor module + scraper DB-write adaptation
-- [ ] 11-03-PLAN.md — CSV cleanup, test updates, smoke tests
+- [ ] 11-01-PLAN.md — Fix migration bulk_insert bug + untrack seed CSVs from data/raw/
+- [ ] 11-02-PLAN.md — Add market-offer ingestion to scrape_justpaddles.py + test
 
 ### Phase 12: Spec Enrichment Scrapers
 **Goal**: Os 10 scrapers capturam specs técnicas completas e executam semanalmente via cron — elevando a completude de specs de 0% para ≥ 70%
@@ -123,7 +122,7 @@ Plans:
 | 8. Deploy & Release Strategy | v2.0 | 3/3 | ✅ Complete | 2026-03-20 |
 | 9. Data Quality Checks & Reporting | v2.0 | 3/3 | ✅ Complete | 2026-03-20 |
 | 10. SLO Gate Fix | v2.0 | 1/1 | ✅ Complete | 2026-03-20 |
-| 11. Seed Cleanup & Store Catalog | 3/3 | Complete    | 2026-03-21 | - |
+| 11. Seed Cleanup & Store Catalog | v3.0 | 0/2 | Replanned | - |
 | 12. Spec Enrichment Scrapers | v3.0 | 0/? | Not started | - |
 | 13. Catalog API | v3.0 | 0/? | Not started | - |
 | 14. Web Catalog Page | v3.0 | 0/? | Not started | - |
