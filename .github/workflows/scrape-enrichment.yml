@@ -1,0 +1,74 @@
+name: Weekly Spec Enrichment
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch: {}
+
+jobs:
+  enrich:
+    name: Enrich Specs (${{ matrix.store }})
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        store:
+          - joola
+          - brazil_pickleball_store
+          - yosports
+          - supremo
+          - shark
+          - prospin
+          - drop_shot_brasil
+          - just_paddles
+          - pcklhouse
+          - propadel
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Playwright browsers
+        run: playwright install chromium --with-deps
+
+      - name: Enrich specs for ${{ matrix.store }}
+        run: python scripts/scrape_product_specs.py --store ${{ matrix.store }}
+        env:
+          DATABASE_URL_SYNC: ${{ secrets.DATABASE_URL_SYNC }}
+
+  audit:
+    name: Quality Audit Post-Enrichment
+    needs: enrich
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Consolidate quality results
+        run: python scripts/quality_aggregator.py --consolidate
+        env:
+          DATABASE_URL_SYNC: ${{ secrets.DATABASE_URL_SYNC }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
