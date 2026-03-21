@@ -14,17 +14,16 @@ jobs:
       fail-fast: false
       matrix:
         scraper:
-          - mercado_livre
-          - amazon_br
-          - netshoes
-          - centauro
-          - decathlon
-          - magalu
-          - shopee
-          - aliexpress
-          - casas_bahia
-          - americanas
-          - submarino
+          - brazil_pickleball_store
+          - joola
+          - yosports
+          - supremo
+          - shark
+          - prospin
+          - drop_shot_brasil
+          - just_paddles
+          - pcklhouse
+          - propadel
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
