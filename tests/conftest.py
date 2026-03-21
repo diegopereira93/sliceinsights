@@ -60,6 +60,33 @@ class MockBrand:
         self.website = "https://test.com"
 
 
+class MockStore:
+    """Mock store for testing."""
+    def __init__(self, id=1, name="ProPadel", slug="propadel",
+                 base_url="https://propadel.com.br", is_active=True,
+                 available_brands=None):
+        self.id = id
+        self.name = name
+        self.slug = slug
+        self.base_url = base_url
+        self.is_active = is_active
+        self.available_brands = available_brands or ["Joola", "Selkirk"]
+
+
+class MockMarketOfferWithStore:
+    """Mock market offer with store relationship loaded (post Phase 11)."""
+    def __init__(self, paddle_id, price=1000.0, store=None):
+        self.id = uuid4()
+        self.paddle_id = paddle_id
+        self.store_id = store.id if store else 1
+        self.price_brl = Decimal(str(price))
+        self.url = "https://store.test.com/paddle-123"
+        self.is_active = True
+        self.store = store or MockStore()
+        from datetime import datetime
+        self.last_updated = datetime.now()
+
+
 class MockMarketOffer:
     """Mock market offer for testing."""
     def __init__(self, paddle_id, price=1000.0):
@@ -89,6 +116,12 @@ def mock_paddle():
 def mock_brand():
     """Create a mock brand."""
     return MockBrand()
+
+
+@pytest.fixture
+def mock_store():
+    """Create a mock store."""
+    return MockStore()
 
 
 @pytest_asyncio.fixture
