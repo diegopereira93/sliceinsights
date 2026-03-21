@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { Home, Heart, BarChart2 } from 'lucide-react';
+import { Home, Heart, BarChart2, ShoppingBag } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
@@ -13,6 +13,7 @@ export function BottomNav() {
             <div className="flex items-center justify-around h-16">
                 <NavItem href="/" icon={Home} label="Home" active={pathname === '/'} />
                 <NavItem href="/statistics" icon={BarChart2} label="Análise" active={pathname === '/statistics'} />
+                <NavItem href="/catalog" icon={ShoppingBag} label="Catalogo" active={pathname === '/catalog'} />
                 {/* <NavItem href="/favorites" icon={Heart} label="Favoritos" active={pathname === '/favorites'} /> */}
             </div>
         </nav>
