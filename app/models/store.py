@@ -6,6 +6,7 @@ from sqlmodel import SQLModel, Field
 class StoreBase(SQLModel):
     """Base store model with shared attributes."""
     name: str
+    slug: Optional[str] = Field(default=None, index=True)
     base_url: str
     is_active: bool = True
     available_brands: Optional[List[str]] = Field(
