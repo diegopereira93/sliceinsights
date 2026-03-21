@@ -25,6 +25,7 @@ from sqlmodel import Session, select, func
 from app.models.market_offer import MarketOffer
 from app.models.paddle import PaddleMaster
 from app.models.slo import SLOLog
+from app.models.store import Store
 from scripts.slo_config import FRESHNESS_SLO_HOURS, COMPLETENESS_SLO_HOURS
 
 
@@ -59,7 +60,7 @@ def _hours_since(dt: datetime) -> float:
 def check_freshness(session: Session, scraper_name: str | None = None) -> list[SLOLog]:
     """Check that market_offers were updated within FRESHNESS_SLO_HOURS.
 
-    Groups by store_name. If *scraper_name* is provided, filters to that store.
+    Groups by store. If *scraper_name* is provided, filters to that store.
 
     Status logic:
       - SKIP: No data yet (scraper never ran)
@@ -70,21 +71,21 @@ def check_freshness(session: Session, scraper_name: str | None = None) -> list[S
     """
     query = (
         select(
-            MarketOffer.store_name,
+            Store.name,
             func.max(MarketOffer.last_updated).label("newest"),
         )
+        .join(Store, MarketOffer.store_id == Store.id)
         .where(MarketOffer.is_active == True)
-        .group_by(MarketOffer.store_name)
+        .group_by(Store.name)
     )
     if scraper_name is not None:
-        query = query.where(MarketOffer.store_name == scraper_name)
+        query = query.where(Store.name == scraper_name)
 
     rows = session.exec(query).all()
 
     logs: list[SLOLog] = []
 
     if not rows:
-        # No data at all — scraper never ran. Skip (don't fail).
         target = scraper_name if scraper_name is not None else "__all__"
         log = SLOLog(
             scraper_name=target,
@@ -102,7 +103,7 @@ def check_freshness(session: Session, scraper_name: str | None = None) -> list[S
         return logs
 
     for row in rows:
-        store = row.store_name
+        store_name = row.name
         newest = _make_aware(row.newest)
         age_hours = _hours_since(newest)
 
@@ -122,7 +123,7 @@ def check_freshness(session: Session, scraper_name: str | None = None) -> list[S
             "age_hours": round(age_hours, 2) if age_hours != float("inf") else None,
         }
         log = SLOLog(
-            scraper_name=store,
+            scraper_name=store_name,
             metric_type="freshness",
             value_hours=age_hours if age_hours != float("inf") else 99999.0,
             threshold_hours=float(FRESHNESS_SLO_HOURS),
@@ -134,7 +135,7 @@ def check_freshness(session: Session, scraper_name: str | None = None) -> list[S
         session.refresh(log)
         logs.append(log)
         age_str = f"{age_hours:.1f}h" if age_hours != float("inf") else "N/A"
-        print(f"[freshness] {store}: {status.upper()} (age={age_str}, threshold={FRESHNESS_SLO_HOURS}h, reason={reason})")
+        print(f"[freshness] {store_name}: {status.upper()} (age={age_str}, threshold={FRESHNESS_SLO_HOURS}h, reason={reason})")
 
     return logs
 

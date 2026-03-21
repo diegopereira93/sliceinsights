@@ -123,8 +123,9 @@ async def trigger_seed(
     secret: str = Query(..., description="Admin secret key"),
 ):
     """
-    Trigger database seed manually (SYNCHRONOUS).
-    Protected by secret key to prevent abuse.
+    Seeding is now done via scrapers (scraper-to-DB pipeline).
+    This endpoint is deprecated and will be removed.
+    Use the scraper scripts in scripts/scrape_*.py instead.
     """
     import os
     admin_secret = os.getenv("ADMIN_SEED_SECRET", "sliceinsights2026")
@@ -132,30 +133,10 @@ async def trigger_seed(
     if secret != admin_secret:
         raise HTTPException(status_code=403, detail="Invalid secret")
     
-    try:
-        os.environ["SEED_FORCE_CLEAR"] = "true"
-        
-        # Import and run synchronously for better error handling
-        from app.db.seed_brazil_catalog import seed
-        seed()
-        
-        # Count results
-        from sqlmodel import select
-        from app.db.database import sync_engine
-        from sqlmodel import Session
-        
-        with Session(sync_engine) as session:
-            brands_count = len(session.exec(select(Brand)).all())
-            paddles_count = len(session.exec(select(PaddleMaster)).all())
-        
-        return {
-            "status": "seed_completed",
-            "brands_created": brands_count,
-            "paddles_created": paddles_count,
-        }
-    except Exception as e:
-        import traceback
-        raise HTTPException(status_code=500, detail=f"Seed failed: {str(e)}\n\nTraceback:\n{traceback.format_exc()}")
+    raise HTTPException(
+        status_code=410,
+        detail="Seeding is now done via scrapers. Use: python scripts/run_scraper.py <scraper_name>"
+    )
 
 
 # ============== Brands ==============

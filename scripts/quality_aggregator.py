@@ -30,11 +30,12 @@ from app.db.database import sync_engine, init_db_sync
 from sqlmodel import Session, select, func
 from app.models.market_offer import MarketOffer
 from app.models.quality_metric import QualityMetric
+from app.models.store import Store
 
 
 FRESHNESS_THRESHOLD_HOURS = 24.0
 COMPLETENESS_THRESHOLD_PCT = 70.0
-OFFER_REQUIRED_FIELDS = ["price_brl", "url", "store_name", "last_updated"]
+OFFER_REQUIRED_FIELDS = ["price_brl", "url", "store_id", "last_updated"]
 
 
 def _now_utc() -> datetime:
@@ -51,9 +52,19 @@ def compute_metrics(scraper_name: str, session: Session) -> dict:
     """Compute all 5 quality metrics for a given scraper."""
     now = _now_utc()
     
+    store = session.exec(select(Store).where(Store.name == scraper_name)).first()
+    if not store:
+        return {
+            "freshness_hours": float("inf"),
+            "completeness_pct": 0.0,
+            "coverage_pct": 0.0,
+            "product_count": 0,
+            "error_rate": 0.0,
+        }
+    
     newest_row = session.exec(
         select(func.max(MarketOffer.last_updated))
-        .where(MarketOffer.store_name == scraper_name, MarketOffer.is_active == True)
+        .where(MarketOffer.store_id == store.id, MarketOffer.is_active == True)
     ).one()
 
     if newest_row is None:
@@ -65,7 +76,7 @@ def compute_metrics(scraper_name: str, session: Session) -> dict:
 
     offers = session.exec(
         select(MarketOffer)
-        .where(MarketOffer.store_name == scraper_name, MarketOffer.is_active == True)
+        .where(MarketOffer.store_id == store.id, MarketOffer.is_active == True)
     ).all()
 
     product_count = len(offers)
@@ -200,8 +211,10 @@ def consolidate(run_id: str, session: Session) -> dict:
 def get_active_scrapers(session: Session) -> list[str]:
     """Get list of active scraper names from market_offers."""
     rows = session.exec(
-        select(func.distinct(MarketOffer.store_name))
+        select(Store.name)
+        .join(MarketOffer, MarketOffer.store_id == Store.id)
         .where(MarketOffer.is_active == True)
+        .distinct()
     ).all()
     return list(rows)
 

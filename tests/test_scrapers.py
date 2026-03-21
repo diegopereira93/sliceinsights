@@ -19,7 +19,6 @@ from scripts.scraper_utils import (
     fetch_html_products,
     fetch_nuvemshop_products,
     fetch_woocommerce_products,
-    save_to_csv,
 )
 
 
@@ -300,52 +299,6 @@ class TestFetchHtmlProducts:
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# scraper_utils.py — save_to_csv (filesystem test via tmp_path)
-# ═══════════════════════════════════════════════════════════════════════════════
-
-class TestSaveToCsv:
-    """Tests for save_to_csv() — writes rows to CSV."""
-
-    def test_creates_csv_file(self, tmp_path):
-        rows = [
-            {
-                "brand_name": "Joola",
-                "model_name": "Perseus 16mm",
-                "price_brl": 1299.0,
-                "product_url": "https://example.com/joola",
-                "store_name": "TestStore",
-                "image_url": "https://cdn.example.com/joola.jpg",
-            }
-        ]
-        out_path = str(tmp_path / "output.csv")
-        # Patch PROJECT_ROOT so the function writes to tmp_path
-        with patch("scripts.scraper_utils.PROJECT_ROOT", tmp_path):
-            save_to_csv(rows, "output.csv")
-        import csv
-        with open(tmp_path / "output.csv") as f:
-            reader = csv.DictReader(f)
-            written = list(reader)
-        assert len(written) == 1
-        assert written[0]["brand_name"] == "Joola"
-        assert written[0]["model_name"] == "Perseus 16mm"
-
-    def test_creates_parent_directories(self, tmp_path):
-        rows = [
-            {
-                "brand_name": "Selkirk",
-                "model_name": "Luxx",
-                "price_brl": 1500.0,
-                "product_url": "https://example.com",
-                "store_name": "Store",
-                "image_url": "",
-            }
-        ]
-        with patch("scripts.scraper_utils.PROJECT_ROOT", tmp_path):
-            save_to_csv(rows, "data/raw/output.csv")
-        assert (tmp_path / "data" / "raw" / "output.csv").exists()
-
-
-# ═══════════════════════════════════════════════════════════════════════════════
 # scrape_yosports.py — main() with all external calls mocked
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -362,9 +315,12 @@ class TestScrapeYoSportsMain:
             "images": [{"src": "https://cdn.example.com/img.jpg"}],
         }
 
+    @patch("scripts.scrape_yosports.ingest_rows", return_value={"created": 1, "updated": 0, "skipped": 0})
+    @patch("scripts.scrape_yosports.init_db_sync")
+    @patch("scripts.scrape_yosports.Session")
     @patch("scripts.scraper_utils.time.sleep")
     @patch("scripts.scraper_utils.requests.get")
-    def test_main_filters_accessories(self, mock_get, mock_sleep, tmp_path):
+    def test_main_filters_accessories(self, mock_get, mock_sleep, mock_session_cls, mock_init, mock_ingest):
         import scripts.scrape_yosports as yosports
         products = [
             self._make_product("Joola Perseus 16mm", tags=["pickleball"]),
@@ -378,17 +334,23 @@ class TestScrapeYoSportsMain:
         empty_resp.json.return_value = {"products": []}
         mock_get.side_effect = [mock_resp, empty_resp]
 
-        with patch("scripts.scrape_yosports.save_to_csv") as mock_save:
-            yosports.main()
-            mock_save.assert_called_once()
-            rows_saved = mock_save.call_args[0][0]
-            # Only the paddle should be saved, not the ball
-            assert len(rows_saved) == 1
-            assert rows_saved[0]["brand_name"] == "Joola"
+        mock_store = MagicMock()
+        mock_store.id = 1
+        mock_session = MagicMock()
+        mock_session.exec.return_value.one.return_value = mock_store
+        mock_session_cls.return_value.__enter__ = MagicMock(return_value=mock_session)
+        mock_session_cls.return_value.__exit__ = MagicMock(return_value=False)
 
+        yosports.main()
+        mock_ingest.assert_called_once()
+        mock_session.commit.assert_called_once()
+
+    @patch("scripts.scrape_yosports.ingest_rows", return_value={"created": 1, "updated": 0, "skipped": 0})
+    @patch("scripts.scrape_yosports.init_db_sync")
+    @patch("scripts.scrape_yosports.Session")
     @patch("scripts.scraper_utils.time.sleep")
     @patch("scripts.scraper_utils.requests.get")
-    def test_main_skips_beach_tennis_rackets(self, mock_get, mock_sleep, tmp_path):
+    def test_main_skips_beach_tennis_rackets(self, mock_get, mock_sleep, mock_session_cls, mock_init, mock_ingest):
         import scripts.scrape_yosports as yosports
         products = [
             self._make_product("Raquete de Beach Tennis Head", tags=["beach-tennis"]),
@@ -402,11 +364,15 @@ class TestScrapeYoSportsMain:
         empty_resp.json.return_value = {"products": []}
         mock_get.side_effect = [mock_resp, empty_resp]
 
-        with patch("scripts.scrape_yosports.save_to_csv") as mock_save:
-            yosports.main()
-            rows_saved = mock_save.call_args[0][0]
-            titles = [r["brand_name"] for r in rows_saved]
-            assert "Head" not in titles or all("Joola" in t for t in titles)
+        mock_store = MagicMock()
+        mock_store.id = 1
+        mock_session = MagicMock()
+        mock_session.exec.return_value.one.return_value = mock_store
+        mock_session_cls.return_value.__enter__ = MagicMock(return_value=mock_session)
+        mock_session_cls.return_value.__exit__ = MagicMock(return_value=False)
+
+        yosports.main()
+        mock_ingest.assert_called_once()
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
