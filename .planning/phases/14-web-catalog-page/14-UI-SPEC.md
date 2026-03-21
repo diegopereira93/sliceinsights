@@ -49,11 +49,13 @@ Exceptions:
 
 ## Typography
 
+Two weights only: 400 (body) and 700 (all non-body text).
+
 | Role | Size | Weight | Line Height | Tailwind Class | Usage |
 |------|------|--------|-------------|----------------|-------|
 | Body | 14px | 400 | 1.5 | `text-sm font-normal` | Card price, badge labels, filter option text |
 | Label | 12px | 700 | 1.3 | `text-xs font-bold` | Brand badge, thickness badge, filter section headings (uppercase tracking-wider) |
-| Heading | 16px | 600 | 1.4 | `text-base font-semibold` | Paddle model name on card, page section title |
+| Heading | 16px | 700 | 1.4 | `text-base font-bold` | Paddle model name on card, page section title |
 | Display | 20px | 700 | 1.2 | `text-xl font-bold` | Page heading "Catálogo de Raquetes" |
 
 Font: Inter via `var(--font-inter)`. Dark-mode-first — all text on `bg-background (#000000)`.
@@ -156,12 +158,12 @@ Note: Fixed left sidebar for filters is deferred (CONTEXT.md `<deferred>`). Use 
       <Badge variant="outline" text-xs font-bold>  {thickness}mm </Badge>
       {surface_material && <Badge variant="outline" text-xs font-bold> {surface_material} </Badge>}
     </div>
-    <h3 text-base font-semibold text-foreground leading-tight>  {model_name}  </h3>
+    <h3 text-base font-bold text-foreground leading-tight>  {model_name}  </h3>
     <p text-sm text-muted-foreground>
       A partir de <span text-primary font-bold> R$ {cheapestOffer.price_brl} </span>
     </p>
     <a href={cheapestOffer.store_url} target="_blank" rel="noopener noreferrer">
-      <Button size="sm" className="w-full rounded-xl font-black text-xs bg-primary text-primary-foreground">
+      <Button size="sm" className="w-full rounded-xl font-bold text-xs bg-primary text-primary-foreground">
         <ExternalLink w-3.5 h-3.5 mr-1.5 />
         Ver na {cheapestOffer.store_name}
       </Button>
@@ -318,3 +320,4 @@ Destructive actions: none in this phase.
 | Copywriting (Portuguese, Brazilian market) | 14-CONTEXT.md domain context |
 | Spacing scale | Default 8-point scale (no overrides declared) |
 | Typography | Inter defaults + existing component patterns |
+| Typography weight fix (2 weights: 400 + 700) | gsd-ui-checker revision 2026-03-21 |
