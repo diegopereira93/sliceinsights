@@ -36,6 +36,7 @@ class MockPaddle:
         self.is_featured = False
         self.available_in_brazil = True
         self.image_url = None
+        self.market_offers = []  # Add after self.image_url = None
         self.specs_source = "lab_dataset"
         self.specs_confidence = 1.0
         
@@ -110,6 +111,16 @@ def mock_session():
 def mock_paddle():
     """Create a mock paddle."""
     return MockPaddle()
+
+
+@pytest.fixture
+def mock_paddle_with_offers():
+    """Create a mock paddle with market offers attached."""
+    paddle = MockPaddle()
+    store = MockStore()
+    offer = MockMarketOfferWithStore(paddle_id=paddle.id, price=999.0, store=store)
+    paddle.market_offers = [offer]
+    return paddle
 
 
 @pytest.fixture

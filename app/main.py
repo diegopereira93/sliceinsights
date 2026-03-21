@@ -18,6 +18,7 @@ from app.db.database import init_db
 from app.api.routes import router
 from app.api.endpoints.alerts import router as alerts_router
 from app.api.endpoints.catalog import router as catalog_router
+from app.api.endpoints.recommend import router as recommend_router
 
 settings = get_settings()
 
@@ -153,6 +154,7 @@ async def log_requests(request: Request, call_next):
 app.include_router(router, prefix="/api/v1")
 app.include_router(alerts_router, prefix="/api/v1")
 app.include_router(catalog_router, prefix="/api/v1")
+app.include_router(recommend_router, prefix="/api/v1")
 
 
 @app.get("/")
