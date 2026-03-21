@@ -201,6 +201,80 @@ class TestFourFieldGate:
         assert "scraping_joola" in mock_paddle.validation_sources
 
 
+class TestStoreExtractors:
+    def test_store_extractor_woocommerce(self):
+        from unittest.mock import patch, MagicMock
+        from scripts.scrape_product_specs import scrape_shark_specs
+
+        mock_html = """
+        <html><body>
+        <table class="woocommerce-product-attributes">
+          <tr><th>Espessura do Nucleo</th><td>16mm</td></tr>
+          <tr><th>Superficie</th><td>Fibra de Carbono</td></tr>
+          <tr><th>Peso</th><td>230g</td></tr>
+          <tr><th>Formato</th><td>Elongated</td></tr>
+        </table>
+        </body></html>
+        """
+
+        with patch("requests.get") as mock_get:
+            mock_resp = MagicMock()
+            mock_resp.status_code = 200
+            mock_resp.text = mock_html
+            mock_get.return_value = mock_resp
+
+            specs = scrape_shark_specs("https://sharkbeachtennis.com.br/product/test", "Shark", "Test Model")
+
+            assert specs.get("core_thickness_mm") == 16.0, f"Expected 16.0, got {specs}"
+            assert specs.get("face_material") == "CARBON", f"Expected CARBON, got {specs}"
+            assert specs.get("weight_grams") == 230.0, f"Expected 230.0, got {specs}"
+            assert specs.get("shape") == "ELONGATED", f"Expected ELONGATED, got {specs}"
+            assert specs.get("brand_name") == "Shark"
+            assert specs.get("model_name") == "Test Model"
+
+    def test_store_extractor_nuvemshop_freetext(self):
+        from unittest.mock import patch, MagicMock
+        from scripts.scrape_product_specs import scrape_supremo_specs
+
+        mock_html = """
+        <html><body>
+        <div class="product-description">
+          Raquete profissional 16mm de espessura, face em fibra de carbono,
+          peso 226.8gramas, formato elongada para jogadores avançados.
+        </div>
+        </body></html>
+        """
+
+        with patch("requests.get") as mock_get:
+            mock_resp = MagicMock()
+            mock_resp.status_code = 200
+            mock_resp.text = mock_html
+            mock_get.return_value = mock_resp
+
+            specs = scrape_supremo_specs("https://lojasupremo.com.br/product/test", "Test Brand", "Test Model")
+
+            assert specs.get("core_thickness_mm") == 16.0, f"Expected 16.0, got {specs}"
+            assert specs.get("face_material") == "CARBON", f"Expected CARBON, got {specs}"
+            assert specs.get("weight_grams") == 226.8, f"Expected 226.8, got {specs}"
+            assert specs.get("shape") == "ELONGATED", f"Expected ELONGATED, got {specs}"
+
+    def test_all_store_extractor_functions_exist(self):
+        from scripts.scrape_product_specs import (
+            scrape_yosports_specs,
+            scrape_supremo_specs,
+            scrape_shark_specs,
+            scrape_prospin_specs,
+            scrape_pcklhouse_specs,
+            scrape_propadel_specs,
+        )
+        assert callable(scrape_yosports_specs)
+        assert callable(scrape_supremo_specs)
+        assert callable(scrape_shark_specs)
+        assert callable(scrape_prospin_specs)
+        assert callable(scrape_pcklhouse_specs)
+        assert callable(scrape_propadel_specs)
+
+
 class TestWeightGramsFieldExists:
     def test_weight_grams_field_exists(self):
         assert "weight_grams" in PaddleMasterBase.model_fields

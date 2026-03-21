@@ -13,6 +13,7 @@ import asyncio
 import re
 import sys
 import argparse
+import requests
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -295,6 +296,211 @@ def parse_freetext_specs(text: str) -> dict:
     if w and 150 <= w <= 350:
         specs['weight_grams'] = w
 
+    return specs
+
+
+# ─── Store Spec Extractors ─────────────────────────────────────────────────────
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+}
+
+
+def _fetch_product_page(url: str) -> str | None:
+    """Fetch product page HTML. Returns None on failure."""
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=15)
+        if r.status_code == 200:
+            return r.text
+    except Exception:
+        pass
+    return None
+
+
+def scrape_yosports_specs(product_url: str, brand_name: str, model_name: str) -> dict:
+    """Extract specs from yosports.com.br product page (Shopify, freetext)."""
+    specs = {"brand_name": brand_name, "model_name": model_name}
+    html = _fetch_product_page(product_url)
+    if not html:
+        return specs
+    try:
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(html, "html.parser")
+        desc = soup.select_one(".product-description, .description, [itemprop='description']")
+        if desc:
+            text = desc.get_text(separator=" ", strip=True)
+        else:
+            text = soup.get_text(separator=" ", strip=True)
+        parsed = parse_freetext_specs(text)
+        specs.update(parsed)
+    except Exception:
+        pass
+    return specs
+
+
+def scrape_supremo_specs(product_url: str, brand_name: str, model_name: str) -> dict:
+    """Extract specs from lojasupremo.com.br product page (Nuvemshop, freetext)."""
+    specs = {"brand_name": brand_name, "model_name": model_name}
+    html = _fetch_product_page(product_url)
+    if not html:
+        return specs
+    try:
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(html, "html.parser")
+        for sel in [".product-description", ".js-product-description", "[itemprop='description']"]:
+            el = soup.select_one(sel)
+            if el:
+                text = el.get_text(separator=" ", strip=True)
+                parsed = parse_freetext_specs(text)
+                specs.update(parsed)
+                break
+    except Exception:
+        pass
+    return specs
+
+
+def scrape_shark_specs(product_url: str, brand_name: str, model_name: str) -> dict:
+    """Extract specs from sharkbeachtennis.com.br (WooCommerce, structured + freetext)."""
+    specs = {"brand_name": brand_name, "model_name": model_name}
+    html = _fetch_product_page(product_url)
+    if not html:
+        return specs
+    try:
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(html, "html.parser")
+
+        rows = soup.select("table.woocommerce-product-attributes tr")
+        for row in rows:
+            label_el = row.select_one("th")
+            value_el = row.select_one("td")
+            if not label_el or not value_el:
+                continue
+            label = label_el.get_text(strip=True).lower()
+            value = value_el.get_text(strip=True)
+            if any(k in label for k in ["espessura", "thickness", "core"]):
+                mm = extract_mm(value)
+                if mm:
+                    specs["core_thickness_mm"] = mm
+            elif any(k in label for k in ["superficie", "surface", "face"]):
+                fm = map_face_material(value)
+                if fm:
+                    specs["face_material"] = fm
+            elif any(k in label for k in ["peso", "weight"]):
+                g = extract_weight_g(value)
+                if g:
+                    specs["weight_grams"] = g
+            elif any(k in label for k in ["formato", "shape"]):
+                sh = map_shape(value)
+                if sh:
+                    specs["shape"] = sh
+
+        if "core_thickness_mm" not in specs:
+            for sel in [".woocommerce-product-details__short-description", ".product-description"]:
+                el = soup.select_one(sel)
+                if el:
+                    text = el.get_text(separator=" ", strip=True)
+                    parsed = parse_freetext_specs(text)
+                    specs.update(parsed)
+                    break
+    except Exception:
+        pass
+    return specs
+
+
+def scrape_prospin_specs(product_url: str, brand_name: str, model_name: str) -> dict:
+    """Extract specs from prospin.com.br (WooCommerce, structured + freetext)."""
+    specs = {"brand_name": brand_name, "model_name": model_name}
+    html = _fetch_product_page(product_url)
+    if not html:
+        return specs
+    try:
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(html, "html.parser")
+
+        rows = soup.select("table.woocommerce-product-attributes tr")
+        for row in rows:
+            label_el = row.select_one("th")
+            value_el = row.select_one("td")
+            if not label_el or not value_el:
+                continue
+            label = label_el.get_text(strip=True).lower()
+            value = value_el.get_text(strip=True)
+            if any(k in label for k in ["espessura", "thickness", "core"]):
+                mm = extract_mm(value)
+                if mm:
+                    specs["core_thickness_mm"] = mm
+            elif any(k in label for k in ["superficie", "surface", "face"]):
+                fm = map_face_material(value)
+                if fm:
+                    specs["face_material"] = fm
+            elif any(k in label for k in ["peso", "weight"]):
+                g = extract_weight_g(value)
+                if g:
+                    specs["weight_grams"] = g
+            elif any(k in label for k in ["formato", "shape"]):
+                sh = map_shape(value)
+                if sh:
+                    specs["shape"] = sh
+
+        if "core_thickness_mm" not in specs:
+            for sel in [".woocommerce-product-details__short-description", ".product-description"]:
+                el = soup.select_one(sel)
+                if el:
+                    text = el.get_text(separator=" ", strip=True)
+                    parsed = parse_freetext_specs(text)
+                    specs.update(parsed)
+                    break
+    except Exception:
+        pass
+    return specs
+
+
+def scrape_pcklhouse_specs(product_url: str, brand_name: str, model_name: str) -> dict:
+    """Extract specs from pcklhouse.com.br (Nuvemshop, freetext)."""
+    specs = {"brand_name": brand_name, "model_name": model_name}
+    html = _fetch_product_page(product_url)
+    if not html:
+        return specs
+    try:
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(html, "html.parser")
+        for sel in [".product-description", ".js-product-description", "[itemprop='description']"]:
+            el = soup.select_one(sel)
+            if el:
+                text = el.get_text(separator=" ", strip=True)
+                parsed = parse_freetext_specs(text)
+                specs.update(parsed)
+                break
+    except Exception:
+        pass
+    return specs
+
+
+def scrape_propadel_specs(product_url: str, brand_name: str, model_name: str) -> dict:
+    """Extract specs from lojapropadel.com.br (custom HTML, freetext)."""
+    specs = {"brand_name": brand_name, "model_name": model_name}
+    html = _fetch_product_page(product_url)
+    if not html:
+        return specs
+    try:
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(html, "html.parser")
+        for sel in [".product-description", ".description", "[itemprop='description']", ".product-info"]:
+            el = soup.select_one(sel)
+            if el:
+                text = el.get_text(separator=" ", strip=True)
+                if text:
+                    parsed = parse_freetext_specs(text)
+                    specs.update(parsed)
+                    break
+        if "core_thickness_mm" not in specs:
+            text = soup.get_text(separator=" ", strip=True)
+            if text:
+                parsed = parse_freetext_specs(text)
+                specs.update(parsed)
+    except Exception:
+        pass
     return specs
 
 
