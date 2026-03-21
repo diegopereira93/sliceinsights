@@ -16,8 +16,8 @@
 
 ### Store — Catálogo de Lojas
 
-- [ ] **STORE-01**: Sistema mantém catálogo de lojas especializadas com nome, URL base, status ativo e marcas disponíveis
-- [ ] **STORE-02**: Cada oferta de mercado está associada à sua loja de origem com URL direta do produto
+- [x] **STORE-01**: Sistema mantém catálogo de lojas especializadas com nome, URL base, status ativo e marcas disponíveis
+- [x] **STORE-02**: Cada oferta de mercado está associada à sua loja de origem com URL direta do produto
 - [ ] **STORE-03**: API retorna lista de lojas com metadados e filtro por marca disponível
 
 ### Catalog — API de Catálogo
@@ -72,8 +72,8 @@
 | SCRP-04 | Phase 12 | Pending |
 | SCRP-05 | Phase 12 | Pending |
 | SCRP-06 | Phase 12 | Pending |
-| STORE-01 | Phase 11 | Pending |
-| STORE-02 | Phase 11 | Pending |
+| STORE-01 | Phase 11 | Complete |
+| STORE-02 | Phase 11 | Complete |
 | STORE-03 | Phase 13 | Pending |
 | CAT-01 | Phase 13 | Pending |
 | CAT-02 | Phase 13 | Pending |

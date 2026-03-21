@@ -57,7 +57,7 @@ Full archive: `.planning/milestones/v2.0-ROADMAP.md`
   2. A `stores` table exists with name, base URL, active status, and available brands for each of the 10 specialized stores
   3. Every market offer row in the database has a non-null `store_id` and a direct product URL pointing to the source store
   4. Deleting the seed CSV files does not break the application or any existing test
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 Plans:
 - [ ] 11-01-PLAN.md — Store model + Alembic migrations (stores table + store_id FK)
 - [ ] 11-02-PLAN.md — Ingestor module + scraper DB-write adaptation
@@ -123,7 +123,7 @@ Plans:
 | 8. Deploy & Release Strategy | v2.0 | 3/3 | ✅ Complete | 2026-03-20 |
 | 9. Data Quality Checks & Reporting | v2.0 | 3/3 | ✅ Complete | 2026-03-20 |
 | 10. SLO Gate Fix | v2.0 | 1/1 | ✅ Complete | 2026-03-20 |
-| 11. Seed Cleanup & Store Catalog | v3.0 | 0/3 | Planning | - |
+| 11. Seed Cleanup & Store Catalog | 1/3 | In Progress|  | - |
 | 12. Spec Enrichment Scrapers | v3.0 | 0/? | Not started | - |
 | 13. Catalog API | v3.0 | 0/? | Not started | - |
 | 14. Web Catalog Page | v3.0 | 0/? | Not started | - |
