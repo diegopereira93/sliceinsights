@@ -31,9 +31,16 @@ A production-grade data pipeline automation system for SliceInsights' 24-scraper
 - ✓ Continuous quality monitoring: hourly audits, historical metrics DB, weekly trend reports — v2.0
 - ✓ SLO gate fix: check_freshness() emits `pass` so nightly deploy unblocks on healthy scrapers — v2.0
 
-### Active — v3.0 (To Be Defined)
+### Active — v3.0 Catálogo Confiável
 
-*(Next milestone to be planned. Candidates from backlog: retry logic, specs completeness fix, ML anomaly detection)*
+- [ ] Remover CSVs de seed — catálogo 100% via scraping
+- [ ] Scrapers cobrem as 10 lojas especializadas em pickleball no Brasil (cron semanal)
+- [ ] Scrapers capturam specs técnicas: espessura do núcleo, material da superfície, peso, formato
+- [ ] Completude de specs do paddle_master sobe de 0% para ≥ 70%
+- [ ] Catálogo de lojas especializadas com URL, marcas disponíveis e status ativo
+- [ ] API de catálogo: listar, filtrar por specs/loja/marca/preço
+- [ ] Página web de catálogo com filtros
+- [ ] Assistente de IA recebe perfil do jogador (quiz) e retorna raquetes recomendadas com links para compra no Brasil
 
 ### Out of Scope
 
@@ -99,6 +106,18 @@ A production-grade data pipeline automation system for SliceInsights' 24-scraper
 
 **v2.0 shipped:** Full pipeline automation — CI/CD, SLO enforcement, multi-channel alerting, safe nightly deploys, quality reporting, SLO gate fix. 26/26 requirements complete. 178 tests passing.
 
+## Current Milestone: v3.0 Catálogo Confiável Brasileiro
+
+**Goal:** Construir um catálogo confiável de raquetes de pickleball vendidas no Brasil — enriquecido com specs técnicas via scraping semanal das lojas especializadas — entregando valor ao público brasileiro e alimentando o assistente de IA de recomendação.
+
+**Target features:**
+- Remoção de CSVs de seed; catálogo 100% via scraping
+- Scrapers das 10 lojas especializadas com extração de specs técnicas (semanal)
+- Catálogo de lojas com metadados (URL, marcas, status)
+- API de catálogo com filtros (specs, loja, marca, preço)
+- Página web de catálogo com filtros
+- Assistente de IA de recomendação baseado em quiz do jogador
+
 ---
 
-*Last updated: 2026-03-20 after v2.0 milestone — Workflows & Automation complete*
+*Last updated: 2026-03-20 after v3.0 milestone start — Catálogo Confiável Brasileiro*
