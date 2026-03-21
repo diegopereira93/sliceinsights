@@ -10,6 +10,8 @@ email-validator==2.1.0
 # Database
 alembic==1.13.1
 psycopg2-binary==2.9.9
+google-cloud-firestore==2.16.0
+google-auth==2.35.0
 
 # Utilities
 thefuzz[speedup]==0.20.0

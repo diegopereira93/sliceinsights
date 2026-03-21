@@ -93,6 +93,12 @@ class Settings(BaseSettings):
     
     # LLM & AI
     groq_api_key: str = ""
+
+    # Firebase/Firestore
+    use_firestore: bool = Field(default=False, alias="USE_FIRESTORE")
+    firestore_project_id: str = Field(default="", alias="FIRESTORE_PROJECT_ID")
+    google_application_credentials: str = Field(default="", alias="GOOGLE_APPLICATION_CREDENTIALS")
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
