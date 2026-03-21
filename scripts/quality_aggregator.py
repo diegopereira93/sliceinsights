@@ -60,6 +60,7 @@ def compute_metrics(scraper_name: str, session: Session) -> dict:
             "coverage_pct": 0.0,
             "product_count": 0,
             "error_rate": 0.0,
+            "status": "fail",
         }
     
     newest_row = session.exec(
