@@ -6,6 +6,7 @@ from .paddle import (
     REQUIRED_FIELDS,
 )
 from .market_offer import MarketOffer
+from .store import Store
 from .price_snapshot import PriceSnapshot
 from .ai_knowledge import AIKnowledgeBase
 from .lead import Lead

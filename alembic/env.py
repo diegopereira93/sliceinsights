@@ -10,7 +10,7 @@ from alembic import context
 sys.path.append(os.getcwd())
 
 # Import your models here to register them with SQLModel
-from app.models import paddle, brand, market_offer  # noqa
+from app.models import paddle, brand, market_offer, store  # noqa
 from app.models.slo import SLOLog  # noqa
 from app.models.slo_alert import SLOAlert  # noqa
 from app.models.deploy_log import DeployLog  # noqa
