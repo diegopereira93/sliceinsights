@@ -417,7 +417,7 @@ def enrich(dry_run: bool = False):
     print(f"✅ ENRICHMENT {'PREVIEW' if dry_run else 'COMPLETE'}")
     print(f"   🟢 Enriched:     {enriched}")
     print(f"   🔴 No match:     {no_match}")
-    print(f"\n📊 Fields to update:")
+    print("\n📊 Fields to update:")
     for field, count in sorted(updated_fields_total.items(), key=lambda x: -x[1]):
         print(f"   {field}: {count}")
 

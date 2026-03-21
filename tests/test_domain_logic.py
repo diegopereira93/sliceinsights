@@ -1,4 +1,4 @@
-from app.models.paddle import calculate_paddle_ratings, calculate_control, PaddleMaster
+from app.models.paddle import calculate_paddle_ratings, PaddleMaster
 
 
 def test_calculate_control_from_core_thickness():

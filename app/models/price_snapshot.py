@@ -2,7 +2,7 @@ from typing import Optional
 from datetime import datetime
 from decimal import Decimal
 from uuid import UUID
-from sqlmodel import SQLModel, Field, Relationship
+from sqlmodel import SQLModel, Field
 
 class PriceSnapshot(SQLModel, table=True):
     """

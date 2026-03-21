@@ -11,9 +11,8 @@ Coverage:
 - Test 7: check_slo_gate queries slo_logs for the calendar day window and returns scraper lists
 """
 
-import pytest
-from unittest.mock import patch, MagicMock, call
-from datetime import date, datetime, timezone
+from unittest.mock import patch, MagicMock
+from datetime import date
 
 
 # ---------------------------------------------------------------------------

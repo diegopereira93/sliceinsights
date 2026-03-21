@@ -11,8 +11,6 @@ import pandas as pd
 from datetime import datetime
 from pathlib import Path
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import text
 
 
 # Configuração

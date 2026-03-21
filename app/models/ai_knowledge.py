@@ -1,7 +1,7 @@
 from typing import List, Optional
 from datetime import datetime
 from uuid import UUID, uuid4
-from sqlmodel import SQLModel, Field, Relationship
+from sqlmodel import SQLModel, Field
 from sqlalchemy import Column, Text
 from pgvector.sqlalchemy import Vector
 

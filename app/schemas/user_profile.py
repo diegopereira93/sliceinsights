@@ -8,6 +8,13 @@ from pydantic import BaseModel, Field
 from app.models.enums import SkillLevel, PlayStyle
 
 
+class MarketOfferOut(BaseModel):
+    """Single market offer with affiliate link."""
+    store_name: str
+    price_brl: float
+    store_url: str  # Already transformed by AffiliateService
+
+
 class UserProfile(BaseModel):
     """User profile for recommendation input."""
     skill_level: SkillLevel = Field(description="Player skill level")
@@ -43,8 +50,10 @@ class PaddleRecommendation(BaseModel):
     paddle_id: UUID
     brand_name: str
     model_name: str
+    image_url: Optional[str] = None
     ratings: dict[str, Optional[int]]
     min_price_brl: Optional[float]
+    market_offers: list[MarketOfferOut] = []
     match_reasons: list[str]
     tags: list[str]
     value_score: Optional[float] = None

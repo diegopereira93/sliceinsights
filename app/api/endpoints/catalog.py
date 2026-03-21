@@ -114,6 +114,7 @@ async def list_catalog_paddles(
                 "id": str(paddle.id),
                 "brand": paddle.brand.name if paddle.brand else None,
                 "model_name": paddle.model_name,
+                "image_url": paddle.image_url,
                 "specs": {
                     "core_thickness_mm": paddle.core_thickness_mm,
                     "surface_material": paddle.face_material.value if paddle.face_material else None,

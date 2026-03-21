@@ -5,20 +5,16 @@ All tests are fully mocked — no network calls are made, no database required.
 Follows the same patterns as tests/test_fetchers.py.
 """
 import sys
-import pytest
 from pathlib import Path
-from unittest.mock import patch, MagicMock, call
+from unittest.mock import patch, MagicMock
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-import scripts.scraper_utils as scraper_utils
 from scripts.scraper_utils import (
     parse_brand_model,
     shopify_product_to_row,
     fetch_shopify_products,
     fetch_html_products,
-    fetch_nuvemshop_products,
-    fetch_woocommerce_products,
 )
 
 
@@ -390,7 +386,6 @@ class TestScrapeJustPaddlesExtractLabData:
             mock_page = MagicMock()
             mock_page.query_selector = MagicMock(return_value=None)
             # Make it return None for 'Paddle Lab' lookup (awaitable)
-            import asyncio
             async def fake_query_selector(selector):
                 return None
             mock_page.query_selector = fake_query_selector

@@ -6,7 +6,10 @@ Measures per-source data age by querying min/max last_updated from market_offers
 Run with:
   docker compose exec -T backend_v3 python scripts/measure_freshness.py
 """
-import sys, json, logging, warnings
+import sys
+import json
+import logging
+import warnings
 from pathlib import Path
 from datetime import datetime, timezone
 

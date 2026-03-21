@@ -2,7 +2,6 @@
 TDD RED phase: Tests for DeployLog model, version_id columns on MarketOffer and PaddleMaster.
 These tests MUST FAIL before implementation and PASS after.
 """
-import pytest
 
 
 def test_deploy_log_model_instantiation():

@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 
 
 @pytest.fixture
@@ -45,7 +45,7 @@ def test_persist_metrics_inserts_row(mock_session):
         "status": "pass"
     }
 
-    result = persist_metrics("test_scraper", "run123", metrics, mock_session)
+    persist_metrics("test_scraper", "run123", metrics, mock_session)
 
     mock_session.add.assert_called_once()
     mock_session.commit.assert_called_once()

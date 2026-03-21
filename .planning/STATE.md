@@ -2,33 +2,34 @@
 gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Catálogo Confiável Brasileiro
-current_phase: 13
-status: "Phase 13-01 complete — catalog API endpoints and store slug"
-last_updated: "2026-03-21T14:30:00.000Z"
+current_phase: 15 (all phases done)
+status: "v3.0 shipped — PR #30"
+stopped_at: Phase 14 shipped — v3.0 milestone complete
+last_updated: "2026-03-21T22:57:27.895Z"
 progress:
   total_phases: 5
-  completed_phases: 2
-  total_plans: 7
-  completed_plans: 7
+  completed_phases: 4
+  total_plans: 13
+  completed_plans: 13
 ---
 
 # Project State: SliceInsights Catálogo Confiável Brasileiro
 
 **Last Updated:** 2026-03-21
-**Status:** Phase 13-01 complete — catalog API endpoints and store slug
-**Current Phase:** 13
+**Status:** v3.0 shipped — PR #30
+**Current Phase:** 15 (all phases done)
 
 ## Current Position
 
-Phase: 13 (catalog-api) — EXECUTING
-Plan: 1 of 2 (plan 1 complete)
+Phase: 15 (ai-recommendation-assistant) — COMPLETE
+All 5 phases of v3.0 complete. Ready to ship.
 
 ## Performance Metrics
 
 **Velocity (v3.0):**
 
-- Total plans completed: 7 (v3.0 phases 11-12)
-- Total phases completed: 2 (v3.0)
+- Total plans completed: 13 (v3.0 phases 11-15)
+- Total phases completed: 5 (v3.0)
 
 **By Phase (v3.0):**
 
@@ -36,9 +37,9 @@ Plan: 1 of 2 (plan 1 complete)
 |-------|-------|-------|----------|
 | 11 | 3 | 3 | - |
 | 12 | 3 | 3 | - |
-| 13 | 1 | 2 | - |
-
-*Updated after each plan completion*
+| 13 | 2 | 2 | - |
+| 14 | 3 | 3 | - |
+| 15 | 3 | 3 | - |
 
 ## Accumulated Context
 
@@ -50,6 +51,8 @@ Plan: 1 of 2 (plan 1 complete)
 - [v3.0 start]: Web page uses HTML/Jinja2 consistent with existing Python/FastAPI stack
 - [v3.0 Phase 13]: INNER JOIN on offer subquery excludes paddles with no active offers (CAT-06)
 - [v3.0 Phase 13]: o.store_name column was dropped in Phase 11 migration — all endpoints must use o.store.name via selectinload
+- [Phase ?]: Rate limit: 30/min for /recommend (LLM call), 60/min for /chat
+- [v3.0 Phase 14]: seed_test_data.py enhanced to provide 5 brands, 5 stores, 5 paddles, 11 market offers for local dev
 
 ### Pending Todos
 
@@ -58,10 +61,9 @@ None.
 ### Blockers/Concerns
 
 - Human verifications still pending from v2.0: live alert delivery, live deploy end-to-end (requires production DB credentials)
-- Alembic migration must be applied (`alembic upgrade head`) before catalog API returns slug data
+- Local dev DB needs `seed_test_data.py` to be run for seed data (improved in phase 14)
 
 ## Session Continuity
 
-Last session: 2026-03-21T14:30:00.000Z
-Stopped at: Phase 13-01 complete
-Resume file: .planning/phases/13-catalog-api/13-01-SUMMARY.md
+Last session: 2026-03-21T23:00:00.000Z
+Stopped at: Phase 14 shipped — v3.0 milestone complete

@@ -6,7 +6,6 @@ Tests are fully mocked — no network calls are made.
 import io
 import os
 import base64
-import pytest
 import pandas as pd
 from unittest.mock import patch, MagicMock
 from pathlib import Path
@@ -16,7 +15,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from scripts.fetch_johnkew import (
     read_from_env_base64,
-    download_with_playwright,
     download_file,
     convert_to_csv,
     main as fetch_johnkew_main,

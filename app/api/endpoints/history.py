@@ -1,7 +1,7 @@
 from typing import List, Dict
 from uuid import UUID
-from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import select, desc
+from fastapi import APIRouter, Depends
+from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from datetime import datetime, timedelta
 

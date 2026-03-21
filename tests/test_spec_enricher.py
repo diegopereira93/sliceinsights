@@ -112,7 +112,7 @@ class TestFourFieldGate:
         assert "weight_g" not in specs
 
     def test_four_field_gate_complete(self):
-        from unittest.mock import MagicMock, patch
+        from unittest.mock import MagicMock
         from app.models.paddle import PaddleMaster
         from app.models.enums import FaceMaterial, PaddleShape
 
@@ -171,7 +171,6 @@ class TestFourFieldGate:
     def test_validation_source_recorded(self):
         from unittest.mock import MagicMock
         from app.models.paddle import PaddleMaster
-        from app.models.enums import FaceMaterial, PaddleShape
 
         mock_paddle = MagicMock(spec=PaddleMaster)
         mock_paddle.core_thickness_mm = None

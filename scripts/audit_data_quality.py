@@ -22,7 +22,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.db.database import sync_engine, init_db_sync
 from app.models import Brand, PaddleMaster, MarketOffer
-from app.models.paddle import calculate_specs_confidence, calculate_control
+from app.models.paddle import calculate_specs_confidence
 
 CSV_PATH = Path(__file__).parent.parent / "app" / "data" / "paddle_stats_dump.csv"
 
@@ -197,12 +197,12 @@ def audit(fix: bool = False):
         print(f"  ❌ No match:     {len(unmatched):3d}/{total}")
 
         if near_misses:
-            print(f"\n  🟡 Near Misses (consider lowering threshold):")
+            print("\n  🟡 Near Misses (consider lowering threshold):")
             for brand, model, score in sorted(near_misses, key=lambda x: -x[2]):
                 print(f"     [{brand}] {model} (score: {score:.2f})")
 
         if unmatched:
-            print(f"\n  ❌ No Match (candidates for removal):")
+            print("\n  ❌ No Match (candidates for removal):")
             for brand, model, score in sorted(unmatched, key=lambda x: x[0]):
                 print(f"     [{brand}] {model}")
 
@@ -242,7 +242,7 @@ def audit(fix: bool = False):
             for brand, model, pid in non_paddles:
                 print(f"     [{brand}] {model}")
         else:
-            print(f"  ✅ No non-paddles detected")
+            print("  ✅ No non-paddles detected")
 
         # ═══════════════════════════════════════════════════════════════════
         # 4. DUPLICATE DETECTION
@@ -264,7 +264,7 @@ def audit(fix: bool = False):
                 brand, model = key.split('|', 1)
                 print(f"     [{brand}] {model} × {len(group)} entries")
         else:
-            print(f"  ✅ No duplicates detected")
+            print("  ✅ No duplicates detected")
 
         # ═══════════════════════════════════════════════════════════════════
         # 5. MARKET OFFER CHECK
@@ -299,7 +299,7 @@ def audit(fix: bool = False):
                     low_price.append((brand.name if brand else '?', paddle.model_name, float(min_price)))
 
         if low_price:
-            print(f"\n  ⚠️ Leisure paddles (< R$ 450):")
+            print("\n  ⚠️ Leisure paddles (< R$ 450):")
             for brand, model, price in sorted(low_price, key=lambda x: x[2]):
                 print(f"     [{brand}] {model} — R$ {price:.0f}")
 
@@ -330,7 +330,7 @@ def audit(fix: bool = False):
         # SUMMARY
         # ═══════════════════════════════════════════════════════════════════
         print(f"\n{'='*70}")
-        print(f"  📊 AUDIT SUMMARY")
+        print("  📊 AUDIT SUMMARY")
         print(f"{'='*70}")
         print(f"  Total paddles:           {total}")
         pct_complete_final = complete_count / total * 100 if total > 0 else 0
@@ -341,7 +341,7 @@ def audit(fix: bool = False):
         print(f"  Duplicates:              {len(dupes)} groups")
         print(f"  With market offers:      {with_offers}")
         print(f"  Low-price (< R$ 450):    {len(low_price)}")
-        print(f"\n  🎯 Catalog after quality gate (specs=100% + offer):")
+        print("\n  🎯 Catalog after quality gate (specs=100% + offer):")
 
         ready = sum(
             1 for p in paddles

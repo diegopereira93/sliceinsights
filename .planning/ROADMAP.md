@@ -42,9 +42,9 @@ Full archive: `.planning/milestones/v2.0-ROADMAP.md`
 
 - [x] **Phase 11: Seed Cleanup & Store Catalog** - Fix remaining issues: migration bug, tracked CSVs, justpaddles market-offer ingestion (completed 2026-03-21)
 - [x] **Phase 12: Spec Enrichment Scrapers** - Enrich all 10 scrapers with technical spec extraction; run weekly via new cron (completed 2026-03-21)
-- [ ] **Phase 13: Catalog API** - REST endpoints to list and filter paddles by specs, store, brand, and price
-- [ ] **Phase 14: Web Catalog Page** - Browser-accessible catalog page with live filter controls
-- [ ] **Phase 15: AI Recommendation Assistant** - Player profile quiz returns personalized paddle recommendations with Brazilian purchase links
+- [x] **Phase 13: Catalog API** - REST endpoints to list and filter paddles by specs, store, brand, and price (completed 2026-03-21)
+- [x] **Phase 14: Web Catalog Page** - Browser-accessible catalog page with live filter controls (completed 2026-03-21)
+- [x] **Phase 15: AI Recommendation Assistant** - Player profile quiz returns personalized paddle recommendations with Brazilian purchase links (completed 2026-03-21)
 
 ## Phase Details
 
@@ -100,7 +100,11 @@ Plans:
   2. The page displays filter controls for core thickness, surface material, price range, brand, and store
   3. Applying a filter updates the paddle listing to show only matching results
   4. Each paddle card includes a clickable link to the Brazilian store where it can be purchased
-**Plans**: [To be planned]
+**Plans**: 3 plans
+Plans:
+- [x] 14-01-PLAN.md — Types, backend image_url fix, and presentational components (card, grid, skeleton, pagination)
+- [x] 14-02-PLAN.md — FilterDrawer extension, CatalogClient, SSR page, bottom-nav wiring
+- [ ] 14-03-PLAN.md — Build verification and human checkpoint
 
 ### Phase 15: AI Recommendation Assistant
 **Goal**: Jogadores recebem recomendações personalizadas de raquetes com justificativa técnica e link de compra no Brasil
@@ -108,10 +112,14 @@ Plans:
 **Requirements**: REC-01, REC-02, REC-03
 **Success Criteria** (what must be TRUE):
   1. Submitting a player profile (skill level, play style, budget) returns at least one paddle recommendation drawn from the live catalog
-  2. Each recommendation includes a plain-language technical justification referencing spec attributes (e.g., "núcleo 16mm para equilíbrio potência/controle")
+  2. Each recommendation includes a plain-language technical justification referencing spec attributes (e.g., "nucleo 16mm para equilibrio potencia/controle")
   3. Each recommendation includes a direct purchase link to a Brazilian store
   4. When no catalog paddle matches the submitted profile, the assistant returns a meaningful "no match" message rather than an empty response or error
-**Plans**: [To be planned]
+**Plans**: 3 plans
+Plans:
+- [x] 15-01-PLAN.md — Backend: schema extension (MarketOfferOut, image_url) + /recommend and /recommend/chat endpoints + tests
+- [x] 15-02-PLAN.md — Frontend: TypeScript types + wizard page + result cards + chat panel + catalog CTA
+- [x] 15-03-PLAN.md — Build verification and human checkpoint
 
 ## Progress
 
@@ -131,6 +139,6 @@ Plans:
 | 10. SLO Gate Fix | v2.0 | 1/1 | ✅ Complete | 2026-03-20 |
 | 11. Seed Cleanup & Store Catalog | v3.0 | Complete | ✅ Complete | 2026-03-21 |
 | 12. Spec Enrichment Scrapers | v3.0 | 3/3 | ✅ Complete | 2026-03-21 |
-| 13. Catalog API | 1/2 | In Progress|  | - |
-| 14. Web Catalog Page | v3.0 | 0/? | Not started | - |
-| 15. AI Recommendation Assistant | v3.0 | 0/? | Not started | - |
+| 13. Catalog API | 2/2 | Complete    | ✅ Complete | 2026-03-21 |
+| 14. Web Catalog Page | v3.0 | Complete | ✅ Complete   | 2026-03-21 |
+| 15. AI Recommendation Assistant | v3.0 | 3/3 | Complete   | 2026-03-21 |

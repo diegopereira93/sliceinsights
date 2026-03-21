@@ -1,14 +1,12 @@
 import re
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
-from typing import Optional
 
 from sqlmodel import Session, select
 
 from app.models.brand import Brand
 from app.models.market_offer import MarketOffer
 from app.models.paddle import PaddleMaster
-from app.models.store import Store
 
 EXCLUDED = {"nan", "none", "unknown", "0", "n/a", ""}
 

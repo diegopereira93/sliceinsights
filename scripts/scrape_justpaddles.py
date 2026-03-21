@@ -44,7 +44,7 @@ async def scrape_paddle_lab(page, search_query: str):
             await first_product.click()
             await page.wait_for_load_state("networkidle")
             return await extract_lab_data(page)
-    except Exception as e:
+    except Exception:
         print(f"  [Search] No results or timeout for {search_query!r}")
         return None
         

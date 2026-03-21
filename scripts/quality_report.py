@@ -15,7 +15,6 @@ import smtplib
 import ssl
 from datetime import datetime, timezone, timedelta
 from email.message import EmailMessage
-from typing import Optional
 
 import pandas as pd
 from sqlmodel import Session, select
@@ -179,7 +178,6 @@ h2 { margin-bottom: 10px; }
             scraper_data = weekly_df[weekly_df["scraper_name"] == scraper].set_index("week")
             html += f"<tr><td style='text-align:left'><strong>{scraper}</strong></td>"
             
-            prior_values = {}
             for i, week in enumerate(weeks):
                 if week in scraper_data.index:
                     row = scraper_data.loc[week]

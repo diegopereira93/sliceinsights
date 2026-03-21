@@ -15,7 +15,7 @@ Coverage:
 """
 
 import pytest
-from unittest.mock import patch, MagicMock, call
+from unittest.mock import patch, MagicMock
 from datetime import datetime, timezone, timedelta
 
 from app.models.slo_alert import SLOAlert, SLOBreach
@@ -124,7 +124,6 @@ def test_telegram_p1_send(service, p1_breach):
     assert result is True
     mock_post.assert_called_once()
     call_kwargs = mock_post.call_args
-    url = call_kwargs[0][0] if call_kwargs[0] else call_kwargs.kwargs.get("url", call_kwargs[0][0])
     # Extract URL from positional args
     pos_args = call_kwargs.args if hasattr(call_kwargs, 'args') else call_kwargs[0]
     assert "api.telegram.org" in pos_args[0]

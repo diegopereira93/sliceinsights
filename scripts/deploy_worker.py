@@ -399,7 +399,7 @@ def run_deploy(batch_date: date | None = None) -> None:
                 entry.finished_at = datetime.now(timezone.utc)
                 session.add(entry)
                 session.commit()
-            print(f"[deploy_worker] FAIL: Validation failed:")
+            print("[deploy_worker] FAIL: Validation failed:")
             for f in failures:
                 print(f"  - {f}")
             sys.exit(1)

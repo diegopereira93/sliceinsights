@@ -23,19 +23,27 @@ interface FilterDrawerProps {
     onToggleBrand: (brand: string) => void;
     priceRange: [number, number];
     onPriceRangeChange: (range: [number, number]) => void;
-    weightFilter: "all" | "light" | "standard" | "heavy";
-    onWeightChange: (weight: "all" | "light" | "standard" | "heavy") => void;
+    weightFilter?: "all" | "light" | "standard" | "heavy";
+    onWeightChange?: (weight: "all" | "light" | "standard" | "heavy") => void;
     thicknessFilter: "all" | "14mm" | "16mm";
     onThicknessChange: (thickness: "all" | "14mm" | "16mm") => void;
     onClear: () => void;
+    surfaceMaterialFilter?: "all" | "Carbon" | "Fiberglass";
+    onSurfaceMaterialChange?: (v: "all" | "Carbon" | "Fiberglass") => void;
+    storeFilter?: string;
+    onStoreChange?: (slug: string) => void;
+    stores?: { name: string; slug: string }[];
 }
 
 export function FilterDrawer({
     brands, selectedBrands, onToggleBrand,
     priceRange, onPriceRangeChange,
-    weightFilter, onWeightChange,
+    weightFilter = "all", onWeightChange,
     thicknessFilter, onThicknessChange,
-    onClear
+    onClear,
+    surfaceMaterialFilter = "all", onSurfaceMaterialChange,
+    storeFilter = "all", onStoreChange,
+    stores = []
 }: FilterDrawerProps) {
     const [brandSearch, setBrandSearch] = React.useState("");
 
@@ -49,9 +57,11 @@ export function FilterDrawer({
 
     // Count active filters (price is active if min > 0 or max < 4000)
     const priceActive = priceRange[0] > 0 || priceRange[1] < 4000 ? 1 : 0;
-    const weightActive = weightFilter !== "all" ? 1 : 0;
+    const weightActive = (weightFilter ?? "all") !== "all" ? 1 : 0;
     const thicknessActive = thicknessFilter !== "all" ? 1 : 0;
-    const totalActiveFilters = selectedBrands.length + priceActive + weightActive + thicknessActive;
+    const surfaceMaterialActive = surfaceMaterialFilter !== "all" ? 1 : 0;
+    const storeActive = storeFilter !== "all" ? 1 : 0;
+    const totalActiveFilters = selectedBrands.length + priceActive + weightActive + thicknessActive + surfaceMaterialActive + storeActive;
 
     return (
         <Drawer>
@@ -154,30 +164,32 @@ export function FilterDrawer({
 
                         <Separator className="bg-white/5" />
 
-                        {/* WEIGHT (PESO) */}
-                        <div>
-                            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-3">Peso Nominal</h4>
-                            <div className="flex gap-2">
-                                {[
-                                    { value: "all", label: "Qualquer" },
-                                    { value: "light", label: "Leve (<7.8 oz)" },
-                                    { value: "standard", label: "Padrão" },
-                                    { value: "heavy", label: "Pesada (>8.2 oz)" }
-                                ].map(option => (
-                                    <Badge
-                                        key={option.value}
-                                        variant={weightFilter === option.value ? "default" : "outline"}
-                                        className={cn(
-                                            "cursor-pointer font-bold px-3 py-1.5",
-                                            weightFilter !== option.value && "border-white/10 text-zinc-400 hover:text-white"
-                                        )}
-                                        onClick={() => onWeightChange(option.value as any)}
-                                    >
-                                        {option.label}
-                                    </Badge>
-                                ))}
+                        {/* WEIGHT (PESO) — only shown when onWeightChange is provided */}
+                        {onWeightChange && (
+                            <div>
+                                <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-3">Peso Nominal</h4>
+                                <div className="flex gap-2">
+                                    {[
+                                        { value: "all", label: "Qualquer" },
+                                        { value: "light", label: "Leve (<7.8 oz)" },
+                                        { value: "standard", label: "Padrão" },
+                                        { value: "heavy", label: "Pesada (>8.2 oz)" }
+                                    ].map(option => (
+                                        <Badge
+                                            key={option.value}
+                                            variant={weightFilter === option.value ? "default" : "outline"}
+                                            className={cn(
+                                                "cursor-pointer font-bold px-3 py-1.5",
+                                                weightFilter !== option.value && "border-white/10 text-zinc-400 hover:text-white"
+                                            )}
+                                            onClick={() => onWeightChange(option.value as any)}
+                                        >
+                                            {option.label}
+                                        </Badge>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         <Separator className="bg-white/5" />
 
@@ -204,6 +216,70 @@ export function FilterDrawer({
                                 ))}
                             </div>
                         </div>
+
+                        {/* Surface Material Filter — only shown when onSurfaceMaterialChange is provided */}
+                        {onSurfaceMaterialChange && (
+                            <>
+                                <Separator className="bg-white/5" />
+                                <div>
+                                    <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-3">Material da Face</h4>
+                                    <div className="flex gap-2">
+                                        {[
+                                            { value: "all", label: "Todos" },
+                                            { value: "Carbon", label: "Carbon" },
+                                            { value: "Fiberglass", label: "Fiberglass" }
+                                        ].map(option => (
+                                            <Badge
+                                                key={option.value}
+                                                variant={surfaceMaterialFilter === option.value ? "default" : "outline"}
+                                                className={cn(
+                                                    "cursor-pointer font-bold px-3 py-1.5",
+                                                    surfaceMaterialFilter !== option.value && "border-white/10 text-zinc-400 hover:text-white"
+                                                )}
+                                                onClick={() => onSurfaceMaterialChange(option.value as any)}
+                                            >
+                                                {option.label}
+                                            </Badge>
+                                        ))}
+                                    </div>
+                                </div>
+                            </>
+                        )}
+
+                        {/* Store Filter — only shown when onStoreChange is provided and stores are available */}
+                        {onStoreChange && stores.length > 0 && (
+                            <>
+                                <Separator className="bg-white/5" />
+                                <div>
+                                    <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-3">Loja</h4>
+                                    <div className="flex gap-2 flex-wrap">
+                                        <Badge
+                                            variant={storeFilter === "all" ? "default" : "outline"}
+                                            className={cn(
+                                                "cursor-pointer font-bold px-3 py-1.5",
+                                                storeFilter !== "all" && "border-white/10 text-zinc-400 hover:text-white"
+                                            )}
+                                            onClick={() => onStoreChange("all")}
+                                        >
+                                            Todas
+                                        </Badge>
+                                        {stores.map(s => (
+                                            <Badge
+                                                key={s.slug}
+                                                variant={storeFilter === s.slug ? "default" : "outline"}
+                                                className={cn(
+                                                    "cursor-pointer font-bold px-3 py-1.5",
+                                                    storeFilter !== s.slug && "border-white/10 text-zinc-400 hover:text-white"
+                                                )}
+                                                onClick={() => onStoreChange(s.slug)}
+                                            >
+                                                {s.name}
+                                            </Badge>
+                                        ))}
+                                    </div>
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     <DrawerFooter className="border-t border-white/5 shrink-0 bg-background/50 backdrop-blur-md">

@@ -1,6 +1,5 @@
 """Smoke test: pipeline runs without CSV seed files (SCRP-01)."""
 import os
-import pytest
 from unittest.mock import patch, MagicMock
 
 

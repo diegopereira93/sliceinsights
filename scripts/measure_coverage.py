@@ -6,7 +6,10 @@ Counts unique paddles and total offers per store_name in market_offers.
 Run with:
   docker compose exec -T backend_v3 python scripts/measure_coverage.py
 """
-import sys, json, logging, warnings
+import sys
+import json
+import logging
+import warnings
 from pathlib import Path
 
 warnings.filterwarnings("ignore")
