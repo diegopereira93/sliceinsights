@@ -9,10 +9,10 @@
 
 - [ ] **SCRP-01**: Sistema remove todos os CSVs de seed (`app/data/`, `data/raw/`) e opera 100% via scraping
 - [ ] **SCRP-02**: Os 10 scrapers de lojas especializadas (brazil_pickleball_store, joola, yosports, supremo, shark, prospin, drop_shot_brasil, just_paddles, pcklhouse, propadel) executam via cron semanal
-- [ ] **SCRP-03**: Cada scraper captura espessura do núcleo (mm) para cada produto
-- [ ] **SCRP-04**: Cada scraper captura material da superfície (carbono cru, fibra de vidro, híbrido, Kevlar) para cada produto
-- [ ] **SCRP-05**: Cada scraper captura peso (gramas) e formato (padrão, alongado) onde disponível
-- [ ] **SCRP-06**: Completude de specs do paddle_master sobe de 0% para ≥ 70% após ciclo de scraping completo
+- [x] **SCRP-03**: Cada scraper captura espessura do núcleo (mm) para cada produto
+- [x] **SCRP-04**: Cada scraper captura material da superfície (carbono cru, fibra de vidro, híbrido, Kevlar) para cada produto
+- [x] **SCRP-05**: Cada scraper captura peso (gramas) e formato (padrão, alongado) onde disponível
+- [x] **SCRP-06**: Completude de specs do paddle_master sobe de 0% para ≥ 70% após ciclo de scraping completo
 
 ### Store — Catálogo de Lojas
 
@@ -68,10 +68,10 @@
 |-------------|-------|--------|
 | SCRP-01 | Phase 11 | Pending |
 | SCRP-02 | Phase 12 | Pending |
-| SCRP-03 | Phase 12 | Pending |
-| SCRP-04 | Phase 12 | Pending |
-| SCRP-05 | Phase 12 | Pending |
-| SCRP-06 | Phase 12 | Pending |
+| SCRP-03 | Phase 12 | Complete |
+| SCRP-04 | Phase 12 | Complete |
+| SCRP-05 | Phase 12 | Complete |
+| SCRP-06 | Phase 12 | Complete |
 | STORE-01 | Phase 11 | Complete |
 | STORE-02 | Phase 11 | Complete |
 | STORE-03 | Phase 13 | Pending |

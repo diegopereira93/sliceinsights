@@ -71,7 +71,7 @@ Plans:
   2. A new GitHub Actions workflow (separate from `quality-audit.yml`) triggers all 10 scrapers on a weekly schedule
   3. After one full scraping cycle, `paddle_master` spec completeness is ≥ 70% as measured by the existing quality audit tool
   4. The weekly cron completes without error for at least 8 of the 10 stores (80% pass rate)
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 Plans:
 - [ ] 12-01-PLAN.md — Foundation: weight_grams migration, enricher core with 4-field gate + DB persistence, tests, archive enrichment.py
 - [ ] 12-02-PLAN.md — Add 8 remaining store extractors (BS4 + Playwright) to scrape_product_specs.py
@@ -127,7 +127,7 @@ Plans:
 | 9. Data Quality Checks & Reporting | v2.0 | 3/3 | ✅ Complete | 2026-03-20 |
 | 10. SLO Gate Fix | v2.0 | 1/1 | ✅ Complete | 2026-03-20 |
 | 11. Seed Cleanup & Store Catalog | v3.0 | Complete    | 2026-03-21 | - |
-| 12. Spec Enrichment Scrapers | v3.0 | 0/3 | Planning complete | - |
+| 12. Spec Enrichment Scrapers | 1/3 | In Progress|  | - |
 | 13. Catalog API | v3.0 | 0/? | Not started | - |
 | 14. Web Catalog Page | v3.0 | 0/? | Not started | - |
 | 15. AI Recommendation Assistant | v3.0 | 0/? | Not started | - |
