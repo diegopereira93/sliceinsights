@@ -8,7 +8,7 @@
 ### Scraping — Lojas Especializadas
 
 - [ ] **SCRP-01**: Sistema remove todos os CSVs de seed (`app/data/`, `data/raw/`) e opera 100% via scraping
-- [ ] **SCRP-02**: Os 10 scrapers de lojas especializadas (brazil_pickleball_store, joola, yosports, supremo, shark, prospin, drop_shot_brasil, just_paddles, pcklhouse, propadel) executam via cron semanal
+- [x] **SCRP-02**: Os 10 scrapers de lojas especializadas (brazil_pickleball_store, joola, yosports, supremo, shark, prospin, drop_shot_brasil, just_paddles, pcklhouse, propadel) executam via cron semanal
 - [x] **SCRP-03**: Cada scraper captura espessura do núcleo (mm) para cada produto
 - [x] **SCRP-04**: Cada scraper captura material da superfície (carbono cru, fibra de vidro, híbrido, Kevlar) para cada produto
 - [x] **SCRP-05**: Cada scraper captura peso (gramas) e formato (padrão, alongado) onde disponível
@@ -67,7 +67,7 @@
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | SCRP-01 | Phase 11 | Pending |
-| SCRP-02 | Phase 12 | Pending |
+| SCRP-02 | Phase 12 | Complete |
 | SCRP-03 | Phase 12 | Complete |
 | SCRP-04 | Phase 12 | Complete |
 | SCRP-05 | Phase 12 | Complete |
