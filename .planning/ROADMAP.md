@@ -163,6 +163,8 @@ Plans:
 Plans:
 - [x] 15.2-01-PLAN.md — Rebuild Docker frontend container with fresh .next build
 - [x] 15.2-02-PLAN.md — Commit 3 pending frontend changes (power field fix, conditional chart render, brand filter threshold)
+- [ ] 15.2-03-PLAN.md — E2E verification via playwright-cli + human visual checkpoint
+
 ### Phase 15.3: Remover imagem do quiz e refinar navegação (INSERTED)
 
 **Goal:** Remover imagem de resultado do quiz para um design mais limpo e remover a sessão redundante 'IA' do menu de navegação.
@@ -182,4 +184,3 @@ Plans:
 
 Plans:
 - [ ] 15.4-01-PLAN.md — E2E Playwright: catalog ingestion validation (>=10 paddles, specs completeness, stores) + recommendation flow (API contract + UI quiz) + npm scripts
-
