@@ -14,6 +14,10 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: 'https',
+                hostname: 'placehold.co',
+            },
+            {
+                protocol: 'https',
                 hostname: 'cdn.shopify.com',
             },
             {
