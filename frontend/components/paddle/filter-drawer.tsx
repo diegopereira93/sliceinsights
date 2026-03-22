@@ -30,9 +30,6 @@ interface FilterDrawerProps {
     onClear: () => void;
     surfaceMaterialFilter?: "all" | "Carbon" | "Fiberglass";
     onSurfaceMaterialChange?: (v: "all" | "Carbon" | "Fiberglass") => void;
-    storeFilter?: string;
-    onStoreChange?: (slug: string) => void;
-    stores?: { name: string; slug: string }[];
 }
 
 export function FilterDrawer({
@@ -42,8 +39,6 @@ export function FilterDrawer({
     thicknessFilter, onThicknessChange,
     onClear,
     surfaceMaterialFilter = "all", onSurfaceMaterialChange,
-    storeFilter = "all", onStoreChange,
-    stores = []
 }: FilterDrawerProps) {
     const [brandSearch, setBrandSearch] = React.useState("");
 
@@ -60,8 +55,7 @@ export function FilterDrawer({
     const weightActive = (weightFilter ?? "all") !== "all" ? 1 : 0;
     const thicknessActive = thicknessFilter !== "all" ? 1 : 0;
     const surfaceMaterialActive = surfaceMaterialFilter !== "all" ? 1 : 0;
-    const storeActive = storeFilter !== "all" ? 1 : 0;
-    const totalActiveFilters = selectedBrands.length + priceActive + weightActive + thicknessActive + surfaceMaterialActive + storeActive;
+    const totalActiveFilters = selectedBrands.length + priceActive + weightActive + thicknessActive + surfaceMaterialActive;
 
     return (
         <Drawer>
@@ -246,40 +240,6 @@ export function FilterDrawer({
                             </>
                         )}
 
-                        {/* Store Filter — only shown when onStoreChange is provided and stores are available */}
-                        {onStoreChange && stores.length > 0 && (
-                            <>
-                                <Separator className="bg-white/5" />
-                                <div>
-                                    <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-3">Loja</h4>
-                                    <div className="flex gap-2 flex-wrap">
-                                        <Badge
-                                            variant={storeFilter === "all" ? "default" : "outline"}
-                                            className={cn(
-                                                "cursor-pointer font-bold px-3 py-1.5",
-                                                storeFilter !== "all" && "border-white/10 text-zinc-400 hover:text-white"
-                                            )}
-                                            onClick={() => onStoreChange("all")}
-                                        >
-                                            Todas
-                                        </Badge>
-                                        {stores.map(s => (
-                                            <Badge
-                                                key={s.slug}
-                                                variant={storeFilter === s.slug ? "default" : "outline"}
-                                                className={cn(
-                                                    "cursor-pointer font-bold px-3 py-1.5",
-                                                    storeFilter !== s.slug && "border-white/10 text-zinc-400 hover:text-white"
-                                                )}
-                                                onClick={() => onStoreChange(s.slug)}
-                                            >
-                                                {s.name}
-                                            </Badge>
-                                        ))}
-                                    </div>
-                                </div>
-                            </>
-                        )}
                     </div>
 
                     <DrawerFooter className="border-t border-white/5 shrink-0 bg-background/50 backdrop-blur-md">
