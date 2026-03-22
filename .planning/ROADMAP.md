@@ -173,3 +173,13 @@ Plans:
 Plans:
 - [x] 15.3-01-PLAN.md — Remover component Image do quiz, remover NavItem 'IA' do bottom-nav, atualizar testes E2E.
 
+### Phase 15.4: Validação E2E do Catálogo e Recomendação com Playwright (INSERTED)
+
+**Goal:** Garantir com testes Playwright que raquetes ingeridas estão disponíveis no catálogo e funcionam no fluxo de recomendação IA — validando a integridade da pipeline de ingestão de ponta a ponta.
+**Requirements**: E2E-01, E2E-02, E2E-03
+**Depends on:** Phase 15.3
+**Plans:** 0 plans
+
+Plans:
+- [ ] 15.4-01-PLAN.md — Testes Playwright: validar catálogo (raquetes visíveis, filtros funcionando) e fluxo IA (quiz → recomendação com link de compra)
+
