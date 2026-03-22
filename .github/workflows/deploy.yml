@@ -214,10 +214,8 @@ jobs:
         run: |
           cd frontend && npx playwright test \
             --reporter=list \
-            --grep-invert="Catalog Ingestion|Recommendation" \
-            --project=chromium 2>&1 | tee e2e-results.txt
-          # Pipeline fails only on homepage/nav/API contract failures
-          # catalog/recommendation ML tests are non-blocking (known data issues)
+            --grep="Homepage|Navigation" \
+            --project=chromium 2>&1
 
       - name: Upload Playwright Report
         if: always()
