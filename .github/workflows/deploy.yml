@@ -214,8 +214,7 @@ jobs:
         run: |
           cd frontend && npx playwright test \
             --reporter=list \
-            --grep="Homepage|Navigation" \
-            --project=chromium 2>&1
+            --grep="Homepage|Navigation" 2>&1
 
       - name: Upload Playwright Report
         if: always()
