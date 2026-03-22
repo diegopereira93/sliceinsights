@@ -1036,7 +1036,6 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                 </button>
                             </div>
                         </div>
-                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
