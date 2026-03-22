@@ -148,7 +148,7 @@ Plans:
 **Goal:** Remover rota /catalog e todos os artefatos exclusivos, substituir nav por /recommend, adicionar redirect 301
 **Requirements**: CLEANUP-01, CLEANUP-02, CLEANUP-03, CLEANUP-04, CLEANUP-05
 **Depends on:** Phase 15
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
 - [ ] 15.1-01-PLAN.md — Deletar rota /catalog, componentes catalog/, types/catalog.ts, atualizar bottom-nav para /recommend, limpar FilterDrawer props orfas, adicionar redirect 301
