@@ -267,7 +267,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                 }));
         };
 
-        const topPower = getTop('powerOriginal', (a, b) => (b.powerOriginal || 0) - (a.powerOriginal || 0))
+        const topPower = getTop('power', (a, b) => (b.power || 0) - (a.power || 0))
             .map(i => ({ ...i, value: (i.value as number)?.toFixed(1) || 'N/A' }));
 
         const topSpin = getTop('spinRPM', (a, b) => (b.spinRPM || 0) - (a.spinRPM || 0))
@@ -592,7 +592,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                 </div>
                             </div>
                             <div className="h-[350px] w-full bg-card/40 backdrop-blur-sm rounded-[2rem] border border-border/50 p-4 shadow-inner relative">
-                                {isMounted && (
+                                {isMounted && activeTab === 'comparativos' && (
                                     <ResponsiveContainer width="100%" height="100%">
                                         <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
                                             <CartesianGrid strokeDasharray="3 3" opacity={0.1} vertical={false} />
@@ -664,7 +664,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                 </div>
                             </div>
                             <div className="h-[350px] w-full bg-card/40 backdrop-blur-sm rounded-[2rem] border border-border/50 p-4 shadow-inner">
-                                {isMounted && (
+                                {isMounted && activeTab === 'comparativos' && (
                                     <ResponsiveContainer width="100%" height="100%">
                                         <ScatterChart margin={{ top: 20, right: 30, bottom: 20, left: 10 }}>
                                             <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
@@ -736,7 +736,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                         </div>
                                     </div>
                                     <div className="h-[300px] w-full bg-card/40 backdrop-blur-sm rounded-[2rem] border border-border/50 p-4 shadow-inner">
-                                        {isMounted && (
+                                        {isMounted && activeTab === 'comparativos' && (
                                             <ResponsiveContainer width="100%" height="100%">
                                                 <ScatterChart margin={{ top: 20, right: 30, bottom: 20, left: 10 }}>
                                                     <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
@@ -788,7 +788,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                     </div>
                                 </div>
                                 <div className="h-[300px] w-full bg-card/40 backdrop-blur-sm rounded-[2rem] border border-border/50 p-4 shadow-inner">
-                                    {isMounted && (
+                                    {isMounted && activeTab === 'comparativos' && (
                                         <ResponsiveContainer width="100%" height="100%">
                                             <ScatterChart margin={{ top: 20, right: 30, bottom: 20, left: 10 }}>
                                                 <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
