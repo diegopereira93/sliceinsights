@@ -114,13 +114,11 @@ jobs:
           
           for i in $(seq 1 $MAX_RETRIES); do
             echo "Attempt $i/$MAX_RETRIES..."
-            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" ${{ env.BACKEND_URL }}/health 2>/dev/null || echo "000")
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" ${{ env.BACKEND_URL }}/api/v1/health 2>/dev/null || echo "000")
             
             if [ "$HTTP_CODE" == "200" ]; then
               echo "Backend is healthy!"
-              
-              # Verify health response
-              HEALTH=$(curl -s ${{ env.BACKEND_URL }}/health)
+              HEALTH=$(curl -s ${{ env.BACKEND_URL }}/api/v1/health)
               echo "Health response: $HEALTH"
               exit 0
             fi
