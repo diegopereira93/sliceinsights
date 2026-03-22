@@ -212,7 +212,7 @@ jobs:
           BASE_URL: ${{ env.FRONTEND_URL }}
           API_URL: ${{ env.API_URL }}
         run: |
-          cd frontend && npx playwright test \
+          npx playwright test \
             --reporter=list \
             --grep="Homepage|Navigation" 2>&1
 
@@ -221,7 +221,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
-          path: frontend/playwright-report/
+          path: playwright-report/
           retention-days: 7
 
       - name: Upload Playwright Test Results
@@ -229,7 +229,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-results
-          path: frontend/test-results/
+          path: test-results/
           retention-days: 7
 
   # ============================================================
