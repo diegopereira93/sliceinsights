@@ -154,7 +154,7 @@ export function BrandIntelligence({ paddles, onBrandClick }: BrandIntelligencePr
         const brands = [...new Set(paddles.map(p => p.brand))];
         return brands
             .map(brand => calculateBrandStats(brand, paddles))
-            .filter(b => b.count >= 2) // At least 2 paddles
+            .filter(b => b.count >= 1) // At least 1 paddle
             .sort((a, b) => b.count - a.count)
             .slice(0, 10); // Top 10
     }, [paddles]);

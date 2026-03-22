@@ -247,34 +247,29 @@ export default function HomeClient({ initialPaddles, brands }: HomeClientProps) 
                         exit={{ y: 100, opacity: 0 }}
                         className="fixed bottom-24 left-0 right-0 z-[100] flex justify-center px-4 pointer-events-none"
                     >
-                        <div className="bg-neutral-900/95 backdrop-blur-2xl border border-white/20 rounded-full px-6 py-4 flex items-center gap-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-primary/20 pointer-events-auto">
-                            <div className="flex -space-x-4">
-                                {comparisonList.map((p) => (
-                                    <div key={p.id} className="w-12 h-12 rounded-full border-2 border-primary overflow-hidden bg-muted shadow-lg">
-                                        <Image src={p.image || "/placeholder-paddle.png"} alt={p.name} fill className="object-cover" />
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="flex flex-col min-w-[80px]">
+                        <div className="bg-neutral-900/95 backdrop-blur-2xl border border-white/20 rounded-full px-6 py-4 flex items-center justify-between gap-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-primary/20 pointer-events-auto w-auto mx-auto">
+                            <div className="flex flex-col min-w-[120px]">
                                 <span className="text-[10px] font-black uppercase text-primary tracking-widest leading-none">Modo de Batalha</span>
                                 <span className="text-sm font-bold text-white leading-none mt-1">
-                                    {comparisonList.length} {comparisonList.length === 1 ? 'raquete' : 'raquetes'}
+                                    {comparisonList.length} {comparisonList.length === 1 ? 'raquete selecionada' : 'raquetes selecionadas'}
                                 </span>
                             </div>
-                            <Button
-                                disabled={comparisonList.length < 2}
-                                onClick={() => setIsComparatorOpen(true)}
-                                className="bg-primary text-primary-foreground font-black rounded-full px-8 h-12 shadow-[0_0_20px_rgba(206,255,0,0.4)] hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                <Swords className="size-5 mr-2" />
-                                LUTAR!
-                            </Button>
-                            <button
-                                onClick={() => setComparisonList([])}
-                                className="p-2 text-white/40 hover:text-white transition-colors bg-white/5 rounded-full"
-                            >
-                                <X className="size-5" />
-                            </button>
+                            <div className="flex items-center gap-4 shrink-0">
+                                <Button
+                                    disabled={comparisonList.length < 2}
+                                    onClick={() => setIsComparatorOpen(true)}
+                                    className="bg-primary text-primary-foreground font-black rounded-full px-6 md:px-8 h-10 md:h-12 text-sm md:text-base shadow-[0_0_20px_rgba(206,255,0,0.4)] hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+                                >
+                                    <Swords className="w-4 h-4 md:size-5 mr-1 md:mr-2 shrink-0" />
+                                    LUTAR!
+                                </Button>
+                                <button
+                                    onClick={() => setComparisonList([])}
+                                    className="p-2 text-white/40 hover:text-white transition-colors bg-white/5 rounded-full shrink-0"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
                         </div>
                     </motion.div>
                 )}

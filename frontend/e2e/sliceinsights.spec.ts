@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 /**
- * E2E Tests: Homepage & Catalog
- * Validates the main user journey: landing → catalog → search → detail
+ * E2E Tests: Homepage & Paddle Discovery
+ * Validates the main user journey: landing → search → filter → quiz
  */
 
 const API = process.env.API_URL || 'http://localhost:8002/api/v1';
@@ -34,7 +34,7 @@ test.describe('Homepage', () => {
     });
 });
 
-test.describe('Catalog', () => {
+test.describe('Paddle Discovery', () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('/');
         // Wait for paddle cards or search to indicate catalog loaded

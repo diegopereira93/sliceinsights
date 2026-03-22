@@ -1,13 +1,14 @@
 'use client';
 
 import { useMemo, useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Paddle } from '@/types/paddle';
 import {
     ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     ZAxis, ReferenceLine, Label, Cell, Legend
 } from 'recharts';
-import { motion } from 'framer-motion';
-import { TrendingUp, Zap, Target, DollarSign, Activity, Shield, Scale, BarChart3, Wind, Trophy, Gem, Star, Award, Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { TrendingUp, Zap, Target, DollarSign, Activity, Shield, Scale, BarChart3, Wind, Trophy, Gem, Star, Award, Loader2, Swords, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import {
     Drawer,
@@ -28,6 +29,7 @@ import { HiddenGems } from '@/components/statistics/hidden-gems';
 import { ScatterFiltersToolbar, ScatterFilters } from '@/components/statistics/scatter-filters';
 import { BrandIntelligence } from '@/components/statistics/brand-intelligence';
 import { InfoTooltip, QuickInfo } from '@/components/ui/info-tooltip';
+import { PaddleComparator } from '@/components/paddle/paddle-comparator';
 
 interface StatisticsClientProps {
     initialPaddles: Paddle[];
@@ -106,6 +108,21 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
         minPower: 0,
     });
     const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+    const [comparisonList, setComparisonList] = useState<Paddle[]>([]);
+    const [isComparatorOpen, setIsComparatorOpen] = useState(false);
+
+    const handleCompare = (paddle: Paddle) => {
+        setComparisonList(prev => {
+            const exists = prev.some(p => p.id === paddle.id);
+            if (exists) {
+                return prev.filter(p => p.id !== paddle.id);
+            }
+            if (prev.length >= 2) {
+                return [...prev.slice(1), paddle];
+            }
+            return [...prev, paddle];
+        });
+    };
 
     // --- Load User Profile from Quiz ---
     useEffect(() => {
@@ -267,7 +284,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                 }));
         };
 
-        const topPower = getTop('powerOriginal', (a, b) => (b.powerOriginal || 0) - (a.powerOriginal || 0))
+        const topPower = getTop('power', (a, b) => (b.power || 0) - (a.power || 0))
             .map(i => ({ ...i, value: (i.value as number)?.toFixed(1) || 'N/A' }));
 
         const topSpin = getTop('spinRPM', (a, b) => (b.spinRPM || 0) - (a.spinRPM || 0))
@@ -592,7 +609,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                 </div>
                             </div>
                             <div className="h-[350px] w-full bg-card/40 backdrop-blur-sm rounded-[2rem] border border-border/50 p-4 shadow-inner relative">
-                                {isMounted && (
+                                {isMounted && activeTab === 'comparativos' && (
                                     <ResponsiveContainer width="100%" height="100%">
                                         <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
                                             <CartesianGrid strokeDasharray="3 3" opacity={0.1} vertical={false} />
@@ -664,7 +681,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                 </div>
                             </div>
                             <div className="h-[350px] w-full bg-card/40 backdrop-blur-sm rounded-[2rem] border border-border/50 p-4 shadow-inner">
-                                {isMounted && (
+                                {isMounted && activeTab === 'comparativos' && (
                                     <ResponsiveContainer width="100%" height="100%">
                                         <ScatterChart margin={{ top: 20, right: 30, bottom: 20, left: 10 }}>
                                             <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
@@ -736,7 +753,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                         </div>
                                     </div>
                                     <div className="h-[300px] w-full bg-card/40 backdrop-blur-sm rounded-[2rem] border border-border/50 p-4 shadow-inner">
-                                        {isMounted && (
+                                        {isMounted && activeTab === 'comparativos' && (
                                             <ResponsiveContainer width="100%" height="100%">
                                                 <ScatterChart margin={{ top: 20, right: 30, bottom: 20, left: 10 }}>
                                                     <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
@@ -788,7 +805,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                     </div>
                                 </div>
                                 <div className="h-[300px] w-full bg-card/40 backdrop-blur-sm rounded-[2rem] border border-border/50 p-4 shadow-inner">
-                                    {isMounted && (
+                                    {isMounted && activeTab === 'comparativos' && (
                                         <ResponsiveContainer width="100%" height="100%">
                                             <ScatterChart margin={{ top: 20, right: 30, bottom: 20, left: 10 }}>
                                                 <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
@@ -932,7 +949,12 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                         </div>
                                     </motion.div>
                                 )}
-                                <PaddleCard paddle={selectedPaddle} onClick={() => { }} />
+                                <PaddleCard
+                                    paddle={selectedPaddle}
+                                    onClick={() => { }}
+                                    onCompare={() => handleCompare(selectedPaddle)}
+                                    isComparing={comparisonList.some(p => p.id === selectedPaddle.id)}
+                                />
                                 {/* Additional detailed stats in drawer */}
                                 <div className="mt-4 p-4 bg-muted/30 rounded-xl space-y-3">
                                     <h4 className="font-bold text-sm mb-2 flex items-center gap-2"><Activity className="w-4 h-4" /> Technical Specs</h4>
@@ -979,6 +1001,51 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                     )}
                 </DrawerContent>
             </Drawer>
+
+            {/* Battle Mode Trigger Bar */}
+            <AnimatePresence>
+                {comparisonList.length > 0 && (
+                    <motion.div
+                        key="battle-bar"
+                        initial={{ y: 100, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 100, opacity: 0 }}
+                        className="fixed bottom-24 left-0 right-0 z-[100] flex justify-center px-4 pointer-events-none"
+                    >
+                        <div className="bg-neutral-900/95 backdrop-blur-2xl border border-white/20 rounded-full px-6 py-4 flex items-center justify-between gap-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-primary/20 pointer-events-auto w-auto mx-auto">
+                            <div className="flex flex-col min-w-[120px]">
+                                <span className="text-[10px] font-black uppercase text-primary tracking-widest leading-none">Modo de Batalha</span>
+                                <span className="text-sm font-bold text-white leading-none mt-1">
+                                    {comparisonList.length} {comparisonList.length === 1 ? 'raquete selecionada' : 'raquetes selecionadas'}
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-4 shrink-0">
+                                <Button
+                                    disabled={comparisonList.length < 2}
+                                    onClick={() => setIsComparatorOpen(true)}
+                                    className="bg-primary text-primary-foreground font-black rounded-full px-6 md:px-8 h-10 md:h-12 text-sm md:text-base shadow-[0_0_20px_rgba(206,255,0,0.4)] hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+                                >
+                                    <Swords className="w-4 h-4 md:size-5 mr-1 md:mr-2 shrink-0" />
+                                    LUTAR!
+                                </Button>
+                                <button
+                                    onClick={() => setComparisonList([])}
+                                    className="p-2 text-white/40 hover:text-white transition-colors bg-white/5 rounded-full shrink-0"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Paddle Comparator */}
+            <PaddleComparator
+                paddles={comparisonList}
+                isOpen={isComparatorOpen}
+                onClose={() => setIsComparatorOpen(false)}
+            />
 
         </div>
     );

@@ -140,5 +140,27 @@ Plans:
 | 11. Seed Cleanup & Store Catalog | v3.0 | Complete | ✅ Complete | 2026-03-21 |
 | 12. Spec Enrichment Scrapers | v3.0 | 3/3 | ✅ Complete | 2026-03-21 |
 | 13. Catalog API | 2/2 | Complete    | ✅ Complete | 2026-03-21 |
-| 14. Web Catalog Page | v3.0 | Complete | ✅ Complete   | 2026-03-21 |
+| 14. Web Catalog Page | v3.0 | Complete | Complete    | 2026-03-22 |
 | 15. AI Recommendation Assistant | v3.0 | 3/3 | Complete   | 2026-03-21 |
+
+### Phase 15.1: Remover pagina de catalogo, pois ja existe na home com melhores filtros (INSERTED)
+
+**Goal:** Remover rota /catalog e todos os artefatos exclusivos, substituir nav por /recommend, adicionar redirect 301
+**Requirements**: CLEANUP-01, CLEANUP-02, CLEANUP-03, CLEANUP-04, CLEANUP-05
+**Depends on:** Phase 15
+**Plans:** 2/3 plans complete
+
+Plans:
+- [ ] 15.1-01-PLAN.md — Deletar rota /catalog, componentes catalog/, types/catalog.ts, atualizar bottom-nav para /recommend, limpar FilterDrawer props orfas, adicionar redirect 301
+
+### Phase 15.2: Fix Statistics Page Content Rendering (INSERTED)
+
+**Goal:** Página /statistics exibe conteúdo correto em todas as abas — Overview, Comparativos, Rankings e Marcas — sem erros de console e com mudanças pendentes commitadas
+**Requirements**: STATS-01, STATS-02, STATS-03
+**Depends on:** Phase 15.1
+**Plans:** 2/3 plans executed
+
+Plans:
+- [x] 15.2-01-PLAN.md — Rebuild Docker frontend container with fresh .next build
+- [x] 15.2-02-PLAN.md — Commit 3 pending frontend changes (power field fix, conditional chart render, brand filter threshold)
+- [ ] 15.2-03-PLAN.md — E2E verification via playwright-cli + human visual checkpoint

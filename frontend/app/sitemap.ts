@@ -17,9 +17,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.9,
         },
         {
-            url: `${baseUrl}/catalogo`,
+            url: `${baseUrl}/recommend`,
             lastModified: new Date(),
-            changeFrequency: 'daily',
+            changeFrequency: 'weekly',
             priority: 0.8,
         },
         {
