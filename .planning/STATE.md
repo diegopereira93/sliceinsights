@@ -2,34 +2,34 @@
 gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Catálogo Confiável Brasileiro
-current_phase: 15.2
-status: executing
-stopped_at: Completed 15.2-01-PLAN.md (Docker rebuild)
-last_updated: "2026-03-22T13:48:46.914Z"
+current_phase: 15.4
+status: shipped
+stopped_at: PR #33 created — Phase 15.4 shipped
+last_updated: "2026-03-22T17:00:00Z"
 progress:
-  total_phases: 7
-  completed_phases: 5
-  total_plans: 17
-  completed_plans: 16
+  total_phases: 9
+  completed_phases: 7
+  total_plans: 19
+  completed_plans: 18
 ---
 
 # Project State: SliceInsights Catálogo Confiável Brasileiro
 
 **Last Updated:** 2026-03-22
-**Status:** Ready to execute
-**Current Phase:** 15.2
+**Status:** Shipped (PR #33)
+**Current Phase:** 15.4 (e2e-catalog-recommendation-validation)
 
 ## Current Position
 
-Phase: 15.2 (fix-statistics-page-content-rendering) — EXECUTING
-Plan: 3 of 3
+Phase: 15.4 (e2e-catalog-recommendation-validation) — SHIPPED
+Plan: 1 of 1
 
 ## Performance Metrics
 
 **Velocity (v3.0):**
 
-- Total plans completed: 13 (v3.0 phases 11-15)
-- Total phases completed: 5 (v3.0)
+- Total plans completed: 18 (v3.0 phases 11-15.4)
+- Total phases completed: 7 (v3.0)
 
 **By Phase (v3.0):**
 
@@ -40,8 +40,10 @@ Plan: 3 of 3
 | 13 | 2 | 2 | - |
 | 14 | 3 | 3 | - |
 | 15 | 3 | 3 | - |
-| Phase 15.2-fix-statistics-page-content-rendering P02 | 1 min | 1 tasks | 3 files |
-| Phase 15.2-fix-statistics-page-content-rendering P01 | 2 min | 1 tasks | 0 files |
+| 15.1 | 1 | 1 | - |
+| 15.2 | 2 | 3 | - |
+| 15.3 | 1 | 1 | - |
+| 15.4 | 1 | 1 | - |
 
 ## Accumulated Context
 
@@ -60,8 +62,8 @@ Plan: 3 of 3
 - [Phase ?]: Rate limit: 30/min for /recommend (LLM call), 60/min for /chat
 - [v3.0 Phase 14]: seed_test_data.py enhanced to provide 5 brands, 5 stores, 5 paddles, 11 market offers for local dev
 - [v3.0 Phase 15.1]: Redirect 301 cobre /catalog E /catalogo -> / para garantir cobertura total de SEO e bookmarks
-- [v3.0 Phase 15.1]: Bottom-nav label 'IA' com Sparkles para /recommend — feature de alto valor agora descobrivel via nav mobile
-- [Phase 15.2-fix-statistics-page-content-rendering]: Rebuilt frontend_next service with docker compose build --no-cache to eliminate stale .next chunk 404 errors
+- [v3.0 Phase 15.3]: IA nav item removed — /recommend accessible via Home filters
+- [v3.0 Phase 15.4]: E2E Playwright tests (catalog ingestion + recommendation validation) — 26/26 passing
 
 ### Pending Todos
 
@@ -75,4 +77,4 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-22T13:48:46.910Z
-Stopped at: Completed 15.2-01-PLAN.md (Docker rebuild)
+Stopped at: PR #33 created — Phase 15.4 shipped

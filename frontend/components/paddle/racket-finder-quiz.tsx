@@ -592,9 +592,6 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
                                             animate={{ scale: 1, opacity: 1 }}
                                             className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4 mb-2 cursor-pointer hover:bg-white/10 hover:border-white/20 transition-all"
                                         >
-                                            <div className="w-16 h-16 rounded-xl overflow-hidden bg-muted flex-shrink-0">
-                                                <Image src={recommendedPaddle.image} alt={recommendedPaddle.name} fill className="object-cover" />
-                                            </div>
                                             <div className="flex-1 text-left min-w-0">
                                                 <p className="text-[10px] uppercase font-bold text-primary tracking-wider">{recommendedPaddle.brand}</p>
                                                 <p className="font-bold truncate">{recommendedPaddle.name}</p>
@@ -607,25 +604,22 @@ export function RacketFinderQuiz({ paddles, onRecommend }: RacketFinderQuizProps
                                         </motion.div>
                                     </a>
                                 ) : (
-                                    <motion.div
-                                        initial={{ scale: 0.9, opacity: 0 }}
-                                        animate={{ scale: 1, opacity: 1 }}
-                                        className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4 mb-2 cursor-pointer hover:bg-white/10 hover:border-white/20 transition-all"
-                                        onClick={() => onRecommend(recommendedPaddle)}
-                                    >
-                                        <div className="w-16 h-16 rounded-xl overflow-hidden bg-muted flex-shrink-0">
-                                            <Image src={recommendedPaddle.image} alt={recommendedPaddle.name} fill className="object-cover" />
-                                        </div>
-                                        <div className="flex-1 text-left min-w-0">
-                                            <p className="text-[10px] uppercase font-bold text-primary tracking-wider">{recommendedPaddle.brand}</p>
-                                            <p className="font-bold truncate">{recommendedPaddle.name}</p>
-                                            <div className="flex items-center gap-2 mt-1">
-                                                <span className="text-xs font-mono font-bold text-white">R$ {recommendedPaddle.price}</span>
-                                                <div className="h-1 w-1 rounded-full bg-white/20" />
-                                                <span className="text-[10px] text-zinc-400">Nota: {recommendedPaddle.rating}</span>
+                                        <motion.div
+                                            initial={{ scale: 0.9, opacity: 0 }}
+                                            animate={{ scale: 1, opacity: 1 }}
+                                            className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4 mb-2 cursor-pointer hover:bg-white/10 hover:border-white/20 transition-all"
+                                            onClick={() => onRecommend(recommendedPaddle)}
+                                        >
+                                            <div className="flex-1 text-left min-w-0">
+                                                <p className="text-[10px] uppercase font-bold text-primary tracking-wider">{recommendedPaddle.brand}</p>
+                                                <p className="font-bold truncate">{recommendedPaddle.name}</p>
+                                                <div className="flex items-center gap-2 mt-1">
+                                                    <span className="text-xs font-mono font-bold text-white">R$ {recommendedPaddle.price}</span>
+                                                    <div className="h-1 w-1 rounded-full bg-white/20" />
+                                                    <span className="text-[10px] text-zinc-400">Nota: {recommendedPaddle.rating}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </motion.div>
+                                        </motion.div>
                                 )
                             ) : (
                                 <div className="w-full bg-white/5 border border-dashed border-white/10 rounded-2xl p-8 mb-2">
