@@ -158,9 +158,9 @@ Plans:
 **Goal:** Página /statistics exibe conteúdo correto em todas as abas — Overview, Comparativos, Rankings e Marcas — sem erros de console e com mudanças pendentes commitadas
 **Requirements**: STATS-01, STATS-02, STATS-03
 **Depends on:** Phase 15.1
-**Plans:** 3 plans
+**Plans:** 2/3 plans executed
 
 Plans:
-- [ ] 15.2-01-PLAN.md — Rebuild Docker frontend container with fresh .next build
-- [ ] 15.2-02-PLAN.md — Commit 3 pending frontend changes (power field fix, conditional chart render, brand filter threshold)
+- [x] 15.2-01-PLAN.md — Rebuild Docker frontend container with fresh .next build
+- [x] 15.2-02-PLAN.md — Commit 3 pending frontend changes (power field fix, conditional chart render, brand filter threshold)
 - [ ] 15.2-03-PLAN.md — E2E verification via playwright-cli + human visual checkpoint
