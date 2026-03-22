@@ -1,0 +1,331 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+env:
+  # Backend (Render)
+  BACKEND_URL: https://sliceinsights-4rmf.onrender.com
+  # Frontend (Vercel)
+  FRONTEND_URL: https://sliceinsights.vercel.app
+  API_URL: ${{ env.BACKEND_URL }}/api/v1
+  # Timeout
+  DEPLOY_TIMEOUT_MINUTES: 15
+  E2E_TIMEOUT_MINUTES: 20
+
+jobs:
+  # ============================================================
+  # JOB 1: Quality Gate - Run all tests
+  # ============================================================
+  quality-gate:
+    name: Quality Gate
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: picklematch
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Enable pgvector extension
+        run: |
+          PGPASSWORD=postgres psql -h localhost -U postgres -d picklematch -c "CREATE EXTENSION IF NOT EXISTS vector;"
+
+      - name: Initialize database schema
+        run: |
+          python -c "
+          import sys
+          sys.path.insert(0, '.')
+          from app.db.database import init_db_sync
+          init_db_sync()
+          print('Database schema initialized successfully.')
+          "
+        env:
+          DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/picklematch
+          DATABASE_URL_SYNC: postgresql://postgres:postgres@localhost:5432/picklematch
+
+      - name: Run unit tests
+        run: |
+          PYTHONPATH=. pytest tests/ -v --ignore=tests/test_e2e_api.py
+        env:
+          DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/picklematch
+          DATABASE_URL_SYNC: postgresql://postgres:postgres@localhost:5432/picklematch
+
+      - name: Lint with Ruff
+        run: ruff check scripts/ app/ tests/
+
+      - name: Smoke tests (data quality)
+        run: |
+          python scripts/smoke_test_quality.py
+        env:
+          DATABASE_URL_SYNC: postgresql://postgres:postgres@localhost:5432/picklematch
+
+  # ============================================================
+  # JOB 2: Deploy Backend to Render
+  # ============================================================
+  deploy-backend:
+    name: Deploy Backend (Render)
+    needs: quality-gate
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ env.DEPLOY_TIMEOUT_MINUTES }}
+
+    steps:
+      - name: Trigger Render Deploy Hook
+        id: deploy
+        run: |
+          echo "Triggering Render deploy..."
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST ${{ secrets.RENDER_DEPLOY_HOOK }})
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+          echo "Response: $BODY"
+          echo "HTTP Code: $HTTP_CODE"
+          
+          if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "201" ]; then
+            echo "::error::Render deploy hook failed with HTTP $HTTP_CODE"
+            exit 1
+          fi
+          echo "deploy_time=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_OUTPUT
+
+      - name: Wait for Backend Health Check
+        run: |
+          echo "Waiting for backend to be ready..."
+          MAX_RETRIES=30
+          RETRY_INTERVAL=10
+          
+          for i in $(seq 1 $MAX_RETRIES); do
+            echo "Attempt $i/$MAX_RETRIES..."
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" ${{ env.BACKEND_URL }}/health 2>/dev/null || echo "000")
+            
+            if [ "$HTTP_CODE" == "200" ]; then
+              echo "Backend is healthy!"
+              
+              # Verify health response
+              HEALTH=$(curl -s ${{ env.BACKEND_URL }}/health)
+              echo "Health response: $HEALTH"
+              exit 0
+            fi
+            
+            if [ $i -lt $MAX_RETRIES ]; then
+              echo "Backend not ready, waiting ${RETRY_INTERVAL}s..."
+              sleep $RETRY_INTERVAL
+            fi
+          done
+          
+          echo "::error::Backend did not become healthy within $((MAX_RETRIES * RETRY_INTERVAL))s"
+          exit 1
+
+  # ============================================================
+  # JOB 3: Deploy Frontend to Vercel
+  # ============================================================
+  deploy-frontend:
+    name: Deploy Frontend (Vercel)
+    needs: quality-gate
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ env.DEPLOY_TIMEOUT_MINUTES }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Vercel (Production)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ vars.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ vars.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: frontend
+
+      - name: Wait for Frontend Deployment
+        run: |
+          echo "Waiting for Vercel deployment to complete..."
+          MAX_RETRIES=30
+          RETRY_INTERVAL=10
+          
+          for i in $(seq 1 $MAX_RETRIES); do
+            echo "Checking frontend availability ($i/$MAX_RETRIES)..."
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" ${{ env.FRONTEND_URL }} 2>/dev/null || echo "000")
+            
+            if [ "$HTTP_CODE" == "200" ]; then
+              echo "Frontend is accessible!"
+              exit 0
+            fi
+            
+            if [ $i -lt $MAX_RETRIES ]; then
+              echo "Frontend not ready (HTTP $HTTP_CODE), waiting ${RETRY_INTERVAL}s..."
+              sleep $RETRY_INTERVAL
+            fi
+          done
+          
+          echo "::error::Frontend did not become accessible within $((MAX_RETRIES * RETRY_INTERVAL))s"
+          exit 1
+
+  # ============================================================
+  # JOB 4: Playwright E2E Validation
+  # ============================================================
+  e2e-validation:
+    name: E2E Validation (Playwright)
+    needs: [deploy-backend, deploy-frontend]
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ env.E2E_TIMEOUT_MINUTES }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Install Playwright browsers
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E Tests (Production)
+        working-directory: frontend
+        env:
+          BASE_URL: ${{ env.FRONTEND_URL }}
+          API_URL: ${{ env.API_URL }}
+        run: npm run test:e2e:prod
+
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: frontend/playwright-report/
+          retention-days: 7
+
+      - name: Upload Playwright Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: frontend/test-results/
+          retention-days: 7
+
+  # ============================================================
+  # JOB 5: Notification on Failure
+  # ============================================================
+  notify-failure:
+    name: Notify on Failure
+    needs: [quality-gate, deploy-backend, deploy-frontend, e2e-validation]
+    if: always() && (needs.quality-gate.result == 'failure' || needs.deploy-backend.result == 'failure' || needs.deploy-frontend.result == 'failure' || needs.e2e-validation.result == 'failure')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Send failure alert
+        run: |
+          python scripts/alert_worker.py --all
+        env:
+          DATABASE_URL_SYNC: ${{ secrets.DATABASE_URL_SYNC }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          ADMIN_EMAIL_GROUP: ${{ secrets.ADMIN_EMAIL_GROUP }}
+          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          DEPLOY_STATUS: 'failed'
+          FAILED_JOBS: >-
+            quality-gate: ${{ needs.quality-gate.result }},
+            deploy-backend: ${{ needs.deploy-backend.result }},
+            deploy-frontend: ${{ needs.deploy-frontend.result }},
+            e2e-validation: ${{ needs.e2e-validation.result }}
+
+      - name: Set commit status to failure
+        if: github.event_name == 'push'
+        run: |
+          echo "Failed jobs summary:"
+          echo "- Quality Gate: ${{ needs.quality-gate.result }}"
+          echo "- Deploy Backend: ${{ needs.deploy-backend.result }}"
+          echo "- Deploy Frontend: ${{ needs.deploy-frontend.result }}"
+          echo "- E2E Validation: ${{ needs.e2e-validation.result }}"
+          echo "::error::Deploy pipeline failed! Check notifications for details."
+
+  # ============================================================
+  # JOB 6: Success Notification (Optional)
+  # ============================================================
+  notify-success:
+    name: Notify on Success
+    needs: [quality-gate, deploy-backend, deploy-frontend, e2e-validation]
+    if: always() && (needs.quality-gate.result == 'success' && needs.deploy-backend.result == 'success' && needs.deploy-frontend.result == 'success' && needs.e2e-validation.result == 'success')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Success Summary
+        run: |
+          echo "✅ Deploy Pipeline Completed Successfully!"
+          echo ""
+          echo "Deployed:"
+          echo "  - Backend: ${{ env.BACKEND_URL }}"
+          echo "  - Frontend: ${{ env.FRONTEND_URL }}"
+          echo ""
+          echo "E2E Validation: ✅ Passed"
+          echo ""
+          echo "Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Update commit status
+        if: github.event_name == 'push'
+        run: |
+          # Update deployment status via GitHub API
+          curl -s -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+            -d '{
+              "state": "success",
+              "target_url": "'${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'",
+              "description": "Deploy successful - E2E tests passed",
+              "context": "deploy/production"
+            }' || echo "Status update skipped (may require additional permissions)"
