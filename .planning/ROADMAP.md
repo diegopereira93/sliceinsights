@@ -178,8 +178,8 @@ Plans:
 **Goal:** Garantir com testes Playwright que raquetes ingeridas estão disponíveis no catálogo e funcionam no fluxo de recomendação IA — validando a integridade da pipeline de ingestão de ponta a ponta.
 **Requirements**: E2E-01, E2E-02, E2E-03
 **Depends on:** Phase 15.3
-**Plans:** 0 plans
+**Plans:** 1 plan
 
 Plans:
-- [ ] 15.4-01-PLAN.md — Testes Playwright: validar catálogo (raquetes visíveis, filtros funcionando) e fluxo IA (quiz → recomendação com link de compra)
+- [ ] 15.4-01-PLAN.md — E2E Playwright: catalog ingestion validation (>=10 paddles, specs completeness, stores) + recommendation flow (API contract + UI quiz) + npm scripts
 
