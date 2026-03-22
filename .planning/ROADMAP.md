@@ -142,6 +142,7 @@ Plans:
 | 13. Catalog API | 2/2 | Complete    | ✅ Complete | 2026-03-21 |
 | 14. Web Catalog Page | v3.0 | Complete | Complete    | 2026-03-22 |
 | 15. AI Recommendation Assistant | v3.0 | 3/3 | Complete   | 2026-03-21 |
+| 15.5. Seed Dev Catalog         | v3.0 | 4/4 | ✅ Complete   | 2026-03-22 |
 
 ### Phase 15.1: Remover pagina de catalogo, pois ja existe na home com melhores filtros (INSERTED)
 
@@ -183,4 +184,16 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 15.4-01-PLAN.md — E2E Playwright: catalog ingestion validation (>=10 paddles, specs completeness, stores) + recommendation flow (API contract + UI quiz) + npm scripts
+- [x] 15.4-01-PLAN.md — E2E Playwright: catalog ingestion validation (>=10 paddles, specs completeness, stores) + recommendation flow (API contract + UI quiz) + npm scripts
+
+### Phase 15.5: Seed Dev Catalog (INSERTED)
+
+**Goal:** Popular o DB dev com as 10 stores corretas e rodar scrapers para que o frontend mostre conteúdo
+**Depends on:** Phase 15.4
+**Plans:** 4 plans
+
+Plans:
+- [x] 15.5-01-PLAN.md — Criar scripts/seed_stores.py e upsert 10 stores corretas
+- [x] 15.5-02-PLAN.md — Corrigir scrape_justpaddles.py para market-offer ingestion
+- [x] 15.5-03-PLAN.md — Executar 10 scrapers e documentar matriz de resultados
+- [x] 15.5-04-PLAN.md — Verificar frontend com Playwright

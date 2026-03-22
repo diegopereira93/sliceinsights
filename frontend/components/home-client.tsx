@@ -9,7 +9,6 @@ import {
     Trophy, 
     ChevronRight, 
     Sparkles,
-    MousePointer2,
     BarChart3,
     MessageSquare,
     Ghost,
@@ -56,9 +55,9 @@ export default function HomeClient({ initialPaddles, brands }: HomeClientProps) 
             let matchesWeight = true;
             if (weightFilter !== "all") {
                 const weightNum = parseFloat(paddle.weight || "0");
-                if (weightFilter === "light") matchesWeight = weightNum < 7.8;
-                else if (weightFilter === "standard") matchesWeight = weightNum >= 7.8 && weightNum <= 8.2;
-                else if (weightFilter === "heavy") matchesWeight = weightNum > 8.2;
+                if (weightFilter === "light") matchesWeight = weightNum < 220;
+                else if (weightFilter === "standard") matchesWeight = weightNum >= 220 && weightNum <= 235;
+                else if (weightFilter === "heavy") matchesWeight = weightNum > 235;
             }
 
             let matchesThickness = true;
@@ -150,19 +149,19 @@ export default function HomeClient({ initialPaddles, brands }: HomeClientProps) 
             </section>
 
             {/* Catalog Toolbar */}
-            <div className="sticky top-0 z-40 glass-dark border-b border-white/5 py-4 px-6 md:px-12 backdrop-blur-xl">
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="sticky top-0 z-40 glass-dark border-b border-white/5 py-3 px-6 md:px-12 backdrop-blur-xl">
+                <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
                     <div className="relative w-full md:w-96 group">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-primary transition-colors" />
                         <Input 
                             placeholder="Buscar por modelo ou marca..." 
-                            className="pl-11 bg-white/5 border-white/10 h-12 rounded-xl focus:ring-primary/20"
+                            className="pl-11 bg-white/5 border-white/10 h-10 rounded-xl focus:ring-primary/20"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
                     
-                    <div className="flex items-center gap-3 w-full md:w-auto overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+                    <div className="flex items-center gap-2 w-full md:w-auto flex-wrap md:flex-nowrap">
                         <FilterDrawer 
                             brands={brands}
                             selectedBrands={selectedBrands}
@@ -176,7 +175,17 @@ export default function HomeClient({ initialPaddles, brands }: HomeClientProps) 
                             onClear={handleClearFilters}
                         />
 
-
+                        {(searchQuery || selectedBrands.length > 0 || priceRange[0] > 0 || priceRange[1] < 4000 || weightFilter !== "all" || thicknessFilter !== "all") && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={handleClearFilters}
+                                className="h-10 px-3 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 flex flex-shrink-0"
+                            >
+                                <X className="w-4 h-4 mr-1" />
+                                Limpar
+                            </Button>
+                        )}
 
                         <Badge variant="outline" className="h-10 px-4 rounded-full border-white/5 bg-white/5 text-zinc-400 flex flex-shrink-0">
                             {filteredPaddles.length} Raquetes
@@ -301,7 +310,7 @@ export default function HomeClient({ initialPaddles, brands }: HomeClientProps) 
                                 onClick={() => setIsQuizOpen(false)}
                                 className="absolute right-6 top-6 rounded-full hover:bg-white/10"
                             >
-                                <MousePointer2 className="w-5 h-5" />
+                                <X className="w-5 h-5" />
                             </Button>
                             
                             <div className="mb-8 text-center">
