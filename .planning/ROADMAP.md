@@ -142,3 +142,13 @@ Plans:
 | 13. Catalog API | 2/2 | Complete    | ✅ Complete | 2026-03-21 |
 | 14. Web Catalog Page | v3.0 | Complete | ✅ Complete   | 2026-03-21 |
 | 15. AI Recommendation Assistant | v3.0 | 3/3 | Complete   | 2026-03-21 |
+
+### Phase 15.1: Remover pagina de catalogo, pois ja existe na home com melhores filtros (INSERTED)
+
+**Goal:** Remover rota /catalog e todos os artefatos exclusivos, substituir nav por /recommend, adicionar redirect 301
+**Requirements**: CLEANUP-01, CLEANUP-02, CLEANUP-03, CLEANUP-04, CLEANUP-05
+**Depends on:** Phase 15
+**Plans:** 1 plan
+
+Plans:
+- [ ] 15.1-01-PLAN.md — Deletar rota /catalog, componentes catalog/, types/catalog.ts, atualizar bottom-nav para /recommend, limpar FilterDrawer props orfas, adicionar redirect 301
