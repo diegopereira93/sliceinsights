@@ -145,11 +145,19 @@ test.describe('Quiz Flow', () => {
         await expect(
             page.locator('text=/Catálogo|Resultado|Recomendação|catalog|result/i').first()
         ).toBeVisible({ timeout: 15000 });
+
+        // Verify no image is present in the quiz results
+        const resultImage = page.locator('img[alt*="match"], img[alt*="recomend"], .show-results img');
+        await expect(resultImage).not.toBeVisible();
     });
 });
 
 test.describe('Navigation', () => {
     test('statistics page accessible', async ({ page }) => {
+        await page.goto('/');
+        const nav = page.getByRole('navigation');
+        await expect(nav.getByText('IA')).not.toBeVisible();
+
         await page.goto('/statistics');
         await expect(page.locator('body')).toBeVisible();
         // Should load without crashing — check page title or any content rendered

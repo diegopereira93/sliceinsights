@@ -163,4 +163,13 @@ Plans:
 Plans:
 - [x] 15.2-01-PLAN.md — Rebuild Docker frontend container with fresh .next build
 - [x] 15.2-02-PLAN.md — Commit 3 pending frontend changes (power field fix, conditional chart render, brand filter threshold)
-- [ ] 15.2-03-PLAN.md — E2E verification via playwright-cli + human visual checkpoint
+### Phase 15.3: Remover imagem do quiz e refinar navegação (INSERTED)
+
+**Goal:** Remover imagem de resultado do quiz para um design mais limpo e remover a sessão redundante 'IA' do menu de navegação.
+**Requirements**: CLEANUP-06, CLEANUP-07
+**Depends on:** Phase 15.2
+**Plans:** 1/1 plan complete
+
+Plans:
+- [x] 15.3-01-PLAN.md — Remover component Image do quiz, remover NavItem 'IA' do bottom-nav, atualizar testes E2E.
+
