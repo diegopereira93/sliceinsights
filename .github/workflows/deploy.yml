@@ -5,14 +5,9 @@ on:
     branches: [main]
 
 env:
-  # Backend (Render)
   BACKEND_URL: https://sliceinsights-4rmf.onrender.com
-  # Frontend (Vercel)
   FRONTEND_URL: https://sliceinsights.vercel.app
-  API_URL: ${{ env.BACKEND_URL }}/api/v1
-  # Timeout
-  DEPLOY_TIMEOUT_MINUTES: 15
-  E2E_TIMEOUT_MINUTES: 20
+  API_URL: https://sliceinsights-4rmf.onrender.com/api/v1
 
 jobs:
   # ============================================================
@@ -92,7 +87,7 @@ jobs:
     name: Deploy Backend (Render)
     needs: quality-gate
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ env.DEPLOY_TIMEOUT_MINUTES }}
+    timeout-minutes: 15
 
     steps:
       - name: Trigger Render Deploy Hook
@@ -146,7 +141,7 @@ jobs:
     name: Deploy Frontend (Vercel)
     needs: quality-gate
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ env.DEPLOY_TIMEOUT_MINUTES }}
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -192,7 +187,7 @@ jobs:
     name: E2E Validation (Playwright)
     needs: [deploy-backend, deploy-frontend]
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ env.E2E_TIMEOUT_MINUTES }}
+    timeout-minutes: 20
 
     steps:
       - name: Checkout code
