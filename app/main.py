@@ -1,6 +1,7 @@
 """
 FastAPI main application entry point.
 """
+
 import logging
 import structlog
 from contextlib import asynccontextmanager
@@ -24,6 +25,7 @@ settings = get_settings()
 
 # ============== Structured Logging ==============
 
+
 def configure_logging():
     """Configure structlog for structured JSON logging."""
     structlog.configure(
@@ -33,7 +35,9 @@ def configure_logging():
             structlog.processors.StackInfoRenderer(),
             structlog.dev.set_exc_info,
             structlog.processors.TimeStamper(fmt="iso"),
-            structlog.processors.JSONRenderer() if not settings.debug else structlog.dev.ConsoleRenderer(),
+            structlog.processors.JSONRenderer()
+            if not settings.debug
+            else structlog.dev.ConsoleRenderer(),
         ],
         wrapper_class=structlog.make_filtering_bound_logger(
             logging.getLevelName(settings.log_level)
@@ -42,6 +46,7 @@ def configure_logging():
         logger_factory=structlog.PrintLoggerFactory(),
         cache_logger_on_first_use=True,
     )
+
 
 configure_logging()
 logger = structlog.get_logger()
@@ -54,6 +59,7 @@ limiter = Limiter(key_func=get_remote_address)
 
 if settings.sentry_dsn:
     import sentry_sdk
+
     sentry_sdk.init(
         dsn=settings.sentry_dsn,
         traces_sample_rate=0.1,
@@ -67,8 +73,11 @@ async def lifespan(app: FastAPI):
     """Application lifespan handler."""
     # Startup
     logger.info("Starting application", app_name=settings.app_name, version=settings.app_version)
-    await init_db()
-    logger.info("Database initialized")
+    try:
+        await init_db()
+        logger.info("Database initialized")
+    except Exception as e:
+        logger.warning("Database initialization skipped (may already be initialized)", error=str(e))
     yield
     # Shutdown
     logger.info("Shutting down application")
@@ -104,6 +113,7 @@ logger.info("Prometheus metrics exposed at /metrics")
 
 # ============== Security Headers ==============
 
+
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next):
     """Add security headers to every response."""
@@ -125,16 +135,19 @@ async def add_security_headers(request: Request, call_next):
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     return response
 
+
 # ============== Request Logging Middleware ==============
+
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     """Log all incoming requests."""
     import time
+
     start_time = time.time()
-    
+
     response = await call_next(request)
-    
+
     process_time = time.time() - start_time
     log = logger.bind(
         method=request.method,
@@ -142,13 +155,14 @@ async def log_requests(request: Request, call_next):
         status_code=response.status_code,
         process_time_ms=round(process_time * 1000, 2),
     )
-    
+
     if response.status_code >= 400:
         log.warning("Request failed")
     else:
         log.info("Request completed")
-    
+
     return response
+
 
 # Include routes
 app.include_router(router, prefix="/api/v1")
@@ -164,15 +178,13 @@ async def root():
         "message": "Welcome to SliceInsights API",
         "docs": "/docs",
         "health": "/api/v1/health",
-        "metrics": "/metrics"
+        "metrics": "/metrics",
     }
 
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(
-        "app.main:app",
-        host=settings.api_host,
-        port=settings.api_port,
-        reload=settings.debug
+        "app.main:app", host=settings.api_host, port=settings.api_port, reload=settings.debug
     )

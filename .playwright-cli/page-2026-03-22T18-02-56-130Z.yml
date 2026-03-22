@@ -1,0 +1,46 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - main [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]:
+              - img
+              - text: Inteligência em Equipamento
+            - heading "Domine a Quadra com a Raquete Perfeita" [level=1] [ref=e9]
+            - paragraph [ref=e10]: Analisamos as métricas de desempenho de centenas de raquetes para encontrar o match ideal para o seu estilo de jogo.
+          - generic [ref=e11]:
+            - button "ENCONTRAR MINHA RAQUETE" [ref=e12] [cursor=pointer]:
+              - text: ENCONTRAR MINHA RAQUETE
+              - img
+            - button "EXPLORAR CATÁLOGO" [ref=e13] [cursor=pointer]
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - img [ref=e17]
+            - textbox "Buscar por modelo ou marca..." [ref=e20]
+          - generic [ref=e21]:
+            - button "Filtros" [ref=e22] [cursor=pointer]:
+              - img
+              - text: Filtros
+            - generic [ref=e23]: 0 Raquetes
+        - main [ref=e24]:
+          - generic [ref=e25]:
+            - img [ref=e27]
+            - heading "Nenhuma raquete encontrada" [level=3] [ref=e29]
+            - paragraph [ref=e30]: Tente ajustar seus filtros ou busca para encontrar o que procura.
+            - button "Limpar Todos os Filtros" [ref=e31] [cursor=pointer]
+        - button [ref=e33] [cursor=pointer]:
+          - img
+    - navigation [ref=e34]:
+      - generic [ref=e35]:
+        - link "Home" [ref=e36] [cursor=pointer]:
+          - /url: /
+          - img [ref=e37]
+          - generic [ref=e40]: Home
+        - link "Análise" [ref=e41] [cursor=pointer]:
+          - /url: /statistics
+          - img [ref=e42]
+          - generic [ref=e43]: Análise
+  - region "Notifications (F8)":
+    - list
+  - alert [ref=e44]

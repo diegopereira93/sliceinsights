@@ -11,11 +11,35 @@ from app.models.paddle import PaddleMaster
 EXCLUDED = {"nan", "none", "unknown", "0", "n/a", ""}
 
 SKIP_KEYWORDS = [
-    "mala", "mochila", "bolsa", "capa", "rede", "kit", "bola", "ball",
-    "tshirt", "camiseta", "raqueteira", "tenis", "short", "meia",
-    "grip", "overgrip", "munhequeira", "acessorio",
-    "vestuario", "bone", "viseira", "bag", "backpack",
-    "shoes", "apparel", "glove", "socks", "hat", "visor",
+    "mala",
+    "mochila",
+    "bolsa",
+    "capa",
+    "rede",
+    "kit",
+    "bola",
+    "ball",
+    "tshirt",
+    "camiseta",
+    "raqueteira",
+    "tenis",
+    "short",
+    "meia",
+    "grip",
+    "overgrip",
+    "munhequeira",
+    "acessorio",
+    "vestuario",
+    "bone",
+    "viseira",
+    "bag",
+    "backpack",
+    "shoes",
+    "apparel",
+    "glove",
+    "socks",
+    "hat",
+    "visor",
 ]
 
 
@@ -79,9 +103,7 @@ def ingest_rows(
         brand_name = normalize(brand_name)
         model_name = normalize(model_name)
 
-        brand = session.exec(
-            select(Brand).where(Brand.name == brand_name)
-        ).first()
+        brand = session.exec(select(Brand).where(Brand.name == brand_name)).first()
         if not brand:
             brand = Brand(name=brand_name)
             session.add(brand)
@@ -98,9 +120,13 @@ def ingest_rows(
                 brand_id=brand.id,
                 model_name=model_name,
                 image_url=image_url or None,
+                available_in_brazil=True,
             )
             session.add(paddle)
             session.flush()
+        elif not paddle.available_in_brazil:
+            paddle.available_in_brazil = True
+            session.add(paddle)
 
         existing_offer = session.exec(
             select(MarketOffer).where(

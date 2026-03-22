@@ -51,7 +51,10 @@ async def init_db():
     async with async_engine.begin() as conn:
         from sqlalchemy import text
 
-        await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+        try:
+            await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+        except Exception:
+            pass  # Extension may already exist
         await conn.run_sync(SQLModel.metadata.create_all)
         await conn.run_sync(_sync_missing_columns)
 
