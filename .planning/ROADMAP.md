@@ -39,7 +39,7 @@ Full archive: `.planning/milestones/v2.0-ROADMAP.md`
 **Goal:** Redesenhar 3 páginas do SliceInsights (Home, Quiz Técnico, Analytics) usando designs do Stitch AI como referência visual, migrando o /recommend de classes hardcoded para tokens do design system, adicionando framer-motion, e garantindo responsividade total em 375px/768px/1280px
 **Requirements**: UI-01, UI-02, UI-03, UI-04, UI-05
 **Depends on:** Phase 16
-**Plans:** 4 plans
+**Plans:** 1/4 plans executed
 
 Plans:
 - [ ] 17-01-PLAN.md — Wave 0: Playwright viewport config + Stitch design extraction + token mapping
