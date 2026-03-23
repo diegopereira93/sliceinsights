@@ -1,5 +1,6 @@
 ---
-status: gaps_found
+status: gap_closure_in_progress
+gap_closure_plan: 16-02-PLAN.md
 phase: 16-data-quality-fix
 created: 2026-03-23
 updated: 2026-03-23
