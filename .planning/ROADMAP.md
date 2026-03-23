@@ -45,6 +45,9 @@ Full archive: `.planning/milestones/v2.0-ROADMAP.md`
 - [x] **Phase 13: Catalog API** - REST endpoints to list and filter paddles by specs, store, brand, and price (completed 2026-03-21)
 - [x] **Phase 14: Web Catalog Page** - Browser-accessible catalog page with live filter controls (completed 2026-03-21)
 - [x] **Phase 15: AI Recommendation Assistant** - Player profile quiz returns personalized paddle recommendations with Brazilian purchase links (completed 2026-03-21)
+- [ ] **Phase 16: Data Quality Fix** - Remover 5 paddles com fotos falsas (Unsplash), corrigir 7+ brand names quebrados dos scrapers (pending)
+
+## Phase Details
 
 ## Phase Details
 
