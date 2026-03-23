@@ -74,6 +74,25 @@ KNOWN_BRANDS = [
     "Six Zero", "SixZero", "Volair", "Babolat", "Legacy",
 ]
 
+# Canonical brand name mapping.
+# Keys are lowercase aliases found in scraped titles or DB; values are the canonical display name.
+# Rules:
+#   - SLK is a Selkirk sub-brand — treated as the same brand in the catalog
+#   - "3rdshot", "3rdShot", "3rd Shot" etc. are all "3RD Shot"
+BRAND_ALIASES: dict[str, str] = {
+    # Selkirk family
+    "slk": "Selkirk",
+    # 3RD Shot variations
+    "3rdshot": "3RD Shot",
+    "3rd shot": "3RD Shot",
+    "3rdshoot": "3RD Shot",
+}
+
+
+def normalize_brand(name: str) -> str:
+    """Apply canonical brand aliases. Returns the canonical name or the original if no alias exists."""
+    return BRAND_ALIASES.get(name.lower(), name)
+
 
 def parse_brand_model(title: str) -> tuple[str, str]:
     """Extract brand and model from product title."""
@@ -83,14 +102,26 @@ def parse_brand_model(title: str) -> tuple[str, str]:
         title,
         flags=re.IGNORECASE,
     ).strip()
+    # Skip kit/bundle products (Portuguese "com X raquetes" = "with X rackets")
+    if re.match(r"com\s+\d+", title, flags=re.IGNORECASE):
+        return "SKIP", ""
     title_lower = title.lower()
-    for brand in sorted(KNOWN_BRANDS, key=len, reverse=True):
+    sorted_brands = sorted(KNOWN_BRANDS, key=len, reverse=True)
+    # Check brand at start of title (most common: "Selkirk Invikta")
+    for brand in sorted_brands:
         if title_lower.startswith(brand.lower()):
             model = title[len(brand):].strip()
             model = re.sub(r"\s+\d+mm$", "", model).strip()
-            return brand, model if model else title
+            return normalize_brand(brand), model if model else title
+    # Check brand at end of title (e.g. "CS Pro Hyperlight" → brand=Hyperlight, model=CS Pro)
+    for brand in sorted_brands:
+        suffix = f" {brand.lower()}"
+        if title_lower.endswith(suffix):
+            model = title[:-(len(brand) + 1)].strip()
+            model = re.sub(r"\s+\d+mm$", "", model).strip()
+            return normalize_brand(brand), model if model else title
     parts = title.split(None, 1)
-    return parts[0].title(), parts[1].strip() if len(parts) > 1 else ""
+    return normalize_brand(parts[0].title()), parts[1].strip() if len(parts) > 1 else ""
 
 
 # --- CSV output ---
