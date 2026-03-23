@@ -443,23 +443,28 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
             {/* Tabs Navigation */}
             <div className="px-4 max-w-5xl mx-auto mb-8">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                    <TabsList className="grid w-full grid-cols-4 h-12 rounded-2xl bg-muted/50 p-1">
-                        <TabsTrigger value="overview" className="rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                    <TabsList className="grid w-full grid-cols-4 h-12 rounded-2xl bg-muted border border-border p-1">
+                        <TabsTrigger value="overview" className="rounded-lg font-black text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm">
                             Overview
                         </TabsTrigger>
-                        <TabsTrigger value="comparativos" className="rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                        <TabsTrigger value="comparativos" className="rounded-lg font-black text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm">
                             Comparativos
                         </TabsTrigger>
-                        <TabsTrigger value="rankings" className="rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                        <TabsTrigger value="rankings" className="rounded-lg font-black text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm">
                             Rankings
                         </TabsTrigger>
-                        <TabsTrigger value="marcas" className="rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                        <TabsTrigger value="marcas" className="rounded-lg font-black text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm">
                             Marcas
                         </TabsTrigger>
                     </TabsList>
 
                     {/* OVERVIEW TAB */}
                     <TabsContent value="overview" className="mt-8 space-y-12">
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.2 }}
+                        >
                         {/* Dynamic KPI Cards */}
                         <motion.div
                             variants={containerVariants}
@@ -467,7 +472,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                             animate="visible"
                             className="grid grid-cols-2 md:grid-cols-4 gap-4"
                         >
-                            <motion.div variants={itemVariants} className="bg-card border border-border/50 p-6 rounded-3xl shadow-sm relative overflow-hidden group hover:scale-[1.02] transition-transform">
+                            <motion.div variants={itemVariants} className="glass-card border-none p-6 rounded-2xl relative overflow-hidden group hover:scale-[1.02] transition-transform">
                                 <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                                     <Activity className="w-16 h-16" />
                                 </div>
@@ -476,7 +481,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                 <p className="text-[10px] text-muted-foreground mt-1">Raquetes Analisadas</p>
                             </motion.div>
 
-                            <motion.div variants={itemVariants} className="bg-card border border-border/50 p-6 rounded-3xl shadow-sm relative overflow-hidden group hover:scale-[1.02] transition-transform">
+                            <motion.div variants={itemVariants} className="glass-card border-none p-6 rounded-2xl relative overflow-hidden group hover:scale-[1.02] transition-transform">
                                 <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                                     <DollarSign className="w-16 h-16" />
                                 </div>
@@ -569,7 +574,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                     <BarChart3 className="w-6 h-6 text-slate-500" />
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold tracking-tight">Panorama do Mercado</h2>
+                                    <h2 className="text-2xl font-black tracking-tight">Panorama do Mercado</h2>
                                     <p className="text-xs text-muted-foreground">Como as raquetes se distribuem.</p>
                                 </div>
                             </div>
@@ -579,6 +584,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                 <DistributionChart data={stats.distributions.twistWeights} title="Twist Weight" unit="" color="#ec4899" binCount={10} domain={[4, 8]} />
                             </div>
                         </section>
+                        </motion.div>
                     </TabsContent>
 
                     {/* COMPARATIVOS TAB */}
@@ -600,7 +606,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                     <TrendingUp className="w-6 h-6 text-green-500" />
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold tracking-tight">Custo x Benefício</h2>
+                                    <h2 className="text-2xl font-black tracking-tight">Custo x Benefício</h2>
                                     <p className="text-xs text-muted-foreground">
                                         Encontre raquetes que entregam <strong>Alta Performance (Eixo Y)</strong> por um <strong>Preço Justo (Eixo X)</strong>.
                                         <br />
@@ -674,7 +680,7 @@ export function StatisticsClient({ initialPaddles }: StatisticsClientProps) {
                                     <Scale className="w-6 h-6 text-blue-500" />
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold tracking-tight">
+                                    <h2 className="text-2xl font-black tracking-tight">
                                         <InfoTooltip term="power">Power</InfoTooltip> vs <InfoTooltip term="control">Control</InfoTooltip>
                                     </h2>
                                     <p className="text-xs text-muted-foreground">O eterno dilema. Raquetes no topo direito oferecem o melhor dos dois mundos.</p>
