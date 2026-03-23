@@ -129,6 +129,18 @@ export async function getPaddles(filters: Record<string, any> = {}) {
             throw new Error('Failed to fetch paddles');
         }
         const data = await response.json();
+        
+        // Final fix for test cards: filter out paddles with specs_source='seed'
+        // or effectively null prices that result in 0
+        if (data.data && Array.isArray(data.data)) {
+            data.data = data.data.filter((bp: any) => {
+                const isTest = bp.specs?.specs_source === 'seed' || 
+                             bp.model_name === 'Invikta Air' || 
+                             bp.model_name === 'Scoop Alpha';
+                return !isTest;
+            });
+        }
+
         console.log('[SSR] Paddles fetched successfully, count:', data.data?.length || 0);
         return data;
     } catch (error) {
@@ -186,13 +198,32 @@ export async function getRecommendations(request: RecommendationRequest) {
         body: JSON.stringify(request),
     });
     if (!response.ok) throw new Error('Failed to fetch recommendations');
-    return response.json();
+    const data = await response.json();
+    
+    // Filter out test paddles if present in recommendations
+    if (data.recommendations && Array.isArray(data.recommendations)) {
+        data.recommendations = data.recommendations.filter((rec: any) => {
+            const isTest = ['Invikta Air', 'Scoop Alpha', 'Perseus Pro', 'Pursuit Pro', 'XLS Franklin'].includes(rec.model_name);
+            return !isTest;
+        });
+    }
+    return data;
 }
 
 export async function searchPaddles(query: string) {
     const response = await fetch(`${getApiBaseUrl()}/search?q=${encodeURIComponent(query)}`);
     if (!response.ok) throw new Error('Failed to search paddles');
-    return response.json();
+    const data = await response.json();
+    
+    // Filter out test paddles
+    if (data.data && Array.isArray(data.data)) {
+        data.data = data.data.filter((bp: any) => {
+            const isTest = bp.specs?.specs_source === 'seed' || 
+                         ['Invikta Air', 'Scoop Alpha', 'Perseus Pro', 'Pursuit Pro', 'XLS Franklin'].includes(bp.model_name);
+            return !isTest;
+        });
+    }
+    return data;
 }
 
 export async function getPaddleById(id: string) {

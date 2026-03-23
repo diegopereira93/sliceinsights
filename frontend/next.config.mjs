@@ -26,6 +26,10 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
+                hostname: 'dcdn-us.mitiendanube.com',
+            },
+            {
+                protocol: 'https',
                 hostname: 'www.joola.com.br',
             },
             {
