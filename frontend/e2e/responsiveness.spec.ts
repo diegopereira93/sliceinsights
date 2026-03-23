@@ -28,3 +28,21 @@ for (const route of routes) {
         });
     });
 }
+
+// Additional mobile-specific interaction tests
+test(`/recommend buttons are accessible at mobile viewport`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/recommend');
+    await page.waitForLoadState('networkidle');
+    // Verify at least one button is visible and clickable
+    const buttons = page.getByRole('button');
+    await expect(buttons.first()).toBeVisible({ timeout: 15000 });
+});
+
+test(`/ displays cards at mobile viewport`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    const cards = page.locator('[class*="card"], [class*="grid"] > div');
+    await expect(cards.first()).toBeVisible({ timeout: 15000 });
+});

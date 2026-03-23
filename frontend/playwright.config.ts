@@ -37,11 +37,11 @@ export default defineConfig({
         },
         {
             name: 'mobile',
-            use: { ...devices['iPhone 13'] },
+            use: { ...devices['Pixel 5'] },
         },
         {
             name: 'tablet',
-            use: { ...devices['iPad (gen 7)'] },
+            use: { ...devices['Galaxy Tab S4'], viewport: { width: 768, height: 1024 } },
         },
     ],
 
