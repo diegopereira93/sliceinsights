@@ -50,6 +50,7 @@ Plan: Not started
 
 ### Roadmap Evolution
 
+- Phase 17 added: UI Redesign com Stitch — implementar designs Stitch AI para Elite Racket Catalog, Premium Home, Quiz Técnico e Analytics com responsividade total
 - Phase 15.1 inserted after Phase 15: Remover pagina de catalogo, pois ja existe na home com melhores filtros (URGENT)
 
 ### Decisions
