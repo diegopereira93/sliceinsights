@@ -33,7 +33,7 @@ export function PaddleCard({ paddle, onClick, onCompare, isComparing }: PaddleCa
       onClick={onClick}
       className="cursor-pointer h-full"
     >
-      <Card className="h-full border-none glass-card overflow-hidden group hover:ring-2 hover:ring-primary/30 transition-all duration-500">
+      <Card className="h-full border-none glass-card overflow-hidden group hover:ring-2 hover:ring-primary/30 hover:shadow-glow transition-all duration-300">
         <CardContent className="p-0 relative aspect-[4/5] overflow-hidden">
           <Image
             src={hasError || !paddle.image ? '/placeholder-paddle.png' : paddle.image}
@@ -107,11 +107,11 @@ export function PaddleCard({ paddle, onClick, onCompare, isComparing }: PaddleCa
           <WeightSensationScale swingWeight={paddle.swingWeight} />
 
           <div className="flex items-center justify-between w-full mt-2">
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-1">
                 <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">A partir de</span>
-                <span className="text-2xl font-black text-primary-text tracking-tighter leading-none">
+                <Badge className="bg-primary/10 text-primary border border-primary/20 font-black text-base px-2 py-0 h-auto leading-tight w-fit">
                     {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(paddle.price)}
-                </span>
+                </Badge>
             </div>
             <Button 
                 size="sm" 

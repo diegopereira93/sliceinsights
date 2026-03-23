@@ -104,7 +104,7 @@ export default function HomeClient({ initialPaddles, brands }: HomeClientProps) 
             <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
 
             {/* Hero Section */}
-            <section className="relative pt-20 pb-16 px-6">
+            <section className="relative pt-20 pb-16 px-6 bg-gradient-to-b from-primary/5 via-background to-background">
                 <div className="max-w-7xl mx-auto text-center space-y-8">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -147,6 +147,9 @@ export default function HomeClient({ initialPaddles, brands }: HomeClientProps) 
                     </motion.div>
                 </div>
             </section>
+
+            {/* Hero-Catalog Divider */}
+            <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
             {/* Catalog Toolbar */}
             <div className="sticky top-0 z-40 glass-dark border-b border-white/5 py-3 px-6 md:px-12 backdrop-blur-xl">
