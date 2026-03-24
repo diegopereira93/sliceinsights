@@ -10,14 +10,16 @@ After the named scraper's main() completes successfully, validate_job_slo is
 called for that scraper.  The SLO check is non-blocking — a failure there will
 never prevent the scraper result from being recorded.
 """
+
 import sys
 import importlib
 from pathlib import Path
 
 # Allow importing sibling scripts as modules
 _SCRIPTS_DIR = Path(__file__).resolve().parent
-if str(_SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(_SCRIPTS_DIR))
+_PROJECT_ROOT = _SCRIPTS_DIR.parent  # /app
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
 
 # Map CLI argument → module name inside scripts/
 SCRAPER_MODULES: dict[str, str] = {
@@ -57,6 +59,7 @@ def run_scraper(scraper_name: str) -> None:
     # Non-blocking SLO validation — runs immediately after data is committed
     try:
         from scraper_utils import finish_run
+
         finish_run(scraper_name)
     except Exception as exc:
         print(f"[run_scraper] WARNING: SLO hook failed (non-blocking): {exc}")

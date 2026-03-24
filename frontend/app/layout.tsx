@@ -84,7 +84,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR" className={`${inter.variable} ${outfit.variable} dark`}>
-      <body className="min-h-screen bg-transparent font-sans antialiased selection:bg-blue-500/30">
+      <body className="min-h-screen bg-background font-sans antialiased selection:bg-blue-500/30">
         <script dangerouslySetInnerHTML={{ __html: `
           if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(registrations => {

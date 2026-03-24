@@ -1,0 +1,262 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - main [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - generic [ref=e8]:
+              - img
+              - text: Inteligência em Equipamento
+            - heading "Domine a Quadra com a Raquete Perfeita" [level=1] [ref=e9]
+            - paragraph [ref=e10]: Analisamos as métricas de desempenho de centenas de raquetes para encontrar o match ideal para o seu estilo de jogo.
+          - generic [ref=e11]:
+            - button "ENCONTRAR MINHA RAQUETE" [ref=e12] [cursor=pointer]:
+              - text: ENCONTRAR MINHA RAQUETE
+              - img
+            - button "EXPLORAR CATÁLOGO" [ref=e13] [cursor=pointer]
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - img [ref=e17]
+            - textbox "Buscar por modelo ou marca..." [ref=e20]
+          - generic [ref=e21]:
+            - button "Filtros" [ref=e22] [cursor=pointer]:
+              - img
+              - text: Filtros
+            - generic [ref=e23]: 5 Raquetes
+        - main [ref=e24]:
+          - generic [ref=e25]:
+            - generic [ref=e28] [cursor=pointer]:
+              - generic [ref=e29]:
+                - img "XLS Franklin" [ref=e30]
+                - generic [ref=e33]: Franklin
+                - generic [ref=e34]:
+                  - generic [ref=e35]:
+                    - heading "XLS Franklin" [level=3] [ref=e36]
+                    - generic [ref=e37]: 13mm
+                  - generic [ref=e38]:
+                    - generic [ref=e39]:
+                      - img [ref=e40]
+                      - img [ref=e42]
+                      - img [ref=e44]
+                      - img [ref=e46]
+                      - img [ref=e48]
+                    - generic [ref=e50]: "6.3"
+              - generic [ref=e51]:
+                - generic [ref=e52]:
+                  - generic [ref=e53]:
+                    - generic [ref=e54]:
+                      - img [ref=e55]
+                      - generic [ref=e57]: Power
+                    - generic [ref=e58]: "8"
+                  - generic [ref=e59]:
+                    - generic [ref=e60]:
+                      - img [ref=e61]
+                      - generic [ref=e63]: Control
+                    - generic [ref=e64]: "1"
+                - generic [ref=e65]:
+                  - generic [ref=e66]:
+                    - generic [ref=e67]: Sensação de Peso
+                    - generic [ref=e68]: SW 118
+                  - generic [ref=e69]:
+                    - img [ref=e71]
+                    - generic [ref=e75]:
+                      - generic [ref=e76]: Manuseio Firme
+                      - generic [ref=e77]: Foco em estabilidade
+                - generic [ref=e80]:
+                  - generic [ref=e81]:
+                    - generic [ref=e82]: A partir de
+                    - generic [ref=e83]: R$ 0,00
+                  - button "COMPARAR" [ref=e84]:
+                    - img
+                    - text: COMPARAR
+            - generic [ref=e87] [cursor=pointer]:
+              - generic [ref=e88]:
+                - img "Pursuit Pro" [ref=e89]
+                - generic [ref=e92]: Engage
+                - generic [ref=e93]:
+                  - generic [ref=e94]:
+                    - heading "Pursuit Pro" [level=3] [ref=e95]
+                    - generic [ref=e96]: 16mm
+                  - generic [ref=e97]:
+                    - generic [ref=e98]:
+                      - img [ref=e99]
+                      - img [ref=e101]
+                      - img [ref=e103]
+                      - img [ref=e105]
+                      - img [ref=e107]
+                    - generic [ref=e109]: "7.7"
+              - generic [ref=e110]:
+                - generic [ref=e111]:
+                  - generic [ref=e112]:
+                    - generic [ref=e113]:
+                      - img [ref=e114]
+                      - generic [ref=e116]: Power
+                    - generic [ref=e117]: "7"
+                  - generic [ref=e118]:
+                    - generic [ref=e119]:
+                      - img [ref=e120]
+                      - generic [ref=e122]: Control
+                    - generic [ref=e123]: "6"
+                - generic [ref=e124]:
+                  - generic [ref=e125]:
+                    - generic [ref=e126]: Sensação de Peso
+                    - generic [ref=e127]: SW 112
+                  - generic [ref=e128]:
+                    - img [ref=e130]
+                    - generic [ref=e134]:
+                      - generic [ref=e135]: Equilibrada
+                      - generic [ref=e136]: Ideal para o dia-a-dia
+                - generic [ref=e139]:
+                  - generic [ref=e140]:
+                    - generic [ref=e141]: A partir de
+                    - generic [ref=e142]: R$ 0,00
+                  - button "COMPARAR" [ref=e143]:
+                    - img
+                    - text: COMPARAR
+            - generic [ref=e146] [cursor=pointer]:
+              - generic [ref=e147]:
+                - img "Scoop Alpha" [ref=e148]
+                - generic [ref=e151]: Joola
+                - generic [ref=e152]:
+                  - generic [ref=e153]:
+                    - heading "Scoop Alpha" [level=3] [ref=e154]
+                    - generic [ref=e155]: 13mm
+                  - generic [ref=e156]:
+                    - generic [ref=e157]:
+                      - img [ref=e158]
+                      - img [ref=e160]
+                      - img [ref=e162]
+                      - img [ref=e164]
+                      - img [ref=e166]
+                    - generic [ref=e168]: "6.0"
+              - generic [ref=e169]:
+                - generic [ref=e170]:
+                  - generic [ref=e171]:
+                    - generic [ref=e172]:
+                      - img [ref=e173]
+                      - generic [ref=e175]: Power
+                    - generic [ref=e176]: "7"
+                  - generic [ref=e177]:
+                    - generic [ref=e178]:
+                      - img [ref=e179]
+                      - generic [ref=e181]: Control
+                    - generic [ref=e182]: "1"
+                - generic [ref=e183]:
+                  - generic [ref=e184]:
+                    - generic [ref=e185]: Sensação de Peso
+                    - generic [ref=e186]: SW 110
+                  - generic [ref=e187]:
+                    - img [ref=e189]
+                    - generic [ref=e193]:
+                      - generic [ref=e194]: Equilibrada
+                      - generic [ref=e195]: Ideal para o dia-a-dia
+                - generic [ref=e198]:
+                  - generic [ref=e199]:
+                    - generic [ref=e200]: A partir de
+                    - generic [ref=e201]: R$ 0,00
+                  - button "COMPARAR" [ref=e202]:
+                    - img
+                    - text: COMPARAR
+            - generic [ref=e205] [cursor=pointer]:
+              - generic [ref=e206]:
+                - img "Perseus Pro" [ref=e207]
+                - generic [ref=e210]: Onix
+                - generic [ref=e211]:
+                  - generic [ref=e212]:
+                    - heading "Perseus Pro" [level=3] [ref=e213]
+                    - generic [ref=e214]: 14mm
+                  - generic [ref=e215]:
+                    - generic [ref=e216]:
+                      - img [ref=e217]
+                      - img [ref=e219]
+                      - img [ref=e221]
+                      - img [ref=e223]
+                      - img [ref=e225]
+                    - generic [ref=e227]: "7.3"
+              - generic [ref=e228]:
+                - generic [ref=e229]:
+                  - generic [ref=e230]:
+                    - generic [ref=e231]:
+                      - img [ref=e232]
+                      - generic [ref=e234]: Power
+                    - generic [ref=e235]: "9"
+                  - generic [ref=e236]:
+                    - generic [ref=e237]:
+                      - img [ref=e238]
+                      - generic [ref=e240]: Control
+                    - generic [ref=e241]: "3"
+                - generic [ref=e242]:
+                  - generic [ref=e243]:
+                    - generic [ref=e244]: Sensação de Peso
+                    - generic [ref=e245]: SW 120
+                  - generic [ref=e246]:
+                    - img [ref=e248]
+                    - generic [ref=e252]:
+                      - generic [ref=e253]: Manuseio Firme
+                      - generic [ref=e254]: Foco em estabilidade
+                - generic [ref=e257]:
+                  - generic [ref=e258]:
+                    - generic [ref=e259]: A partir de
+                    - generic [ref=e260]: R$ 0,00
+                  - button "COMPARAR" [ref=e261]:
+                    - img
+                    - text: COMPARAR
+            - generic [ref=e264] [cursor=pointer]:
+              - generic [ref=e265]:
+                - img "Invikta Air" [ref=e266]
+                - generic [ref=e269]: Selkirk
+                - generic [ref=e270]:
+                  - generic [ref=e271]:
+                    - heading "Invikta Air" [level=3] [ref=e272]
+                    - generic [ref=e273]: 16mm
+                  - generic [ref=e274]:
+                    - generic [ref=e275]:
+                      - img [ref=e276]
+                      - img [ref=e278]
+                      - img [ref=e280]
+                      - img [ref=e282]
+                      - img [ref=e284]
+                    - generic [ref=e286]: "8.0"
+              - generic [ref=e287]:
+                - generic [ref=e288]:
+                  - generic [ref=e289]:
+                    - generic [ref=e290]:
+                      - img [ref=e291]
+                      - generic [ref=e293]: Power
+                    - generic [ref=e294]: "8"
+                  - generic [ref=e295]:
+                    - generic [ref=e296]:
+                      - img [ref=e297]
+                      - generic [ref=e299]: Control
+                    - generic [ref=e300]: "6"
+                - generic [ref=e301]:
+                  - generic [ref=e302]:
+                    - generic [ref=e303]: Sensação de Peso
+                    - generic [ref=e304]: SW 115
+                  - generic [ref=e305]:
+                    - img [ref=e307]
+                    - generic [ref=e311]:
+                      - generic [ref=e312]: Manuseio Firme
+                      - generic [ref=e313]: Foco em estabilidade
+                - generic [ref=e316]:
+                  - generic [ref=e317]:
+                    - generic [ref=e318]: A partir de
+                    - generic [ref=e319]: R$ 0,00
+                  - button "COMPARAR" [ref=e320]:
+                    - img
+                    - text: COMPARAR
+        - button [ref=e322] [cursor=pointer]:
+          - img
+    - navigation [ref=e323]:
+      - generic [ref=e324]:
+        - link "Home" [ref=e325] [cursor=pointer]:
+          - /url: /
+          - img [ref=e326]
+          - generic [ref=e329]: Home
+        - link "Análise" [ref=e330] [cursor=pointer]:
+          - /url: /statistics
+          - img [ref=e331]
+          - generic [ref=e332]: Análise
+  - region "Notifications (F8)":
+    - list
+  - alert [ref=e333]

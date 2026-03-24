@@ -45,6 +45,9 @@ Full archive: `.planning/milestones/v2.0-ROADMAP.md`
 - [x] **Phase 13: Catalog API** - REST endpoints to list and filter paddles by specs, store, brand, and price (completed 2026-03-21)
 - [x] **Phase 14: Web Catalog Page** - Browser-accessible catalog page with live filter controls (completed 2026-03-21)
 - [x] **Phase 15: AI Recommendation Assistant** - Player profile quiz returns personalized paddle recommendations with Brazilian purchase links (completed 2026-03-21)
+- [x] **Phase 16: Data Quality Fix** - Remover 5 paddles com fotos falsas (Unsplash), corrigir 7+ brand names quebrados dos scrapers (gap closure in progress) (completed 2026-03-23)
+
+## Phase Details
 
 ## Phase Details
 
@@ -142,6 +145,7 @@ Plans:
 | 13. Catalog API | 2/2 | Complete    | ✅ Complete | 2026-03-21 |
 | 14. Web Catalog Page | v3.0 | Complete | Complete    | 2026-03-22 |
 | 15. AI Recommendation Assistant | v3.0 | 3/3 | Complete   | 2026-03-21 |
+| 15.5. Seed Dev Catalog         | v3.0 | 4/4 | ✅ Complete   | 2026-03-22 |
 
 ### Phase 15.1: Remover pagina de catalogo, pois ja existe na home com melhores filtros (INSERTED)
 
@@ -183,4 +187,28 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 15.4-01-PLAN.md — E2E Playwright: catalog ingestion validation (>=10 paddles, specs completeness, stores) + recommendation flow (API contract + UI quiz) + npm scripts
+- [x] 15.4-01-PLAN.md — E2E Playwright: catalog ingestion validation (>=10 paddles, specs completeness, stores) + recommendation flow (API contract + UI quiz) + npm scripts
+
+### Phase 15.5: Seed Dev Catalog (INSERTED)
+
+**Goal:** Popular o DB dev com as 10 stores corretas e rodar scrapers para que o frontend mostre conteúdo
+**Depends on:** Phase 15.4
+**Plans:** 4 plans
+
+Plans:
+- [x] 15.5-01-PLAN.md — Criar scripts/seed_stores.py e upsert 10 stores corretas
+- [x] 15.5-02-PLAN.md — Corrigir scrape_justpaddles.py para market-offer ingestion
+- [x] 15.5-03-PLAN.md — Executar 10 scrapers e documentar matriz de resultados
+- [x] 15.5-04-PLAN.md — Verificar frontend com Playwright
+
+### Phase 16: Data Quality Fix
+
+**Goal:** Remover 5 paddles com fotos falsas (Unsplash), corrigir 7+ brand names quebrados dos scrapers
+**Depends on:** Phase 15.5
+**Requirements:** REQ-DATA-01, REQ-DATA-02
+**Status:** Gap closure in progress
+**Plans:** 2/2 plans complete
+
+Plans:
+- [x] 16-01-PLAN.md — Delete 5 test paddles, fix 2 brand name typos (3Rdshot→3RD Shot, Slk→SLK)
+- [ ] 16-02-PLAN.md — Gap closure: resolve Com and Cs scraper-artifact brands (1 paddle each)

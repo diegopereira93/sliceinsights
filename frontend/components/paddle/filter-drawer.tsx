@@ -165,9 +165,9 @@ export function FilterDrawer({
                                 <div className="flex gap-2">
                                     {[
                                         { value: "all", label: "Qualquer" },
-                                        { value: "light", label: "Leve (<7.8 oz)" },
+                                        { value: "light", label: "Leve (<220g)" },
                                         { value: "standard", label: "Padrão" },
-                                        { value: "heavy", label: "Pesada (>8.2 oz)" }
+                                        { value: "heavy", label: "Pesada (>235g)" }
                                     ].map(option => (
                                         <Badge
                                             key={option.value}

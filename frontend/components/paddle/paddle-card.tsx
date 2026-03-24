@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
@@ -18,6 +19,8 @@ interface PaddleCardProps {
 }
 
 export function PaddleCard({ paddle, onClick, onCompare, isComparing }: PaddleCardProps) {
+  const [hasError, setHasError] = useState(false);
+
   // Use price per mm of thickness as a "Value Index" (fun data insight)
   const valueIndex = paddle.coreThicknessmm ? (paddle.price / paddle.coreThicknessmm).toFixed(1) : null;
 
@@ -33,11 +36,12 @@ export function PaddleCard({ paddle, onClick, onCompare, isComparing }: PaddleCa
       <Card className="h-full border-none glass-card overflow-hidden group hover:ring-2 hover:ring-primary/30 transition-all duration-500">
         <CardContent className="p-0 relative aspect-[4/5] overflow-hidden">
           <Image
-            src={paddle.image || '/placeholder-paddle.png'}
+            src={hasError || !paddle.image ? '/placeholder-paddle.png' : paddle.image}
             alt={paddle.name}
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-110"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            onError={() => setHasError(true)}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
           

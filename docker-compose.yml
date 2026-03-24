@@ -54,7 +54,7 @@ services:
     container_name: picklematch_ui_v3
     environment:
       - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://localhost:8002/api/v1
+      - NEXT_PUBLIC_API_URL=/api/v1
       - BACKEND_URL=http://backend_v3:8000
       - WATCHPACK_POLLING=true
       - CHOKIDAR_USEPOLLING=true
@@ -70,7 +70,7 @@ services:
       - picklematch_v3
     restart: unless-stopped
 
-  # Seed data runner (on-demand)
+  # Seed data runner (on-demand: docker compose run seed_v3)
   seed_v3:
     build:
       context: .
@@ -87,7 +87,7 @@ services:
     depends_on:
       postgres_v3:
         condition: service_healthy
-    command: python -m app.db.seed_brazil_catalog
+    entrypoint: ["python", "scripts/seed_from_csv.py"]
     networks:
       - picklematch_v3
 

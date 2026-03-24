@@ -67,20 +67,19 @@ For detailed technical documentation, architecture guides, and deployment instru
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/seu-usuario/sliceinsights.git
+git clone https://github.com/diegogp/sliceinsights.git
 cd sliceinsights
 
 # Subir todos os serviços
 docker compose up -d
-
-# Popular o banco de dados
-docker compose exec backend_v3 python -m app.db.seed_brazil_catalog
 
 # Acessar aplicação
 # Frontend: http://localhost:3000
 # API: http://localhost:8002
 # Docs API: http://localhost:8002/docs
 ```
+
+Na primeira vez, o banco é populado automaticamente com dados reais de `data/db/*.csv` (raquetes, lojas, preços). Desenvolvedores futuros fazem apenas `git clone && docker compose up`.
 
 ### Estrutura de Serviços
 
@@ -89,39 +88,80 @@ docker compose exec backend_v3 python -m app.db.seed_brazil_catalog
 | `frontend_next` | 3000 | Aplicação Next.js |
 | `backend_v3` | 8002 | API FastAPI |
 | `postgres_v3` | 5434 | Banco PostgreSQL |
+| `seed_v3` | - | Serviço de seed (sob demanda) |
 
-## 📊 Scrapers de Dados
+## 📊 Pipeline de Dados
 
-### Brazil Pickleball Store
+### Arquitetura
 
-Scraper automatizado que extrai produtos da loja oficial:
-
-```bash
-# Executar scraper
-docker compose --profile tools run --rm scraper python scripts/scrape_brazil_store.py
-
-# Output: data/raw/brazil_pickleball_store.csv
+```
+                        ┌─────────────────────────────────────────┐
+  10 Lojas (BR)         │            GitHub Actions                │
+  ┌──────────────┐      │  ┌──────────────────────────────────┐   │
+  │ joola.com.br │      │  │   scrape-enrichment.yml (sáb)    │   │
+  │ sharkbeach...│  →   │  │   run_scraper.py × 10 stores     │   │
+  │ yosports...  │      │  └──────────────┬───────────────────┘   │
+  │ ...          │      │                 ↓                        │
+  └──────────────┘      │         PostgreSQL (Railway/Prod)        │
+                        │                 ↓                         │
+                        │         export_db_to_csv.py               │
+                        │                 ↓                         │
+                        │         data/db/*.csv                     │
+                        │                 ↓                         │
+                        └──────────── Git commit ───────────────────┘
+                                              ↓
+                        ┌─────────────────────────────────────────┐
+  Dev (docker compose)  │  init-db.sh → seed_from_csv.py           │
+                        │  = 176 paddles, 10 stores, 183 offers    │
+                        └─────────────────────────────────────────┘
 ```
 
-**Dados extraídos**:
-- Nome da marca e modelo
-- Preço em BRL
-- URL do produto
-- Imagem em alta resolução (WebP)
+### Fluxo de Dados
 
-### Atualizar Banco de Dados
+| Ambiente | Origem dos Dados | Como |
+|----------|-------------------|------|
+| **Produção** | Scrapers (10 lojas) | GitHub Actions cron (sábado) |
+| **Desenvolvimento** | CSV versionado | `data/db/*.csv` carregado no `docker compose up` |
 
-Após executar os scrapers:
+### Scripts Principais
 
 ```bash
-# Repopular banco com novos dados
-docker compose exec backend_v3 python -m app.db.seed_brazil_catalog
+# Executar todos os scrapers e popular o banco (dev ou prod)
+docker exec picklematch_api_v3 python scripts/run_scraper.py all
+
+# Exportar dados do banco para CSVs (para versionar)
+docker exec picklematch_api_v3 python scripts/export_db_to_csv.py
+
+# Seed manual do banco a partir dos CSVs
+docker exec picklematch_api_v3 python scripts/seed_from_csv.py
+
+# Re-popular uma loja específica
+docker exec picklematch_api_v3 python scripts/scrape_brazil_store.py
 ```
 
-O seed híbrido:
-1. Cria produtos brasileiros primeiro (COM imagens)
-2. Adiciona produtos internacionais (para analytics)
-3. Evita duplicatas automaticamente
+### Atualizar Dados Reais
+
+Quando os scrapers encontrarem novas raquetes em produção:
+
+```bash
+# 1. Exportar do banco de prod (Railway)
+docker exec picklematch_api_prod python scripts/export_db_to_csv.py
+
+# 2. Copiar CSVs para o repo
+docker cp picklematch_api_prod:/app/data/db/*.csv ./data/db/
+
+# 3. Commitar
+git add data/db/ && git commit -m "seed: sync $(date +%Y-%m-%d)"
+```
+
+### Dados Versionados
+
+| Arquivo | Conteúdo | Tamanho |
+|---------|----------|---------|
+| `data/db/stores.csv` | 10 lojas especializadas BR | ~0.6 KB |
+| `data/db/brands.csv` | Marcas (Selkirk, Joola, etc.) | ~0.4 KB |
+| `data/db/paddle_master.csv` | 176 raquetes com specs | ~50 KB |
+| `data/db/market_offers.csv` | 183 ofertas de preço | ~38 KB |
 
 ## 🎯 Funcionalidades
 
@@ -155,21 +195,27 @@ sliceinsights/
 ├── app/                      # Backend FastAPI
 │   ├── api/                  # Endpoints REST
 │   ├── db/                   # Database & ORM
-│   │   ├── seed_brazil_catalog.py  # Seed híbrido
-│   │   └── database.py
-│   ├── models/               # SQLModel schemas
+│   │   ├── database.py       # Conexão e sync de colunas
+│   │   └── ingestor.py       # Lógica de upsert de products
+│   ├── models/               # SQLModel schemas (Paddle, Store, MarketOffer, Brand)
 │   └── main.py
 ├── frontend/                 # Frontend Next.js
 │   ├── app/                  # App router
 │   ├── components/           # React components
 │   └── lib/                  # Utilities
 ├── scripts/                  # Scrapers & tools
-│   ├── scrape_brazil_store.py
-│   └── scrape_mercado_livre.py
-├── data/                     # Dados extraídos
-│   └── raw/
-│       ├── brazil_pickleball_store.csv
-│       └── paddle_stats_dump.csv
+│   ├── scrape_*.py           # 10 scrapers (1 por loja)
+│   ├── seed_from_csv.py      # Seed a partir de CSVs
+│   ├── export_db_to_csv.py   # Exporta DB para CSVs
+│   ├── run_scraper.py        # Wrapper para executar scraper específico
+│   └── seed_stores.py        # Seed as 10 lojas
+├── data/
+│   ├── db/                   # CSVs versionados (seed real)
+│   │   ├── stores.csv
+│   │   ├── brands.csv
+│   │   ├── paddle_master.csv
+│   │   └── market_offers.csv
+│   └── raw/                  # Outputs dos scrapers (não versionados)
 └── docker-compose.yml
 ```
 
