@@ -1,7 +1,8 @@
 {
-    "buildCommand": "cd frontend-vite && npm install && npm run build",
-    "outputDirectory": "frontend-vite/dist",
-    "framework": "vite",
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "framework": null,
+    "rootDirectory": "frontend-vite",
     "env": {
         "VITE_API_URL": "https://sliceinsights-4rmf.onrender.com/api/v1"
     }
