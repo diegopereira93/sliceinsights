@@ -112,7 +112,7 @@ export function PaddleCard({ paddle, index = 0 }: PaddleCardProps) {
         {/* Price */}
         <p className="text-2xl font-light tracking-tight text-white mb-4">
           <span className="text-xs font-normal text-zinc-500 mr-1">a partir de</span>
-          <span className="text-sm font-normal text-zinc-400 align-top mr-1">R$</span>
+          <span className="text-sm font-normal text-zinc-400 mr-1">R$</span>
           {paddle.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
         </p>
 
