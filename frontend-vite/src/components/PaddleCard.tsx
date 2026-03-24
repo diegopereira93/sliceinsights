@@ -1,7 +1,8 @@
-import { Paddle } from "../lib/types/paddle";
-import { ShoppingCart, Swords, Sparkles } from "lucide-react";
+import { ShoppingCart, Swords, Sparkles, Zap, Shield } from "lucide-react";
 import { useBattle } from "./BattleContext";
 import { motion } from "framer-motion";
+import { WeightSensationScale } from "./WeightSensationScale";
+import { Paddle } from "../lib/types/paddle";
 
 interface PaddleCardProps {
   paddle: Paddle;
@@ -18,12 +19,16 @@ interface StatBarProps {
   label: string;
   value: number;
   colorClass: string;
+  icon?: React.ReactNode;
 }
 
-function StatBar({ label, value, colorClass }: StatBarProps) {
+function StatBar({ label, value, colorClass, icon }: StatBarProps) {
   return (
     <div className="flex-1 flex flex-col gap-1.5">
-      <span className="text-[10px] font-bold tracking-widest text-zinc-500 uppercase">{label}</span>
+      <div className="flex items-center gap-1">
+        {icon && <span className="w-3 h-3">{icon}</span>}
+        <span className="text-[10px] font-bold tracking-widest text-zinc-500 uppercase">{label}</span>
+      </div>
       <div className="h-1 w-full bg-zinc-800 rounded-full overflow-hidden">
         <motion.div
           className={`h-full rounded-full ${colorClass}`}
@@ -84,20 +89,53 @@ export function PaddleCard({ paddle, index = 0 }: PaddleCardProps) {
 
         {/* Material + Thickness subtitle */}
         {materialLabel && (
-          <p className="text-xs text-zinc-500 mb-3">{materialLabel}</p>
+          <p className="text-xs text-zinc-500 mb-2">{materialLabel}</p>
+        )}
+
+        {/* Rating 5 stars */}
+        {paddle.rating !== undefined && (
+          <div className="flex items-center gap-1 mb-3">
+            {[...Array(5)].map((_, i) => (
+              <svg
+                key={i}
+                className={`w-3 h-3 ${i < Math.floor(paddle.rating ?? 0) ? 'text-primary fill-primary' : 'text-zinc-600'}`}
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+            ))}
+            {paddle.rating && <span className="text-xs text-zinc-400 ml-1">{paddle.rating.toFixed(1)}</span>}
+          </div>
         )}
 
         {/* Price */}
         <p className="text-2xl font-light tracking-tight text-white mb-4">
+          <span className="text-xs font-normal text-zinc-500 mr-1">a partir de</span>
           <span className="text-sm font-normal text-zinc-400 align-top mr-1">R$</span>
           {paddle.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
         </p>
 
-        {/* 3 Bars side by side */}
-        <div className="flex gap-3 mt-auto mb-5">
-          <StatBar label="PWR" value={paddle.powerScore ?? 5} colorClass="bg-gradient-to-r from-lime-500 to-lime-400" />
-          <StatBar label="CTRL" value={paddle.controlScore ?? 5} colorClass="bg-gradient-to-r from-cyan-500 to-cyan-400" />
+        {/* 3 Bars side by side with icons */}
+        <div className="flex gap-3 mb-4">
+          <StatBar 
+            label="PWR" 
+            value={paddle.powerScore ?? 5} 
+            colorClass="bg-gradient-to-r from-lime-500 to-lime-400"
+            icon={<Zap className="w-3 h-3 text-lime-400" />}
+          />
+          <StatBar 
+            label="CTRL" 
+            value={paddle.controlScore ?? 5} 
+            colorClass="bg-gradient-to-r from-cyan-500 to-cyan-400"
+            icon={<Shield className="w-3 h-3 text-cyan-400" />}
+          />
           <StatBar label="SPIN" value={spinScore} colorClass="bg-gradient-to-r from-purple-500 to-purple-400" />
+        </div>
+
+        {/* Weight Sensation Scale */}
+        <div className="mb-4">
+          <WeightSensationScale swingWeight={paddle.swingWeight} />
         </div>
 
         {/* Actions */}
@@ -112,7 +150,7 @@ export function PaddleCard({ paddle, index = 0 }: PaddleCardProps) {
             }`}
           >
             <Swords className="w-4 h-4" />
-            {isSelectedForBattle ? "NA ARENA" : "BATALHA"}
+            {isSelectedForBattle ? "SELECIONADA ✓" : "COMPARAR"}
           </button>
 
           <a

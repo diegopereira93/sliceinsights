@@ -84,34 +84,49 @@ export default function Home() {
 
   useEffect(() => {
     const fetchPaddles = async () => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+
       try {
         setIsLoading(true);
         const response = await fetch(
-          "https://sliceinsights-4rmf.onrender.com/api/v1/paddles?limit=100&available_in_brazil=true"
+          "/paddles?limit=100&available_in_brazil=true",
+          {
+            signal: controller.signal,
+            headers: { "Accept": "application/json" },
+          }
         );
+        clearTimeout(timeoutId);
+
         if (!response.ok) {
-          throw new Error("Failed to fetch paddles");
+          throw new Error(`Failed to fetch paddles: ${response.status} ${response.statusText}`);
         }
-        const data = await response.json();
-        
-        // Map API response to Paddle interface
-        const mappedPaddles: Paddle[] = (data.paddles || data || []).map((p: Record<string, unknown>) => ({
-          id: p.id as number,
+
+        const responseData = await response.json();
+        const paddlesArray = responseData.data || [];
+
+        const mappedPaddles: Paddle[] = paddlesArray.map((p: Record<string, unknown>) => ({
+          id: typeof p.id === 'string' ? parseInt(p.id.replace(/-/g, '').slice(0, 8), 16) : (p.id as number),
           name: (p.model_name as string) || "",
-          brand: (p.brand_name as string) || "",
-          price: (p.min_price_brl as number) || 0,
+          brand: (p.brand as string) || "",
+          price: (p.min_price as number) || 0,
           imageUrl: p.image_url as string | undefined,
-          coreThickness: p.core_thickness as number | undefined,
-          surface: p.surface as string | undefined,
+          coreThickness: (p.specs as Record<string, unknown>)?.core_thickness_mm as number | undefined,
+          surface: (p.specs as Record<string, unknown>)?.surface_material as string | undefined,
           powerScore: (p.ratings as Record<string, number>)?.power ?? 0,
           controlScore: (p.ratings as Record<string, number>)?.control ?? 0,
           isHiddenGem: p.is_featured as boolean | undefined,
         }));
-        
+
         setPaddles(mappedPaddles);
       } catch (err) {
-        setError(err instanceof Error ? err : new Error("Unknown error"));
+        if (err instanceof Error && err.name === 'AbortError') {
+          setError(new Error("Request timed out. Please try again."));
+        } else {
+          setError(err instanceof Error ? err : new Error("Unknown error"));
+        }
       } finally {
+        clearTimeout(timeoutId);
         setIsLoading(false);
       }
     };
@@ -291,8 +306,15 @@ export default function Home() {
             <p className="text-zinc-600 font-display tracking-[0.2em] uppercase text-xs">Carregando arsenal...</p>
           </div>
         ) : error ? (
-          <div className="text-center py-20 text-red-400">
-            <p>Erro ao carregar raquetes.</p>
+          <div className="text-center py-20">
+            <p className="text-red-400 font-medium mb-2">Erro ao carregar raquetes.</p>
+            <p className="text-zinc-500 text-sm">{error.message}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-4 px-4 py-2 bg-primary/20 text-primary rounded-lg text-sm hover:bg-primary/30 transition-colors"
+            >
+              Tentar novamente
+            </button>
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-20">
