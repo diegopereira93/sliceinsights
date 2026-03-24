@@ -85,7 +85,7 @@ export default function Home() {
   useEffect(() => {
     const fetchPaddles = async () => {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
 
       try {
         setIsLoading(true);
@@ -93,9 +93,7 @@ export default function Home() {
           "/paddles?limit=100&available_in_brazil=true",
           {
             signal: controller.signal,
-            headers: {
-              "Accept": "application/json",
-            },
+            headers: { "Accept": "application/json" },
           }
         );
         clearTimeout(timeoutId);
@@ -105,11 +103,8 @@ export default function Home() {
         }
 
         const responseData = await response.json();
-
-        // API returns {data: [...], total, limit, offset}
         const paddlesArray = responseData.data || [];
 
-        // Map API response to Paddle interface
         const mappedPaddles: Paddle[] = paddlesArray.map((p: Record<string, unknown>) => ({
           id: typeof p.id === 'string' ? parseInt(p.id.replace(/-/g, '').slice(0, 8), 16) : (p.id as number),
           name: (p.model_name as string) || "",
