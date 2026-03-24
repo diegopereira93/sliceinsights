@@ -15,4 +15,6 @@ export interface Paddle {
   shopUrl?: string;
   isHiddenGem?: boolean;
   valueCostBenefit?: string;
+  rating?: number;
+  weight?: string;
 }
