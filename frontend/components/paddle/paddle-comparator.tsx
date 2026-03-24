@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Paddle } from '@/types/paddle';
 import {
     Sheet,
@@ -12,6 +13,19 @@ import { Zap, Shield, Weight, Activity, Ruler, Layers, Target, Tornado, X, Shopp
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { WeightSensationScale } from '../ui/weight-sensation-scale';
+
+function PaddleImage({ src, alt }: { src: string, alt: string }) {
+    const [hasError, setHasError] = useState(false);
+    return (
+        <Image 
+            src={hasError || !src ? '/placeholder-paddle.png' : src} 
+            alt={alt} 
+            fill 
+            className="object-cover" 
+            onError={() => setHasError(true)}
+        />
+    );
+}
 
 interface PaddleComparatorProps {
     paddles: Paddle[] | null;
@@ -74,7 +88,7 @@ export function PaddleComparator({ paddles, isOpen, onClose }: PaddleComparatorP
                             {[p1, p2].map((p, i) => (
                                 <div key={i} className="flex flex-col items-center text-center gap-4">
                                     <div className="relative w-full aspect-square rounded-3xl overflow-hidden bg-secondary/20 shadow-2xl">
-                                        <Image src={p.image} alt={p.name} fill className="object-cover" />
+                                        <PaddleImage src={p.image} alt={p.name} />
                                         <div className="absolute top-2 left-2">
                                             <Badge variant="secondary" className="bg-black/60 text-white border-none text-[10px] font-bold">
                                                 {p.brand}

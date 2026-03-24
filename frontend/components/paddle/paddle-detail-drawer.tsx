@@ -73,6 +73,8 @@ export function PaddleDetailDrawer({ paddle: initialPaddle, isOpen, onClose }: P
         }
     }, [isOpen, initialPaddle]);
 
+    const [hasError, setHasError] = useState(false);
+
     if (!initialPaddle) return null;
     const displayPaddle = details || initialPaddle;
 
@@ -115,10 +117,11 @@ export function PaddleDetailDrawer({ paddle: initialPaddle, isOpen, onClose }: P
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="relative aspect-square rounded-3xl overflow-hidden bg-secondary/20 group">
                             <Image
-                                src={displayPaddle.image}
+                                src={hasError || !displayPaddle.image ? '/placeholder-paddle.png' : displayPaddle.image}
                                 alt={displayPaddle.name}
                                 fill
                                 className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                onError={() => setHasError(true)}
                             />
                             <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-2">
                                 <Badge className="bg-primary/90 backdrop-blur-md text-primary-foreground border-none px-3 py-1 font-bold">

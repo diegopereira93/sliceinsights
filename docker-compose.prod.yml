@@ -59,7 +59,10 @@ services:
       dockerfile: Dockerfile.frontend
     container_name: picklematch_ui_prod
     environment:
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      # Backend: Internal Docker network URL (for SSR + API proxy routes)
+      BACKEND_URL: http://backend:8000
+      # Client: Same-origin proxy via Next.js API routes
+      NEXT_PUBLIC_API_URL: /api/v1
     ports:
       - "3000:3000"
     depends_on:

@@ -1,0 +1,41 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e5]:
+      - generic [ref=e7]:
+        - generic [ref=e8]: Racket Finder AI
+        - generic [ref=e9]: Passo 1 de 4
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - img [ref=e15]
+          - heading "Qual o seu nível atual?" [level=2] [ref=e19]
+        - generic [ref=e20]:
+          - button "Iniciante Começando agora ou jogo há poucos meses" [ref=e21]:
+            - generic [ref=e23]:
+              - heading "Iniciante" [level=4] [ref=e24]
+              - paragraph [ref=e25]: Começando agora ou jogo há poucos meses
+          - button "Intermediário Jogo regularmente, participo de torneios locais" [ref=e27]:
+            - generic [ref=e29]:
+              - heading "Intermediário" [level=4] [ref=e30]
+              - paragraph [ref=e31]: Jogo regularmente, participo de torneios locais
+          - button "Avançado Competidor de alto nível, DUPR 4.5+" [ref=e33]:
+            - generic [ref=e35]:
+              - heading "Avançado" [level=4] [ref=e36]
+              - paragraph [ref=e37]: Competidor de alto nível, DUPR 4.5+
+    - generic [ref=e40]:
+      - link "Inicio" [ref=e41] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e42]:
+          - img [ref=e43]
+          - generic [ref=e46]: Home
+      - link "Recomendacao" [ref=e47] [cursor=pointer]:
+        - /url: /recommend
+        - generic [ref=e48]:
+          - img [ref=e49]
+          - generic [ref=e52]: AI Coach
+      - link "Analise" [ref=e55] [cursor=pointer]:
+        - /url: /statistics
+        - generic [ref=e56]:
+          - img [ref=e57]
+          - generic [ref=e58]: Análise
+  - region "Notifications (F8)":
+    - list

@@ -1,0 +1,43 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - img "AI Coach" [ref=e8]
+          - generic [ref=e10]:
+            - heading "NEXUS-7" [level=2] [ref=e11]:
+              - text: NEXUS-7
+              - img [ref=e12]
+            - generic [ref=e17]: ONLINE PARA CONSULTORIA
+        - generic [ref=e18]:
+          - generic [ref=e19]: "DATABANK: CONNECTED"
+          - generic [ref=e20]: "LATENCY: 12ms"
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - img [ref=e26]
+          - generic [ref=e28]: SYSTEM.RESPONSE
+        - paragraph [ref=e29]: Bem-vindo ao Command Center. Sou seu técnico virtual especializado em equipamentos. O que você quer saber sobre raquetes hoje?
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - textbox "Pergunte sobre as raquetes recomendadas..." [ref=e33]
+          - button [disabled] [ref=e34]:
+            - img [ref=e35]
+        - generic [ref=e38]: ENCRYPTED END-TO-END CONNECTION
+    - generic [ref=e40]:
+      - link "Inicio" [ref=e41] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e42]:
+          - img [ref=e43]
+          - generic [ref=e46]: Home
+      - link "Recomendacao" [ref=e47] [cursor=pointer]:
+        - /url: /recommend
+        - generic [ref=e48]:
+          - img [ref=e49]
+          - generic [ref=e52]: AI Coach
+      - link "Analise" [ref=e53] [cursor=pointer]:
+        - /url: /statistics
+        - generic [ref=e54]:
+          - img [ref=e55]
+          - generic [ref=e56]: Análise
+  - region "Notifications (F8)":
+    - list

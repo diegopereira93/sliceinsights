@@ -34,6 +34,19 @@ Full archive: `.planning/milestones/v2.0-ROADMAP.md`
 
 </details>
 
+### Phase 17: UI Redesign — Migrar frontend Next.js para Vite SPA do redesign-slice
+
+**Goal:** Substituir o frontend Next.js 14 pelo Vite SPA redesenhado no Replit (`redesign-slice/artifacts/sliceinsights/`), reaproveitando o API client Orval/React Query, mantendo o FastAPI como backend, e criando as rotas faltantes (leads, chat) no FastAPI.
+**Requirements**: UI-01, UI-02, UI-03, UI-04, UI-05
+**Depends on:** Phase 16
+**Plans:** 4 plans
+
+Plans:
+- [ ] 17-01-PLAN.md — Scaffold frontend-vite/ com source copy, standalone package.json, route renames, API client inline
+- [ ] 17-02-PLAN.md — Criar orval_shim.py com 9 endpoints Orval-compativeis no FastAPI (/api prefix)
+- [ ] 17-03-PLAN.md — Docker infrastructure (Dockerfile.frontend Vite+nginx, docker-compose.yml) + human visual verification
+- [ ] 17-04-PLAN.md — Playwright E2E tests (pages, API compat, responsiveness) com 3 viewport projects
+
 ---
 
 ### v3.0 Catálogo Confiável Brasileiro (In Progress)
@@ -45,6 +58,9 @@ Full archive: `.planning/milestones/v2.0-ROADMAP.md`
 - [x] **Phase 13: Catalog API** - REST endpoints to list and filter paddles by specs, store, brand, and price (completed 2026-03-21)
 - [x] **Phase 14: Web Catalog Page** - Browser-accessible catalog page with live filter controls (completed 2026-03-21)
 - [x] **Phase 15: AI Recommendation Assistant** - Player profile quiz returns personalized paddle recommendations with Brazilian purchase links (completed 2026-03-21)
+- [x] **Phase 16: Data Quality Fix** - Remover 5 paddles com fotos falsas (Unsplash), corrigir 7+ brand names quebrados dos scrapers (gap closure in progress) (completed 2026-03-23)
+
+## Phase Details
 
 ## Phase Details
 
@@ -197,3 +213,15 @@ Plans:
 - [x] 15.5-02-PLAN.md — Corrigir scrape_justpaddles.py para market-offer ingestion
 - [x] 15.5-03-PLAN.md — Executar 10 scrapers e documentar matriz de resultados
 - [x] 15.5-04-PLAN.md — Verificar frontend com Playwright
+
+### Phase 16: Data Quality Fix
+
+**Goal:** Remover 5 paddles com fotos falsas (Unsplash), corrigir 7+ brand names quebrados dos scrapers
+**Depends on:** Phase 15.5
+**Requirements:** REQ-DATA-01, REQ-DATA-02
+**Status:** Gap closure in progress
+**Plans:** 2/2 plans complete
+
+Plans:
+- [x] 16-01-PLAN.md — Delete 5 test paddles, fix 2 brand name typos (3Rdshot→3RD Shot, Slk→SLK)
+- [ ] 16-02-PLAN.md — Gap closure: resolve Com and Cs scraper-artifact brands (1 paddle each)

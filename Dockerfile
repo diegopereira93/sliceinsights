@@ -27,4 +27,4 @@ ENV PORT=8000
 EXPOSE 8000
 
 # Run the application startup
-CMD ["/app/scripts/init-db.sh", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "${PORT}"]
+CMD ["/app/scripts/init-db.sh", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

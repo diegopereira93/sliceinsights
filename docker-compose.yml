@@ -45,32 +45,23 @@ services:
       - picklematch_v3
     restart: unless-stopped
 
-  # Next.js Frontend
-  frontend_next:
+  # Vite SPA Frontend
+  frontend_vite:
     build:
       context: .
       dockerfile: Dockerfile.frontend
-      target: builder
-    container_name: picklematch_ui_v3
-    environment:
-      - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://localhost:8002/api/v1
-      - BACKEND_URL=http://backend_v3:8000
-      - WATCHPACK_POLLING=true
-      - CHOKIDAR_USEPOLLING=true
+      args:
+        VITE_API_URL: ""
+    container_name: picklematch_ui_vite
     ports:
-      - "3002:3000"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    command: npm run dev
+      - "3002:80"
     depends_on:
       - backend_v3
     networks:
       - picklematch_v3
     restart: unless-stopped
 
-  # Seed data runner (on-demand)
+  # Seed data runner (on-demand: docker compose run seed_v3)
   seed_v3:
     build:
       context: .
@@ -87,7 +78,7 @@ services:
     depends_on:
       postgres_v3:
         condition: service_healthy
-    command: python -m app.db.seed_brazil_catalog
+    entrypoint: ["python", "scripts/seed_from_csv.py"]
     networks:
       - picklematch_v3
 

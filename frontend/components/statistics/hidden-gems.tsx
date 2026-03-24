@@ -1,11 +1,27 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Paddle } from '@/types/paddle';
 import { motion } from 'framer-motion';
 import { Gem, TrendingUp, Star, Zap, Target, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import Image from 'next/image';
+
+function GemImage({ src, alt }: { src: string, alt: string }) {
+    const [hasError, setHasError] = useState(false);
+    return (
+        <div className="relative w-12 h-12 flex-shrink-0">
+            <Image 
+                src={hasError || !src ? '/placeholder-paddle.png' : src} 
+                alt={alt} 
+                fill 
+                className="object-contain rounded-lg bg-muted/30" 
+                onError={() => setHasError(true)}
+            />
+        </div>
+    );
+}
 
 interface HiddenGemsProps {
     paddles: Paddle[];
@@ -135,18 +151,8 @@ export function HiddenGems({ paddles, onPaddleClick, idealPoint }: HiddenGemsPro
                             <span className="text-white font-bold text-sm">{index + 1}</span>
                         </div>
 
-                        {/* Image placeholder */}
-                        {gem.image ? (
-                            <img
-                                src={gem.image}
-                                alt={gem.name}
-                                className="w-12 h-12 object-contain rounded-lg bg-muted/30"
-                            />
-                        ) : (
-                            <div className="w-12 h-12 rounded-lg bg-muted/30 flex items-center justify-center">
-                                <Gem className="w-6 h-6 text-muted-foreground/30" />
-                            </div>
-                        )}
+                        {/* Image */}
+                        <GemImage src={gem.image} alt={gem.name} />
 
                         {/* Content */}
                         <div className="flex-1 min-w-0">

@@ -14,11 +14,19 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: 'https',
+                hostname: 'placehold.co',
+            },
+            {
+                protocol: 'https',
                 hostname: 'cdn.shopify.com',
             },
             {
                 protocol: 'https',
                 hostname: 'acdn-us.mitiendanube.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'dcdn-us.mitiendanube.com',
             },
             {
                 protocol: 'https',
