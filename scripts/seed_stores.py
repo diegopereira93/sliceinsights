@@ -53,7 +53,7 @@ def main():
                 select(MarketOffer).where(MarketOffer.store_id.in_(stale_ids))
             ).all():
                 session.delete(mo)
-            print(f"  Deleted market_offers for stale stores")
+            print("  Deleted market_offers for stale stores")
             for s in stale:
                 print(f"  Deleted stale store: {s.name}")
                 session.delete(s)

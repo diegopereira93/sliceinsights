@@ -8,7 +8,6 @@ from fastapi import APIRouter, Depends, Query, Request
 from sqlmodel import select, func
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import selectinload
-from sqlalchemy import case
 from pydantic import BaseModel, EmailStr
 
 from slowapi import Limiter
