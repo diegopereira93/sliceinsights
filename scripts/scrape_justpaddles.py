@@ -185,7 +185,7 @@ async def run_market_offer_ingestion():
         stats = ingest_rows(rows, store_id=store.id, session=session)
         session.commit()
     print(f"\n{'=' * 60}")
-    print(f"✅ JUST PADDLES INGESTION COMPLETE")
+    print("✅ JUST PADDLES INGESTION COMPLETE")
     print(f"   Created:  {stats['created']}")
     print(f"   Updated: {stats['updated']}")
     print(f"   Skipped: {stats['skipped']}")
