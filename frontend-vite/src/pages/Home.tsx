@@ -107,15 +107,15 @@ export default function Home() {
 
         const mappedPaddles: Paddle[] = paddlesArray.map((p: Record<string, unknown>) => ({
           id: typeof p.id === 'string' ? parseInt(p.id.replace(/-/g, '').slice(0, 8), 16) : (p.id as number),
-          name: (p.model_name as string) || "",
+          name: (p.name as string) || "",
           brand: (p.brand as string) || "",
-          price: (p.min_price as number) || 0,
-          imageUrl: p.image_url as string | undefined,
-          coreThickness: (p.specs as Record<string, unknown>)?.core_thickness_mm as number | undefined,
-          surface: (p.specs as Record<string, unknown>)?.surface_material as string | undefined,
-          powerScore: (p.ratings as Record<string, number>)?.power ?? 0,
-          controlScore: (p.ratings as Record<string, number>)?.control ?? 0,
-          isHiddenGem: p.is_featured as boolean | undefined,
+          price: (p.price as number) || 0,
+          imageUrl: p.imageUrl as string | undefined,
+          coreThickness: p.coreThickness as number | undefined,
+          surface: p.surface as string | undefined,
+          powerScore: (p.powerScore as number) ?? 0,
+          controlScore: (p.controlScore as number) ?? 0,
+          isHiddenGem: p.isHiddenGem as boolean | undefined,
         }));
 
         setPaddles(mappedPaddles);
