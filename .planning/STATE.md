@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Catálogo Confiável Brasileiro
 current_phase: 17
-status: executing
-stopped_at: Completed 17-04-PLAN.md - Playwright E2E test suite
+status: shipped
+stopped_at: Phase 17 shipped — PR #35 created
 last_updated: "2026-03-24T10:04:42.374Z"
 progress:
   total_phases: 12
