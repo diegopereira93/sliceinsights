@@ -1,0 +1,15 @@
+.git
+.venv
+.venv_dlt
+node_modules
+frontend-old
+frontend-vite/node_modules
+data
+redesign-slice
+docs
+tests
+*.py
+*.log
+.env
+.env.*
+!.env.example

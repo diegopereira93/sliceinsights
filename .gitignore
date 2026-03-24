@@ -87,3 +87,8 @@ simulation_results.json
 
 # Logs
 *.log
+
+# Claude/OpenCode temp files
+.mcp.json
+.planning/debug/
+.playwright-cli/

@@ -3,20 +3,20 @@ gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Catálogo Confiável Brasileiro
 current_phase: 17
-status: shipped
-stopped_at: Phase 17 shipped — PR #35 created
-last_updated: "2026-03-24T14:00:00.000Z"
+status: "Phase 17-05 shipped — PR #38 created"
+stopped_at: "Phase 17 shipped — PR #35 created"
+last_updated: "2026-03-24T21:56:00.324Z"
 progress:
-  total_phases: 12
+  total_phases: 13
   completed_phases: 9
-  total_plans: 29
-  completed_plans: 26
+  total_plans: 30
+  completed_plans: 27
 ---
 
 # Project State: SliceInsights Catálogo Confiável Brasileiro
 
 **Last Updated:** 2026-03-24
-**Status:** Phase 17 shipped — PR #35
+**Status:** Phase 17-05 shipped — PR #38 created
 **Current Phase:** 17
 
 ## Current Position
