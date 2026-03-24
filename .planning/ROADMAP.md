@@ -34,6 +34,19 @@ Full archive: `.planning/milestones/v2.0-ROADMAP.md`
 
 </details>
 
+### Phase 17: UI Redesign — Migrar frontend Next.js para Vite SPA do redesign-slice
+
+**Goal:** Substituir o frontend Next.js 14 pelo Vite SPA redesenhado no Replit (`redesign-slice/artifacts/sliceinsights/`), reaproveitando o API client Orval/React Query, mantendo o FastAPI como backend, e criando as rotas faltantes (leads, chat) no FastAPI.
+**Requirements**: UI-01, UI-02, UI-03, UI-04, UI-05
+**Depends on:** Phase 16
+**Plans:** 4 plans
+
+Plans:
+- [ ] 17-01-PLAN.md — Scaffold frontend-vite/ com source copy, standalone package.json, route renames, API client inline
+- [ ] 17-02-PLAN.md — Criar orval_shim.py com 9 endpoints Orval-compativeis no FastAPI (/api prefix)
+- [ ] 17-03-PLAN.md — Docker infrastructure (Dockerfile.frontend Vite+nginx, docker-compose.yml) + human visual verification
+- [ ] 17-04-PLAN.md — Playwright E2E tests (pages, API compat, responsiveness) com 3 viewport projects
+
 ---
 
 ### v3.0 Catálogo Confiável Brasileiro (In Progress)

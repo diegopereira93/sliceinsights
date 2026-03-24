@@ -1,0 +1,1851 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - img [ref=e9]
+        - generic [ref=e62]:
+          - generic [ref=e63]: INTELIGÊNCIA EM EQUIPAMENTO
+          - heading "DOMINE A QUADRA." [level=1] [ref=e65]:
+            - text: DOMINE A
+            - text: QUADRA.
+          - paragraph [ref=e66]: Analisamos as métricas de desempenho de centenas de raquetes para encontrar o match ideal para o seu estilo de jogo.
+          - generic [ref=e67]:
+            - link "ENCONTRAR MINHA RAQUETE →" [ref=e68] [cursor=pointer]:
+              - /url: /quiz
+              - button "ENCONTRAR MINHA RAQUETE →" [ref=e69]: ENCONTRAR MINHA RAQUETE →
+            - link "EXPLORAR CATÁLOGO" [ref=e70] [cursor=pointer]:
+              - /url: "#catalog"
+      - generic [ref=e73]:
+        - generic [ref=e74]:
+          - generic [ref=e75]:
+            - img [ref=e76]
+            - textbox "Buscar por nome, marca ou material..." [ref=e79]
+          - generic [ref=e80]:
+            - button "Todos" [ref=e81]
+            - button "⚡ Power" [ref=e82]
+            - button "🎯 Controle" [ref=e83]
+            - button "⚖️ Equilibrado" [ref=e84]
+            - button "12–14mm Speed" [ref=e85]
+            - button "16mm Controle" [ref=e86]
+            - button "18mm+ Estabil." [ref=e87]
+            - button "💎 Joias" [ref=e88]
+            - generic [ref=e89]: 100 raquetes
+        - generic [ref=e90]:
+          - generic [ref=e91]:
+            - img "Raquete Hugo Calderano Infinity Carbon" [ref=e94]
+            - generic [ref=e95]:
+              - paragraph [ref=e96]: Joola
+              - heading "Raquete Hugo Calderano Infinity Carbon" [level=3] [ref=e97]
+              - paragraph [ref=e98]: R$699,00
+              - generic [ref=e99]:
+                - generic [ref=e101]: PWR
+                - generic [ref=e105]: CTRL
+                - generic [ref=e109]: SPIN
+              - generic [ref=e112]:
+                - button "BATALHA" [ref=e113]:
+                  - img [ref=e114]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e123] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/raquete-joola-hugo-calderano-infinity-carbon
+                  - img [ref=e124]
+                  - text: COMPRAR
+          - generic [ref=e128]:
+            - img "Raquete Match Pro" [ref=e131]
+            - generic [ref=e132]:
+              - paragraph [ref=e133]: Joola
+              - heading "Raquete Match Pro" [level=3] [ref=e134]
+              - paragraph [ref=e135]: R$249,00
+              - generic [ref=e136]:
+                - generic [ref=e138]: PWR
+                - generic [ref=e142]: CTRL
+                - generic [ref=e146]: SPIN
+              - generic [ref=e149]:
+                - button "BATALHA" [ref=e150]:
+                  - img [ref=e151]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e160] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/raquete-joola-match-pro
+                  - img [ref=e161]
+                  - text: COMPRAR
+          - generic [ref=e165]:
+            - img "Raquete Infinity Balance (Verde)" [ref=e168]
+            - generic [ref=e169]:
+              - paragraph [ref=e170]: Joola
+              - heading "Raquete Infinity Balance (Verde)" [level=3] [ref=e171]
+              - paragraph [ref=e172]: R$349,00
+              - generic [ref=e173]:
+                - generic [ref=e175]: PWR
+                - generic [ref=e179]: CTRL
+                - generic [ref=e183]: SPIN
+              - generic [ref=e186]:
+                - button "BATALHA" [ref=e187]:
+                  - img [ref=e188]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e197] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/raquete-joola-infinity-balance-verde
+                  - img [ref=e198]
+                  - text: COMPRAR
+          - generic [ref=e202]:
+            - img "Raquete Bat Match" [ref=e205]
+            - generic [ref=e206]:
+              - paragraph [ref=e207]: Joola
+              - heading "Raquete Bat Match" [level=3] [ref=e208]
+              - paragraph [ref=e209]: R$119,00
+              - generic [ref=e210]:
+                - generic [ref=e212]: PWR
+                - generic [ref=e216]: CTRL
+                - generic [ref=e220]: SPIN
+              - generic [ref=e223]:
+                - button "BATALHA" [ref=e224]:
+                  - img [ref=e225]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e234] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/raquete-joola-bat-match
+                  - img [ref=e235]
+                  - text: COMPRAR
+          - generic [ref=e239]:
+            - img "Raquete Team Master" [ref=e242]
+            - generic [ref=e243]:
+              - paragraph [ref=e244]: Joola
+              - heading "Raquete Team Master" [level=3] [ref=e245]
+              - paragraph [ref=e246]: R$189,00
+              - generic [ref=e247]:
+                - generic [ref=e249]: PWR
+                - generic [ref=e253]: CTRL
+                - generic [ref=e257]: SPIN
+              - generic [ref=e260]:
+                - button "BATALHA" [ref=e261]:
+                  - img [ref=e262]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e271] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/raquete-joola-team-masters
+                  - img [ref=e272]
+                  - text: COMPRAR
+          - generic [ref=e276]:
+            - img "Borracha Micron" [ref=e279]
+            - generic [ref=e280]:
+              - paragraph [ref=e281]: Joola
+              - heading "Borracha Micron" [level=3] [ref=e282]
+              - paragraph [ref=e283]: R$209,00
+              - generic [ref=e284]:
+                - generic [ref=e286]: PWR
+                - generic [ref=e290]: CTRL
+                - generic [ref=e294]: SPIN
+              - generic [ref=e297]:
+                - button "BATALHA" [ref=e298]:
+                  - img [ref=e299]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e308] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/borracha-joola-micron
+                  - img [ref=e309]
+                  - text: COMPRAR
+          - generic [ref=e313]:
+            - img "Raquete Proline One" [ref=e316]
+            - generic [ref=e317]:
+              - paragraph [ref=e318]: Joola
+              - heading "Raquete Proline One" [level=3] [ref=e319]
+              - paragraph [ref=e320]: R$899,00
+              - generic [ref=e321]:
+                - generic [ref=e323]: PWR
+                - generic [ref=e327]: CTRL
+                - generic [ref=e331]: SPIN
+              - generic [ref=e334]:
+                - button "BATALHA" [ref=e335]:
+                  - img [ref=e336]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e345] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/raquete-joola-proline-one
+                  - img [ref=e346]
+                  - text: COMPRAR
+          - generic [ref=e350]:
+            - img "Raquete Proline Iac" [ref=e353]
+            - generic [ref=e354]:
+              - paragraph [ref=e355]: Joola
+              - heading "Raquete Proline Iac" [level=3] [ref=e356]
+              - paragraph [ref=e357]: R$899,00
+              - generic [ref=e358]:
+                - generic [ref=e360]: PWR
+                - generic [ref=e364]: CTRL
+                - generic [ref=e368]: SPIN
+              - generic [ref=e371]:
+                - button "BATALHA" [ref=e372]:
+                  - img [ref=e373]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e382] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/raquete-blade-proline-iac-fl
+                  - img [ref=e383]
+                  - text: COMPRAR
+          - generic [ref=e387]:
+            - img "Raquete Baseline All" [ref=e390]
+            - generic [ref=e391]:
+              - paragraph [ref=e392]: Joola
+              - heading "Raquete Baseline All" [level=3] [ref=e393]
+              - paragraph [ref=e394]: R$299,00
+              - generic [ref=e395]:
+                - generic [ref=e397]: PWR
+                - generic [ref=e401]: CTRL
+                - generic [ref=e405]: SPIN
+              - generic [ref=e408]:
+                - button "BATALHA" [ref=e409]:
+                  - img [ref=e410]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e419] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/raquete-joola-blade-baseline-all-fl
+                  - img [ref=e420]
+                  - text: COMPRAR
+          - generic [ref=e424]:
+            - img "Raquete Proline Aw5" [ref=e427]
+            - generic [ref=e428]:
+              - paragraph [ref=e429]: Joola
+              - heading "Raquete Proline Aw5" [level=3] [ref=e430]
+              - paragraph [ref=e431]: R$799,00
+              - generic [ref=e432]:
+                - generic [ref=e434]: PWR
+                - generic [ref=e438]: CTRL
+                - generic [ref=e442]: SPIN
+              - generic [ref=e445]:
+                - button "BATALHA" [ref=e446]:
+                  - img [ref=e447]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e456] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/raquete-joola-proline-aw5
+                  - img [ref=e457]
+                  - text: COMPRAR
+          - generic [ref=e461]:
+            - img "Raquete Proline Aw7" [ref=e464]
+            - generic [ref=e465]:
+              - paragraph [ref=e466]: Joola
+              - heading "Raquete Proline Aw7" [level=3] [ref=e467]
+              - paragraph [ref=e468]: R$899,00
+              - generic [ref=e469]:
+                - generic [ref=e471]: PWR
+                - generic [ref=e475]: CTRL
+                - generic [ref=e479]: SPIN
+              - generic [ref=e482]:
+                - button "BATALHA" [ref=e483]:
+                  - img [ref=e484]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e493] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/raquete-joola-proline-aw7
+                  - img [ref=e494]
+                  - text: COMPRAR
+          - generic [ref=e498]:
+            - img "Cola Glue Lex Green" [ref=e501]
+            - generic [ref=e502]:
+              - paragraph [ref=e503]: Joola
+              - heading "Cola Glue Lex Green" [level=3] [ref=e504]
+              - paragraph [ref=e505]: R$138,00
+              - generic [ref=e506]:
+                - generic [ref=e508]: PWR
+                - generic [ref=e512]: CTRL
+                - generic [ref=e516]: SPIN
+              - generic [ref=e519]:
+                - button "BATALHA" [ref=e520]:
+                  - img [ref=e521]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e530] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/lex-green-power-table-tennis-rubber-glue
+                  - img [ref=e531]
+                  - text: COMPRAR
+          - generic [ref=e535]:
+            - img "Raquete Vyzaryz Freeze Hrd" [ref=e538]
+            - generic [ref=e539]:
+              - paragraph [ref=e540]: Joola
+              - heading "Raquete Vyzaryz Freeze Hrd" [level=3] [ref=e541]
+              - paragraph [ref=e542]: R$1.169,00
+              - generic [ref=e543]:
+                - generic [ref=e545]: PWR
+                - generic [ref=e549]: CTRL
+                - generic [ref=e553]: SPIN
+              - generic [ref=e556]:
+                - button "BATALHA" [ref=e557]:
+                  - img [ref=e558]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e567] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/raquete-vyzaryz-freeze-hrd
+                  - img [ref=e568]
+                  - text: COMPRAR
+          - generic [ref=e572]:
+            - img "Raquete Infinity Balance (Vermelha)" [ref=e575]
+            - generic [ref=e576]:
+              - paragraph [ref=e577]: Joola
+              - heading "Raquete Infinity Balance (Vermelha)" [level=3] [ref=e578]
+              - paragraph [ref=e579]: R$349,00
+              - generic [ref=e580]:
+                - generic [ref=e582]: PWR
+                - generic [ref=e586]: CTRL
+                - generic [ref=e590]: SPIN
+              - generic [ref=e593]:
+                - button "BATALHA" [ref=e594]:
+                  - img [ref=e595]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e604] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/raquete-joola-infinity-balance-vermelha
+                  - img [ref=e605]
+                  - text: COMPRAR
+          - generic [ref=e609]:
+            - img "Raquete Infinity Balance (Azul)" [ref=e612]
+            - generic [ref=e613]:
+              - paragraph [ref=e614]: Joola
+              - heading "Raquete Infinity Balance (Azul)" [level=3] [ref=e615]
+              - paragraph [ref=e616]: R$349,00
+              - generic [ref=e617]:
+                - generic [ref=e619]: PWR
+                - generic [ref=e623]: CTRL
+                - generic [ref=e627]: SPIN
+              - generic [ref=e630]:
+                - button "BATALHA" [ref=e631]:
+                  - img [ref=e632]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e641] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/raquete-joola-infinity-balance-azul
+                  - img [ref=e642]
+                  - text: COMPRAR
+          - generic [ref=e646]:
+            - img "Raquete Vyzaryz Trinity" [ref=e649]
+            - generic [ref=e650]:
+              - paragraph [ref=e651]: Joola
+              - heading "Raquete Vyzaryz Trinity" [level=3] [ref=e652]
+              - paragraph [ref=e653]: R$1.299,00
+              - generic [ref=e654]:
+                - generic [ref=e656]: PWR
+                - generic [ref=e660]: CTRL
+                - generic [ref=e664]: SPIN
+              - generic [ref=e667]:
+                - button "BATALHA" [ref=e668]:
+                  - img [ref=e669]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e678] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/raquete-joola-vyzaryz-trinity
+                  - img [ref=e679]
+                  - text: COMPRAR
+          - generic [ref=e683]:
+            - 'img "Adicional: Serviço De Montagem De Raquete (Azul No Forehand)" [ref=e686]'
+            - generic [ref=e687]:
+              - paragraph [ref=e688]: Joola
+              - 'heading "Adicional: Serviço De Montagem De Raquete (Azul No Forehand)" [level=3] [ref=e689]'
+              - paragraph [ref=e690]: R$50,00
+              - generic [ref=e691]:
+                - generic [ref=e693]: PWR
+                - generic [ref=e697]: CTRL
+                - generic [ref=e701]: SPIN
+              - generic [ref=e704]:
+                - button "BATALHA" [ref=e705]:
+                  - img [ref=e706]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e715] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/racket-assembly-service-blue-on-forehand
+                  - img [ref=e716]
+                  - text: COMPRAR
+          - generic [ref=e720]:
+            - img "Borracha Vizon" [ref=e723]
+            - generic [ref=e724]:
+              - paragraph [ref=e725]: Joola
+              - heading "Borracha Vizon" [level=3] [ref=e726]
+              - paragraph [ref=e727]: R$147,00
+              - generic [ref=e728]:
+                - generic [ref=e730]: PWR
+                - generic [ref=e734]: CTRL
+                - generic [ref=e738]: SPIN
+              - generic [ref=e741]:
+                - button "BATALHA" [ref=e742]:
+                  - img [ref=e743]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e752] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/borracha-joola-vizon
+                  - img [ref=e753]
+                  - text: COMPRAR
+          - generic [ref=e757]:
+            - 'img "Adicional: Serviço De Montagem De Raquete (Lilás No Forehand)" [ref=e760]'
+            - generic [ref=e761]:
+              - paragraph [ref=e762]: Joola
+              - 'heading "Adicional: Serviço De Montagem De Raquete (Lilás No Forehand)" [level=3] [ref=e763]'
+              - paragraph [ref=e764]: R$50,00
+              - generic [ref=e765]:
+                - generic [ref=e767]: PWR
+                - generic [ref=e771]: CTRL
+                - generic [ref=e775]: SPIN
+              - generic [ref=e778]:
+                - button "BATALHA" [ref=e779]:
+                  - img [ref=e780]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e789] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/servico-de-montagem-de-raquete-lilas-no-forehand
+                  - img [ref=e790]
+                  - text: COMPRAR
+          - generic [ref=e794]:
+            - img "Rubber Cleaner Set (125Ml)" [ref=e797]
+            - generic [ref=e798]:
+              - paragraph [ref=e799]: Joola
+              - heading "Rubber Cleaner Set (125Ml)" [level=3] [ref=e800]
+              - paragraph [ref=e801]: R$109,00
+              - generic [ref=e802]:
+                - generic [ref=e804]: PWR
+                - generic [ref=e808]: CTRL
+                - generic [ref=e812]: SPIN
+              - generic [ref=e815]:
+                - button "BATALHA" [ref=e816]:
+                  - img [ref=e817]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e826] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/joola-rubber-cleaner-set-125ml
+                  - img [ref=e827]
+                  - text: COMPRAR
+          - generic [ref=e831]:
+            - img "Borracha Dynaryz Cmd" [ref=e834]
+            - generic [ref=e835]:
+              - paragraph [ref=e836]: Joola
+              - heading "Borracha Dynaryz Cmd" [level=3] [ref=e837]
+              - paragraph [ref=e838]: R$409,00
+              - generic [ref=e839]:
+                - generic [ref=e841]: PWR
+                - generic [ref=e845]: CTRL
+                - generic [ref=e849]: SPIN
+              - generic [ref=e852]:
+                - button "BATALHA" [ref=e853]:
+                  - img [ref=e854]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e863] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/borracha-joola-dynaryz-cmd
+                  - img [ref=e864]
+                  - text: COMPRAR
+          - generic [ref=e868]:
+            - img "Borracha Dynaryz Agr" [ref=e871]
+            - generic [ref=e872]:
+              - paragraph [ref=e873]: Joola
+              - heading "Borracha Dynaryz Agr" [level=3] [ref=e874]
+              - paragraph [ref=e875]: R$409,00
+              - generic [ref=e876]:
+                - generic [ref=e878]: PWR
+                - generic [ref=e882]: CTRL
+                - generic [ref=e886]: SPIN
+              - generic [ref=e889]:
+                - button "BATALHA" [ref=e890]:
+                  - img [ref=e891]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e900] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/borracha-joola-dynaryz-agr
+                  - img [ref=e901]
+                  - text: COMPRAR
+          - generic [ref=e905]:
+            - img "Borracha Express Ultra (Pino Curto)" [ref=e908]
+            - generic [ref=e909]:
+              - paragraph [ref=e910]: Joola
+              - heading "Borracha Express Ultra (Pino Curto)" [level=3] [ref=e911]
+              - paragraph [ref=e912]: R$299,00
+              - generic [ref=e913]:
+                - generic [ref=e915]: PWR
+                - generic [ref=e919]: CTRL
+                - generic [ref=e923]: SPIN
+              - generic [ref=e926]:
+                - button "BATALHA" [ref=e927]:
+                  - img [ref=e928]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e937] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/borracha-joola-express-ultra
+                  - img [ref=e938]
+                  - text: COMPRAR
+          - generic [ref=e942]:
+            - img "Borracha Dynaryz Zgr" [ref=e945]
+            - generic [ref=e946]:
+              - paragraph [ref=e947]: Joola
+              - heading "Borracha Dynaryz Zgr" [level=3] [ref=e948]
+              - paragraph [ref=e949]: R$419,00
+              - generic [ref=e950]:
+                - generic [ref=e952]: PWR
+                - generic [ref=e956]: CTRL
+                - generic [ref=e960]: SPIN
+              - generic [ref=e963]:
+                - button "BATALHA" [ref=e964]:
+                  - img [ref=e965]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e974] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/borracha-joola-dynaryz-zgr
+                  - img [ref=e975]
+                  - text: COMPRAR
+          - generic [ref=e979]:
+            - img "Borracha Dynaryz Inferno" [ref=e982]
+            - generic [ref=e983]:
+              - paragraph [ref=e984]: Joola
+              - heading "Borracha Dynaryz Inferno" [level=3] [ref=e985]
+              - paragraph [ref=e986]: R$409,00
+              - generic [ref=e987]:
+                - generic [ref=e989]: PWR
+                - generic [ref=e993]: CTRL
+                - generic [ref=e997]: SPIN
+              - generic [ref=e1000]:
+                - button "BATALHA" [ref=e1001]:
+                  - img [ref=e1002]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1011] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/borracha-joola-dynaryz-inferno
+                  - img [ref=e1012]
+                  - text: COMPRAR
+          - generic [ref=e1016]:
+            - img "Borracha Tronix Zgr" [ref=e1019]
+            - generic [ref=e1020]:
+              - paragraph [ref=e1021]: Joola
+              - heading "Borracha Tronix Zgr" [level=3] [ref=e1022]
+              - paragraph [ref=e1023]: R$359,00
+              - generic [ref=e1024]:
+                - generic [ref=e1026]: PWR
+                - generic [ref=e1030]: CTRL
+                - generic [ref=e1034]: SPIN
+              - generic [ref=e1037]:
+                - button "BATALHA" [ref=e1038]:
+                  - img [ref=e1039]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1048] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/borracha-joola-tronix-zgr
+                  - img [ref=e1049]
+                  - text: COMPRAR
+          - generic [ref=e1053]:
+            - img "Borracha Tronix Acc" [ref=e1056]
+            - generic [ref=e1057]:
+              - paragraph [ref=e1058]: Joola
+              - heading "Borracha Tronix Acc" [level=3] [ref=e1059]
+              - paragraph [ref=e1060]: R$359,00
+              - generic [ref=e1061]:
+                - generic [ref=e1063]: PWR
+                - generic [ref=e1067]: CTRL
+                - generic [ref=e1071]: SPIN
+              - generic [ref=e1074]:
+                - button "BATALHA" [ref=e1075]:
+                  - img [ref=e1076]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1085] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/borracha-joola-tronix-acc
+                  - img [ref=e1086]
+                  - text: COMPRAR
+          - generic [ref=e1090]:
+            - img "Borracha Tronix Cmd" [ref=e1093]
+            - generic [ref=e1094]:
+              - paragraph [ref=e1095]: Joola
+              - heading "Borracha Tronix Cmd" [level=3] [ref=e1096]
+              - paragraph [ref=e1097]: R$359,00
+              - generic [ref=e1098]:
+                - generic [ref=e1100]: PWR
+                - generic [ref=e1104]: CTRL
+                - generic [ref=e1108]: SPIN
+              - generic [ref=e1111]:
+                - button "BATALHA" [ref=e1112]:
+                  - img [ref=e1113]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1122] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/borracha-joola-tronix-cmd
+                  - img [ref=e1123]
+                  - text: COMPRAR
+          - generic [ref=e1127]:
+            - img "Borracha Dynaryz Zgx" [ref=e1130]
+            - generic [ref=e1131]:
+              - paragraph [ref=e1132]: Joola
+              - heading "Borracha Dynaryz Zgx" [level=3] [ref=e1133]
+              - paragraph [ref=e1134]: R$419,00
+              - generic [ref=e1135]:
+                - generic [ref=e1137]: PWR
+                - generic [ref=e1141]: CTRL
+                - generic [ref=e1145]: SPIN
+              - generic [ref=e1148]:
+                - button "BATALHA" [ref=e1149]:
+                  - img [ref=e1150]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1159] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/borracha-joola-dynaryz-zgx
+                  - img [ref=e1160]
+                  - text: COMPRAR
+          - generic [ref=e1164]:
+            - img "Raquete Tezzo Warrior" [ref=e1167]
+            - generic [ref=e1168]:
+              - paragraph [ref=e1169]: Joola
+              - heading "Raquete Tezzo Warrior" [level=3] [ref=e1170]
+              - paragraph [ref=e1171]: R$629,00
+              - generic [ref=e1172]:
+                - generic [ref=e1174]: PWR
+                - generic [ref=e1178]: CTRL
+                - generic [ref=e1182]: SPIN
+              - generic [ref=e1185]:
+                - button "BATALHA" [ref=e1186]:
+                  - img [ref=e1187]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1196] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/raquete-joola-tezzo-warrior
+                  - img [ref=e1197]
+                  - text: COMPRAR
+          - generic [ref=e1201]:
+            - img "Fita Para Raquete De Tênis De Mesa Dynaryz" [ref=e1204]
+            - generic [ref=e1205]:
+              - paragraph [ref=e1206]: Joola
+              - heading "Fita Para Raquete De Tênis De Mesa Dynaryz" [level=3] [ref=e1207]
+              - paragraph [ref=e1208]: R$89,00
+              - generic [ref=e1209]:
+                - generic [ref=e1211]: PWR
+                - generic [ref=e1215]: CTRL
+                - generic [ref=e1219]: SPIN
+              - generic [ref=e1222]:
+                - button "BATALHA" [ref=e1223]:
+                  - img [ref=e1224]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1233] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/fita-joola-dynaryz
+                  - img [ref=e1234]
+                  - text: COMPRAR
+          - generic [ref=e1238]:
+            - img "Fita Para Raquete De Tênis De Mesa '20" [ref=e1241]
+            - generic [ref=e1242]:
+              - paragraph [ref=e1243]: Joola
+              - heading "Fita Para Raquete De Tênis De Mesa '20" [level=3] [ref=e1244]
+              - paragraph [ref=e1245]: R$89,00
+              - generic [ref=e1246]:
+                - generic [ref=e1248]: PWR
+                - generic [ref=e1252]: CTRL
+                - generic [ref=e1256]: SPIN
+              - generic [ref=e1259]:
+                - button "BATALHA" [ref=e1260]:
+                  - img [ref=e1261]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1270] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/fita-joola-20
+                  - img [ref=e1271]
+                  - text: COMPRAR
+          - generic [ref=e1275]:
+            - 'img "Adicional: Serviço De Montagem De Raquete (Vermelho No Forehand)" [ref=e1278]'
+            - generic [ref=e1279]:
+              - paragraph [ref=e1280]: Joola
+              - 'heading "Adicional: Serviço De Montagem De Raquete (Vermelho No Forehand)" [level=3] [ref=e1281]'
+              - paragraph [ref=e1282]: R$50,00
+              - generic [ref=e1283]:
+                - generic [ref=e1285]: PWR
+                - generic [ref=e1289]: CTRL
+                - generic [ref=e1293]: SPIN
+              - generic [ref=e1296]:
+                - button "BATALHA" [ref=e1297]:
+                  - img [ref=e1298]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1307] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/servico-de-montagem-de-raquete-vermelho-no-forehand
+                  - img [ref=e1308]
+                  - text: COMPRAR
+          - generic [ref=e1312]:
+            - img "Blade Varnish - Seladora Verniz Para Madeira De Tênis De Mesa" [ref=e1315]
+            - generic [ref=e1316]:
+              - paragraph [ref=e1317]: Joola
+              - heading "Blade Varnish - Seladora Verniz Para Madeira De Tênis De Mesa" [level=3] [ref=e1318]
+              - paragraph [ref=e1319]: R$109,00
+              - generic [ref=e1320]:
+                - generic [ref=e1322]: PWR
+                - generic [ref=e1326]: CTRL
+                - generic [ref=e1330]: SPIN
+              - generic [ref=e1333]:
+                - button "BATALHA" [ref=e1334]:
+                  - img [ref=e1335]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1344] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/blade-varnish-joola-seladora-verniz
+                  - img [ref=e1345]
+                  - text: COMPRAR
+          - generic [ref=e1349]:
+            - img "Borracha Cwx (Pino Longo)" [ref=e1352]
+            - generic [ref=e1353]:
+              - paragraph [ref=e1354]: Joola
+              - heading "Borracha Cwx (Pino Longo)" [level=3] [ref=e1355]
+              - paragraph [ref=e1356]: R$299,00
+              - generic [ref=e1357]:
+                - generic [ref=e1359]: PWR
+                - generic [ref=e1363]: CTRL
+                - generic [ref=e1367]: SPIN
+              - generic [ref=e1370]:
+                - button "BATALHA" [ref=e1371]:
+                  - img [ref=e1372]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1381] [cursor=pointer]:
+                  - /url: https://joola.com.br/products/borracha-joola-cwx
+                  - img [ref=e1382]
+                  - text: COMPRAR
+          - generic [ref=e1386]:
+            - img "Youth Rock Star Infantil Sealife" [ref=e1389]
+            - generic [ref=e1390]:
+              - paragraph [ref=e1391]: Franklin
+              - heading "Youth Rock Star Infantil Sealife" [level=3] [ref=e1392]
+              - paragraph [ref=e1393]: R$549,00
+              - generic [ref=e1394]:
+                - generic [ref=e1396]: PWR
+                - generic [ref=e1400]: CTRL
+                - generic [ref=e1404]: SPIN
+              - generic [ref=e1407]:
+                - button "BATALHA" [ref=e1408]:
+                  - img [ref=e1409]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1418] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-franklin-youth-rock-star-infantil-sealife
+                  - img [ref=e1419]
+                  - text: COMPRAR
+          - generic [ref=e1423]:
+            - img "Youth Rock Star Infantil Ice Cream" [ref=e1426]
+            - generic [ref=e1427]:
+              - paragraph [ref=e1428]: Franklin
+              - heading "Youth Rock Star Infantil Ice Cream" [level=3] [ref=e1429]
+              - paragraph [ref=e1430]: R$549,00
+              - generic [ref=e1431]:
+                - generic [ref=e1433]: PWR
+                - generic [ref=e1437]: CTRL
+                - generic [ref=e1441]: SPIN
+              - generic [ref=e1444]:
+                - button "BATALHA" [ref=e1445]:
+                  - img [ref=e1446]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1455] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-franklin-youth-rock-star-infantil-ice-cream
+                  - img [ref=e1456]
+                  - text: COMPRAR
+          - generic [ref=e1460]:
+            - img "Fs Tour Series Tempo 14Mm - Carbono Bruto T700" [ref=e1463]
+            - generic [ref=e1464]:
+              - paragraph [ref=e1465]: Franklin
+              - heading "Fs Tour Series Tempo 14Mm - Carbono Bruto T700" [level=3] [ref=e1466]
+              - paragraph [ref=e1467]: R$1.399,00
+              - generic [ref=e1468]:
+                - generic [ref=e1470]: PWR
+                - generic [ref=e1474]: CTRL
+                - generic [ref=e1478]: SPIN
+              - generic [ref=e1481]:
+                - button "BATALHA" [ref=e1482]:
+                  - img [ref=e1483]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1492] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-franklin-fs-tour-series-tempo-14mm-carbono-bruto-t700
+                  - img [ref=e1493]
+                  - text: COMPRAR
+          - generic [ref=e1497]:
+            - img "Fs Tour Series Tempo 16Mm - Carbono Bruto T700" [ref=e1500]
+            - generic [ref=e1501]:
+              - paragraph [ref=e1502]: Franklin
+              - heading "Fs Tour Series Tempo 16Mm - Carbono Bruto T700" [level=3] [ref=e1503]
+              - paragraph [ref=e1504]: R$1.399,00
+              - generic [ref=e1505]:
+                - generic [ref=e1507]: PWR
+                - generic [ref=e1511]: CTRL
+                - generic [ref=e1515]: SPIN
+              - generic [ref=e1518]:
+                - button "BATALHA" [ref=e1519]:
+                  - img [ref=e1520]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1529] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-franklin-fs-tour-series-tempo-16mm-carbono-bruto-t700
+                  - img [ref=e1530]
+                  - text: COMPRAR
+          - generic [ref=e1534]:
+            - img "Fs Tour Series Dynasty 14Mm - Carbono Bruto T700" [ref=e1537]
+            - generic [ref=e1538]:
+              - paragraph [ref=e1539]: Franklin
+              - heading "Fs Tour Series Dynasty 14Mm - Carbono Bruto T700" [level=3] [ref=e1540]
+              - paragraph [ref=e1541]: R$1.399,00
+              - generic [ref=e1542]:
+                - generic [ref=e1544]: PWR
+                - generic [ref=e1548]: CTRL
+                - generic [ref=e1552]: SPIN
+              - generic [ref=e1555]:
+                - button "BATALHA" [ref=e1556]:
+                  - img [ref=e1557]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1566] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-franklin-fs-tour-series-dynasty-14mm-carbono-bruto-t700
+                  - img [ref=e1567]
+                  - text: COMPRAR
+          - generic [ref=e1571]:
+            - img "Fs Tour Series Dynasty 16Mm - Carbono Bruto T700" [ref=e1574]
+            - generic [ref=e1575]:
+              - paragraph [ref=e1576]: Franklin
+              - heading "Fs Tour Series Dynasty 16Mm - Carbono Bruto T700" [level=3] [ref=e1577]
+              - paragraph [ref=e1578]: R$1.399,00
+              - generic [ref=e1579]:
+                - generic [ref=e1581]: PWR
+                - generic [ref=e1585]: CTRL
+                - generic [ref=e1589]: SPIN
+              - generic [ref=e1592]:
+                - button "BATALHA" [ref=e1593]:
+                  - img [ref=e1594]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1603] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-franklin-fs-tour-series-dynasty-16mm-carbono-bruto-t700
+                  - img [ref=e1604]
+                  - text: COMPRAR
+          - generic [ref=e1608]:
+            - img "Pro C45 Tempo 14Mm - Carbono T700" [ref=e1611]
+            - generic [ref=e1612]:
+              - paragraph [ref=e1613]: Franklin
+              - heading "Pro C45 Tempo 14Mm - Carbono T700" [level=3] [ref=e1614]
+              - paragraph [ref=e1615]: R$1.999,00
+              - generic [ref=e1616]:
+                - generic [ref=e1618]: PWR
+                - generic [ref=e1622]: CTRL
+                - generic [ref=e1626]: SPIN
+              - generic [ref=e1629]:
+                - button "BATALHA" [ref=e1630]:
+                  - img [ref=e1631]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1640] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-franklin-pro-c45-tempo-14mm-carbono-t700
+                  - img [ref=e1641]
+                  - text: COMPRAR
+          - generic [ref=e1645]:
+            - img "Pro C45 Hybrid 14Mm - Carbono T700" [ref=e1648]
+            - generic [ref=e1649]:
+              - paragraph [ref=e1650]: Franklin
+              - heading "Pro C45 Hybrid 14Mm - Carbono T700" [level=3] [ref=e1651]
+              - paragraph [ref=e1652]: R$1.999,00
+              - generic [ref=e1653]:
+                - generic [ref=e1655]: PWR
+                - generic [ref=e1659]: CTRL
+                - generic [ref=e1663]: SPIN
+              - generic [ref=e1666]:
+                - button "BATALHA" [ref=e1667]:
+                  - img [ref=e1668]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1677] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-franklin-c45-hybrid-14mm-carbono-t700
+                  - img [ref=e1678]
+                  - text: COMPRAR
+          - generic [ref=e1682]:
+            - img "Pro C45 Dynasty 16Mm - Carbono T700" [ref=e1685]
+            - generic [ref=e1686]:
+              - paragraph [ref=e1687]: Franklin
+              - heading "Pro C45 Dynasty 16Mm - Carbono T700" [level=3] [ref=e1688]
+              - paragraph [ref=e1689]: R$1.999,00
+              - generic [ref=e1690]:
+                - generic [ref=e1692]: PWR
+                - generic [ref=e1696]: CTRL
+                - generic [ref=e1700]: SPIN
+              - generic [ref=e1703]:
+                - button "BATALHA" [ref=e1704]:
+                  - img [ref=e1705]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1714] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-franklin-dinasty-16mm
+                  - img [ref=e1715]
+                  - text: COMPRAR
+          - generic [ref=e1719]:
+            - img "Pro C45 Dynasty 14Mm - Carbono T700" [ref=e1722]
+            - generic [ref=e1723]:
+              - paragraph [ref=e1724]: Franklin
+              - heading "Pro C45 Dynasty 14Mm - Carbono T700" [level=3] [ref=e1725]
+              - paragraph [ref=e1726]: R$1.999,00
+              - generic [ref=e1727]:
+                - generic [ref=e1729]: PWR
+                - generic [ref=e1733]: CTRL
+                - generic [ref=e1737]: SPIN
+              - generic [ref=e1740]:
+                - button "BATALHA" [ref=e1741]:
+                  - img [ref=e1742]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1751] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-franklin-dinasty-14mm
+                  - img [ref=e1752]
+                  - text: COMPRAR
+          - generic [ref=e1756]:
+            - img "Steffi Graf Pro V -" [ref=e1759]
+            - generic [ref=e1760]:
+              - paragraph [ref=e1761]: Joola
+              - heading "Steffi Graf Pro V -" [level=3] [ref=e1762]
+              - paragraph [ref=e1763]: R$1.999,00
+              - generic [ref=e1764]:
+                - generic [ref=e1766]: PWR
+                - generic [ref=e1770]: CTRL
+                - generic [ref=e1774]: SPIN
+              - generic [ref=e1777]:
+                - button "BATALHA" [ref=e1778]:
+                  - img [ref=e1779]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1788] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-steffi-graf-pro-v-16mm
+                  - img [ref=e1789]
+                  - text: COMPRAR
+          - generic [ref=e1793]:
+            - img "Hyperion Pro V Ben Johns -" [ref=e1796]
+            - generic [ref=e1797]:
+              - paragraph [ref=e1798]: Joola
+              - heading "Hyperion Pro V Ben Johns -" [level=3] [ref=e1799]
+              - paragraph [ref=e1800]: R$1.999,00
+              - generic [ref=e1801]:
+                - generic [ref=e1803]: PWR
+                - generic [ref=e1807]: CTRL
+                - generic [ref=e1811]: SPIN
+              - generic [ref=e1814]:
+                - button "BATALHA" [ref=e1815]:
+                  - img [ref=e1816]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1825] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-joola-hyperion-pro-v-ben-johns-16mm
+                  - img [ref=e1826]
+                  - text: COMPRAR
+          - generic [ref=e1830]:
+            - img "Scorpeus Pro V Collin Johns -" [ref=e1833]
+            - generic [ref=e1834]:
+              - paragraph [ref=e1835]: Joola
+              - heading "Scorpeus Pro V Collin Johns -" [level=3] [ref=e1836]
+              - paragraph [ref=e1837]: R$1.999,00
+              - generic [ref=e1838]:
+                - generic [ref=e1840]: PWR
+                - generic [ref=e1844]: CTRL
+                - generic [ref=e1848]: SPIN
+              - generic [ref=e1851]:
+                - button "BATALHA" [ref=e1852]:
+                  - img [ref=e1853]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1862] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-scorpeus-pro-v-collin-johns-16mm
+                  - img [ref=e1863]
+                  - text: COMPRAR
+          - generic [ref=e1867]:
+            - img "Scorpeus Pro V Anna Bright -" [ref=e1870]
+            - generic [ref=e1871]:
+              - paragraph [ref=e1872]: Joola
+              - heading "Scorpeus Pro V Anna Bright -" [level=3] [ref=e1873]
+              - paragraph [ref=e1874]: R$1.999,00
+              - generic [ref=e1875]:
+                - generic [ref=e1877]: PWR
+                - generic [ref=e1881]: CTRL
+                - generic [ref=e1885]: SPIN
+              - generic [ref=e1888]:
+                - button "BATALHA" [ref=e1889]:
+                  - img [ref=e1890]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1899] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-scorpeus-pro-v-anna-bright-16mm
+                  - img [ref=e1900]
+                  - text: COMPRAR
+          - generic [ref=e1904]:
+            - img "Kosmos Pro V - 14Mm - Tyson Mcguffin" [ref=e1907]
+            - generic [ref=e1908]:
+              - paragraph [ref=e1909]: Joola
+              - heading "Kosmos Pro V - 14Mm - Tyson Mcguffin" [level=3] [ref=e1910]
+              - paragraph [ref=e1911]: R$1.999,00
+              - generic [ref=e1912]:
+                - generic [ref=e1914]: PWR
+                - generic [ref=e1918]: CTRL
+                - generic [ref=e1922]: SPIN
+              - generic [ref=e1925]:
+                - button "BATALHA" [ref=e1926]:
+                  - img [ref=e1927]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1936] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-kosmos-pro-v-14mm-tyson-mcguffin
+                  - img [ref=e1937]
+                  - text: COMPRAR
+          - generic [ref=e1941]:
+            - img "Perseus Pro V Ben Johns -" [ref=e1944]
+            - generic [ref=e1945]:
+              - paragraph [ref=e1946]: Joola
+              - heading "Perseus Pro V Ben Johns -" [level=3] [ref=e1947]
+              - paragraph [ref=e1948]: R$1.999,00
+              - generic [ref=e1949]:
+                - generic [ref=e1951]: PWR
+                - generic [ref=e1955]: CTRL
+                - generic [ref=e1959]: SPIN
+              - generic [ref=e1962]:
+                - button "BATALHA" [ref=e1963]:
+                  - img [ref=e1964]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e1973] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-perseus-pro-v-ben-johns-16mm
+                  - img [ref=e1974]
+                  - text: COMPRAR
+          - generic [ref=e1978]:
+            - img "Perseus Pro V - 16Mm Simone Jardim" [ref=e1981]
+            - generic [ref=e1982]:
+              - paragraph [ref=e1983]: Joola
+              - heading "Perseus Pro V - 16Mm Simone Jardim" [level=3] [ref=e1984]
+              - paragraph [ref=e1985]: R$1.999,00
+              - generic [ref=e1986]:
+                - generic [ref=e1988]: PWR
+                - generic [ref=e1992]: CTRL
+                - generic [ref=e1996]: SPIN
+              - generic [ref=e1999]:
+                - button "BATALHA" [ref=e2000]:
+                  - img [ref=e2001]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2010] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-perseus-pro-v-simone-jardim-16mm
+                  - img [ref=e2011]
+                  - text: COMPRAR
+          - generic [ref=e2015]:
+            - img "Agassi Pro V -" [ref=e2018]
+            - generic [ref=e2019]:
+              - paragraph [ref=e2020]: Joola
+              - heading "Agassi Pro V -" [level=3] [ref=e2021]
+              - paragraph [ref=e2022]: R$1.999,00
+              - generic [ref=e2023]:
+                - generic [ref=e2025]: PWR
+                - generic [ref=e2029]: CTRL
+                - generic [ref=e2033]: SPIN
+              - generic [ref=e2036]:
+                - button "BATALHA" [ref=e2037]:
+                  - img [ref=e2038]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2047] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-agassi-pro-v-16mm
+                  - img [ref=e2048]
+                  - text: COMPRAR
+          - generic [ref=e2052]:
+            - img "Kosmos Pro V - 16Mm - Federico Staksrud" [ref=e2055]
+            - generic [ref=e2056]:
+              - paragraph [ref=e2057]: Joola
+              - heading "Kosmos Pro V - 16Mm - Federico Staksrud" [level=3] [ref=e2058]
+              - paragraph [ref=e2059]: R$1.999,00
+              - generic [ref=e2060]:
+                - generic [ref=e2062]: PWR
+                - generic [ref=e2066]: CTRL
+                - generic [ref=e2070]: SPIN
+              - generic [ref=e2073]:
+                - button "BATALHA" [ref=e2074]:
+                  - img [ref=e2075]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2084] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-kosmos-pro-v-16mm-federico-staksrud
+                  - img [ref=e2085]
+                  - text: COMPRAR
+          - generic [ref=e2089]:
+            - img "Black Mamba" [ref=e2092]
+            - generic [ref=e2093]:
+              - paragraph [ref=e2094]: Zcebra
+              - heading "Black Mamba" [level=3] [ref=e2095]
+              - paragraph [ref=e2096]: R$1.400,00
+              - generic [ref=e2097]:
+                - generic [ref=e2099]: PWR
+                - generic [ref=e2103]: CTRL
+                - generic [ref=e2107]: SPIN
+              - generic [ref=e2110]:
+                - button "BATALHA" [ref=e2111]:
+                  - img [ref=e2112]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2121] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-pickleball-zcebra-black-mamba-16mm-carbono
+                  - img [ref=e2122]
+                  - text: COMPRAR
+          - generic [ref=e2126]:
+            - img "Totem Trinom" [ref=e2129]
+            - generic [ref=e2130]:
+              - paragraph [ref=e2131]: Zcebra
+              - heading "Totem Trinom" [level=3] [ref=e2132]
+              - paragraph [ref=e2133]: R$1.200,00
+              - generic [ref=e2134]:
+                - generic [ref=e2136]: PWR
+                - generic [ref=e2140]: CTRL
+                - generic [ref=e2144]: SPIN
+              - generic [ref=e2147]:
+                - button "BATALHA" [ref=e2148]:
+                  - img [ref=e2149]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2158] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-pickleball-zcebra-totem-trinom-19mm
+                  - img [ref=e2159]
+                  - text: COMPRAR
+          - generic [ref=e2163]:
+            - img "Osprey Shotcore" [ref=e2166]
+            - generic [ref=e2167]:
+              - paragraph [ref=e2168]: Zcebra
+              - heading "Osprey Shotcore" [level=3] [ref=e2169]
+              - paragraph [ref=e2170]: R$1.600,00
+              - generic [ref=e2171]:
+                - generic [ref=e2173]: PWR
+                - generic [ref=e2177]: CTRL
+                - generic [ref=e2181]: SPIN
+              - generic [ref=e2184]:
+                - button "BATALHA" [ref=e2185]:
+                  - img [ref=e2186]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2195] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-pickleball-zcebra-osprey-shotcore-16mm
+                  - img [ref=e2196]
+                  - text: COMPRAR
+          - generic [ref=e2200]:
+            - img "Anna Bright Scorpeus Pro Iv" [ref=e2203]
+            - generic [ref=e2204]:
+              - paragraph [ref=e2205]: Joola
+              - heading "Anna Bright Scorpeus Pro Iv" [level=3] [ref=e2206]
+              - paragraph [ref=e2207]: R$1.599,00
+              - generic [ref=e2208]:
+                - generic [ref=e2210]: PWR
+                - generic [ref=e2214]: CTRL
+                - generic [ref=e2218]: SPIN
+              - generic [ref=e2221]:
+                - button "BATALHA" [ref=e2222]:
+                  - img [ref=e2223]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2232] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-anna-bright-scorpeus-pro-iv-14mm
+                  - img [ref=e2233]
+                  - text: COMPRAR
+          - generic [ref=e2237]:
+            - img "Ben Johns Perseus 3S" [ref=e2240]
+            - generic [ref=e2241]:
+              - paragraph [ref=e2242]: Joola
+              - heading "Ben Johns Perseus 3S" [level=3] [ref=e2243]
+              - paragraph [ref=e2244]: R$1.299,00
+              - generic [ref=e2245]:
+                - generic [ref=e2247]: PWR
+                - generic [ref=e2251]: CTRL
+                - generic [ref=e2255]: SPIN
+              - generic [ref=e2258]:
+                - button "BATALHA" [ref=e2259]:
+                  - img [ref=e2260]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2269] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-ben-johns-perseus-3s-16mm
+                  - img [ref=e2270]
+                  - text: COMPRAR
+          - generic [ref=e2274]:
+            - img "Ben Johns Perseus Pro Iv" [ref=e2277]
+            - generic [ref=e2278]:
+              - paragraph [ref=e2279]: Joola
+              - heading "Ben Johns Perseus Pro Iv" [level=3] [ref=e2280]
+              - paragraph [ref=e2281]: R$1.599,00
+              - generic [ref=e2282]:
+                - generic [ref=e2284]: PWR
+                - generic [ref=e2288]: CTRL
+                - generic [ref=e2292]: SPIN
+              - generic [ref=e2295]:
+                - button "BATALHA" [ref=e2296]:
+                  - img [ref=e2297]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2306] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-ben-johns-perseus-pro-iv-16mm
+                  - img [ref=e2307]
+                  - text: COMPRAR
+          - generic [ref=e2311]:
+            - img "Agassi Champion Ss25 -" [ref=e2314]
+            - generic [ref=e2315]:
+              - paragraph [ref=e2316]: Joola
+              - heading "Agassi Champion Ss25 -" [level=3] [ref=e2317]
+              - paragraph [ref=e2318]: R$449,00
+              - generic [ref=e2319]:
+                - generic [ref=e2321]: PWR
+                - generic [ref=e2325]: CTRL
+                - generic [ref=e2329]: SPIN
+              - generic [ref=e2332]:
+                - button "BATALHA" [ref=e2333]:
+                  - img [ref=e2334]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2343] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-agassi-champion-ss25-12-mm
+                  - img [ref=e2344]
+                  - text: COMPRAR
+          - generic [ref=e2348]:
+            - img "Adipower Attk3" [ref=e2351]
+            - generic [ref=e2352]:
+              - paragraph [ref=e2353]: Adidas
+              - heading "Adipower Attk3" [level=3] [ref=e2354]
+              - paragraph [ref=e2355]: R$1.099,00
+              - generic [ref=e2356]:
+                - generic [ref=e2358]: PWR
+                - generic [ref=e2362]: CTRL
+                - generic [ref=e2366]: SPIN
+              - generic [ref=e2369]:
+                - button "BATALHA" [ref=e2370]:
+                  - img [ref=e2371]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2380] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-adidas-adipower-attk3
+                  - img [ref=e2381]
+                  - text: COMPRAR
+          - generic [ref=e2385]:
+            - img "Agassi Edge Ss25" [ref=e2388]
+            - generic [ref=e2389]:
+              - paragraph [ref=e2390]: Joola
+              - heading "Agassi Edge Ss25" [level=3] [ref=e2391]
+              - paragraph [ref=e2392]: R$799,00
+              - generic [ref=e2393]:
+                - generic [ref=e2395]: PWR
+                - generic [ref=e2399]: CTRL
+                - generic [ref=e2403]: SPIN
+              - generic [ref=e2406]:
+                - button "BATALHA" [ref=e2407]:
+                  - img [ref=e2408]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2417] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-agassi-edge-ss25-16mm
+                  - img [ref=e2418]
+                  - text: COMPRAR
+          - generic [ref=e2422]:
+            - img "Perseus 3S Dual" [ref=e2425]
+            - generic [ref=e2426]:
+              - paragraph [ref=e2427]: Joola
+              - heading "Perseus 3S Dual" [level=3] [ref=e2428]
+              - paragraph [ref=e2429]: R$1.299,00
+              - generic [ref=e2430]:
+                - generic [ref=e2432]: PWR
+                - generic [ref=e2436]: CTRL
+                - generic [ref=e2440]: SPIN
+              - generic [ref=e2443]:
+                - button "BATALHA" [ref=e2444]:
+                  - img [ref=e2445]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2454] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-perseus-3s-dual-16mm
+                  - img [ref=e2455]
+                  - text: COMPRAR
+          - generic [ref=e2459]:
+            - img "Hyperion 3S Dual" [ref=e2462]
+            - generic [ref=e2463]:
+              - paragraph [ref=e2464]: Joola
+              - heading "Hyperion 3S Dual" [level=3] [ref=e2465]
+              - paragraph [ref=e2466]: R$1.299,00
+              - generic [ref=e2467]:
+                - generic [ref=e2469]: PWR
+                - generic [ref=e2473]: CTRL
+                - generic [ref=e2477]: SPIN
+              - generic [ref=e2480]:
+                - button "BATALHA" [ref=e2481]:
+                  - img [ref=e2482]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2491] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-hyperion-3s-dual-16mm
+                  - img [ref=e2492]
+                  - text: COMPRAR
+          - generic [ref=e2496]:
+            - img "Scorpeus Heat Vision -" [ref=e2499]
+            - generic [ref=e2500]:
+              - paragraph [ref=e2501]: Joola
+              - heading "Scorpeus Heat Vision -" [level=3] [ref=e2502]
+              - paragraph [ref=e2503]: R$899,00
+              - generic [ref=e2504]:
+                - generic [ref=e2506]: PWR
+                - generic [ref=e2510]: CTRL
+                - generic [ref=e2514]: SPIN
+              - generic [ref=e2517]:
+                - button "BATALHA" [ref=e2518]:
+                  - img [ref=e2519]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2528] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-scorpeus-heat-vision-16mm
+                  - img [ref=e2529]
+                  - text: COMPRAR
+          - generic [ref=e2533]:
+            - img "Perseus Double Vision -" [ref=e2536]
+            - generic [ref=e2537]:
+              - paragraph [ref=e2538]: Joola
+              - heading "Perseus Double Vision -" [level=3] [ref=e2539]
+              - paragraph [ref=e2540]: R$999,00
+              - generic [ref=e2541]:
+                - generic [ref=e2543]: PWR
+                - generic [ref=e2547]: CTRL
+                - generic [ref=e2551]: SPIN
+              - generic [ref=e2554]:
+                - button "BATALHA" [ref=e2555]:
+                  - img [ref=e2556]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2565] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-perseus-double-vision-16mm
+                  - img [ref=e2566]
+                  - text: COMPRAR
+          - generic [ref=e2570]:
+            - img "Hyperion Double Vision -" [ref=e2573]
+            - generic [ref=e2574]:
+              - paragraph [ref=e2575]: Joola
+              - heading "Hyperion Double Vision -" [level=3] [ref=e2576]
+              - paragraph [ref=e2577]: R$999,00
+              - generic [ref=e2578]:
+                - generic [ref=e2580]: PWR
+                - generic [ref=e2584]: CTRL
+                - generic [ref=e2588]: SPIN
+              - generic [ref=e2591]:
+                - button "BATALHA" [ref=e2592]:
+                  - img [ref=e2593]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2602] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-hyperion-double-vision-16mm
+                  - img [ref=e2603]
+                  - text: COMPRAR
+          - generic [ref=e2607]:
+            - img "Agassi Edge Heat Vision -" [ref=e2610]
+            - generic [ref=e2611]:
+              - paragraph [ref=e2612]: Joola
+              - heading "Agassi Edge Heat Vision -" [level=3] [ref=e2613]
+              - paragraph [ref=e2614]: R$899,00
+              - generic [ref=e2615]:
+                - generic [ref=e2617]: PWR
+                - generic [ref=e2621]: CTRL
+                - generic [ref=e2625]: SPIN
+              - generic [ref=e2628]:
+                - button "BATALHA" [ref=e2629]:
+                  - img [ref=e2630]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2639] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-agassi-heat-vision-16mm
+                  - img [ref=e2640]
+                  - text: COMPRAR
+          - generic [ref=e2644]:
+            - img "Ben Johns Hyperion 3S" [ref=e2647]
+            - generic [ref=e2648]:
+              - paragraph [ref=e2649]: Joola
+              - heading "Ben Johns Hyperion 3S" [level=3] [ref=e2650]
+              - paragraph [ref=e2651]: R$1.299,00
+              - generic [ref=e2652]:
+                - generic [ref=e2654]: PWR
+                - generic [ref=e2658]: CTRL
+                - generic [ref=e2662]: SPIN
+              - generic [ref=e2665]:
+                - button "BATALHA" [ref=e2666]:
+                  - img [ref=e2667]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2676] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-ben-johns-hyperion-3s-16mm
+                  - img [ref=e2677]
+                  - text: COMPRAR
+          - generic [ref=e2681]:
+            - img "Astrum" [ref=e2684]
+            - generic [ref=e2685]:
+              - paragraph [ref=e2686]: Starvie
+              - heading "Astrum" [level=3] [ref=e2687]
+              - paragraph [ref=e2688]: R$600,00
+              - generic [ref=e2689]:
+                - generic [ref=e2691]: PWR
+                - generic [ref=e2695]: CTRL
+                - generic [ref=e2699]: SPIN
+              - generic [ref=e2702]:
+                - button "BATALHA" [ref=e2703]:
+                  - img [ref=e2704]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2713] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-starvie-astrum
+                  - img [ref=e2714]
+                  - text: COMPRAR
+          - generic [ref=e2718]:
+            - img "Tyson Mcguffin Magnus Pro Iv" [ref=e2721]
+            - generic [ref=e2722]:
+              - paragraph [ref=e2723]: Joola
+              - heading "Tyson Mcguffin Magnus Pro Iv" [level=3] [ref=e2724]
+              - paragraph [ref=e2725]: R$1.599,00
+              - generic [ref=e2726]:
+                - generic [ref=e2728]: PWR
+                - generic [ref=e2732]: CTRL
+                - generic [ref=e2736]: SPIN
+              - generic [ref=e2739]:
+                - button "BATALHA" [ref=e2740]:
+                  - img [ref=e2741]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2750] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-tyson-mcguffin-magnus-pro-iv-14mm
+                  - img [ref=e2751]
+                  - text: COMPRAR
+          - generic [ref=e2755]:
+            - img "Tyson Mcguffin Magnus 3S" [ref=e2758]
+            - generic [ref=e2759]:
+              - paragraph [ref=e2760]: Joola
+              - heading "Tyson Mcguffin Magnus 3S" [level=3] [ref=e2761]
+              - paragraph [ref=e2762]: R$1.299,00
+              - generic [ref=e2763]:
+                - generic [ref=e2765]: PWR
+                - generic [ref=e2769]: CTRL
+                - generic [ref=e2773]: SPIN
+              - generic [ref=e2776]:
+                - button "BATALHA" [ref=e2777]:
+                  - img [ref=e2778]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2787] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-tyson-mcguffin-magnus-3s-16mm
+                  - img [ref=e2788]
+                  - text: COMPRAR
+          - generic [ref=e2792]:
+            - img "Graf Pro Iv" [ref=e2795]
+            - generic [ref=e2796]:
+              - paragraph [ref=e2797]: Joola
+              - heading "Graf Pro Iv" [level=3] [ref=e2798]
+              - paragraph [ref=e2799]: R$1.599,00
+              - generic [ref=e2800]:
+                - generic [ref=e2802]: PWR
+                - generic [ref=e2806]: CTRL
+                - generic [ref=e2810]: SPIN
+              - generic [ref=e2813]:
+                - button "BATALHA" [ref=e2814]:
+                  - img [ref=e2815]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2824] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-graf-pro-iv-16mm
+                  - img [ref=e2825]
+                  - text: COMPRAR
+          - generic [ref=e2829]:
+            - img "Graf Edge Ss25" [ref=e2832]
+            - generic [ref=e2833]:
+              - paragraph [ref=e2834]: Joola
+              - heading "Graf Edge Ss25" [level=3] [ref=e2835]
+              - paragraph [ref=e2836]: R$799,00
+              - generic [ref=e2837]:
+                - generic [ref=e2839]: PWR
+                - generic [ref=e2843]: CTRL
+                - generic [ref=e2847]: SPIN
+              - generic [ref=e2850]:
+                - button "BATALHA" [ref=e2851]:
+                  - img [ref=e2852]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2861] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-graf-edge-ss25-16mm
+                  - img [ref=e2862]
+                  - text: COMPRAR
+          - generic [ref=e2866]:
+            - img "Collin Johns Scorpeus Pro Iv" [ref=e2869]
+            - generic [ref=e2870]:
+              - paragraph [ref=e2871]: Joola
+              - heading "Collin Johns Scorpeus Pro Iv" [level=3] [ref=e2872]
+              - paragraph [ref=e2873]: R$1.599,00
+              - generic [ref=e2874]:
+                - generic [ref=e2876]: PWR
+                - generic [ref=e2880]: CTRL
+                - generic [ref=e2884]: SPIN
+              - generic [ref=e2887]:
+                - button "BATALHA" [ref=e2888]:
+                  - img [ref=e2889]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2898] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-collin-johns-scorpeus-pro-iv-16mm
+                  - img [ref=e2899]
+                  - text: COMPRAR
+          - generic [ref=e2903]:
+            - img "Collin Johns Scorpeus 3S" [ref=e2906]
+            - generic [ref=e2907]:
+              - paragraph [ref=e2908]: Joola
+              - heading "Collin Johns Scorpeus 3S" [level=3] [ref=e2909]
+              - paragraph [ref=e2910]: R$1.299,00
+              - generic [ref=e2911]:
+                - generic [ref=e2913]: PWR
+                - generic [ref=e2917]: CTRL
+                - generic [ref=e2921]: SPIN
+              - generic [ref=e2924]:
+                - button "BATALHA" [ref=e2925]:
+                  - img [ref=e2926]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2935] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-collin-johns-scorpeus-3s-16mm
+                  - img [ref=e2936]
+                  - text: COMPRAR
+          - generic [ref=e2940]:
+            - img "Ben Johns Hyperion Pro Iv" [ref=e2943]
+            - generic [ref=e2944]:
+              - paragraph [ref=e2945]: Joola
+              - heading "Ben Johns Hyperion Pro Iv" [level=3] [ref=e2946]
+              - paragraph [ref=e2947]: R$1.599,00
+              - generic [ref=e2948]:
+                - generic [ref=e2950]: PWR
+                - generic [ref=e2954]: CTRL
+                - generic [ref=e2958]: SPIN
+              - generic [ref=e2961]:
+                - button "BATALHA" [ref=e2962]:
+                  - img [ref=e2963]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e2972] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-ben-johns-hyperion-pro-iv-16mm
+                  - img [ref=e2973]
+                  - text: COMPRAR
+          - generic [ref=e2977]:
+            - img "Anna Bright Scorpeus Gen 3" [ref=e2980]
+            - generic [ref=e2981]:
+              - paragraph [ref=e2982]: Joola
+              - heading "Anna Bright Scorpeus Gen 3" [level=3] [ref=e2983]
+              - paragraph [ref=e2984]: R$699,00
+              - generic [ref=e2985]:
+                - generic [ref=e2987]: PWR
+                - generic [ref=e2991]: CTRL
+                - generic [ref=e2995]: SPIN
+              - generic [ref=e2998]:
+                - button "BATALHA" [ref=e2999]:
+                  - img [ref=e3000]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3009] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-anna-bright-scorpeus-gen-3-14mm
+                  - img [ref=e3010]
+                  - text: COMPRAR
+          - generic [ref=e3014]:
+            - img "Anna Bright Scorpeus 3S" [ref=e3017]
+            - generic [ref=e3018]:
+              - paragraph [ref=e3019]: Joola
+              - heading "Anna Bright Scorpeus 3S" [level=3] [ref=e3020]
+              - paragraph [ref=e3021]: R$1.499,00
+              - generic [ref=e3022]:
+                - generic [ref=e3024]: PWR
+                - generic [ref=e3028]: CTRL
+                - generic [ref=e3032]: SPIN
+              - generic [ref=e3035]:
+                - button "BATALHA" [ref=e3036]:
+                  - img [ref=e3037]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3046] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-anna-bright-scorpeus-3s-14mm
+                  - img [ref=e3047]
+                  - text: COMPRAR
+          - generic [ref=e3051]:
+            - img "Agassi Pro Iv" [ref=e3054]
+            - generic [ref=e3055]:
+              - paragraph [ref=e3056]: Joola
+              - heading "Agassi Pro Iv" [level=3] [ref=e3057]
+              - paragraph [ref=e3058]: R$1.599,00
+              - generic [ref=e3059]:
+                - generic [ref=e3061]: PWR
+                - generic [ref=e3065]: CTRL
+                - generic [ref=e3069]: SPIN
+              - generic [ref=e3072]:
+                - button "BATALHA" [ref=e3073]:
+                  - img [ref=e3074]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3083] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-joola-agassi-pro-iv-14mm
+                  - img [ref=e3084]
+                  - text: COMPRAR
+          - generic [ref=e3088]:
+            - img "Conqueror Attack" [ref=e3091]
+            - generic [ref=e3092]:
+              - paragraph [ref=e3093]: Drop Shot
+              - heading "Conqueror Attack" [level=3] [ref=e3094]
+              - paragraph [ref=e3095]: R$749,00
+              - generic [ref=e3096]:
+                - generic [ref=e3098]: PWR
+                - generic [ref=e3102]: CTRL
+                - generic [ref=e3106]: SPIN
+              - generic [ref=e3109]:
+                - button "BATALHA" [ref=e3110]:
+                  - img [ref=e3111]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3120] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-drop-shot-conqueror-attack
+                  - img [ref=e3121]
+                  - text: COMPRAR
+          - generic [ref=e3125]:
+            - img "Adipower Carbon Control" [ref=e3128]
+            - generic [ref=e3129]:
+              - paragraph [ref=e3130]: Adidas
+              - heading "Adipower Carbon Control" [level=3] [ref=e3131]
+              - paragraph [ref=e3132]: R$799,00
+              - generic [ref=e3133]:
+                - generic [ref=e3135]: PWR
+                - generic [ref=e3139]: CTRL
+                - generic [ref=e3143]: SPIN
+              - generic [ref=e3146]:
+                - button "BATALHA" [ref=e3147]:
+                  - img [ref=e3148]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3157] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-adidas-adipower-carbon-control-16mm
+                  - img [ref=e3158]
+                  - text: COMPRAR
+          - generic [ref=e3162]:
+            - img "Adipower Carbon Attk" [ref=e3165]
+            - generic [ref=e3166]:
+              - paragraph [ref=e3167]: Adidas
+              - heading "Adipower Carbon Attk" [level=3] [ref=e3168]
+              - paragraph [ref=e3169]: R$990,00
+              - generic [ref=e3170]:
+                - generic [ref=e3172]: PWR
+                - generic [ref=e3176]: CTRL
+                - generic [ref=e3180]: SPIN
+              - generic [ref=e3183]:
+                - button "BATALHA" [ref=e3184]:
+                  - img [ref=e3185]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3194] [cursor=pointer]:
+                  - /url: https://yosports.com.br/products/raquete-de-pickleball-adidas-adipower-carbon-attk-16mm
+                  - img [ref=e3195]
+                  - text: COMPRAR
+          - generic [ref=e3199]:
+            - img "Touch Control 16Mm" [ref=e3202]
+            - generic [ref=e3203]:
+              - paragraph [ref=e3204]: 3Rdshot
+              - heading "Touch Control 16Mm" [level=3] [ref=e3205]
+              - paragraph [ref=e3206]: R$474,00
+              - generic [ref=e3207]:
+                - generic [ref=e3209]: PWR
+                - generic [ref=e3213]: CTRL
+                - generic [ref=e3217]: SPIN
+              - generic [ref=e3220]:
+                - button "BATALHA" [ref=e3221]:
+                  - img [ref=e3222]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3231] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-3rdshot-touch-control-16mm/
+                  - img [ref=e3232]
+                  - text: COMPRAR
+          - generic [ref=e3236]:
+            - img "Labs Project Boomstik Enlongated" [ref=e3239]
+            - generic [ref=e3240]:
+              - paragraph [ref=e3241]: Selkirk
+              - heading "Labs Project Boomstik Enlongated" [level=3] [ref=e3242]
+              - paragraph [ref=e3243]: R$2.599,00
+              - generic [ref=e3244]:
+                - generic [ref=e3246]: PWR
+                - generic [ref=e3250]: CTRL
+                - generic [ref=e3254]: SPIN
+              - generic [ref=e3257]:
+                - button "BATALHA" [ref=e3258]:
+                  - img [ref=e3259]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3268] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-selkirk-labs-project-boom-stik-enlongated-16mm/
+                  - img [ref=e3269]
+                  - text: COMPRAR
+          - generic [ref=e3273]:
+            - img "Oberon Mini" [ref=e3276]
+            - generic [ref=e3277]:
+              - paragraph [ref=e3278]: 3Rdshot
+              - heading "Oberon Mini" [level=3] [ref=e3279]
+              - paragraph [ref=e3280]: R$109,00
+              - generic [ref=e3281]:
+                - generic [ref=e3283]: PWR
+                - generic [ref=e3287]: CTRL
+                - generic [ref=e3291]: SPIN
+              - generic [ref=e3294]:
+                - button "BATALHA" [ref=e3295]:
+                  - img [ref=e3296]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3305] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-3rdshot-oberon-mini/
+                  - img [ref=e3306]
+                  - text: COMPRAR
+          - generic [ref=e3310]:
+            - img "Invikta Luxx Control Infinigrit" [ref=e3313]
+            - generic [ref=e3314]:
+              - paragraph [ref=e3315]: Selkirk
+              - heading "Invikta Luxx Control Infinigrit" [level=3] [ref=e3316]
+              - paragraph [ref=e3317]: R$2.309,00
+              - generic [ref=e3318]:
+                - generic [ref=e3320]: PWR
+                - generic [ref=e3324]: CTRL
+                - generic [ref=e3328]: SPIN
+              - generic [ref=e3331]:
+                - button "BATALHA" [ref=e3332]:
+                  - img [ref=e3333]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3342] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-selkirk-invikta-luxx-control-infinigrit-19mm/
+                  - img [ref=e3343]
+                  - text: COMPRAR
+          - generic [ref=e3347]:
+            - img "Invikta Amped Pro Air" [ref=e3350]
+            - generic [ref=e3351]:
+              - paragraph [ref=e3352]: Selkirk
+              - heading "Invikta Amped Pro Air" [level=3] [ref=e3353]
+              - paragraph [ref=e3354]: R$1.272,00
+              - generic [ref=e3355]:
+                - generic [ref=e3357]: PWR
+                - generic [ref=e3361]: CTRL
+                - generic [ref=e3365]: SPIN
+              - generic [ref=e3368]:
+                - button "BATALHA" [ref=e3369]:
+                  - img [ref=e3370]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3379] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-selkirk-invikta-amped-pro-air/
+                  - img [ref=e3380]
+                  - text: COMPRAR
+          - generic [ref=e3384]:
+            - img "Bantam Alw-C 14.3Mm Anna Leight Waters" [ref=e3387]
+            - generic [ref=e3388]:
+              - paragraph [ref=e3389]: Paddletek
+              - heading "Bantam Alw-C 14.3Mm Anna Leight Waters" [level=3] [ref=e3390]
+              - paragraph [ref=e3391]: R$1.889,00
+              - generic [ref=e3392]:
+                - generic [ref=e3394]: PWR
+                - generic [ref=e3398]: CTRL
+                - generic [ref=e3402]: SPIN
+              - generic [ref=e3405]:
+                - button "BATALHA" [ref=e3406]:
+                  - img [ref=e3407]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3416] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-paddletek-bantam-alw-c-14-3mm-anna-leight-waters/
+                  - img [ref=e3417]
+                  - text: COMPRAR
+          - generic [ref=e3421]:
+            - img "Labs Project Boom Stik Widebody" [ref=e3424]
+            - generic [ref=e3425]:
+              - paragraph [ref=e3426]: Selkirk
+              - heading "Labs Project Boom Stik Widebody" [level=3] [ref=e3427]
+              - paragraph [ref=e3428]: R$2.599,00
+              - generic [ref=e3429]:
+                - generic [ref=e3431]: PWR
+                - generic [ref=e3435]: CTRL
+                - generic [ref=e3439]: SPIN
+              - generic [ref=e3442]:
+                - button "BATALHA" [ref=e3443]:
+                  - img [ref=e3444]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3453] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-selkirk-labs-project-boom-stik-widebody-16mm/
+                  - img [ref=e3454]
+                  - text: COMPRAR
+          - generic [ref=e3458]:
+            - img "Signature Series 16Mm" [ref=e3461]
+            - generic [ref=e3462]:
+              - paragraph [ref=e3463]: Proxr
+              - heading "Signature Series 16Mm" [level=3] [ref=e3464]
+              - paragraph [ref=e3465]: R$1.082,00
+              - generic [ref=e3466]:
+                - generic [ref=e3468]: PWR
+                - generic [ref=e3472]: CTRL
+                - generic [ref=e3476]: SPIN
+              - generic [ref=e3479]:
+                - button "BATALHA" [ref=e3480]:
+                  - img [ref=e3481]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3490] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-proxr-signature-series-16mm/
+                  - img [ref=e3491]
+                  - text: COMPRAR
+          - generic [ref=e3495]:
+            - img "Bantam Alw-C 12.7Mm Anna Leight Waters" [ref=e3498]
+            - generic [ref=e3499]:
+              - paragraph [ref=e3500]: Paddletek
+              - heading "Bantam Alw-C 12.7Mm Anna Leight Waters" [level=3] [ref=e3501]
+              - paragraph [ref=e3502]: R$1.889,00
+              - generic [ref=e3503]:
+                - generic [ref=e3505]: PWR
+                - generic [ref=e3509]: CTRL
+                - generic [ref=e3513]: SPIN
+              - generic [ref=e3516]:
+                - button "BATALHA" [ref=e3517]:
+                  - img [ref=e3518]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3527] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-paddletek-bantam-alw-c-12-7mm-anna-leight-waters/
+                  - img [ref=e3528]
+                  - text: COMPRAR
+          - generic [ref=e3532]:
+            - img "Sweet Spot Max Series 13Mm" [ref=e3535]
+            - generic [ref=e3536]:
+              - paragraph [ref=e3537]: Proxr
+              - heading "Sweet Spot Max Series 13Mm" [level=3] [ref=e3538]
+              - paragraph [ref=e3539]: R$1.082,00
+              - generic [ref=e3540]:
+                - generic [ref=e3542]: PWR
+                - generic [ref=e3546]: CTRL
+                - generic [ref=e3550]: SPIN
+              - generic [ref=e3553]:
+                - button "BATALHA" [ref=e3554]:
+                  - img [ref=e3555]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3564] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-proxr-sweet-spot-max-series-13mm/
+                  - img [ref=e3565]
+                  - text: COMPRAR
+          - generic [ref=e3569]:
+            - img "Labs Project Boomstik Enlongated 16Mm - Jack Sock" [ref=e3572]
+            - generic [ref=e3573]:
+              - paragraph [ref=e3574]: Selkirk
+              - heading "Labs Project Boomstik Enlongated 16Mm - Jack Sock" [level=3] [ref=e3575]
+              - paragraph [ref=e3576]: R$2.599,00
+              - generic [ref=e3577]:
+                - generic [ref=e3579]: PWR
+                - generic [ref=e3583]: CTRL
+                - generic [ref=e3587]: SPIN
+              - generic [ref=e3590]:
+                - button "BATALHA" [ref=e3591]:
+                  - img [ref=e3592]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3601] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-selkirk-labs-project-boomstik-enlongated-16mm-jack-sock-wo0a8/
+                  - img [ref=e3602]
+                  - text: COMPRAR
+          - generic [ref=e3606]:
+            - img "Venus" [ref=e3609]
+            - generic [ref=e3610]:
+              - paragraph [ref=e3611]: 3Rdshot
+              - heading "Venus" [level=3] [ref=e3612]
+              - paragraph [ref=e3613]: R$899,00
+              - generic [ref=e3614]:
+                - generic [ref=e3616]: PWR
+                - generic [ref=e3620]: CTRL
+                - generic [ref=e3624]: SPIN
+              - generic [ref=e3627]:
+                - button "BATALHA" [ref=e3628]:
+                  - img [ref=e3629]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3638] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-3rdshot-venus-16mm-tuckj/
+                  - img [ref=e3639]
+                  - text: COMPRAR
+          - generic [ref=e3643]:
+            - img "Sweet Spot Max Series 16Mm" [ref=e3646]
+            - generic [ref=e3647]:
+              - paragraph [ref=e3648]: Proxr
+              - heading "Sweet Spot Max Series 16Mm" [level=3] [ref=e3649]
+              - paragraph [ref=e3650]: R$1.082,00
+              - generic [ref=e3651]:
+                - generic [ref=e3653]: PWR
+                - generic [ref=e3657]: CTRL
+                - generic [ref=e3661]: SPIN
+              - generic [ref=e3664]:
+                - button "BATALHA" [ref=e3665]:
+                  - img [ref=e3666]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3675] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-proxr-sweet-spot-max-series-16mm/
+                  - img [ref=e3676]
+                  - text: COMPRAR
+          - generic [ref=e3680]:
+            - img "Tempest Wave Pro-C 14.3Mm" [ref=e3683]
+            - generic [ref=e3684]:
+              - paragraph [ref=e3685]: Paddletek
+              - heading "Tempest Wave Pro-C 14.3Mm" [level=3] [ref=e3686]
+              - paragraph [ref=e3687]: R$1.069,00
+              - generic [ref=e3688]:
+                - generic [ref=e3690]: PWR
+                - generic [ref=e3694]: CTRL
+                - generic [ref=e3698]: SPIN
+              - generic [ref=e3701]:
+                - button "BATALHA" [ref=e3702]:
+                  - img [ref=e3703]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3712] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-paddletek-tempest-wave-pro-c-14-3mm/
+                  - img [ref=e3713]
+                  - text: COMPRAR
+          - generic [ref=e3717]:
+            - img "Venus 16Mm Nova Geração" [ref=e3720]
+            - generic [ref=e3721]:
+              - paragraph [ref=e3722]: 3Rdshot
+              - heading "Venus 16Mm Nova Geração" [level=3] [ref=e3723]
+              - paragraph [ref=e3724]: R$1.199,00
+              - generic [ref=e3725]:
+                - generic [ref=e3727]: PWR
+                - generic [ref=e3731]: CTRL
+                - generic [ref=e3735]: SPIN
+              - generic [ref=e3738]:
+                - button "BATALHA" [ref=e3739]:
+                  - img [ref=e3740]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3749] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-3rdshot-venus-16mm-nova-geracao-6schs/
+                  - img [ref=e3750]
+                  - text: COMPRAR
+          - generic [ref=e3754]:
+            - img "Era Enlongated 16Mm Sunset - Edition Limited" [ref=e3757]
+            - generic [ref=e3758]:
+              - paragraph [ref=e3759]: Slk
+              - heading "Era Enlongated 16Mm Sunset - Edition Limited" [level=3] [ref=e3760]
+              - paragraph [ref=e3761]: R$1.889,00
+              - generic [ref=e3762]:
+                - generic [ref=e3764]: PWR
+                - generic [ref=e3768]: CTRL
+                - generic [ref=e3772]: SPIN
+              - generic [ref=e3775]:
+                - button "BATALHA" [ref=e3776]:
+                  - img [ref=e3777]
+                  - text: BATALHA
+                - link "COMPRAR" [ref=e3786] [cursor=pointer]:
+                  - /url: https://www.brazilpickleballstore.com.br/produtos/raquete-slk-era-enlongated-16mm-sunset-edition-limited-stk7e/
+                  - img [ref=e3787]
+                  - text: COMPRAR
+    - generic [ref=e3792]:
+      - link "Inicio" [ref=e3793] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e3794]:
+          - img [ref=e3795]
+          - generic [ref=e3798]: Home
+      - link "Recomendacao" [ref=e3801] [cursor=pointer]:
+        - /url: /recommend
+        - generic [ref=e3802]:
+          - img [ref=e3803]
+          - generic [ref=e3806]: AI Coach
+      - link "Analise" [ref=e3807] [cursor=pointer]:
+        - /url: /statistics
+        - generic [ref=e3808]:
+          - img [ref=e3809]
+          - generic [ref=e3810]: Análise
+  - region "Notifications (F8)":
+    - list

@@ -1,0 +1,54 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - img [ref=e9]
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - generic [ref=e63]: INTELIGÊNCIA EM EQUIPAMENTO
+            - heading "DOMINE A QUADRA." [level=1] [ref=e65]:
+              - text: DOMINE A
+              - text: QUADRA.
+            - paragraph [ref=e66]: Analisamos as métricas de desempenho de centenas de raquetes para encontrar o match ideal para o seu estilo de jogo.
+            - generic [ref=e67]:
+              - link "ENCONTRAR MINHA RAQUETE →" [ref=e68] [cursor=pointer]:
+                - /url: /quiz
+                - button "ENCONTRAR MINHA RAQUETE →" [ref=e69]: ENCONTRAR MINHA RAQUETE →
+              - link "EXPLORAR CATÁLOGO" [ref=e70] [cursor=pointer]:
+                - /url: "#catalog"
+          - img "Premium Paddle" [ref=e72]
+      - generic [ref=e73]:
+        - generic [ref=e74]:
+          - generic [ref=e75]:
+            - img [ref=e76]
+            - textbox "Buscar por nome, marca ou material..." [ref=e79]
+          - generic [ref=e80]:
+            - button "Todos" [ref=e81]
+            - button "⚡ Power" [ref=e82]
+            - button "🎯 Controle" [ref=e83]
+            - button "⚖️ Equilibrado" [ref=e84]
+            - button "12–14mm Speed" [ref=e85]
+            - button "16mm Controle" [ref=e86]
+            - button "18mm+ Estabil." [ref=e87]
+            - button "💎 Joias" [ref=e88]
+        - generic [ref=e89]:
+          - img [ref=e90]
+          - paragraph [ref=e92]: Carregando arsenal...
+    - generic [ref=e94]:
+      - link "Inicio" [ref=e95] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e96]:
+          - img [ref=e97]
+          - generic [ref=e100]: Home
+      - link "Recomendacao" [ref=e103] [cursor=pointer]:
+        - /url: /recommend
+        - generic [ref=e104]:
+          - img [ref=e105]
+          - generic [ref=e108]: AI Coach
+      - link "Analise" [ref=e109] [cursor=pointer]:
+        - /url: /statistics
+        - generic [ref=e110]:
+          - img [ref=e111]
+          - generic [ref=e112]: Análise
+  - region "Notifications (F8)":
+    - list

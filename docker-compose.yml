@@ -45,25 +45,16 @@ services:
       - picklematch_v3
     restart: unless-stopped
 
-  # Next.js Frontend
-  frontend_next:
+  # Vite SPA Frontend
+  frontend_vite:
     build:
       context: .
       dockerfile: Dockerfile.frontend
-      target: builder
-    container_name: picklematch_ui_v3
-    environment:
-      - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=/api/v1
-      - BACKEND_URL=http://backend_v3:8000
-      - WATCHPACK_POLLING=true
-      - CHOKIDAR_USEPOLLING=true
+      args:
+        VITE_API_URL: ""
+    container_name: picklematch_ui_vite
     ports:
-      - "3002:3000"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    command: npm run dev
+      - "3002:80"
     depends_on:
       - backend_v3
     networks:

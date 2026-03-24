@@ -390,6 +390,50 @@ If FAIL: return to planner with specific fixes. Same revision loop as other dime
 
 **Severity:** WARNING for potential conflicts. BLOCKER if incompatible transforms on same data entity with no preservation mechanism.
 
+## Dimension 10: AGENTS.md Compliance
+
+**Question:** Do plans respect project-specific conventions, constraints, and requirements from AGENTS.md?
+
+**Process:**
+1. Read `./AGENTS.md` in the working directory (already loaded in `<project_context>`)
+2. Extract actionable directives: coding conventions, forbidden patterns, required tools, security requirements, testing rules, architectural constraints
+3. For each directive, check if any plan task contradicts or ignores it
+4. Flag plans that introduce patterns AGENTS.md explicitly forbids
+5. Flag plans that skip steps AGENTS.md explicitly requires (e.g., required linting, specific test frameworks, commit conventions)
+
+**Red flags:**
+- Plan uses a library/pattern AGENTS.md explicitly forbids
+- Plan skips a required step (e.g., AGENTS.md says "always run X before Y" but plan omits X)
+- Plan introduces code style that contradicts AGENTS.md conventions
+- Plan creates files in locations that violate AGENTS.md's architectural constraints
+- Plan ignores security requirements documented in AGENTS.md
+
+**Skip condition:** If no `./AGENTS.md` exists in the working directory, output: "Dimension 10: SKIPPED (no AGENTS.md found)" and move on.
+
+**Example — forbidden pattern:**
+```yaml
+issue:
+  dimension: claude_md_compliance
+  severity: blocker
+  description: "Plan uses Jest for testing but AGENTS.md requires Vitest"
+  plan: "01"
+  task: 1
+  claude_md_rule: "Testing: Always use Vitest, never Jest"
+  plan_action: "Install Jest and create test suite..."
+  fix_hint: "Replace Jest with Vitest per project AGENTS.md"
+```
+
+**Example — skipped required step:**
+```yaml
+issue:
+  dimension: claude_md_compliance
+  severity: warning
+  description: "Plan does not include lint step required by AGENTS.md"
+  plan: "02"
+  claude_md_rule: "All tasks must run eslint before committing"
+  fix_hint: "Add eslint verification step to each task's <verify> block"
+```
+
 </verification_dimensions>
 
 <verification_process>
@@ -721,6 +765,7 @@ Plan verification complete when:
   - [ ] Deferred ideas not included in plans
 - [ ] Overall status determined (passed | issues_found)
 - [ ] Cross-plan data contracts checked (no conflicting transforms on shared data)
+- [ ] AGENTS.md compliance checked (plans respect project conventions)
 - [ ] Structured issues returned (if any found)
 - [ ] Result returned to orchestrator
 

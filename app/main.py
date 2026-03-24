@@ -20,6 +20,7 @@ from app.api.routes import router
 from app.api.endpoints.alerts import router as alerts_router
 from app.api.endpoints.catalog import router as catalog_router
 from app.api.endpoints.recommend import router as recommend_router
+from app.api.endpoints.orval_shim import router as orval_shim_router
 
 settings = get_settings()
 
@@ -169,6 +170,7 @@ app.include_router(router, prefix="/api/v1")
 app.include_router(alerts_router, prefix="/api/v1")
 app.include_router(catalog_router, prefix="/api/v1")
 app.include_router(recommend_router, prefix="/api/v1")
+app.include_router(orval_shim_router)  # No prefix - router has /api internally
 
 
 @app.get("/")

@@ -87,6 +87,3 @@ simulation_results.json
 
 # Logs
 *.log
-
-# Loki
-.loki/

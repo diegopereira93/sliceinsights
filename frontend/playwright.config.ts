@@ -29,6 +29,22 @@ export default defineConfig({
         screenshot: 'only-on-failure',
     },
 
+    /* Multi-viewport projects for responsive testing */
+    projects: [
+        {
+            name: 'desktop',
+            use: { ...devices['Desktop Chrome'] },
+        },
+        {
+            name: 'mobile',
+            use: { ...devices['Pixel 5'] },
+        },
+        {
+            name: 'tablet',
+            use: { ...devices['Galaxy Tab S4'], viewport: { width: 768, height: 1024 } },
+        },
+    ],
+
     /* webServer is handled by Docker Compose */
     webServer: undefined,
 });

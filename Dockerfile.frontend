@@ -1,45 +1,22 @@
 # ============================================
-# Frontend Dockerfile - Multi-stage Build
+# Frontend Dockerfile - Vite SPA + nginx
 # ============================================
+
+# Stage 1: Build the Vite SPA
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Copy package files
-COPY frontend/package*.json ./
-RUN npm ci --legacy-peer-deps
+COPY frontend-vite/package.json frontend-vite/package-lock.json* ./
+RUN npm ci
 
-# Copy the rest of the application
-COPY frontend/ .
-
-# Set production environment
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
-
-# NEXT_PUBLIC_* vars must be present at build time to be inlined into the client bundle
-ARG NEXT_PUBLIC_API_URL=http://localhost:8002/api/v1
-ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-
-# Build the application
+COPY frontend-vite/ .
+ARG VITE_API_URL=http://localhost:8002
+ENV VITE_API_URL=${VITE_API_URL}
 RUN npm run build
 
-# ============================================
-# Runner
-FROM node:20-alpine AS runner
-WORKDIR /app
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
-
-# Copy built application
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
-EXPOSE 3000
-ENV HOSTNAME="0.0.0.0"
-
-CMD ["node", "server.js"]
+# Stage 2: Serve with nginx
+FROM nginx:alpine AS runner
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY frontend-vite/nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
