@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Swords, ShoppingCart, Info } from "lucide-react";
 import { useBattle } from "./BattleContext";
 import { formatCurrency, cn } from "@/lib/utils";
-import { Paddle } from "../lib/api-client";
+import { Paddle } from "../lib/types/paddle";
 
 export function BattleOverlay() {
   const { selectedPaddles, removePaddle, isBattleModeOpen, setBattleModeOpen, clearBattle: _clearBattle } = useBattle();

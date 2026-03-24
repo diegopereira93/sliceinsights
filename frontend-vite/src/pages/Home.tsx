@@ -1,13 +1,23 @@
-import { useState, useMemo } from "react";
-import { useListPaddles } from "../lib/api-client";
-import type { Paddle } from "../lib/api-client";
+import { useState, useMemo, useEffect } from "react";
 import { PaddleCard } from "@/components/PaddleCard";
 import { Search, Loader2, Zap, Target, Scale, Layers, Gem } from "lucide-react";
 import { motion, useMotionValue, animate } from "framer-motion";
-import { useEffect } from "react";
 import { Link } from "wouter";
 
 type FilterId = "all" | "power" | "control" | "balanced" | "core-thin" | "core-mid" | "core-thick" | "gems";
+
+interface Paddle {
+  id: number;
+  name: string;
+  brand: string;
+  price: number;
+  imageUrl?: string;
+  coreThickness?: number;
+  surface?: string;
+  powerScore: number;
+  controlScore: number;
+  isHiddenGem?: boolean;
+}
 
 interface SmartFilter {
   id: FilterId;
@@ -68,11 +78,48 @@ function FloatingPaddle() {
 export default function Home() {
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterId>("all");
+  const [paddles, setPaddles] = useState<Paddle[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  const { data, isLoading, error } = useListPaddles({ limit: 100 });
+  useEffect(() => {
+    const fetchPaddles = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch(
+          "https://sliceinsights-4rmf.onrender.com/api/v1/paddles?limit=100&available_in_brazil=true"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch paddles");
+        }
+        const data = await response.json();
+        
+        // Map API response to Paddle interface
+        const mappedPaddles: Paddle[] = (data.paddles || data || []).map((p: Record<string, unknown>) => ({
+          id: p.id as number,
+          name: (p.model_name as string) || "",
+          brand: (p.brand_name as string) || "",
+          price: (p.min_price_brl as number) || 0,
+          imageUrl: p.image_url as string | undefined,
+          coreThickness: p.core_thickness as number | undefined,
+          surface: p.surface as string | undefined,
+          powerScore: (p.ratings as Record<string, number>)?.power ?? 0,
+          controlScore: (p.ratings as Record<string, number>)?.control ?? 0,
+          isHiddenGem: p.is_featured as boolean | undefined,
+        }));
+        
+        setPaddles(mappedPaddles);
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error("Unknown error"));
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPaddles();
+  }, []);
 
   const filtered = useMemo(() => {
-    const paddles = data?.paddles ?? [];
     const filterFn = SMART_FILTERS.find(f => f.id === activeFilter)?.match ?? (() => true);
     const searched = search.trim()
       ? paddles.filter(p =>
@@ -82,7 +129,7 @@ export default function Home() {
         )
       : paddles;
     return searched.filter(filterFn);
-  }, [data, search, activeFilter]);
+  }, [paddles, search, activeFilter]);
 
   return (
     <div className="min-h-screen pb-32">

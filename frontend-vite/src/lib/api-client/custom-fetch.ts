@@ -26,7 +26,7 @@ let _authTokenGetter: AuthTokenGetter | null = null;
  * Pass `null` to clear the base URL.
  */
 export function setBaseUrl(url: string | null): void {
-  _baseUrl = url ? url.replace(/\/+$/, "") : null;
+  _baseUrl = url ? url.replace(/\/+$/, "").trim() : null;
 }
 
 /**
@@ -59,9 +59,14 @@ function isUrl(input: RequestInfo | URL): input is URL {
 
 function applyBaseUrl(input: RequestInfo | URL): RequestInfo | URL {
   if (!_baseUrl) return input;
-  const url = resolveUrl(input);
+  let url = resolveUrl(input);
   // Only prepend to relative paths (starting with /)
   if (!url.startsWith("/")) return input;
+
+  // If base URL ends with /api/v1 and path starts with /api, strip /api from path
+  if (_baseUrl.endsWith("/api/v1") && url.startsWith("/api/")) {
+    url = url.substring(4); // Remove /api prefix from path
+  }
 
   const absolute = `${_baseUrl}${url}`;
   if (typeof input === "string") return absolute;
