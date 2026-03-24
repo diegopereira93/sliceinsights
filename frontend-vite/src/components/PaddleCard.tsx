@@ -2,6 +2,7 @@ import { ShoppingCart, Swords, Sparkles, Zap, Shield } from "lucide-react";
 import { useBattle } from "./BattleContext";
 import { motion } from "framer-motion";
 import { WeightSensationScale } from "./WeightSensationScale";
+import { Paddle } from "../lib/types/paddle";
 
 interface PaddleCardProps {
   paddle: Paddle;
