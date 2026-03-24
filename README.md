@@ -1,0 +1,336 @@
+# SliceInsights v1.8.1
+![Version](https://img.shields.io/badge/version-1.8.1-brightgreen)
+
+![CI Quality Gate](https://github.com/diegogp/sliceinsights/actions/workflows/production-pipeline.yml/badge.svg)
+
+
+🏓 Uma plataforma premium de recomendação de raquetes de Pickleball, focada em alta performance, UX sofisticada e conversão. **Agora com Rankeamento Híbrido por IA**.
+
+## ✨ Features
+
+- **AI Racket Finder v1.8**: Consultor de Elite (Llama 3.3) que cruza specs técnicas com o perfil do aluno para recomendações "Coach-Level".
+- **Labor Illusion Advanced**: Mensagens de processamento em tempo real para feedback técnico imersivo.
+- **Cromatismo Técnico & Médio**: Atributos técnicos e filtros de saúde (Tennis Elbow) validados por hardware.
+- **Design System Elite**: Interface moderna com Lime Green (#CEFF00), Glassmorphism e Dark Mode nativo.
+- **SE Refactor (High Performance)**: Backend otimizado com SQL Joins e Smart Filtering.
+- **Mobile-First PWA**: Experiência de app nativo focada em performance móvel.
+
+## 🛡️ Production-Ready Features
+
+- **Rate Limiting**: Proteção contra abuso de API (30-100 req/min por endpoint)
+- **CORS Whitelist**: Segurança configurável para origens permitidas
+- **Prometheus Metrics**: Métricas de performance em `/metrics`
+- **Structured Logging**: Logs JSON com structlog
+- **Sentry Integration**: Error tracking (configurável via `SENTRY_DSN`)
+- **Health Check**: Validação de conexão com DB em `/api/v1/health` (Returns 503 on failure)
+- **Error Boundaries**: Tratamento gracioso de erros no frontend
+- **E2E Testing**: Suite completa com Playwright verificando integridade de dados em produção
+### Estrutura de Monorepo (Frontend/Backend)
+- O frontend reside na pasta `/frontend`.
+- O deploy na Vercel é configurado via DashBoard (Root Directory: `frontend`) e o arquivo `frontend/vercel.json` gerencia variáveis de ambiente.
+- O pipeline de CI/CD no GitHub Actions dispara o deploy a partir da raiz para garantir a detecção correta.
+- [x] **CI/CD Pipeline**: GitHub Actions para testes e build
+- [x] **Lógica de Recomendação**: Validação física unificada (Physics-Based Scoring)
+- [x] **Verificação Contínua**: Ralph-Loop (Self-Healing) ativo em produção
+- [x] **Project Documentation**: Revisão completa v1.7 concluída
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js 14.2.35 (App Router) + Tailwind CSS + Framer Motion
+- **UI Components**: Shadcn/ui + Lucide Icons + Radix UI
+- **Backend**: FastAPI + SQLModel + AsyncPG
+- **Database**: PostgreSQL 16
+- **Testing**: Pytest (backend) + Playwright (E2E)
+- **Observability**: Prometheus + Sentry + Structlog
+- **Architecture**: Clean Architecture / Service Layer Pattern
+
+## 📖 Documentation
+
+For detailed technical documentation, architecture guides, and deployment instructions, please refer to the [docs/](./docs/) directory:
+
+- [Architecture Guide](./docs/ARCHITECTURE.md)
+- [API Specification](./docs/technical/api_specification.md)
+- [Deployment Guide](./docs/DEPLOYMENT.md)
+- [Project Analysis Report (Archive Jan 2026)](./docs/archive/PROJECT_ANALYSIS_REPORT_JAN_2026.md)
+
+---
+
+## 🚀 Quick Start
+
+### Pré-requisitos
+
+- Docker e Docker Compose
+- Python 3.11+ (para scrapers)
+- Node.js 18+ (para desenvolvimento frontend)
+
+### Executar o Projeto
+
+```bash
+# Clonar o repositório
+git clone https://github.com/diegogp/sliceinsights.git
+cd sliceinsights
+
+# Subir todos os serviços
+docker compose up -d
+
+# Acessar aplicação
+# Frontend: http://localhost:3000
+# API: http://localhost:8002
+# Docs API: http://localhost:8002/docs
+```
+
+Na primeira vez, o banco é populado automaticamente com dados reais de `data/db/*.csv` (raquetes, lojas, preços). Desenvolvedores futuros fazem apenas `git clone && docker compose up`.
+
+### Estrutura de Serviços
+
+| Serviço | Porta | Descrição |
+|---------|-------|-----------|
+| `frontend_next` | 3000 | Aplicação Next.js |
+| `backend_v3` | 8002 | API FastAPI |
+| `postgres_v3` | 5434 | Banco PostgreSQL |
+| `seed_v3` | - | Serviço de seed (sob demanda) |
+
+## 📊 Pipeline de Dados
+
+### Arquitetura
+
+```
+                        ┌─────────────────────────────────────────┐
+  10 Lojas (BR)         │            GitHub Actions                │
+  ┌──────────────┐      │  ┌──────────────────────────────────┐   │
+  │ joola.com.br │      │  │   scrape-enrichment.yml (sáb)    │   │
+  │ sharkbeach...│  →   │  │   run_scraper.py × 10 stores     │   │
+  │ yosports...  │      │  └──────────────┬───────────────────┘   │
+  │ ...          │      │                 ↓                        │
+  └──────────────┘      │         PostgreSQL (Railway/Prod)        │
+                        │                 ↓                         │
+                        │         export_db_to_csv.py               │
+                        │                 ↓                         │
+                        │         data/db/*.csv                     │
+                        │                 ↓                         │
+                        └──────────── Git commit ───────────────────┘
+                                              ↓
+                        ┌─────────────────────────────────────────┐
+  Dev (docker compose)  │  init-db.sh → seed_from_csv.py           │
+                        │  = 176 paddles, 10 stores, 183 offers    │
+                        └─────────────────────────────────────────┘
+```
+
+### Fluxo de Dados
+
+| Ambiente | Origem dos Dados | Como |
+|----------|-------------------|------|
+| **Produção** | Scrapers (10 lojas) | GitHub Actions cron (sábado) |
+| **Desenvolvimento** | CSV versionado | `data/db/*.csv` carregado no `docker compose up` |
+
+### Scripts Principais
+
+```bash
+# Executar todos os scrapers e popular o banco (dev ou prod)
+docker exec picklematch_api_v3 python scripts/run_scraper.py all
+
+# Exportar dados do banco para CSVs (para versionar)
+docker exec picklematch_api_v3 python scripts/export_db_to_csv.py
+
+# Seed manual do banco a partir dos CSVs
+docker exec picklematch_api_v3 python scripts/seed_from_csv.py
+
+# Re-popular uma loja específica
+docker exec picklematch_api_v3 python scripts/scrape_brazil_store.py
+```
+
+### Atualizar Dados Reais
+
+Quando os scrapers encontrarem novas raquetes em produção:
+
+```bash
+# 1. Exportar do banco de prod (Railway)
+docker exec picklematch_api_prod python scripts/export_db_to_csv.py
+
+# 2. Copiar CSVs para o repo
+docker cp picklematch_api_prod:/app/data/db/*.csv ./data/db/
+
+# 3. Commitar
+git add data/db/ && git commit -m "seed: sync $(date +%Y-%m-%d)"
+```
+
+### Dados Versionados
+
+| Arquivo | Conteúdo | Tamanho |
+|---------|----------|---------|
+| `data/db/stores.csv` | 10 lojas especializadas BR | ~0.6 KB |
+| `data/db/brands.csv` | Marcas (Selkirk, Joola, etc.) | ~0.4 KB |
+| `data/db/paddle_master.csv` | 176 raquetes com specs | ~50 KB |
+| `data/db/market_offers.csv` | 183 ofertas de preço | ~38 KB |
+
+## 🎯 Funcionalidades
+
+### Quiz de Recomendação
+
+Sistema inteligente de 10 perguntas que considera:
+- Nível de habilidade
+- Estilo de jogo (potência vs controle)
+- Histórico esportivo (tênis, etc.)
+- Orçamento em reais
+- Preferências de peso e formato
+
+### Market Intelligence
+
+- 📉 Distribuição de preços no mercado
+- 📊 Segmentação por características técnicas
+- 💎 "Hidden Gems" - melhores custo-benefício
+- 🏷️ Análise por marca
+
+### Catálogo Brasileiro
+
+- Filtros por marca, preço, características
+- Comparação lado a lado (Battle Mode)
+- Detalhes técnicos completos
+- Links diretos para compra
+
+## 📁 Estrutura do Projeto
+
+```
+sliceinsights/
+├── app/                      # Backend FastAPI
+│   ├── api/                  # Endpoints REST
+│   ├── db/                   # Database & ORM
+│   │   ├── database.py       # Conexão e sync de colunas
+│   │   └── ingestor.py       # Lógica de upsert de products
+│   ├── models/               # SQLModel schemas (Paddle, Store, MarketOffer, Brand)
+│   └── main.py
+├── frontend/                 # Frontend Next.js
+│   ├── app/                  # App router
+│   ├── components/           # React components
+│   └── lib/                  # Utilities
+├── scripts/                  # Scrapers & tools
+│   ├── scrape_*.py           # 10 scrapers (1 por loja)
+│   ├── seed_from_csv.py      # Seed a partir de CSVs
+│   ├── export_db_to_csv.py   # Exporta DB para CSVs
+│   ├── run_scraper.py        # Wrapper para executar scraper específico
+│   └── seed_stores.py        # Seed as 10 lojas
+├── data/
+│   ├── db/                   # CSVs versionados (seed real)
+│   │   ├── stores.csv
+│   │   ├── brands.csv
+│   │   ├── paddle_master.csv
+│   │   └── market_offers.csv
+│   └── raw/                  # Outputs dos scrapers (não versionados)
+└── docker-compose.yml
+```
+
+## 🔧 Desenvolvimento
+
+### Backend
+
+```bash
+# Entrar no container
+docker compose exec backend_v3 bash
+
+# Rodar testes
+pytest
+
+# Criar migração
+alembic revision --autogenerate -m "description"
+```
+
+### Frontend
+
+```bash
+# Desenvolvimento local
+cd frontend
+npm install
+npm run dev
+
+# Build de produção
+npm run build
+```
+
+### Qualidade & Testes
+
+```bash
+# Verificar todo o projeto (Lint, Segurança, Testes)
+./scripts/verify.sh
+
+# Rodar apenas Linter (Ruff)
+./.venv/bin/ruff check .
+
+# Rodar Scan de Segurança
+./.venv/bin/safety check -r requirements.txt
+```
+
+### 🌳 Fluxo de Trabalho Git (Obrigatório)
+
+Para garantir a estabilidade em produção, todos os ajustes (humanos ou agentes) seguem este padrão:
+
+1.  **Branch a partir da `main`**: `git checkout -b feat/nome-da-feature`.
+2.  **Desenvolvimento**: Implemente as mudanças e verifique localmente com `./scripts/verify.sh`.
+3.  **Documentação**: Atualize todos os documentos afetados (README, API docs) antes do push.
+4.  **Pull Request**: Abra um PR contra a `main`. **Nunca faça push direto na `main`.**
+5.  **Merge**: O merge só deve ocorrer após aprovação e sucesso na pipeline de CI.
+
+**Padrões exigidos**:
+- **Linting**: Código deve passar no `ruff` sem erros.
+- **Segurança**: Dependências verificadas pelo `safety`.
+- **Testing**: Cobertura básica de endpoints críticos.
+
+## 📝 API Endpoints
+
+### Principais Rotas
+
+```bash
+# Listar produtos brasileiros (padrão)
+GET /api/v1/paddles
+
+# Todas as raquetes (analytics)
+GET /api/v1/paddles?available_in_brazil=null
+
+# Apenas internacionais
+GET /api/v1/paddles?available_in_brazil=false
+
+# Recomendações do quiz
+POST /api/v1/recommendations
+```
+
+## 🤖 Desenvolvimento Autônomo
+
+Este projeto utiliza um enxame de agentes de IA especializados para acelerar o desenvolvimento.
+
+**Read more about the system architecture in [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)**
+
+### Workflow Rápido (IssueOps)
+1.  **Abra uma Issue** usando os templates (`Feature Request`, `Bug Report`).
+2.  **Marque um Agente** (ex: `@project-planner`) para iniciar o trabalho.
+3.  **Revise o PR** gerado automaticamente.
+
+### Agentes Principais
+*   `@project-planner`: Planejamento e Arquitetura.
+*   `@frontend-specialist`: UI/UX e React.
+*   `@backend-specialist`: API e Banco de Dados.
+*   `@devops-engineer`: CI/CD e Infra.
+
+---
+
+## 🤝 Contribuindo
+
+Contribuições são bem-vindas! Por favor:
+
+1. Fork o projeto
+2. Crie uma branch de feature (`git checkout -b feat/nova-feature`)
+3. Commit suas mudanças (`git commit -m 'feat: adiciona nova feature'`)
+4. Push para a branch (`git push origin feat/nova-feature`)
+5. Abra um Pull Request contra a `main`.
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+
+## 🙏 Agradecimentos
+
+- Brazil Pickleball Store pela disponibilidade dos produtos
+- Comunidade brasileira de pickleball
+- Dataset internacional de especificações técnicas
+
+---
+
+**Desenvolvido com ❤️ para a comunidade brasileira de pickleball**
