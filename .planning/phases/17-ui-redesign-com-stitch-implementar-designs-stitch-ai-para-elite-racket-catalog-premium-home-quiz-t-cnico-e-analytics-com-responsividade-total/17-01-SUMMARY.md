@@ -1,106 +1,102 @@
 ---
-phase: 17-ui-redesign-com-stitch
-plan: 01
-subsystem: frontend/testing + planning/design
-tags: [playwright, responsive, stitch, design-tokens, e2e]
+phase: 17-ui-redesign
+plan: "01"
+subsystem: frontend
+tags: [vite, react-19, tailwind-4, standalone-spa, ui-redesign]
 dependency_graph:
   requires: []
-  provides:
-    - Multi-viewport Playwright config (desktop/mobile/tablet projects)
-    - Responsiveness E2E test scaffold for /, /recommend, /statistics
-    - Stitch design-to-token mapping document for Phase 17
-  affects:
-    - frontend/playwright.config.ts
-    - frontend/e2e/responsiveness.spec.ts
-    - .planning/phases/17-*/designs/stitch-design-map.md
+  provides: [frontend-vite-directory]
+  affects: [docker-compose, backend-cors]
 tech_stack:
-  added: []
-  patterns:
-    - Playwright multi-project viewport testing
-    - Glassmorphism card pattern (glass-card utility)
-    - Lime accent + glow-hover pattern
-    - Pill option button pattern for quiz steps
+  added: [vite-7.3, react-19.1.0, tailwind-4.1.14, wouter-3.3, @tanstack-react-query-5.90, framer-motion-12.35, recharts-2.15, lucide-react-0.545, sonner-2.0, zod-3.25]
 key_files:
   created:
-    - frontend/e2e/responsiveness.spec.ts
-    - .planning/phases/17-ui-redesign-com-stitch-.../designs/stitch-design-map.md
-  modified:
-    - frontend/playwright.config.ts
+    - frontend-vite/package.json
+    - frontend-vite/vite.config.ts
+    - frontend-vite/tsconfig.json
+    - frontend-vite/index.html
+    - frontend-vite/.env.local
+    - frontend-vite/nginx.conf
+    - frontend-vite/src/main.tsx
+    - frontend-vite/src/App.tsx
+    - frontend-vite/src/index.css
+    - frontend-vite/src/lib/utils.ts
+    - frontend-vite/src/lib/api-client/custom-fetch.ts
+    - frontend-vite/src/lib/api-client/generated/api.ts
+    - frontend-vite/src/lib/api-client/generated/api.schemas.ts
+    - frontend-vite/src/lib/api-client/index.ts
+    - frontend-vite/src/pages/Home.tsx
+    - frontend-vite/src/pages/Quiz.tsx
+    - frontend-vite/src/pages/Chat.tsx
+    - frontend-vite/src/pages/Stats.tsx
+    - frontend-vite/src/pages/not-found.tsx
+    - frontend-vite/src/components/BottomNav.tsx
+    - frontend-vite/src/components/PaddleCard.tsx
+    - frontend-vite/src/components/BattleContext.tsx
+    - frontend-vite/src/components/BattleOverlay.tsx
+    - frontend-vite/src/components/ui/*.tsx (55 files)
+    - frontend-vite/src/hooks/use-mobile.tsx
+    - frontend-vite/src/hooks/use-toast.ts
+    - frontend-vite/public/images/*.png (4 files)
 decisions:
-  - Stitch MCP unavailable — design map created from tailwind.config.js + globals.css + component inventory as fallback
-  - Used `devices['iPhone 13']`, `devices['iPad (gen 7)']`, `devices['Desktop Chrome']` for viewport coverage
-  - Responsiveness spec uses scrollWidth > window.innerWidth for overflow detection (no setViewportSize needed — projects handle it)
+  - "Standalone package.json without pnpm workspace references"
+  - "Removed @replit/vite-plugin-cartographer, @replit/vite-plugin-dev-banner, @replit/vite-plugin-runtime-error-modal"
+  - "Route changes: /quiz -> /recommend, /stats -> /statistics per product requirements"
+  - "Added aria-labels to BottomNav: Inicio, Recomendacao, Analise"
+  - "API client inlined (not workspace dependency) with setBaseUrl bootstrap"
 metrics:
-  duration: ~15 min
-  completed_date: 2026-03-23
-  tasks_completed: 2
-  tasks_total: 2
-  files_created: 2
-  files_modified: 1
+  duration: ~6 minutes
+  completed_date: "2026-03-24"
+  files_created: 84
+  requirements: [UI-01, UI-02, UI-04]
 ---
 
-# Phase 17 Plan 01: Wave 0 Foundation — Playwright Viewport Projects + Stitch Design Map Summary
+# Phase 17 Plan 1: Vite SPA Frontend Scaffold Summary
 
-**One-liner:** Multi-viewport Playwright config (desktop/mobile/tablet) + responsiveness spec scaffold + comprehensive Stitch-to-project design token mapping document for all 3 redesign targets.
-
----
+## Objective
+Scaffold the Vite SPA frontend by copying redesign-slice source into a standalone `frontend-vite/` directory, creating a clean package.json, adapting vite.config.ts (remove Replit plugins), copying the API client library inline, updating route paths from /quiz to /recommend and /stats to /statistics, and configuring setBaseUrl to point to the FastAPI backend.
 
 ## What Was Built
+A complete standalone Vite + React 19 + Tailwind 4 frontend with:
+- All 4 pages (Home, Quiz/Recommend, Statistics, Chat)
+- 55+ shadcn/ui components
+- API client with setBaseUrl bootstrap
+- Public images (paddle images, hero backgrounds)
+- nginx.conf for production SPA serving
 
-### Task 1: Playwright Multi-Viewport Config + Responsiveness Spec (commit: 446f0aa)
+## Key Changes
+1. **Created frontend-vite/ directory** with standalone project structure
+2. **package.json**: Removed @workspace and @replit references, pinned exact versions
+3. **vite.config.ts**: Uses react() and tailwindcss() plugins only (no Replit)
+4. **Routes updated**: /quiz → /recommend, /stats → /statistics
+5. **BottomNav updated**: Links + aria-labels per UI-SPEC
+6. **API imports fixed**: All @workspace references changed to relative paths
+7. **main.tsx**: Added setBaseUrl bootstrap from VITE_API_URL env var
 
-Updated `frontend/playwright.config.ts` to add a `projects` array with three viewport configurations:
-- `desktop` — `devices['Desktop Chrome']`
-- `mobile` — `devices['iPhone 13']`
-- `tablet` — `devices['iPad (gen 7)']`
+## Acceptance Criteria - All Passed
+- `frontend-vite/package.json` has no @workspace/ or @replit/ references
+- `frontend-vite/vite.config.ts` contains react() and tailwindcss() plugins
+- `frontend-vite/src/main.tsx` imports setBaseUrl from ./lib/api-client/custom-fetch
+- `frontend-vite/src/App.tsx` has routes /recommend and /statistics
+- `frontend-vite/src/components/BottomNav.tsx` has correct nav links
+- No @workspace imports remain in frontend-vite/src/
+- Public images exist with non-zero file sizes
+- .env.local contains VITE_API_URL=http://localhost:8002
+- npm run build exits with code 0
+- dist/index.html exists after build
 
-All existing settings preserved: `fullyParallel`, `forbidOnly`, `retries`, `workers`, `reporter`, `use` (including `baseURL: process.env.BASE_URL`), `webServer`.
+## Deviation: None
+Plan executed exactly as written.
 
-Created `frontend/e2e/responsiveness.spec.ts` covering 3 routes (`/`, `/recommend`, `/statistics`) with two tests per route:
-- `renders without horizontal overflow` — evaluates `document.documentElement.scrollWidth > window.innerWidth`
-- `main content is visible` — checks `main` element visibility with 15s timeout
+## Auth Gates: None
+No authentication required for this task.
 
-### Task 2: Stitch Design Mapping Document (commit: a63d494)
-
-Created `.planning/phases/.../designs/stitch-design-map.md` containing:
-- **Token Mapping table** — 13 Stitch-to-project mappings (bg-zinc-950 → bg-background, text-lime-400 → text-primary, etc.)
-- **Per-screen design notes** for Home, Quiz (/recommend), and Statistics — layout patterns, responsive behavior, component choices
-- **Component Mapping table** — 12 entries mapping Stitch UI elements to project components (Button, Input, Card, Tabs, Badge, etc.)
-- **Design patterns** — code snippets for glassmorphism cards, lime accent headings, pill option buttons, glow hover cards
-- **Color palette summary** — all 8 project colors with token class and hex value
-
----
-
-## Deviations from Plan
-
-### Auto-applied (Rule 3)
-
-**1. [Rule 3 - Fallback] Stitch MCP unavailable — design map generated from codebase tokens**
-- **Found during:** Task 2, step 1
-- **Issue:** `mcp__stitch__list_projects` tool not available in this environment
-- **Fix:** Used fallback approach defined in plan step 2 — extracted all design information from `tailwind.config.js`, `globals.css`, and component inventory; used the Stitch design prompts from the plan as design intent references
-- **Files modified:** none (design map created as originally planned, just without Stitch screenshot data)
-- **Commit:** a63d494
-- **Note:** Design map includes instruction to update with real Stitch data when MCP is available
-
----
-
-## Success Criteria Check
-
-- [x] Playwright config has 3 viewport projects (mobile, tablet, desktop)
-- [x] Responsiveness test scaffold covers /, /recommend, /statistics
-- [x] Stitch designs extracted and mapped to project tokens (via fallback)
-- [x] Wave 0 foundation complete — subsequent plans can reference the design map
+## Known Stubs: None
+All required functionality is wired up.
 
 ---
 
 ## Self-Check: PASSED
-
-Files exist:
-- FOUND: frontend/playwright.config.ts (modified — contains projects array)
-- FOUND: frontend/e2e/responsiveness.spec.ts
-- FOUND: .planning/phases/.../designs/stitch-design-map.md
-
-Commits exist:
-- FOUND: 446f0aa — feat(17-01): add multi-viewport Playwright projects and responsiveness test scaffold
-- FOUND: a63d494 — feat(17-01): create Stitch design-to-token mapping document for Phase 17
+- All acceptance criteria verified
+- Build completes successfully
+- Commit 4464f55 contains 84 files
