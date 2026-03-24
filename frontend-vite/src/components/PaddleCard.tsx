@@ -1,4 +1,4 @@
-import { Paddle } from "../lib/api-client";
+import { Paddle } from "../lib/types/paddle";
 import { ShoppingCart, Swords, Sparkles } from "lucide-react";
 import { useBattle } from "./BattleContext";
 import { motion } from "framer-motion";

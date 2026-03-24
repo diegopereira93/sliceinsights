@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from "react";
-import { Paddle } from "../lib/api-client";
+import { Paddle } from "../lib/types/paddle";
 
 interface BattleContextType {
   selectedPaddles: Paddle[];
