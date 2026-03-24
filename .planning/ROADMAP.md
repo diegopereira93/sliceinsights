@@ -34,18 +34,18 @@ Full archive: `.planning/milestones/v2.0-ROADMAP.md`
 
 </details>
 
-### Phase 17: UI Redesign com Stitch — implementar designs Stitch AI para Elite Racket Catalog, Premium Home, Quiz Técnico e Analytics com responsividade total
+### Phase 17: UI Redesign — Migrar frontend Next.js para Vite SPA do redesign-slice
 
-**Goal:** Redesenhar 3 páginas do SliceInsights (Home, Quiz Técnico, Analytics) usando designs do Stitch AI como referência visual, migrando o /recommend de classes hardcoded para tokens do design system, adicionando framer-motion, e garantindo responsividade total em 375px/768px/1280px
+**Goal:** Substituir o frontend Next.js 14 pelo Vite SPA redesenhado no Replit (`redesign-slice/artifacts/sliceinsights/`), reaproveitando o API client Orval/React Query, mantendo o FastAPI como backend, e criando as rotas faltantes (leads, chat) no FastAPI.
 **Requirements**: UI-01, UI-02, UI-03, UI-04, UI-05
 **Depends on:** Phase 16
-**Plans:** 3/4 plans executed
+**Plans:** 4 plans
 
 Plans:
-- [ ] 17-01-PLAN.md — Wave 0: Playwright viewport config + Stitch design extraction + token mapping
-- [ ] 17-02-PLAN.md — Quiz /recommend redesign: SSR wrapper + design system migration + framer-motion
-- [ ] 17-03-PLAN.md — Home hero + PaddleCard + Statistics layout visual refinements
-- [ ] 17-04-PLAN.md — E2E regression + responsive viewport tests + human visual checkpoint
+- [ ] 17-01-PLAN.md — Scaffold frontend-vite/ com source copy, standalone package.json, route renames, API client inline
+- [ ] 17-02-PLAN.md — Criar orval_shim.py com 9 endpoints Orval-compativeis no FastAPI (/api prefix)
+- [ ] 17-03-PLAN.md — Docker infrastructure (Dockerfile.frontend Vite+nginx, docker-compose.yml) + human visual verification
+- [ ] 17-04-PLAN.md — Playwright E2E tests (pages, API compat, responsiveness) com 3 viewport projects
 
 ---
 
