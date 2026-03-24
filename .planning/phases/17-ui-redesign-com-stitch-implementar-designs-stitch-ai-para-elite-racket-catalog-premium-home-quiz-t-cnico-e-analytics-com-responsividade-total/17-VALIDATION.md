@@ -1,6 +1,6 @@
 ---
 phase: 17
-slug: ui-redesign-com-stitch
+slug: ui-redesign-vite-spa-migration
 status: draft
 nyquist_compliant: false
 wave_0_complete: false
@@ -9,69 +9,49 @@ created: 2026-03-23
 
 # Phase 17 — Validation Strategy
 
-> Per-phase validation contract for feedback sampling during execution.
-
----
-
 ## Test Infrastructure
 
 | Property | Value |
 |----------|-------|
-| **Framework** | Playwright E2E |
-| **Config file** | `playwright.config.ts` |
-| **Quick run command** | `npx playwright test --reporter=line` |
-| **Full suite command** | `npx playwright test` |
+| **Framework** | Playwright (E2E) |
+| **Config file** | `frontend-vite/playwright.config.ts` (Wave 0 cria) |
+| **Quick run command** | `cd frontend-vite && npx playwright test --project=desktop --reporter=dot` |
+| **Full suite command** | `cd frontend-vite && npx playwright test --project=desktop,mobile,tablet` |
 | **Estimated runtime** | ~60 seconds |
-
----
 
 ## Sampling Rate
 
-- **After every task commit:** Run `npx playwright test --reporter=line`
-- **After every plan wave:** Run `npx playwright test`
-- **Before `/gsd:verify-work`:** Full suite must be green
+- **After every task commit:** Quick run command
+- **After every plan wave:** Full suite
+- **Before `/gsd:verify-work`:** Full suite verde
 - **Max feedback latency:** 60 seconds
-
----
 
 ## Per-Task Verification Map
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 17-W0-01 | 01 | 0 | baseline | e2e | `npx playwright test` | ✅ | ⬜ pending |
-| 17-W1-01 | 01 | 1 | /recommend redesign | e2e | `npx playwright test --grep recommend` | ✅ | ⬜ pending |
-| 17-W2-01 | 02 | 2 | /home redesign | e2e | `npx playwright test --grep home` | ✅ | ⬜ pending |
-| 17-W2-02 | 02 | 2 | /statistics redesign | e2e | `npx playwright test --grep statistics` | ✅ | ⬜ pending |
-| 17-W3-01 | 03 | 3 | responsividade mobile | e2e | `npx playwright test --project=mobile` | ❌ W0 | ⬜ pending |
-
-*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
-
----
+| 17-01-01 | 01 | 1 | UI-01 | e2e | `cd frontend-vite && npx playwright test e2e/pages.spec.ts --project=desktop` | ❌ W0 | ⬜ pending |
+| 17-02-01 | 02 | 1 | UI-03 | e2e | `cd frontend-vite && npx playwright test e2e/api-compat.spec.ts` | ❌ W0 | ⬜ pending |
+| 17-03-01 | 03 | 2 | UI-04 | e2e | `cd frontend-vite && npx playwright test e2e/pages.spec.ts --project=desktop` | ❌ W0 | ⬜ pending |
+| 17-04-01 | 04 | 2 | UI-05 | e2e | `cd frontend-vite && npx playwright test e2e/responsiveness.spec.ts --project=mobile` | ❌ W0 | ⬜ pending |
 
 ## Wave 0 Requirements
 
-- [ ] Document baseline screenshot E2E (26/26 testes passando antes do redesign)
-- [ ] Adicionar projeto mobile ao `playwright.config.ts` para testes de responsividade
-- [ ] Adicionar testes de screenshot visual para as 4 páginas alvo
-- [ ] Configurar Stitch MCP no projeto antes de iniciar redesign
-
-*Wave 0 bloqueia todos os outros waves.*
-
----
+- [ ] `frontend-vite/playwright.config.ts` — viewport projects (desktop 1280px, tablet 768px, mobile 375px)
+- [ ] `frontend-vite/e2e/pages.spec.ts` — 4 rotas carregam sem erro (/, /recommend, /statistics, /chat)
+- [ ] `frontend-vite/e2e/api-compat.spec.ts` — chamadas ao FastAPI retornam 200
+- [ ] `frontend-vite/e2e/responsiveness.spec.ts` — sem overflow horizontal em 375px/768px/1280px
 
 ## Manual-Only Verifications
 
 | Behavior | Requirement | Why Manual | Test Instructions |
 |----------|-------------|------------|-------------------|
-| Qualidade visual do design Stitch | UI Redesign | Julgamento estético não automatizável | Revisar cada página redesenhada no browser com viewport 375px, 768px, 1280px |
-| Fidelidade ao design system | Design tokens | Inspeção visual de cores e tipografia | Verificar que nenhuma cor hex hardcoded aparece em `/recommend/page.tsx` |
-
----
+| Fidelidade visual vs redesign-slice | UI-01 | Comparação visual | Abrir localhost:5173 e comparar com screenshots do Replit |
+| Chat AI response quality | UI-03 | Qualidade LLM subjetiva | Enviar mensagem em /chat e verificar resposta coerente |
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
+- [ ] All tasks have automated verify or Wave 0 dependencies
 - [ ] Wave 0 covers all MISSING references
 - [ ] No watch-mode flags
 - [ ] Feedback latency < 60s

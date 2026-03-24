@@ -1,0 +1,21 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]: CARREGANDO TERMINAL...
+    - generic [ref=e6]:
+      - link "Inicio" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e8]:
+          - img [ref=e9]
+          - generic [ref=e12]: Home
+      - link "Recomendacao" [ref=e13] [cursor=pointer]:
+        - /url: /recommend
+        - generic [ref=e14]:
+          - img [ref=e15]
+          - generic [ref=e18]: AI Coach
+      - link "Analise" [ref=e19] [cursor=pointer]:
+        - /url: /statistics
+        - generic [ref=e20]:
+          - img [ref=e21]
+          - generic [ref=e22]: Análise
+  - region "Notifications (F8)":
+    - list

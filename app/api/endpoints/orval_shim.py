@@ -30,8 +30,15 @@ limiter = Limiter(key_func=get_remote_address)
 
 def paddle_to_orval(paddle: PaddleMaster, seq_id: int) -> dict:
     """Convert PaddleMaster SQLModel to Orval Paddle dict."""
-    # Get active offers
-    active_offers = [o for o in paddle.market_offers if o.is_active]
+    # Get active offers - handle both ORM objects and raw rows
+    try:
+        active_offers = [o for o in paddle.market_offers if o.is_active]
+    except AttributeError:
+        # For raw SQL rows, try to access market_offers differently
+        active_offers = []
+        if hasattr(paddle, "_extra"):
+            offers = paddle._extra.get("market_offers", [])
+            active_offers = [o for o in offers if getattr(o, "is_active", False)]
 
     # Find minimum price offer
     min_offer = (
@@ -222,13 +229,12 @@ async def list_paddles(
     # Get paginated results
     query = base_query.order_by(PaddleMaster.created_at).offset(offset).limit(limit)
     result = await session.exec(query)
-    rows = result.all()
+    paddles_db = result.scalars().all()
 
     # Convert to Orval format
     paddles = []
-    for row in rows:
-        paddle = row[0] if isinstance(row, tuple) else row
-        seq_id = row.seq_id if hasattr(row, "seq_id") else offset + len(paddles) + 1
+    for idx, paddle in enumerate(paddles_db):
+        seq_id = offset + idx + 1
         paddles.append(paddle_to_orval(paddle, seq_id))
 
     return {"paddles": paddles, "total": total}
@@ -432,15 +438,18 @@ async def get_market_stats(
         .subquery()
     )
 
+    brand_subq = select(
+        Brand.id,
+        Brand.name.label("brand_name"),
+    ).subquery()
+
     query = (
         select(
+            brand_subq.c.brand_name,
             PaddleMaster,
             offer_subq.c.min_price,
         )
-        .options(
-            selectinload(PaddleMaster.brand),
-            selectinload(PaddleMaster.market_offers),
-        )
+        .outerjoin(brand_subq, PaddleMaster.brand_id == brand_subq.c.id)
         .join(offer_subq, PaddleMaster.id == offer_subq.c.paddle_id)
     )
 
@@ -460,8 +469,9 @@ async def get_market_stats(
     top_power_score = 0
 
     for row in rows:
-        paddle = row[0] if isinstance(row, tuple) else row
-        min_price = row[1] if isinstance(row, tuple) else None
+        brand_name = row[0]
+        paddle = row[1]
+        min_price = row[2]
 
         if min_price:
             prices.append(float(min_price))
@@ -486,19 +496,62 @@ async def get_market_stats(
             ratio = rating / float(min_price)
             if ratio > best_value_ratio:
                 best_value_ratio = ratio
-                best_value = paddle_to_orval(paddle, 0)
+                best_value = {
+                    "id": 0,
+                    "name": paddle.model_name,
+                    "brand": brand_name or "Unknown",
+                    "price": float(min_price),
+                    "rating": rating,
+                    "imageUrl": paddle.image_url,
+                    "coreThickness": float(paddle.core_thickness_mm)
+                    if paddle.core_thickness_mm
+                    else None,
+                    "surface": paddle.face_material.value if paddle.face_material else None,
+                    "handle": None,
+                    "swingWeight": paddle.swing_weight,
+                    "powerScore": power,
+                    "controlScore": control,
+                    "weightSensation": None,
+                    "weightSensationDescription": None,
+                    "shopUrl": None,
+                    "isHiddenGem": rating >= 7
+                    and float(min_price) > 0
+                    and float(min_price) < 600
+                    and not paddle.is_featured,
+                    "valueCostBenefit": None,
+                }
 
         # Top power: highest power score
         if power > top_power_score:
             top_power_score = power
-            top_power = paddle_to_orval(paddle, 0)
+            top_power = {
+                "id": 0,
+                "name": paddle.model_name,
+                "brand": brand_name or "Unknown",
+                "price": float(min_price) if min_price else 0,
+                "rating": rating,
+                "imageUrl": paddle.image_url,
+                "coreThickness": float(paddle.core_thickness_mm)
+                if paddle.core_thickness_mm
+                else None,
+                "surface": paddle.face_material.value if paddle.face_material else None,
+                "handle": None,
+                "swingWeight": paddle.swing_weight,
+                "powerScore": power,
+                "controlScore": control,
+                "weightSensation": None,
+                "weightSensationDescription": None,
+                "shopUrl": None,
+                "isHiddenGem": False,
+                "valueCostBenefit": None,
+            }
 
         # Power vs control data (limit to 30)
         if len(power_vs_control) < 30:
             power_vs_control.append(
                 {
                     "name": paddle.model_name,
-                    "brand": paddle.brand.name if paddle.brand else "Unknown",
+                    "brand": brand_name or "Unknown",
                     "power": power,
                     "control": control,
                     "price": float(min_price) if min_price else 0,
@@ -556,15 +609,18 @@ async def get_brand_stats(
         .subquery()
     )
 
+    brand_subq = select(
+        Brand.id,
+        Brand.name.label("brand_name"),
+    ).subquery()
+
     query = (
         select(
+            brand_subq.c.brand_name,
             PaddleMaster,
             offer_subq.c.min_price,
         )
-        .options(
-            selectinload(PaddleMaster.brand),
-            selectinload(PaddleMaster.market_offers),
-        )
+        .outerjoin(brand_subq, PaddleMaster.brand_id == brand_subq.c.id)
         .join(offer_subq, PaddleMaster.id == offer_subq.c.paddle_id)
     )
 
@@ -575,13 +631,12 @@ async def get_brand_stats(
     brand_data: Dict[str, Dict[str, Any]] = {}
 
     for row in rows:
-        paddle = row[0] if isinstance(row, tuple) else row
-        min_price = row[1] if isinstance(row, tuple) else None
+        brand_name = row[0]
+        paddle = row[1]
+        min_price = row[2]
 
-        if not paddle.brand:
+        if not brand_name:
             continue
-
-        brand_name = paddle.brand.name
 
         if brand_name not in brand_data:
             brand_data[brand_name] = {

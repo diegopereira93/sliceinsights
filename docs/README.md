@@ -1,140 +1,134 @@
-# SliceInsights - Documentação do Projeto
+# SliceInsights — Catálogo Confiável Brasileiro
 
-**Status**: Production-Ready | **Raquetes**: 460 | **Versão**: 1.7
+> Plataforma de recomendação de raquetes de Pickleball com IA e catálogo confiável, focada no mercado brasileiro.
 
-> Plataforma premium de recomendação de raquetes de Pickleball com motor de IA e **Hyper-Personalização**, focada no mercado brasileiro.
-
----
-
-## 🚀 Quick Start
-
-### Para Desenvolvedores
-1. **Executar localmente**: `docker compose up -d --build`
-2. **Acessar**: 
-   - Frontend: http://localhost:3000
-   - API: http://localhost:8002/docs
-3. **Consultar**: [`operations/runbook.md`](operations/runbook.md) para troubleshooting
-
-### Para Deploy
-- **Railway**: Siga [`operations/railway_deploy.md`](operations/railway_deploy.md)
-- **Production Checklist**: [`../production-ready-check.md`](../production-ready-check.md) ✅
+**Milestone:** v3 | **Status:** Em desenvolvimento (Phase 17)
 
 ---
 
-## 📚 Navegação da Documentação
+## Quick Start
 
-### 🔧 Documentação Técnica
-| Documento | Descrição |
-|-----------|-----------|
-| [`ARCHITECTURE.md`](ARCHITECTURE.md) | Visão geral da arquitetura, stack e fluxo |
-| [`technical/database_schema.md`](technical/database_schema.md) | Schema PostgreSQL detalhado |
-| [`technical/api_specification.md`](technical/api_specification.md) | Endpoints, requests e responses |
-| [`technical/quiz.md`](technical/quiz.md) | Lógica do quiz de recomendação (10 perguntas) |
-| [`technical/hyper_personalization.md`](technical/hyper_personalization.md) | Sistema de Hyper-Personalização (Ideal Point, Delta Score) |
+```bash
+# 1. Subir serviços
+docker compose up -d --build
 
-### ⚙️ Operações
-| Documento | Descrição |
-|-----------|-----------|
-| [`operations/runbook.md`](operations/runbook.md) | Troubleshooting e manutenção |
-| [`operations/railway_deploy.md`](operations/railway_deploy.md) | Tutorial de deploy no Railway |
+# 2. Acessar
+#   Frontend Vite:  http://localhost:5173
+#   API FastAPI:    http://localhost:8002
 
-### 🗺️ Roadmaps Estratégicos (Pareto 80/20)
-| Documento | Status | Descrição |
-|-----------|--------|-----------|
-| [`roadmaps/NEXT_STEPS.md`](roadmaps/NEXT_STEPS.md) | 🔥 **URGENTE** | O que fazer AGORA (P0/P1) |
-| [`MONETIZATION.md`](MONETIZATION.md) | 🟡 20% | Foco em geração de receita |
+# 3. Seed dev catalog (primeira vez)
+docker compose run seed_v3
+```
 
 ---
 
----
+## Arquitetura
 
-## 🎯 Estado Atual do Projeto
+```
+frontend-vite/     → Vite SPA (React 19, Tailwind 4, React Query)
+     ↓ VITE_API_URL
+app/               → FastAPI backend (Python)
+     ↓ DATABASE_URL
+postgres_v3/       → PostgreSQL 16 + pgvector
+```
 
-### ✅ **Implementado**
-- 🗄️ **Catálogo**: 460 raquetes, ~50 marcas
-- 🧠 **Algoritmo**: Smart scoring, value score, slider Power/Control
-- 📊 **Estatísticas**: Hub de inteligência de mercado completo
-- 🔒 **Produção**: Rate limiting, CORS, logging, métricas Prometheus
-- ⚔️ **Features**: Comparador "Batalha", Info tooltips técnicos
-- ✅ **Testes**: 15 testes automatizados passando
-- 🎯 **Hyper-Personalização (v1.7)**:
-  - Quiz de 10 perguntas com slider Power/Control
-  - **Ideal Point**: Seu perfil ideal visualizado nos gráficos de dispersão
-  - **Delta Score (%)**: Distância entre suas preferências e cada raquete
-  - Persistencia de sessão para análises personalizadas
+### Tech Stack
 
-### 🟡 **Em Progresso**
-- 💰 Monetização (afiliados Amazon/ML, AdSense)
-- 📱 PWA com favoritos offline
-- 🧮 Calculadora de importação
-
-### 📋 **Planejado**
-- 🤖 Scraper automatizado para e-commerce BR
-- ⏰ Alertas de preço
-- ⭐ Sistema de reviews
+| Layer | Tech |
+|-------|------|
+| Frontend | Vite 7, React 19, Tailwind 4, React Query, Framer Motion |
+| Backend | FastAPI, SQLModel, asyncpg, Orval |
+| Database | PostgreSQL 16 + pgvector |
+| Deploy | Docker Compose |
 
 ---
 
-## 📊 Métricas de Progresso
-
-| Categoria | Progresso | Meta |
-|-----------|-----------|------|
-| MVP Features | 100% | ✅ Completo |
-| Catálogo | 460 raquetes | 🟢 920% da meta (50) |
-| Production Ready | 100% | ✅ Completo |
-| Monetização | 20% | 🟡 Em progresso |
-
----
-
-## 🏗️ Tech Stack
-
-- **Frontend**: Next.js 14.2.35 + Tailwind CSS + Framer Motion
-- **Backend**: FastAPI + SQLModel + AsyncPG
-- **Database**: PostgreSQL 16
-- **Deploy**: Docker + Railway
-- **Observability**: Prometheus + Sentry + Structlog
-
----
-
-## 📁 Estrutura de Diretórios
+## Estrutura
 
 ```
 sliceinsights/
-├── app/              # FastAPI backend
-├── frontend/         # Next.js frontend
-├── tests/            # Testes automatizados
-├── scripts/          # Scripts de utilidade (seeding, scraping)
-├── data/             # Dados de paddles (CSV)
-├── docs/             # Documentação (você está aqui!)
-│   ├── technical/    # Specs técnicas
-│   ├── operations/   # Deploy e manutenção
-│   ├── roadmaps/     # Planejamento estratégico
-│   └── archive/      # Documentos históricos
+├── frontend-vite/       # Vite SPA (Phase 17)
+│   ├── src/pages/       # Home, Quiz, Chat, Stats
+│   ├── src/components/  # UI components
+│   └── src/lib/api-client/  # Orval-generated API client
+├── app/                 # FastAPI backend
+│   ├── api/endpoints/   # Route handlers
+│   └── main.py          # Entry point
+├── scripts/             # Scraper, seed, deploy scripts
+├── data/                # Seed data CSV
+├── docs/                # Documentação
+│   ├── deploy-guide.md  # Deploy & release
+│   └── slo-guide.md     # SLO monitoring
+├── tests/               # Testes automatizados
 └── docker-compose.yml
 ```
 
 ---
 
-## 🔗 Links Úteis
+## API Endpoints
 
-- **Swagger API**: http://localhost:8002/docs (dev)
-- **Métricas**: http://localhost:8002/metrics
-- **Health Check**: http://localhost:8002/api/v1/health
+| Route | Description |
+|-------|-------------|
+| `GET /api/healthz` | Health check |
+| `GET /api/paddles` | List paddles (paginated, filterable) |
+| `GET /api/paddles/{id}` | Paddle by ID |
+| `POST /api/quiz/recommend` | AI recommendation |
+| `POST /api/leads` | Lead capture |
+| `POST /api/chat` | Chat endpoint |
+| `GET /api/stats/market` | Market statistics |
+| `GET /api/stats/brands` | Brand stats |
+| `GET /api/stats/hidden-gems` | Hidden gems |
 
----
-
-## 📝 Contribuindo
-
-1. Consulte [`ARCHITECTURE.md`](ARCHITECTURE.md) para entender a estrutura
-2. Revise roadmaps em [`roadmaps/`](roadmaps/) para próximos passos
-3. Execute testes: `docker compose exec backend_v3 pytest tests/ -v`
-
----
-
-## 📜 Licença
-
-MIT
+Swagger: http://localhost:8002/docs
 
 ---
 
-**Última Atualização**: Fevereiro 2026 | **Versão**: 1.7 (Hyper-Personalization)
+## Scripts Úteis
+
+```bash
+# Database
+docker compose up postgres_v3 -d
+
+# Backend com hot reload
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+# Frontend
+cd frontend-vite && npm install && npm run dev
+
+# Seed dev catalog
+docker compose run seed_v3
+
+# Deploy data pipeline
+python scripts/deploy_worker.py --run
+```
+
+---
+
+## Testes
+
+```bash
+pytest tests/ -v
+```
+
+---
+
+## Roadmap
+
+Progresso atual: `.planning/ROADMAP.md`
+
+| Phase | Status |
+|-------|--------|
+| 11-16 | ✅ Complete |
+| 17 — UI Redesign (Vite SPA) | 🔄 In Progress |
+| 18 | 📋 Planned |
+
+---
+
+## Links
+
+- **Swagger API:** http://localhost:8002/docs
+- **Progress:** `.planning/ROADMAP.md`
+
+---
+
+*Última Atualização: Marzo 2026 | Milestone: v3.0*

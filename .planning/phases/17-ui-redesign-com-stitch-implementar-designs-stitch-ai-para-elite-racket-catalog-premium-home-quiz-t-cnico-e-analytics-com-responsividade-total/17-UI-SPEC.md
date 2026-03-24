@@ -1,7 +1,7 @@
 ---
 phase: 17
 slug: ui-redesign-com-stitch
-status: draft
+status: approved
 shadcn_initialized: true
 preset: none
 created: 2026-03-23
@@ -23,8 +23,8 @@ created: 2026-03-23
 | Preset | CSS-first via `index.css` `@theme inline` block — no `components.json` preset string |
 | Component library | Radix UI primitives (via shadcn) |
 | Icon library | lucide-react ^0.545.0 |
-| Body font | Inter (weights 300, 400, 500, 600) — `--font-sans` |
-| Display font | Outfit (weights 400, 600, 700, 800 + italic 700) — `--font-display` |
+| Body font | Inter (weights 400, 600) — `--font-sans` |
+| Display font | Outfit (weights 700, 900) — `--font-display` |
 | Animation library | framer-motion 12.35.1 |
 | Chart library | recharts ^2.15.4 |
 
@@ -58,20 +58,24 @@ Source: `Home.tsx`, `Stats.tsx`, `Chat.tsx`, `BottomNav.tsx`
 
 ## Typography
 
+Four canonical sizes, two weights per family:
+
 | Role | Size | Weight | Line Height | Font | Usage |
 |------|------|--------|-------------|------|-------|
-| Body | 14px (text-sm) | 400 (regular) | 1.5 | Inter | Card subtitles, filter pill labels, meta text |
-| Body-md | 16px (text-base) | 400 (light/regular) | 1.625 (leading-relaxed) | Inter | Hero subheadline, paragraph copy |
-| Label | 10px (text-[10px]) | 700 (bold) | 1 | Inter | Brand name above paddle name, stat bar labels (PWR/CTRL/SPIN), eyebrow badges — `tracking-widest uppercase` |
-| Heading | 20px (text-xl) | 700 (bold) | 1.25 | Outfit (font-display) | Page section headings, card names (`text-lg`/`text-xl`) |
-| Display | fluid clamp(3.2rem → 6rem) | 900 (font-black) | 0.92 | Outfit (font-display) | Hero h1 — `tracking-[-0.03em] italic` for accent word |
-| Mono | 10–12px (text-xs/text-[10px]) | 400 | 1 | system monospace (font-mono) | Loading terminal text, Stats page subtitle, chat latency readout — `tracking-widest uppercase` |
+| Label/Mono | 10px (text-xs / text-[10px]) | 600 (semibold) for Inter labels; 400 (regular) for mono readouts | 1 | Inter (labels) / system monospace (data readouts) | Brand name above paddle name, stat bar labels (PWR/CTRL/SPIN), eyebrow badges, terminal text, chat latency — `tracking-widest uppercase` |
+| Body | 14px (text-sm) | 400 (regular) | 1.5 (`leading-normal`) for single-line; 1.625 (`leading-relaxed`) for paragraph copy | Inter | Card subtitles, filter pill labels, meta text, hero subheadline, all paragraph copy |
+| Heading | 20px (text-xl) | 700 (bold) | 1.25 | Outfit (`font-display`) | Page section headings, card names (`text-lg` / `text-xl`) |
+| Display | fluid `clamp(3.2rem, 8vw, 6rem)` | 900 (black) | 0.92 | Outfit (`font-display`) | Hero h1 — `tracking-[-0.03em]`; accent word uses italic style (not a separate weight) |
 
 Rules:
 - All headings (`h1`–`h6`) use `font-display tracking-tight` (from `@layer base`)
 - Body text uses `font-sans antialiased`
 - Terminal/data labels use `font-mono` for numeric readouts
 - `tracking-[0.2em]` applied to eyebrow/status badges; `tracking-widest` on micro-labels
+- Italic is a **style variation** on Outfit 700 (e.g. accent word in hero h1) — it is not a separate weight declaration
+- The `16px (text-base)` size is eliminated. Where paragraph copy needs looser line-height, apply `leading-relaxed` to the 14px Body token instead.
+
+Eliminated (checker BLOCK 2): weights 300 (light), 500 (medium), 800 (extrabold) for Inter; weights 400 and 600 for Outfit are not used. Eliminated Body-md 16px (checker BLOCK 1).
 
 Source: `index.css` `@layer base`, `Home.tsx`, `PaddleCard.tsx`, `Stats.tsx`, `Chat.tsx`
 
@@ -140,6 +144,7 @@ Source: `Home.tsx`, `PaddleCard.tsx`, `BottomNav.tsx`, `Quiz.tsx`, `Chat.tsx`
 | BottomNav container | `glass-panel mx-4 mb-4 md:mb-6 rounded-2xl max-w-md md:mx-auto` — centered on desktop |
 | Page content padding | `container mx-auto px-4` — all pages; `pb-32` for BottomNav clearance |
 | Hero | Full-width section, `min-h-[580px]`, 2-column grid on md+ (`md:grid-cols-2`) |
+| Focal point primário | Floating paddle image no hero — âncora visual da Home; deve ser o elemento mais saliente na viewport inicial |
 | Catalog grid | `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5` |
 | Stats KPI row | `grid-cols-2 md:grid-cols-4 gap-4` |
 | Stats charts | `grid lg:grid-cols-2 gap-6` |
@@ -164,13 +169,13 @@ Source: `App.tsx`, `Home.tsx`, `BottomNav.tsx`, RESEARCH.md Pattern 2
 
 Components to migrate from `redesign-slice/artifacts/sliceinsights/src/`:
 
-| Component | File | Status |
-|-----------|------|--------|
-| PaddleCard | `components/PaddleCard.tsx` | Migrate as-is |
-| BottomNav | `components/BottomNav.tsx` | Migrate + update routes to `/recommend`, `/statistics` |
-| BattleContext | `components/BattleContext.tsx` | Include but do NOT activate — deferred (CONTEXT.md) |
-| BattleOverlay | `components/BattleOverlay.tsx` | Include but do NOT activate — deferred (CONTEXT.md) |
-| All shadcn/ui | `components/ui/*.tsx` (~50 files) | Migrate as-is |
+| Component | File | Status | Notes |
+|-----------|------|--------|-------|
+| PaddleCard | `components/PaddleCard.tsx` | Migrate as-is | — |
+| BottomNav | `components/BottomNav.tsx` | Migrate + update routes to `/recommend`, `/statistics` | Each nav item must declare `aria-label`: "Início" (Home `/`), "Recomendação" (AI Coach `/recommend`), "Análise" (Statistics `/statistics`) |
+| BattleContext | `components/BattleContext.tsx` | Include but do NOT activate — deferred (CONTEXT.md) | — |
+| BattleOverlay | `components/BattleOverlay.tsx` | Include but do NOT activate — deferred (CONTEXT.md) | — |
+| All shadcn/ui | `components/ui/*.tsx` (~50 files) | Migrate as-is | — |
 
 Public assets required:
 - `public/images/cinematic-paddle-nobg.png` — used in hero FloatingPaddle
@@ -191,7 +196,7 @@ Source: `App.tsx`, CONTEXT.md Deferred, RESEARCH.md Pattern directory
 | Empty state body (catalog) | "Tente ajustar os filtros de busca." |
 | Loading state (catalog) | "Carregando arsenal..." (font-mono tracking-[0.2em] uppercase) |
 | Loading state (stats) | "CARREGANDO TERMINAL..." (font-mono text-primary) |
-| Error state (catalog) | "Erro ao carregar raquetes." |
+| Error state (catalog) | "Erro ao carregar raquetes. Tente novamente." |
 | Error state (chat) | "[ERRO DE CONEXÃO: Tente novamente mais tarde]" |
 | Chat initial greeting | "Bem-vindo ao Command Center. Sou seu técnico virtual especializado em equipamentos. O que você quer saber sobre raquetes hoje?" |
 | AI agent name | "NEXUS-7" |

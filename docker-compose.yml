@@ -51,7 +51,7 @@ services:
       context: .
       dockerfile: Dockerfile.frontend
       args:
-        VITE_API_URL: http://backend_v3:8000
+        VITE_API_URL: ""
     container_name: picklematch_ui_vite
     ports:
       - "3002:80"

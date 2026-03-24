@@ -56,13 +56,13 @@ export default function Quiz() {
   const [answers, setAnswers] = useState<Partial<QuizAnswers>>({});
   const [leadForm, setLeadForm] = useState({ name: "", email: "" });
   const [showLead, setShowLead] = useState(false);
-  
+
   const recommendMutation = useGetQuizRecommendation();
   const captureLeadMutation = useCaptureLead();
 
   const handleOptionSelect = (key: string, value: string) => {
     setAnswers(prev => ({ ...prev, [key]: value }));
-    
+
     if (step < QUESTIONS.length - 1) {
       setTimeout(() => setStep(step + 1), 300);
     } else {
@@ -95,7 +95,7 @@ export default function Quiz() {
   // Render Results State
   if (recommendMutation.isSuccess && recommendMutation.data) {
     const { topPick, reasoning, alternatives } = recommendMutation.data;
-    
+
     return (
       <div className="min-h-screen pt-12 pb-32 px-4 container mx-auto">
         <div className="text-center mb-10">
@@ -106,7 +106,7 @@ export default function Quiz() {
           >
             <Sparkles className="w-10 h-10 text-primary" />
           </motion.div>
-          <h1 className="text-3xl md:text-5xl font-display font-black text-white italic mb-4">SUA ARMA IDEAL</h1>
+          <h1 className="text-3xl md:text-5xl font-display font-black text-white italic mb-4">SUA RAQUETE IDEAL</h1>
           <p className="text-zinc-400 max-w-2xl mx-auto">Analisamos seu perfil e encontramos a combinação perfeita de potência, controle e sensibilidade para o seu jogo.</p>
         </div>
 
@@ -114,7 +114,7 @@ export default function Quiz() {
           <div className="lg:col-span-5">
             <PaddleCard paddle={topPick} />
           </div>
-          
+
           <div className="lg:col-span-7 space-y-6">
             <div className="glass-panel p-6 rounded-2xl">
               <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-4">
@@ -123,7 +123,7 @@ export default function Quiz() {
               </h3>
               <p className="text-zinc-300 leading-relaxed">{reasoning}</p>
             </div>
-            
+
             <div className="glass-panel p-6 rounded-2xl bg-primary/5 border-primary/20">
               <div className="flex items-center justify-between">
                 <div>
@@ -145,7 +145,7 @@ export default function Quiz() {
                   {alternatives.map(alt => (
                     <div key={alt.id} className="bg-zinc-900 border border-white/5 rounded-xl p-3 flex gap-3 items-center">
                       <div className="w-12 h-16 bg-zinc-800 rounded flex-shrink-0 flex items-center justify-center p-1">
-                        {alt.imageUrl ? <img src={alt.imageUrl} className="h-full object-contain"/> : alt.brand[0]}
+                        {alt.imageUrl ? <img src={alt.imageUrl} className="h-full object-contain" /> : alt.brand[0]}
                       </div>
                       <div>
                         <p className="text-xs text-primary font-bold">{alt.brand}</p>
@@ -165,7 +165,7 @@ export default function Quiz() {
   return (
     <div className="min-h-screen pt-12 pb-32 flex flex-col items-center">
       <div className="w-full max-w-2xl px-4">
-        
+
         {/* Progress Bar */}
         {!showLead && (
           <div className="mb-12">
@@ -174,7 +174,7 @@ export default function Quiz() {
               <span>Passo {step + 1} de {QUESTIONS.length}</span>
             </div>
             <div className="h-1 w-full bg-zinc-800 rounded-full overflow-hidden">
-              <motion.div 
+              <motion.div
                 className="h-full bg-primary"
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
@@ -196,31 +196,31 @@ export default function Quiz() {
             </div>
             <h2 className="text-3xl font-display font-black text-white italic mb-4">ANÁLISE CONCLUÍDA</h2>
             <p className="text-zinc-400 mb-8">Nossa inteligência artificial processou seu perfil de jogador. Para onde devemos enviar o relatório detalhado e a sua recomendação ideal?</p>
-            
+
             <form onSubmit={handleLeadSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">Seu Nome</label>
-                <input 
+                <input
                   required
-                  type="text" 
+                  type="text"
                   value={leadForm.name}
-                  onChange={e => setLeadForm(prev => ({...prev, name: e.target.value}))}
+                  onChange={e => setLeadForm(prev => ({ ...prev, name: e.target.value }))}
                   className="w-full bg-zinc-900 border border-white/10 rounded-xl px-4 py-4 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                   placeholder="Ex: João Silva"
                 />
               </div>
               <div>
                 <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">Seu Email</label>
-                <input 
+                <input
                   required
-                  type="email" 
+                  type="email"
                   value={leadForm.email}
-                  onChange={e => setLeadForm(prev => ({...prev, email: e.target.value}))}
+                  onChange={e => setLeadForm(prev => ({ ...prev, email: e.target.value }))}
                   className="w-full bg-zinc-900 border border-white/10 rounded-xl px-4 py-4 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                   placeholder="Ex: joao@exemplo.com"
                 />
               </div>
-              <button 
+              <button
                 type="submit"
                 disabled={recommendMutation.isPending}
                 className="w-full mt-4 bg-primary text-black font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-white transition-colors disabled:opacity-50"
@@ -261,8 +261,8 @@ export default function Quiz() {
                             onClick={() => handleOptionSelect(q.id, opt.value)}
                             className={cn(
                               "text-left p-6 rounded-2xl border transition-all duration-300 group hover:-translate-y-1",
-                              answers[q.id as keyof QuizAnswers] === opt.value 
-                                ? "bg-primary/10 border-primary shadow-[0_0_20px_rgba(163,230,53,0.15)]" 
+                              answers[q.id as keyof QuizAnswers] === opt.value
+                                ? "bg-primary/10 border-primary shadow-[0_0_20px_rgba(163,230,53,0.15)]"
                                 : "bg-zinc-900/50 border-white/10 hover:border-white/30 hover:bg-zinc-800"
                             )}
                           >
@@ -300,8 +300,8 @@ export default function Quiz() {
 function Sparkles(props: any) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinelinejoin="round" {...props}>
-      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-      <path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>
+      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+      <path d="M5 3v4" /><path d="M19 17v4" /><path d="M3 5h4" /><path d="M17 19h4" />
     </svg>
   )
 }
