@@ -6,5 +6,6 @@
       "url": "https://mcp.vercel.com",
       "enabled": true
     }
-  }
+  },
+  "plugin": ["superpowers@git+https://github.com/obra/superpowers.git"]
 }

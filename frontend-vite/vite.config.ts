@@ -13,6 +13,13 @@ export default defineConfig({
   server: {
     port: 3002,
     host: "0.0.0.0",
+    proxy: {
+      "/paddles": {
+        target: "http://localhost:8002",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/paddles/, "/api/v1/paddles"),
+      },
+    },
   },
   build: {
     outDir: "dist",

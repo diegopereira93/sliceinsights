@@ -88,9 +88,8 @@ async def list_catalog_paddles(
     if price_max is not None:
         count_query = count_query.where(offer_subq.c.min_price <= price_max)
     if brand:
-        count_query = (
-            count_query.join(Brand, PaddleMaster.brand_id == Brand.id)
-            .where(Brand.name.ilike(f"%{brand}%"))
+        count_query = count_query.join(Brand, PaddleMaster.brand_id == Brand.id).where(
+            Brand.name.ilike(f"%{brand}%")
         )
     if store:
         count_query = (
@@ -115,9 +114,12 @@ async def list_catalog_paddles(
                 "brand": paddle.brand.name if paddle.brand else None,
                 "model_name": paddle.model_name,
                 "image_url": paddle.image_url,
+                "price": min_price,
                 "specs": {
                     "core_thickness_mm": paddle.core_thickness_mm,
-                    "surface_material": paddle.face_material.value if paddle.face_material else None,
+                    "surface_material": paddle.face_material.value
+                    if paddle.face_material
+                    else None,
                 },
                 "market_offers": sorted(
                     [

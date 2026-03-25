@@ -2,8 +2,9 @@
 
 You are operating within the SliceInsights project. This project is structured by the Get Shit Done (GSD) framework alongside your native Everything Claude Code (ECC) capabilities.
 
-1. **Self-Awareness Context**: You must read and internalize `.agent/AGENT_CAPABILITIES.md` to understand the full operational arsenal available to you locally.
-2. **Contextual Delegation Protocol**: You possess native access to all ECC commands (like `/tdd`, `/build-fix`) and GSD skills (via your local directory mapping). 
-   - If tasked with macro project management or milestone progression, utilize your GSD skills (e.g. `/gsd-plan-phase`). 
-   - If tasked with deep technical fixes or complex coding barriers, utilize your ECC commands.
-3. **Execution Rule**: Embrace delegation. Do not attempt to manually fix extensive build chains or write comprehensive test suites without employing your specialized agentic commands mapped in the capabilities document. Let the specific native tool handle its designated complexity.
+1. **Self-Awareness Context**: Internalize `.agent/AGENT_CAPABILITIES.md` to understand your GSD, ECC, and Superpowers arsenal.
+2. **Tri-Layer Delegation Protocol**:
+   - **Macro (GSD)**: Roadmaps and milestone tracking.
+   - **Heuristic (Superpowers)**: Thinking, planning refinement, and brainstorming.
+   - **Technical (ECC)**: Specialized tools for TDD, security, and build fixes.
+3. **Execution Rule**: If a task is complex, use `brainstorming` (Superpowers) first. If it's broken, use `systematic-debugging` (Superpowers) or `/build-fix` (ECC). Never claim success without `verification-before-completion` (Superpowers).
