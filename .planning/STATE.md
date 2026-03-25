@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: Catálogo Confiável Brasileiro
 current_phase: 17
-status: "Phase 17-05 shipped — PR #38 created"
-stopped_at: "Phase 17 shipped — PR #35 created"
-last_updated: "2026-03-24T21:56:00.324Z"
+status: "Phase 17 shipped — PR #41 created"
+stopped_at: "Frontend migration shipped"
+last_updated: "2026-03-25T11:30:00.000Z"
 progress:
   total_phases: 13
   completed_phases: 9
